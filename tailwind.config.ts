@@ -1,55 +1,84 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       colors: {
-        'gw-bg-0': '#08080a',
-        'gw-bg-1': '#0e0e12',
-        'gw-bg-2': '#141418',
-        'gw-bg-3': '#1a1a20',
-        'gw-bg-4': '#222229',
-        'gw-tx-0': '#f0eeeb',
-        'gw-tx-1': '#c8c6c2',
-        'gw-tx-2': '#8a8892',
-        'gw-tx-3': '#55533e',
-        'gw-red': '#d63031',
-        'gw-gold': '#d4a843',
-        'gw-green': '#27ae60',
-        'gw-blue': '#2e86de',
-        'gw-orange': '#e17055',
-        'gw-border': '#1e1e26',
+        bg: {
+          primary: '#06090f',
+          secondary: '#0c1018',
+          card: '#141c2f',
+          'card-hover': '#1a2642',
+        },
+        border: {
+          DEFAULT: '#2a3f5f',
+          hover: '#3d5280',
+        },
+        txt: {
+          primary: '#f1f5f9',
+          secondary: '#b8c7db',
+          dim: '#8b9cb7',
+          muted: '#6b7c99',
+        },
+        accent: {
+          red: '#ef4444',
+          gold: '#fbbf24',
+          blue: '#3b82f6',
+          green: '#22c55e',
+          purple: '#a855f7',
+          cyan: '#06b6d4',
+          orange: '#f97316',
+        },
       },
       fontFamily: {
-        display: ['DM Serif Display', 'Georgia', 'serif'],
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
         mono: ['IBM Plex Mono', 'monospace'],
-        arabic: ['Noto Sans Arabic', 'Vazirmatn', 'sans-serif'],
-        farsi: ['Vazirmatn', 'Noto Sans Arabic', 'sans-serif'],
-        chinese: ['Noto Sans SC', 'sans-serif'],
+        heading: ['Outfit', 'sans-serif'],
+        body: ['system-ui', 'sans-serif'],
       },
       animation: {
-        'ticker-scroll': 'ticker-scroll 60s linear infinite',
-        'pulse-live': 'pulse-live 2s ease-in-out infinite',
-        'count-up': 'count-up 0.3s ease-out',
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+        'pulse-border': 'pulse-border 2s ease-in-out infinite',
+        'scanline': 'scanline 10s linear infinite',
+        'shimmer': 'shimmer 3s ease-in-out infinite',
+        'glow': 'glow 2.5s ease-in-out infinite',
       },
       keyframes: {
-        'ticker-scroll': {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-50%)' },
+        'pulse-glow': {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(239, 68, 68, 0.3)' },
+          '50%': { boxShadow: '0 0 20px rgba(239, 68, 68, 0.6)' },
         },
-        'pulse-live': {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.4' },
+        'pulse-border': {
+          '0%, 100%': {
+            borderColor: 'rgba(239, 68, 68, 0.3)',
+            boxShadow: '0 0 8px rgba(239, 68, 68, 0.2)',
+          },
+          '50%': {
+            borderColor: 'rgba(239, 68, 68, 0.8)',
+            boxShadow: '0 0 16px rgba(239, 68, 68, 0.5)',
+          },
         },
+        'scanline': {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '0 100px' },
+        },
+        'shimmer': {
+          '0%, 100%': { textShadow: '0 0 10px rgba(59, 130, 246, 0.3)' },
+          '50%': {
+            textShadow:
+              '0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.3)',
+          },
+        },
+        'glow': {
+          '0%, 100%': { boxShadow: '0 0 8px rgba(59, 130, 246, 0.2)' },
+          '50%': { boxShadow: '0 0 16px rgba(59, 130, 246, 0.4)' },
+        },
+      },
+      transitionDuration: {
+        200: '200ms',
       },
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;

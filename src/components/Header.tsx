@@ -1,130 +1,123 @@
-'use client'
-
-import { useState } from 'react'
-import Link from 'next/link'
-import { LANGUAGES, Language } from '@/lib/types'
+'use client';
+import { useState, useEffect } from 'react';
 
 export default function Header() {
-  const [langOpen, setLangOpen] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const currentLang: Language = 'en'
+  const [warDay, setWarDay] = useState(22);
+  const [time, setTime] = useState('');
+  const [activeFronts] = useState(3);
+  const [sprRemaining] = useState(48);
+
+  useEffect(() => {
+    const warStart = new Date('2026-02-28');
+    const update = () => {
+      const now = new Date();
+      const diff = Math.floor((now.getTime() - warStart.getTime()) / (1000 * 60 * 60 * 24));
+      setWarDay(diff + 1);
+      setTime(
+        now.toLocaleString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        })
+      );
+    };
+    update();
+    const iv = setInterval(update, 1000);
+    return () => clearInterval(iv);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-gw-bg-0/95 backdrop-blur-md border-b border-gw-border">
-      <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-        {/* Logo + Live */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-display font-bold tracking-tight text-gw-tx-0">
-              Geo<span className="text-gw-gold">Wire</span>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-bg-primary via-bg-primary to-bg-secondary border-b border-border backdrop-blur-md">
+      {/* Top accent line */}
+      <div className="h-px bg-gradient-to-r from-accent-red via-accent-red/30 to-transparent" />
+
+      <div className="max-w-[1800px] mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Left section: Branding and live status */}
+        <div className="flex items-center gap-6">
+          {/* Live indicator with pulse */}
+          <div className="flex items-center gap-2.5">
+            <div className="relative flex h-3 w-3">
+              <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-accent-red opacity-60" />
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-accent-red shadow-lg shadow-accent-red/50" />
+            </div>
+            <span className="text-accent-red font-mono text-xs font-bold tracking-widest uppercase">
+              Live Conflict
             </span>
-          </Link>
-          <span className="flex items-center gap-1.5 px-2 py-0.5 bg-gw-red/15 border border-gw-red/30 rounded text-[11px] font-mono text-gw-red uppercase tracking-wider">
-            <span className="w-1.5 h-1.5 bg-gw-red rounded-full animate-pulse-live" />
-            Live
-          </span>
-        </div>
-
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1">
-          {[
-            { href: '/', label: 'Home' },
-            { href: '/dashboard', label: 'Crisis Dashboard' },
-            { href: '/category/iran-war', label: 'Iran War' },
-            { href: '/category/energy', label: 'Energy' },
-            { href: '/category/markets', label: 'Markets' },
-            { href: '/about', label: 'About' },
-          ].map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="px-3 py-1.5 text-sm text-gw-tx-2 hover:text-gw-tx-0 transition-colors rounded hover:bg-gw-bg-2"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Right side: Language + Mobile toggle */}
-        <div className="flex items-center gap-2">
-          {/* Language Switcher */}
-          <div className="relative">
-            <button
-              onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1 px-2 py-1 text-xs font-mono text-gw-tx-2 hover:text-gw-tx-0 border border-gw-border rounded hover:bg-gw-bg-2 transition-colors"
-            >
-              {LANGUAGES[currentLang].nativeLabel}
-              <svg
-                className={`w-3 h-3 transition-transform ${langOpen ? 'rotate-180' : ''}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {langOpen && (
-              <div className="absolute right-0 top-full mt-1 w-40 bg-gw-bg-1 border border-gw-border rounded-lg shadow-xl overflow-hidden z-50">
-                {(Object.keys(LANGUAGES) as Language[]).map((code) => (
-                  <Link
-                    key={code}
-                    href={code === 'en' ? '/' : `/${code}`}
-                    onClick={() => setLangOpen(false)}
-                    className={`block px-3 py-2 text-sm hover:bg-gw-bg-2 transition-colors ${
-                      code === currentLang ? 'text-gw-gold' : 'text-gw-tx-1'
-                    }`}
-                  >
-                    <span className="font-mono text-xs text-gw-tx-3 mr-2">
-                      {code.toUpperCase()}
-                    </span>
-                    {LANGUAGES[code].nativeLabel}
-                    <span className="text-gw-tx-3 ml-1 text-xs">
-                      {LANGUAGES[code].label}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Mobile menu */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-1.5 text-gw-tx-2 hover:text-gw-tx-0"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {mobileOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+          {/* Main branding */}
+          <div className="hidden sm:flex flex-col gap-0.5">
+            <h1 className="font-heading text-xl font-black text-txt-primary tracking-tight">
+              CRISISSCOPE
+            </h1>
+            <p className="text-txt-secondary font-mono text-xs tracking-wide">
+              Global Crisis Economic Intelligence
+            </p>
+          </div>
+        </div>
+
+        {/* Center section: War metrics */}
+        <div className="hidden lg:flex items-center gap-6 px-6 py-3 bg-bg-secondary/40 border border-border rounded-lg">
+          {/* War day counter */}
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-txt-dim font-mono text-[10px] tracking-widest uppercase">War Day</span>
+            <span className="font-mono font-black text-accent-red text-2xl leading-none tracking-tight">
+              {warDay}
+            </span>
+          </div>
+
+          {/* Divider */}
+          <div className="h-8 w-px bg-border/50" />
+
+          {/* Active fronts */}
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-txt-dim font-mono text-[10px] tracking-widest uppercase">Active Fronts</span>
+            <span className="font-mono font-black text-accent-blue text-2xl leading-none tracking-tight">
+              {activeFronts}
+            </span>
+          </div>
+
+          {/* Divider */}
+          <div className="h-8 w-px bg-border/50" />
+
+          {/* SPR remaining */}
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-txt-dim font-mono text-[10px] tracking-widest uppercase">SPR Hours</span>
+            <span className="font-mono font-black text-accent-gold text-2xl leading-none tracking-tight">
+              {sprRemaining}
+            </span>
+          </div>
+        </div>
+
+        {/* Right section: Threat level and time */}
+        <div className="flex items-center gap-4">
+          {/* Threat level indicator */}
+          <div className="flex flex-col items-end gap-1">
+            <div className="flex items-center gap-2 bg-accent-red/15 border border-accent-red/50 rounded px-3 py-1.5 backdrop-blur">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-red opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-red" />
+              </span>
+              <span className="text-accent-red font-mono font-bold text-xs tracking-widest uppercase">
+                Critical
+              </span>
+            </div>
+            <span className="text-txt-muted font-mono text-[10px] hidden sm:block">THREAT LEVEL</span>
+          </div>
+
+          {/* Current time */}
+          <div className="text-right hidden md:block">
+            <div className="text-txt-primary font-mono font-semibold text-sm leading-none">{time}</div>
+            <div className="text-txt-dim font-mono text-[10px] tracking-wide mt-1">UTC+0</div>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Nav */}
-      {mobileOpen && (
-        <nav className="md:hidden border-t border-gw-border bg-gw-bg-1 px-4 py-3 space-y-1">
-          {[
-            { href: '/', label: 'Home' },
-            { href: '/dashboard', label: 'Crisis Dashboard' },
-            { href: '/category/iran-war', label: 'Iran War' },
-            { href: '/category/energy', label: 'Energy' },
-            { href: '/category/markets', label: 'Markets' },
-            { href: '/about', label: 'About' },
-          ].map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className="block px-3 py-2 text-sm text-gw-tx-1 hover:text-gw-tx-0 hover:bg-gw-bg-2 rounded transition-colors"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-      )}
+      {/* Bottom accent gradient */}
+      <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent opacity-50" />
     </header>
-  )
+  );
 }
