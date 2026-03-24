@@ -286,6 +286,51 @@ export default function GlobePage() {
 
   const handleMouseUp = () => setIsDragging(false);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    const t = e.touches[0];
+    setIsDragging(true);
+    setDragStart({ x: t.clientX, y: t.clientY });
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx = t.clientX - rect.left;
+    const my = t.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const radius = Math.min(rect.width, rect.height) * 0.35;
+    const dx = (t.clientX - dragStart.x) * 0.005;
+    const dy = (t.clientY - dragStart.y) * 0.005;
+    setRotation(r => ({ x: Math.max(-1.2, Math.min(1.2, r.x + dy)), y: r.y + dx }));
+    setDragStart({ x: t.clientX, y: t.clientY });
+    // Hit test for hotspots on touch
+    let found: Hotspot | null = null;
+    const filteredSpots = filter === 'all' ? HOTSPOTS : HOTSPOTS.filter(h => h.type === filter);
+    for (const spot of filteredSpots) {
+      const p = latLngToXYZ(spot.lat, spot.lng, 1.02);
+      const proj = project(p.x, p.y, p.z, rotation.y, rotation.x, cx, cy, radius);
+      if (proj.visible && Math.hypot(proj.x - mx, proj.y - my) < 20) {
+        found = spot;
+        break;
+      }
+    }
+    setHoveredSpot(found);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    setIsDragging(false);
+    if (hoveredSpot) {
+      setSelectedSpot(hoveredSpot.id === selectedSpot?.id ? null : hoveredSpot);
+    }
+  };
+
+
   const handleClick = (e: React.MouseEvent) => {
     if (hoveredSpot) {
       setSelectedSpot(hoveredSpot.id === selectedSpot?.id ? null : hoveredSpot);
@@ -348,7 +393,7 @@ export default function GlobePage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Globe Canvas */}
           <div className="lg:col-span-3">
-            <div className="relative bg-bg-1 rounded-lg border border-bg-3 overflow-hidden" style={{ height: '600px' }}>
+            <div className="relative bg-bg-1 rounded-lg border border-bg-3 overflow-hidden" style={{ height: "min(600px, 70vh)" }}>
               <canvas
                 ref={canvasRef}
                 className="w-full h-full cursor-grab active:cursor-grabbing"
@@ -356,6 +401,9 @@ export default function GlobePage() {
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 onMouseLeave={handleMouseUp}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
                 onClick={handleClick}
               />
 
