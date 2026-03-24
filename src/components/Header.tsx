@@ -51,10 +51,10 @@ export default function Header() {
           {/* Main branding */}
           <div className="hidden sm:flex flex-col gap-0.5">
             <h1 className="font-heading text-xl font-black text-txt-primary tracking-tight">
-              CRISISSCOPE
+              GEOWIRE
             </h1>
             <p className="text-txt-secondary font-mono text-xs tracking-wide">
-              Global Crisis Economic Intelligence
+              Global Intelligence Platform
             </p>
           </div>
         </div>
