@@ -1,263 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&family=Vazirmatn:wght@400;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
-
-:root {
-  /* Base backgrounds with enhanced contrast */
-  --bg-primary: #06090f;
-  --bg-secondary: #0c1018;
-  --bg-card: #141c2f;
-  --bg-card-hover: #1a2642;
-
-  /* Enhanced borders for visibility */
-  --border: #2a3f5f;
-  --border-hover: #3d5280;
-
-  /* Improved text colors for readability */
-  --txt-primary: #f1f5f9;
-  --txt-secondary: #b8c7db;
-  --txt-dim: #8b9cb7;
-  --txt-muted: #6b7c99;
-
-  /* Accent colors - vibrant military intelligence aesthetic */
-  --accent-red: #ef4444;
-  --accent-gold: #fbbf24;
-  --accent-blue: #3b82f6;
-  --accent-green: #22c55e;
-  --accent-purple: #a855f7;
-  --accent-cyan: #06b6d4;
-  --accent-orange: #f97316;
-
-  /* Glow effects */
-  --glow-red: rgba(239, 68, 68, 0.4);
-  --glow-blue: rgba(59, 130, 246, 0.3);
-  --glow-cyan: rgba(6, 182, 212, 0.3);
-}
-
-/* Reset and base styles */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #3a4f6f transparent;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background: #3a4f6f;
-  border-radius: 4px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: #4a5f7f;
-  background-clip: padding-box;
-}
-
-/* Body and main styles */
 body {
-  background: var(--bg-primary);
-  color: var(--txt-primary);
-  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #08080a;
+  color: #f0eeeb;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  line-height: 1.6;
   overflow-x: hidden;
-  position: relative;
 }
 
-/* Subtle background grid pattern */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    linear-gradient(0deg, transparent 24%, rgba(59, 130, 246, 0.02) 25%, rgba(59, 130, 246, 0.02) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, 0.02) 75%, rgba(59, 130, 246, 0.02) 76%, transparent 77%, transparent),
-    linear-gradient(90deg, transparent 24%, rgba(59, 130, 246, 0.02) 25%, rgba(59, 130, 246, 0.02) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, 0.02) 75%, rgba(59, 130, 246, 0.02) 76%, transparent 77%, transparent);
-  background-size: 50px 50px;
-  pointer-events: none;
-  z-index: 0;
+/* RTL support */
+html[dir="rtl"] body {
+  font-family: 'Vazirmatn', 'Noto Sans Arabic', sans-serif;
 }
 
-/* Scanline effect overlay */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(
-    0deg,
-    transparent 0%,
-    rgba(59, 130, 246, 0.015) 1%,
-    rgba(59, 130, 246, 0.015) 2%,
-    transparent 3%
-  );
-  background-size: 100% 4px;
-  animation: scanline 10s linear infinite;
-  pointer-events: none;
-  z-index: 1;
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0e0e12;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a34;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a44;
 }
 
-/* Range input styling */
-input[type="range"] {
-  -webkit-appearance: none;
-  background: transparent;
+/* Ticker animation */
+.ticker-wrap {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-content {
+  display: inline-flex;
+  animation: ticker 90s linear infinite;
+}
+.ticker-content:hover {
+  animation-play-state: paused;
+}
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  background: var(--accent-blue);
-  cursor: pointer;
-  margin-top: -6px;
-  box-shadow: 0 0 8px var(--glow-blue);
-  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+/* Live pulse */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.live-dot {
+  animation: live-pulse 1.5s ease-in-out infinite;
 }
 
-input[type="range"]::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 16px var(--glow-blue);
-  background: #60a5fa;
+/* War cost counter */
+@keyframes flash-red {
+  0%, 100% { color: #d63031; }
+  50% { color: #ff6b6b; }
+}
+.cost-counter {
+  animation: flash-red 2s ease-in-out infinite;
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
-  height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  border: 1px solid var(--border-hover);
+/* Gold gradient for logo */
+.gw-gradient {
+  background: linear-gradient(135deg, #d4a843 0%, #e17055 100%);
 }
 
-/* Utility classes */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* Ad zone placeholder */
+.ad-zone {
+  border: 1px dashed #2a2a34;
+  background: #0e0e12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #55535e;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+/* Threat level badges */
+.threat-critical { background-color: rgba(214, 48, 49, 0.15); color: #d63031; border-color: #d63031; }
+.threat-elevated { background-color: rgba(225, 112, 85, 0.15); color: #e17055; border-color: #e17055; }
+.threat-moderate { background-color: rgba(212, 168, 67, 0.15); color: #d4a843; border-color: #d4a843; }
+.threat-stable { background-color: rgba(39, 174, 96, 0.15); color: #27ae60; border-color: #27ae60; }
+
+/* Article number styling */
+.article-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3rem;
+  line-height: 1;
+  color: #1e1e26;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
 }
 
-/* Text color utilities */
-.txt-primary {
-  color: var(--txt-primary);
+/* Selection color */
+::selection {
+  background-color: rgba(212, 168, 67, 0.3);
+  color: #f0eeeb;
 }
 
-.txt-secondary {
-  color: var(--txt-secondary);
-}
-
-.txt-dim {
-  color: var(--txt-dim);
-}
-
-.txt-muted {
-  color: var(--txt-muted);
-}
-
-/* Card base style with glow on hover */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--border-hover);
-  box-shadow: 0 0 12px rgba(59, 130, 246, 0.1);
-}
-
-/* Focus states for better accessibility */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--accent-blue);
+/* Focus outline */
+:focus-visible {
+  outline: 2px solid #d4a843;
   outline-offset: 2px;
 }
 
-/* Animations */
-
-/* Pulse glow for red alerts */
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(239, 68, 68, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
-  }
-}
-
-/* Pulsing border for critical alerts */
-@keyframes pulse-border {
-  0%, 100% {
-    border-color: rgba(239, 68, 68, 0.3);
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
-  }
-  50% {
-    border-color: rgba(239, 68, 68, 0.8);
-    box-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
-  }
-}
-
-/* Scanline animation for military aesthetic */
-@keyframes scanline {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 100px;
-  }
-}
-
-/* Shimmer/glow animation for section headers */
-@keyframes shimmer {
-  0%, 100% {
-    text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-  }
-  50% {
-    text-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.3);
-  }
-}
-
-/* Glow animation for interactive elements */
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
-  }
-}
-
-/* Utility animation classes */
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.animate-pulse-border {
-  animation: pulse-border 2s ease-in-out infinite;
-}
-
-.animate-shimmer {
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-.animate-glow {
-  animation: glow 2.5s ease-in-out infinite;
+/* Smooth transitions */
+a, button {
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.2s;
 }

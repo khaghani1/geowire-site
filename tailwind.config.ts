@@ -1,81 +1,57 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
   theme: {
     extend: {
       colors: {
         bg: {
-          primary: '#06090f',
-          secondary: '#0c1018',
-          card: '#141c2f',
-          'card-hover': '#1a2642',
+          0: '#08080a',
+          1: '#0e0e12',
+          2: '#141418',
+          3: '#1a1a20',
+          4: '#222229',
         },
-        border: {
-          DEFAULT: '#2a3f5f',
-          hover: '#3d5280',
-        },
-        txt: {
-          primary: '#f1f5f9',
-          secondary: '#b8c7db',
-          dim: '#8b9cb7',
-          muted: '#6b7c99',
+        tx: {
+          0: '#f0eeeb',
+          1: '#c8c6c2',
+          2: '#8a8892',
+          3: '#55533e',
         },
         accent: {
-          red: '#ef4444',
-          gold: '#fbbf24',
-          blue: '#3b82f6',
-          green: '#22c55e',
-          purple: '#a855f7',
-          cyan: '#06b6d4',
-          orange: '#f97316',
+          red: '#d63031',
+          gold: '#d4a843',
+          green: '#27ae60',
+          blue: '#2e86de',
+          orange: '#e17055',
+          cyan: '#00cec9',
+        },
+        border: {
+          DEFAULT: '#1e1e26',
+          hover: '#2a2a34',
         },
       },
       fontFamily: {
-        mono: ['IBM Plex Mono', 'monospace'],
-        heading: ['Outfit', 'sans-serif'],
-        body: ['system-ui', 'sans-serif'],
+        display: ['"DM Serif Display"', 'Georgia', 'serif'],
+        body: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'monospace'],
+        arabic: ['"Noto Sans Arabic"', '"Vazirmatn"', 'sans-serif'],
+        chinese: ['"Noto Sans SC"', 'sans-serif'],
       },
       animation: {
-        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
-        'pulse-border': 'pulse-border 2s ease-in-out infinite',
-        'scanline': 'scanline 10s linear infinite',
-        'shimmer': 'shimmer 3s ease-in-out infinite',
-        'glow': 'glow 2.5s ease-in-out infinite',
+        'ticker-scroll': 'ticker 60s linear infinite',
+        'pulse-slow': 'pulse 3s ease-in-out infinite',
+        'count-up': 'countup 1s ease-out',
       },
       keyframes: {
-        'pulse-glow': {
-          '0%, 100%': { boxShadow: '0 0 5px rgba(239, 68, 68, 0.3)' },
-          '50%': { boxShadow: '0 0 20px rgba(239, 68, 68, 0.6)' },
+        ticker: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
-        'pulse-border': {
-          '0%, 100%': {
-            borderColor: 'rgba(239, 68, 68, 0.3)',
-            boxShadow: '0 0 8px rgba(239, 68, 68, 0.2)',
-          },
-          '50%': {
-            borderColor: 'rgba(239, 68, 68, 0.8)',
-            boxShadow: '0 0 16px rgba(239, 68, 68, 0.5)',
-          },
-        },
-        'scanline': {
-          '0%': { backgroundPosition: '0 0' },
-          '100%': { backgroundPosition: '0 100px' },
-        },
-        'shimmer': {
-          '0%, 100%': { textShadow: '0 0 10px rgba(59, 130, 246, 0.3)' },
-          '50%': {
-            textShadow:
-              '0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.3)',
-          },
-        },
-        'glow': {
-          '0%, 100%': { boxShadow: '0 0 8px rgba(59, 130, 246, 0.2)' },
-          '50%': { boxShadow: '0 0 16px rgba(59, 130, 246, 0.4)' },
-        },
-      },
-      transitionDuration: {
-        200: '200ms',
       },
     },
   },
