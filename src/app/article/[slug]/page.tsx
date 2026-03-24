@@ -51,10 +51,10 @@ export default function ArticlePage() {
         return <h2 key={i} className="font-display text-2xl text-tx-0 mt-10 mb-4">{para.replace('## ', '')}</h2>;
       }
       if (para.startsWith('**') && para.endsWith('**')) {
-        return <p key={i} className="text-tx-0 font-semibold text-lg mb-4">{para.replace(/**/g, '')}</p>;
+        return <p key={i} className="text-tx-0 font-semibold text-lg mb-4">{para.replaceAll('**', '')}</p>;
       }
       if (para.startsWith('**')) {
-        const parts = para.split(/**/g);
+        const parts = para.split('**');
         return (
           <p key={i} className="text-tx-1 leading-relaxed mb-4">
             {parts.map((part, j) => j % 2 === 1 ? <strong key={j} className="text-tx-0">{part}</strong> : part)}
