@@ -9,6 +9,8 @@ const NAV_LINKS = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/globe', label: 'War Map' },
   { href: '/cost', label: 'Cost Calculator' },
+  { href: '/what-changed', label: 'What Changed' },
+  { href: '/narrative-war', label: 'Narrative War' },
   { href: '/category/iran-war', label: 'Iran War' },
   { href: '/category/energy', label: 'Energy' },
   { href: '/about', label: 'About' },

@@ -47,10 +47,13 @@ export const THREAT_COLORS: Record<ThreatLevel, string> = {
 export const NAV_ITEMS = [
   { label: 'Home', href: '/' },
   { label: 'Iran War', href: '/category/iran-war', live: true },
+  { label: 'What Changed', href: '/what-changed', icon: '🔄' },
+  { label: 'Narrative War', href: '/narrative-war', icon: '📢' },
   { label: 'Globe', href: '/globe', icon: '🌐' },
   { label: 'Dashboard', href: '/dashboard', icon: '📊' },
   { label: 'Predict', href: '/predict', icon: '♟️' },
   { label: 'War Cost', href: '/cost', icon: '💸' },
+  { label: 'Analysis', href: '/analysis' },
   { label: 'Energy', href: '/category/energy' },
   { label: 'US-China', href: '/category/us-china' },
   { label: 'Russia-Ukraine', href: '/category/russia-ukraine' },
