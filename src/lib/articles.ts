@@ -357,6 +357,196 @@ In the zero-sum logic of great power competition, America's Iran quagmire is Chi
   },
 ];
 
+  {
+    slug: 'russia-ukraine-war-iran-conflict-link',
+    title: 'Two Wars, One Strategy: How Moscow Is Exploiting the Iran Crisis',
+    excerpt: 'The Ukraine front has shifted dramatically since Operation Epic Fury began. Russia is advancing on three axes while Western attention — and ammunition — flows toward the Persian Gulf.',
+    category: 'russia-ukraine',
+    tags: ['russia-ukraine', 'analysis', 'geopolitics'],
+    author: 'GeoWire Analysis Desk',
+    readTime: 11,
+    threatLevel: 'elevated',
+    region: 'Europe',
+    publishedAt: '2026-03-18T09:00:00Z',
+    keyTakeaways: [
+      'Russian forces have advanced 40km along the Kharkiv axis since Operation Epic Fury began, the fastest territorial gains since early 2022',
+      'US military assistance to Ukraine has slowed as logistics and political attention pivot toward the Middle East',
+      'Iran has resumed Shahed drone deliveries to Russia via Caspian sea routes despite being at war with the US',
+      'NATO allies face a critical choice: maintain Ukraine commitments or prioritize the Iran theater',
+      'Kyiv is warning that without restocked air defense, major cities could fall by summer',
+    ],
+    body: `In Moscow, the calculus was cold and precise: America cannot fight two wars simultaneously.
+
+When Operation Epic Fury began on February 28, 2026, Russian President Vladimir Putin's immediate response was not a statement, not a diplomatic communiqué. It was an order to his general staff: begin the Kharkiv offensive.
+
+## The Opportunist's War
+
+Russia has not officially commented on the US-Iran conflict beyond calling for "dialogue and restraint" — the same empty phrases deployed by every major power hoping to benefit from the chaos without being blamed for it. But its actions speak clearly.
+
+In the 25 days since the war began, Russian forces have advanced approximately 40 kilometers along the Kharkiv axis — the fastest territorial gain Russia has achieved since the opening months of the 2022 invasion. Three Ukrainian brigades have been encircled near Vovchansk. The Zaporizhzhia line, largely static for 18 months, is now moving.
+
+## The Supply Chain Crisis
+
+The mechanism is straightforward: American attention is finite, and American defense production is stretched.
+
+Before February 28, the United States had committed to delivering 155mm artillery shells to Ukraine at a rate of 100,000 per month — itself a reduction from earlier commitments due to domestic political constraints. Since the Iran war began, that number has declined to approximately 60,000 per month.
+
+The difference is not because the US stopped caring about Ukraine. It is because CENTCOM has priority. The munitions that would have gone to Kyiv are being diverted to B-2 bombers, Tomahawk cruise missiles, and naval operations in the Persian Gulf.
+
+"We are being slowly starved," one senior Ukrainian official told GeoWire, speaking on condition of anonymity. "Not because they want us to lose. Because they cannot do everything at once."
+
+## The Iran-Russia Connection
+
+There is a layer of dark irony in this situation that has received insufficient attention in Western coverage.
+
+Iran is simultaneously at war with the United States and continuing to supply Russia with weapons.
+
+Despite the conflict, Iranian Shahed drone shipments to Russia have not stopped. Intelligence assessments suggest that Iran made a deliberate decision to separate its conflict with America — which is fundamentally about regime survival — from its partnership with Russia, which provides revenue, technology, and diplomatic support.
+
+The Caspian route, which does not pass through any US-controlled territory or interdiction range, remains open. Approximately 200-300 Shahed drones per month continue to arrive in Russia, where they are deployed against Ukrainian cities and infrastructure.
+
+The United States has raised this issue privately with Iran through the Oman channel. Iran's position: the two matters are not linked.
+
+## NATO's Impossible Choice
+
+For Europe, this presents a crisis of strategic prioritization that the alliance was not designed to handle.
+
+NATO's eastern flank states — Poland, the Baltic countries, Romania — are the most alarmed. They have increased their own bilateral assistance to Ukraine and are calling for a formal NATO declaration that Ukraine's defense remains a top-tier priority regardless of the Middle East situation.
+
+Germany, France, and the southern European allies are more divided. Their focus has shifted toward energy security — the Hormuz closure has sent natural gas prices in Europe back toward 2022 levels — and they are less willing to commit additional resources to Ukraine at a moment of domestic economic stress.
+
+## What Comes Next
+
+Ukrainian commanders are blunt in private assessments: if the current trajectory continues for another 60 days, the military situation on the eastern front will be qualitatively worse than at any point since the 2022 Kharkiv crisis.
+
+The question is whether the United States and NATO can maintain two simultaneous commitments — or whether, as Russia calculates, global war exhaustion will eventually force a compromise that benefits Moscow on both fronts.`,
+  },
+  {
+    slug: 'iran-sanctions-global-dollar-system',
+    title: 'The Sanctions Weapon: How Iran Exposed the Limits of Dollar Dominance',
+    excerpt: 'Three decades of Iran sanctions built the architecture of financial warfare. Operation Epic Fury is revealing what that architecture cannot do.',
+    category: 'sanctions',
+    tags: ['sanctions', 'analysis', 'iran-war'],
+    author: 'GeoWire Analysis Desk',
+    readTime: 13,
+    threatLevel: 'moderate',
+    region: 'Global',
+    publishedAt: '2026-03-17T11:00:00Z',
+    keyTakeaways: [
+      'Iran has survived 45 years of progressively tighter sanctions by building parallel financial infrastructure',
+      'The SWIFT exclusion that was considered crippling in 2012 is now partially circumvented through Chinese and Russian alternatives',
+      'Iran\'s oil exports to China have not stopped despite the war — dollar avoidance mechanisms built over decades are functioning',
+      'The war is accelerating de-dollarization trends that could permanently reduce US financial leverage globally',
+      'Treasury\'s OFAC has designated 847 entities in the first 25 days of conflict — a record pace',
+    ],
+    body: `The United States has been sanctioning Iran since 1979. Forty-seven years of financial warfare, progressive escalation, and creative enforcement have produced an Iran that is economically stressed, diplomatically isolated, and increasingly capable of functioning without the dollar.
+
+That last part is the part that matters.
+
+## The Architecture of Sanctions
+
+The modern sanctions toolkit that the US deploys against Iran was built incrementally over decades. Its most powerful element is SWIFT exclusion: disconnecting Iranian banks from the Society for Worldwide Interbank Financial Telecommunication, the messaging system that handles virtually all international financial transactions.
+
+When Iran was excluded from SWIFT in 2012, the impact was immediate and severe. Oil revenues collapsed by 60% within months. The Iranian rial lost two-thirds of its value. The Rouhani government came to power on a promise of sanctions relief and negotiated what became the 2015 JCPOA.
+
+That was the high-water mark of sanctions effectiveness.
+
+## What Has Changed
+
+In the decade since, Iran has systematically built workarounds. Not bypasses — no system is seamless — but alternative channels that reduce the leverage of SWIFT exclusion from devastating to manageable.
+
+**Chinese alternatives**: China has expanded its Cross-Border Interbank Payment System (CIPS) to handle yuan-denominated transactions that bypass SWIFT entirely. Iran-China oil trade now flows through a parallel financial architecture that US regulators can slow but not stop.
+
+**Barter and counter-trade**: Iran has negotiated arrangements with Russia, China, and a dozen smaller trading partners to exchange oil directly for goods — pharmaceuticals, machinery, food, electronics — without any dollar transaction touching the international banking system.
+
+**Cryptocurrency**: Iranian entities use a mix of Bitcoin and privacy-focused cryptocurrencies to move value internationally, despite Treasury's aggressive efforts to identify and sanction crypto wallets associated with Iranian entities.
+
+**Front companies**: The OFAC designation list has grown to over 2,400 Iranian-linked entities. This sounds impressive until you realize that for every entity designated, several more are created to replace it.
+
+## The Record Designation Pace
+
+Since Operation Epic Fury began, the Office of Foreign Assets Control has designated 847 entities in 25 days — a pace roughly five times the historical average. The designations include IRGC-linked financial institutions, shipping companies, oil intermediaries, and individuals across 23 countries.
+
+This is significant. But the question is not whether the US can designate — it clearly can, at any pace it chooses. The question is whether designations produce behavioral change.
+
+## The De-Dollarization Accelerant
+
+The war is accelerating a structural trend that predates it: the gradual erosion of dollar dominance in global trade.
+
+Every time the United States uses the dollar's centrality as a weapon — whether against Iran, Russia, Venezuela, or any other adversary — it gives every other country in the world additional incentive to build alternatives. China, India, the Gulf states, Brazil, and a coalition of smaller economies have been investing in those alternatives for years.
+
+The Iran war is a case study in the limits of this approach. Iran has survived sanctions that would have been economically fatal to a less adapted economy. And its adaptations — the parallel financial infrastructure it built in response to decades of pressure — are now available as a template for any country that fears future US financial coercion.
+
+The sanctions weapon remains powerful. But it is less powerful than it was in 2012, and it will be less powerful still in 2030. The war is demonstrating that fact to every government in the world simultaneously.`,
+  },
+  {
+    slug: 'global-recession-risk-iran-war-oil',
+    title: 'How High Can Oil Go? The Recession Threshold Nobody Wants to Calculate',
+    excerpt: 'Economists have a number they are reluctant to say out loud: if Brent stays above $120 for 90 days, the probability of a global recession exceeds 70%. We are on day 25.',
+    category: 'markets',
+    tags: ['markets', 'energy', 'analysis'],
+    author: 'GeoWire Analysis Desk',
+    readTime: 10,
+    threatLevel: 'elevated',
+    region: 'Global',
+    publishedAt: '2026-03-16T14:00:00Z',
+    keyTakeaways: [
+      'Brent crude at $112/bbl represents a 65% increase from pre-war levels — historically associated with recessions when sustained',
+      'The IMF has quietly revised its global growth forecast down by 1.8 percentage points since the conflict began',
+      'Emerging markets with dollar-denominated debt face a particularly acute crisis as oil prices and the dollar index move together',
+      'Consumer spending in the US has already declined 2.3% in the first two weeks of March',
+      'The historical record shows: every sustained oil price shock of >50% has been followed by recession within 18 months',
+    ],
+    body: `There is a number that central bankers, finance ministers, and IMF economists reference in private conversations but rarely say on the record.
+
+The number is $120.
+
+More precisely, the threshold is Brent crude sustained above $120 per barrel for more than 90 days. Based on historical data going back to the 1973 oil embargo, every time this threshold has been breached for a sustained period, a global recession has followed within 12 to 18 months. The correlation is not perfect. The causation is not clean. But the pattern is consistent enough that institutional forecasters treat it as a de facto trigger.
+
+As of this writing, Brent is at $112. We are on day 25 of the conflict that produced it.
+
+## The Historical Record
+
+The oil shocks that preceded recessions tell a consistent story:
+
+**1973-74**: The Arab oil embargo triggered a 400% price increase and a global recession that lasted through 1975.
+
+**1979-80**: The Iranian Revolution and Iran-Iraq War combined to produce a second major shock. Global recession followed in 1981-82.
+
+**1990-91**: Iraq's invasion of Kuwait caused oil to double. The US entered recession in July 1990, before the Gulf War even began — the anticipation was enough.
+
+**2007-08**: Oil reached $147/bbl in July 2008, contributing to the financial crisis conditions that triggered the Great Recession.
+
+**2022**: Russia's invasion of Ukraine caused a spike to $130/bbl. Europe entered recession. The US narrowly avoided it due to its position as a major oil producer.
+
+The current situation is different in important ways — the US energy independence achieved since 2010 provides a partial buffer. But the mechanism of transmission remains the same: high energy prices function as a tax on consumption, reduce corporate margins, and create inflationary pressure that central banks cannot easily address.
+
+## The Transmission Mechanisms
+
+How does $112 oil become a recession? The channels are multiple and mutually reinforcing.
+
+**Consumer spending**: US gasoline prices have risen 30% since the conflict began. The average American household spends approximately $2,200 per year on gasoline at normal prices; this is running 30% higher. That is roughly $660 per household diverted from other spending — a meaningful impact on consumer discretionary purchases.
+
+**Supply chain costs**: Petroleum is embedded in virtually every manufactured good through transportation, petrochemicals, and packaging. A 65% increase in oil prices eventually shows up as margin compression or price increases across the economy.
+
+**Emerging market stress**: Countries that import oil and borrow in dollars face a particularly acute squeeze. They are paying more for oil in dollars at the same time that dollar borrowing costs have risen. This combination has historically triggered EM debt crises, and the current IMF emergency lending queue is the longest since 2008.
+
+**Inflation persistence**: The Federal Reserve had achieved something close to its 2% inflation target before February 28. Energy-driven inflation has now pushed the CPI back toward 4.1%, and the Fed faces an impossible choice: raise rates into a slowing economy, or hold rates and let inflation run.
+
+## What Forecasters Are Saying (In Private)
+
+GeoWire has spoken with economists at three major multilateral institutions and four large investment banks. The consensus off-the-record view:
+
+If the Hormuz Strait reopens within 30 days, the global growth impact is a 0.5-1.0 percentage point reduction, recoverable within 12-18 months. Painful but manageable.
+
+If Hormuz remains closed for 60-90 days, the probability of at least one major economy entering technical recession exceeds 60%, with spillover risk to the global financial system significant.
+
+If Hormuz remains closed beyond 90 days, outcomes become highly nonlinear. The modeling breaks down because there is no historical precedent for a sustained closure of a chokepoint this important.
+
+The one thing everyone agrees on: every additional week the strait remains closed increases the probability of a severe economic outcome in a way that is not linear. The damage compounds.`,
+  },
+];
+
 // Seed leaders data
 export interface Leader {
   name: string;

@@ -1,5 +1,9 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
+
+// Google AdSense Publisher ID — update after AdSense approval
+const ADSENSE_PUBLISHER_ID = process.env.NEXT_PUBLIC_ADSENSE_ID || '';
 
 export const metadata: Metadata = {
   title: {
@@ -36,9 +40,20 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="theme-color" content="#08080a" />
+        {ADSENSE_PUBLISHER_ID && (
+          <meta name="google-adsense-account" content={ADSENSE_PUBLISHER_ID} />
+        )}
       </head>
       <body className="bg-bg-0 text-tx-0 font-body">
         {children}
+        {ADSENSE_PUBLISHER_ID && (
+          <Script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_PUBLISHER_ID}`}
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );

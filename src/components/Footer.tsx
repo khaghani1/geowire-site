@@ -54,6 +54,7 @@ export default function Footer() {
               <a href="#" className="block text-sm text-tx-2 hover:text-tx-0">LinkedIn</a>
               <a href="#" className="block text-sm text-tx-2 hover:text-tx-0">RSS Feed</a>
               <Link href="/about" className="block text-sm text-tx-2 hover:text-tx-0">About</Link>
+              <Link href="/privacy-policy" className="block text-sm text-tx-2 hover:text-tx-0">Privacy Policy</Link>
             </div>
           </div>
         </div>
@@ -68,8 +69,10 @@ export default function Footer() {
               A GeoWire Media publication
             </span>
           </div>
-          <div className="font-mono text-[10px] text-tx-3 text-center sm:text-right">
-            &copy; {new Date().getFullYear()} GeoWire Media &middot; Chicago, IL &middot; Independent global intelligence
+          <div className="font-mono text-[10px] text-tx-3 text-center sm:text-right flex items-center gap-3">
+            <Link href="/privacy-policy" className="hover:text-tx-1 transition-colors">Privacy Policy</Link>
+            <span>&middot;</span>
+            <span>&copy; {new Date().getFullYear()} GeoWire Media &middot; Chicago, IL</span>
           </div>
         </div>
 

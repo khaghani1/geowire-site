@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { SEED_ARTICLES } from '@/lib/articles';
 
 const BASE = 'https://geowire.org';
 
@@ -21,7 +22,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/category/russia-ukraine`, lastModified: now, changeFrequency: 'daily', priority: 0.6 },
     { url: `${BASE}/category/markets`,    lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
     { url: `${BASE}/about`,               lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${BASE}/privacy-policy`,      lastModified: now, changeFrequency: 'yearly',  priority: 0.2 },
   ];
 
-  return staticRoutes;
+  const articleRoutes: MetadataRoute.Sitemap = SEED_ARTICLES.map((article) => ({
+    url: `${BASE}/article/${article.slug}`,
+    lastModified: new Date(article.publishedAt),
+    changeFrequency: 'weekly' as const,
+    priority: article.isHero ? 0.9 : 0.7,
+  }));
+
+  return [...staticRoutes, ...articleRoutes];
 }
