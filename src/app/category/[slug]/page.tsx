@@ -1,6 +1,4 @@
-'use client';
-
-import { useParams } from 'next/navigation';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SEED_ARTICLES } from '@/lib/articles';
 import Header from '@/components/Header';
@@ -24,16 +22,37 @@ const CATEGORY_LABELS: Record<string, string> = {
   'americas': 'Americas',
 };
 
-const THREAT_COLORS: Record<string, string> = {
-  critical: 'text-red-400 border-red-700/50 bg-red-900/20',
-  elevated: 'text-orange-400 border-orange-700/50 bg-orange-900/20',
-  moderate: 'text-yellow-400 border-yellow-700/50 bg-yellow-900/20',
-  stable: 'text-green-400 border-green-700/50 bg-green-900/20',
+const CATEGORY_DESCRIPTIONS: Record<string, string> = {
+  'iran-war': 'Live coverage of Operation Epic Fury: US–Iran conflict, IRGC strikes, Hormuz blockade, coalition operations, and casualty reports.',
+  'energy': 'Oil market disruption, Brent crude price analysis, Hormuz Strait closure impacts, and global energy supply tracking.',
+  'us-china': 'US–China strategic competition, Taiwan Strait tensions, PRC opportunism during Iran crisis, and Indo-Pacific security.',
+  'russia-ukraine': 'Russia–Ukraine war developments, NATO responses, and how the Iran conflict reshapes European security.',
+  'markets': 'Financial market impacts of the US–Iran war: oil, gold, equities, and currency moves.',
 };
 
-export default function CategoryPage() {
-  const params = useParams();
-  const slug = params?.slug as string;
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const label = CATEGORY_LABELS[slug] || slug.replace(/-/g, ' ');
+  const description = CATEGORY_DESCRIPTIONS[slug] || `GeoWire intelligence coverage of ${label}: conflict analysis, economic impacts, and strategic developments.`;
+
+  return {
+    title: `${label} — Coverage`,
+    description,
+    keywords: [label.toLowerCase(), 'geopolitical intelligence', 'conflict analysis', 'geowire'],
+    openGraph: {
+      title: `${label} — GeoWire`,
+      description,
+      url: `https://geowire.org/category/${slug}`,
+    },
+  };
+}
+
+export default async function CategoryPage({ params }: Props) {
+  const { slug } = await params;
   const label = CATEGORY_LABELS[slug] || slug?.replace(/-/g, ' ').toUpperCase();
   const articles = SEED_ARTICLES.filter((a) => a.category === slug);
 
@@ -47,7 +66,7 @@ export default function CategoryPage() {
         <AdZone size="leaderboard" className="mb-6" />
 
         {/* Page Header */}
-        <div className="mb-8 pb-4 border-b border-border">
+        <div className="mb-8 pb-4 border-b border-border-1">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-accent-red text-sm">▲</span>
             <span className="font-mono text-xs tracking-widest text-tx-2 uppercase">Coverage Zone</span>
@@ -71,14 +90,11 @@ export default function CategoryPage() {
               </div>
             ) : (
               <>
-                {/* Hero article */}
                 {articles[0] && (
                   <section>
                     <ArticleCard article={articles[0]} variant="hero" />
                   </section>
                 )}
-
-                {/* Rest of articles */}
                 {articles.length > 1 && (
                   <section>
                     <div className="flex items-center gap-2 mb-4">

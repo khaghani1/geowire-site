@@ -1,5 +1,4 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SEED_ARTICLES } from '@/lib/articles';
 import Header from '@/components/Header';
@@ -9,6 +8,17 @@ import ArticleCard from '@/components/ArticleCard';
 import Sidebar from '@/components/Sidebar';
 import AdZone from '@/components/AdZone';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Analysis — Intelligence Briefings',
+  description: 'In-depth intelligence analysis on Operation Epic Fury and global conflict. Expert breakdowns of military operations, economic impacts, and geopolitical shifts.',
+  keywords: ['iran war analysis', 'intelligence briefing', 'geopolitical analysis', 'conflict report', 'us iran'],
+  openGraph: {
+    title: 'Analysis — GeoWire Intelligence',
+    description: 'Deep-dive analysis on the US–Iran conflict, energy markets, and global security.',
+    url: 'https://geowire.org/analysis',
+  },
+};
 
 export default function AnalysisPage() {
   const analysisArticles = SEED_ARTICLES;

@@ -1,11 +1,26 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
 import MarketTicker from '@/components/MarketTicker';
 import NarrativeWar from '@/components/NarrativeWar';
 import AdZone from '@/components/AdZone';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Narrative War — Information Operations',
+  description: 'Track how Operation Epic Fury is being told across 6 global narratives. US/Western, Iranian, Russian, Chinese, Arab, and Global South framings with disinformation tracker.',
+  keywords: ['narrative war', 'information operations', 'iran propaganda', 'us iran media', 'disinformation tracker', 'info ops'],
+  openGraph: {
+    title: 'Narrative War — GeoWire',
+    description: 'Six competing narratives on Operation Epic Fury. Who is saying what, and why it matters.',
+    url: 'https://geowire.org/narrative-war',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Narrative War — GeoWire',
+    description: 'Six competing narratives on Operation Epic Fury. Who is saying what, and why it matters.',
+  },
+};
 
 export default function NarrativeWarPage() {
   return (
@@ -17,8 +32,7 @@ export default function NarrativeWarPage() {
       <main className="max-w-[1800px] mx-auto px-4 sm:px-6 pt-6">
         <AdZone size="leaderboard" className="mb-6" />
 
-        {/* Page Header */}
-        <div className="mb-8 pb-4 border-b border-border">
+        <div className="mb-8 pb-4 border-b border-border-1">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-accent-red text-sm">▲</span>
             <span className="font-mono text-xs tracking-widest text-tx-2 uppercase">Information War</span>

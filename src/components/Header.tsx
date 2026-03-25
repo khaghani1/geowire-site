@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/globe', label: 'War Map' },
+  { href: '/powermap', label: 'Power Map' },
   { href: '/cost', label: 'Cost Calculator' },
   { href: '/what-changed', label: 'What Changed' },
   { href: '/narrative-war', label: 'Narrative War' },

@@ -53,6 +53,7 @@ export const NAV_ITEMS = [
   { label: 'Dashboard', href: '/dashboard', icon: '📊' },
   { label: 'Predict', href: '/predict', icon: '♟️' },
   { label: 'War Cost', href: '/cost', icon: '💸' },
+  { label: 'Power Map', href: '/powermap', icon: '🗺️' },
   { label: 'Analysis', href: '/analysis' },
   { label: 'Energy', href: '/category/energy' },
   { label: 'US-China', href: '/category/us-china' },

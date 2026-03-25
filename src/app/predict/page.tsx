@@ -1,11 +1,21 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
 import MarketTicker from '@/components/MarketTicker';
 import Scenarios from '@/components/Scenarios';
 import AdZone from '@/components/AdZone';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Predict — Conflict Scenario Modeling',
+  description: 'Interactive scenario modeling for the US–Iran conflict. Adjust conflict parameters to explore outcomes: ceasefire, escalation, regional war, and nuclear threshold scenarios.',
+  keywords: ['iran war scenarios', 'conflict prediction', 'geopolitical forecast', 'war outcome modeling', 'iran nuclear'],
+  openGraph: {
+    title: 'Predict — GeoWire Scenario Modeling',
+    description: 'Model the possible outcomes of Operation Epic Fury. Ceasefire, escalation, and beyond.',
+    url: 'https://geowire.org/predict',
+  },
+};
 
 export default function PredictPage() {
   return (
