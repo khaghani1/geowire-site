@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Power Map — Interactive mapping of military assets, alliances, and conflict zones in Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Power Map — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-confirmed">CONFIRMED</span>
+          <span class="tag tag-military">MILITARY</span>
+        </div>
+        <h1 class="page-hero-title">Power Map</h1>
+        <p class="page-hero-subtitle">Visual overview of military deployments, alliance networks, threat zones, and strategic assets in the Operation Epic Fury theater.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- MAP VISUALIZATION -->
+  <section class="section">
+    <div class="container">
+      <div class="powermap-container">
+        <div class="powermap-header">
+          <h2 class="powermap-title">Theater of Operations — Persian Gulf &amp; Middle East</h2>
+          <div class="powermap-legend" id="powermap-legend"></div>
+        </div>
+        <div class="powermap-visual" id="powermap-visual">
+          <!-- SVG map or canvas -->
+          <div class="powermap-placeholder">
+            <div class="powermap-svg-wrap" id="powermap-svg"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORCE DISPOSITION TABLE -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Force Disposition</h2>
+      <div class="force-tabs">
+        <button class="force-tab active" data-side="us">US Coalition</button>
+        <button class="force-tab" data-side="iran">Iran / Proxies</button>
+        <button class="force-tab" data-side="regional">Regional Actors</button>
+      </div>
+      <div class="force-grid" id="force-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- STRIKE ZONES -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Confirmed Strike Locations</h2>
+      <div class="data-table-wrap">
+        <table class="data-table" id="strikes-table">
+          <thead>
+            <tr>
+              <th>Location</th>
+              <th>Target Type</th>
+              <th>Day</th>
+              <th>Munition</th>
+              <th>Damage Assessment</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="strikes-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section section-dark">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(() => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('powermap.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Build SVG power map
+  const svgEl = document.getElementById('powermap-svg');
+  if (svgEl) {
+    svgEl.innerHTML = `
+      <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" class="powermap-svg">
+        <!-- Background -->
+        <rect width="900" height="500" fill="#0a0a0a"/>
+        <!-- Sea areas -->
+        <ellipse cx="450" cy="300" rx="320" ry="130" fill="#0d1a26" opacity="0.8"/>
+        <!-- Country blocks (simplified) -->
+        <!-- Iran -->
+        <rect x="430" y="120" width="180" height="130" rx="4" fill="#1a0a0a" stroke="#ff3b3b" stroke-width="1.5"/>
+        <text x="520" y="175" text-anchor="middle" fill="#ff3b3b" font-family="JetBrains Mono" font-size="12" font-weight="700">IRAN</text>
+        <text x="520" y="192" text-anchor="middle" fill="#ff6666" font-family="JetBrains Mono" font-size="9">HOSTILE</text>
+        <!-- Iraq -->
+        <rect x="310" y="130" width="110" height="110" rx="4" fill="#111" stroke="#ffb800" stroke-width="1"/>
+        <text x="365" y="183" text-anchor="middle" fill="#ffb800" font-family="JetBrains Mono" font-size="11">IRAQ</text>
+        <!-- Saudi Arabia -->
+        <rect x="310" y="260" width="140" height="100" rx="4" fill="#0a1208" stroke="#00ff88" stroke-width="1"/>
+        <text x="380" y="310" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono" font-size="11">SAUDI</text>
+        <text x="380" y="326" text-anchor="middle" fill="#00cc66" font-family="JetBrains Mono" font-size="9">COALITION</text>
+        <!-- UAE -->
+        <rect x="460" y="270" width="80" height="60" rx="4" fill="#0a1208" stroke="#00ff88" stroke-width="1"/>
+        <text x="500" y="303" text-anchor="middle" fill="#00ff88" font-family="JetBrains Mono" font-size="10">UAE</text>
+        <!-- Strait of Hormuz -->
+        <ellipse cx="510" cy="255" rx="45" ry="18" fill="none" stroke="#ff3b3b" stroke-width="2" stroke-dasharray="5,3"/>
+        <text x="510" y="250" text-anchor="middle" fill="#ff3b3b" font-family="JetBrains Mono" font-size="8">HORMUZ</text>
+        <text x="510" y="263" text-anchor="middle" fill="#ff3b3b" font-family="JetBrains Mono" font-size="8">CLOSED</text>
+        <!-- Persian Gulf -->
+        <text x="415" y="310" text-anchor="middle" fill="#4a9eff" font-family="JetBrains Mono" font-size="9" opacity="0.7">PERSIAN GULF</text>
+        <!-- Carrier Strike Group 1 -->
+        <polygon points="340,290 356,300 340,310 324,300" fill="#4a9eff" opacity="0.9"/>
+        <text x="340" y="320" text-anchor="middle" fill="#4a9eff" font-family="JetBrains Mono" font-size="8">CSG-1</text>
+        <!-- Carrier Strike Group 2 -->
+        <polygon points="460,320 476,330 460,340 444,330" fill="#4a9eff" opacity="0.9"/>
+        <text x="460" y="350" text-anchor="middle" fill="#4a9eff" font-family="JetBrains Mono" font-size="8">CSG-2</text>
+        <!-- Strike markers -->
+        <circle cx="520" cy="145" r="6" fill="#ff3b3b" opacity="0.8"/>
+        <text x="535" y="149" fill="#ff6666" font-family="JetBrains Mono" font-size="9">FORDOW</text>
+        <circle cx="545" cy="165" r="5" fill="#ff3b3b" opacity="0.7"/>
+        <text x="560" y="169" fill="#ff6666" font-family="JetBrains Mono" font-size="9">NATANZ</text>
+        <circle cx="480" cy="200" r="5" fill="#ff3b3b" opacity="0.6"/>
+        <text x="495" y="204" fill="#ff6666" font-family="JetBrains Mono" font-size="9">ISFAHAN</text>
+        <!-- Legend area -->
+        <rect x="20" y="380" width="200" height="100" rx="4" fill="#111" stroke="#242424"/>
+        <text x="30" y="398" fill="#f4f4f4" font-family="JetBrains Mono" font-size="9" font-weight="700">LEGEND</text>
+        <circle cx="33" cy="415" r="5" fill="#ff3b3b"/>
+        <text x="45" y="419" fill="#b8b8b8" font-family="JetBrains Mono" font-size="9">Strike location</text>
+        <polygon points="33,430 43,437 33,444 23,437" fill="#4a9eff"/>
+        <text x="50" y="441" fill="#b8b8b8" font-family="JetBrains Mono" font-size="9">Carrier Strike Group</text>
+        <rect x="25" y="450" width="14" height="10" rx="2" fill="none" stroke="#ff3b3b" stroke-dasharray="4,2"/>
+        <text x="45" y="459" fill="#b8b8b8" font-family="JetBrains Mono" font-size="9">Closed/Contested zone</text>
+      </svg>`;
+  }
+
+  // Force disposition data
+  const forces = {
+    us: [
+      { name: 'USS Eisenhower (CVN-69)', type: 'Carrier Strike Group', location: 'Central Persian Gulf', status: 'ACTIVE' },
+      { name: 'USS Gerald Ford (CVN-78)', type: 'Carrier Strike Group', location: 'Gulf of Oman', status: 'ACTIVE' },
+      { name: 'B-2 Spirit Squadron', type: 'Strategic Bomber', location: 'Diego Garcia', status: 'ACTIVE' },
+      { name: 'USAF F-35A Package', type: 'Tactical Air', location: 'Al Udeid AB, Qatar', status: 'ACTIVE' },
+      { name: '82nd Airborne Ready Brigade', type: 'Ground Force', location: 'Kuwait / Standby', status: 'STANDBY' },
+      { name: 'SOF Task Force', type: 'Special Operations', location: 'Classified', status: 'ACTIVE' },
+    ],
+    iran: [
+      { name: 'IRGC Navy Fast Boats', type: 'Asymmetric Naval', location: 'Strait of Hormuz', status: 'ACTIVE' },
+      { name: 'Khordad-15 SAM Batteries', type: 'Air Defense', location: 'Multiple sites', status: 'DEGRADED' },
+      { name: 'Hezbollah LF (Lebanon)', type: 'Proxy Ground Force', location: 'Southern Lebanon', status: 'CONTAINED' },
+      { name: 'Houthi Missile Units', type: 'Proxy Missile', location: 'Yemen', status: 'ACTIVE' },
+      { name: 'Iraqi PMF', type: 'Proxy Ground', location: 'Iraq-Iran border', status: 'RESTRICTED' },
+      { name: 'Cyber Command (APT33)', type: 'Cyber Operations', location: 'Classified', status: 'ACTIVE' },
+    ],
+    regional: [
+      { name: 'Saudi RSAF F-15SA', type: 'Tactical Air', location: 'King Khalid AB', status: 'COALITION' },
+      { name: 'Israel IDF Air Force', type: 'Tactical Air', location: 'Nevatim Base', status: 'COALITION' },
+      { name: 'HMS Prince of Wales', type: 'UK Carrier', location: 'Arabian Sea', status: 'COALITION' },
+      { name: 'French Rafale Squadron', type: 'Tactical Air', location: 'UAE', status: 'COALITION' },
+      { name: 'Turkish Black Sea Fleet', type: 'Naval / Neutral', location: 'Bosphorus', status: 'NEUTRAL' },
+      { name: 'Chinese PLAN Task Force', type: 'Naval Observer', location: 'Gulf of Aden', status: 'WATCHING' },
+    ]
+  };
+
+  function renderForces(side) {
+    const data = forces[side] || [];
+    const grid = document.getElementById('force-grid');
+    grid.innerHTML = data.map(f => `
+      <div class="force-card status-${(f.status||'').toLowerCase()}">
+        <div class="force-name">${f.name}</div>
+        <div class="force-type">${f.type}</div>
+        <div class="force-location">📍 ${f.location}</div>
+        <span class="force-status status-pill-${(f.status||'').toLowerCase()}">${f.status}</span>
+      </div>`).join('');
+  }
+
+  renderForces('us');
+
+  document.querySelectorAll('.force-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.force-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderForces(tab.dataset.side);
+    });
+  });
+
+  // Strikes table
+  const strikesBody = document.getElementById('strikes-body');
+  if (strikesBody) {
+    strikesBody.innerHTML = [
+      ['Fordow', 'Underground enrichment', '1', 'GBU-57 MOP (B-2)', '90% facility destroyed', 'confirmed'],
+      ['Natanz', 'Enrichment centrifuges', '1', 'Tomahawk + JASSM', 'Surface complex destroyed', 'confirmed'],
+      ['Isfahan Nuclear Site', 'Conversion facility', '1', 'F-35A + GBU-31', 'Moderate damage', 'multisource'],
+      ['Bandar Abbas Naval Base', 'IRGC fast boat fleet', '2', 'Naval Tomahawk', '60% of fast boats destroyed', 'confirmed'],
+      ['Dezful Air Base', 'IRGC Air Force F-14s', '3', 'JASSM-ER', 'Runway cratered, 8 aircraft destroyed', 'confirmed'],
+      ['Parchin Military Complex', 'Suspected nuclear R&D', '5', 'B-2 + GBU-57', 'Assessment ongoing', 'inferred'],
+      ['Tehran IRGC HQ', 'Command & Control', '8', 'Precision strike package', '50% C2 disruption', 'multisource'],
+      ['Kharg Island Oil Terminal', 'Warning shot (partial)', '12', 'Naval gunfire', 'Terminal offline 6 hrs then restored', 'confirmed'],
+    ].map(r => `<tr>
+      <td class="td-primary">${r[0]}</td>
+      <td>${r[1]}</td>
+      <td>${r[2]}</td>
+      <td>${r[3]}</td>
+      <td>${r[4]}</td>
+      <td>${UI.renderConfidenceBadge(r[5])}</td>
+    </tr>`).join('');
+  }
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

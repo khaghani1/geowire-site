@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Trade — Global shipping disruption, tariff cascades, and supply chain shock from Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Trade &amp; Supply Chain — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-confirmed">CONFIRMED</span>
+          <span class="tag tag-economic">TRADE</span>
+        </div>
+        <h1 class="page-hero-title">Trade &amp; Supply Chain Disruption</h1>
+        <p class="page-hero-subtitle">$1.4T in annual trade through the Strait of Hormuz is offline. Tracking global shipping reroutes, commodity shocks, and economic cascades.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- TRADE HEADLINE STATS -->
+  <section class="section">
+    <div class="container">
+      <div class="stat-banner" id="trade-stat-banner">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- TRADE DATA TABLE -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Trade Route Disruption Matrix</h2>
+      <div class="data-table-wrap">
+        <table class="data-table" id="trade-table">
+          <thead>
+            <tr>
+              <th>Trade Route / Commodity</th>
+              <th>Annual Value</th>
+              <th>Disruption</th>
+              <th>Alternative</th>
+              <th>Cost Premium</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="trade-table-body">
+            <!-- populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPLY CHAIN -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Supply Chain Risk Map</h2>
+      <div id="supply-chain-container"></div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- COMMODITY SHOCKS -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Commodity Price Shocks</h2>
+      <div class="commodity-grid" id="commodity-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(async () => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('trade.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Stat banner
+  const banner = document.getElementById('trade-stat-banner');
+  if (banner) {
+    banner.innerHTML = `
+      <div class="stat-item">
+        <div class="stat-value">$1.4T</div>
+        <div class="stat-label">Annual Hormuz Trade Halted</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">21M</div>
+        <div class="stat-label">Barrels/Day Offline</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">+14 days</div>
+        <div class="stat-label">Cape Reroute Added Transit</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">$34B</div>
+        <div class="stat-label">Daily Global Cost</div>
+      </div>`;
+  }
+
+  // Trade data table
+  const tradeData = GEOWIRE.tradeData || [];
+  const tbody = document.getElementById('trade-table-body');
+  if (tbody) {
+    if (tradeData.length) {
+      tbody.innerHTML = tradeData.map(r => `
+        <tr>
+          <td class="td-primary">${r.route || r.country || '—'}</td>
+          <td>${r.annualValue || r.volume || '—'}</td>
+          <td>${r.disruption || '—'}</td>
+          <td>${r.alternative || '—'}</td>
+          <td>${r.costPremium || '—'}</td>
+          <td><span class="status-dot status-${(r.status||'').toLowerCase().replace(/\s/g,'-')}">${r.status || '—'}</span></td>
+        </tr>`).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr><td class="td-primary">Hormuz Oil Exports</td><td>$720B/yr</td><td>100%</td><td>Cape of Good Hope</td><td>+$8–14/bbl</td><td><span class="status-dot status-closed">CLOSED</span></td></tr>
+        <tr><td class="td-primary">LNG — Persian Gulf</td><td>$180B/yr</td><td>85%</td><td>Pipeline / LNG terminals</td><td>+340%</td><td><span class="status-dot status-disrupted">DISRUPTED</span></td></tr>
+        <tr><td class="td-primary">Japan Auto Parts</td><td>$42B/yr</td><td>60%</td><td>Air freight</td><td>+800%</td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
+        <tr><td class="td-primary">India–Europe Container</td><td>$280B/yr</td><td>40%</td><td>Suez + Cape mix</td><td>+22%</td><td><span class="status-dot status-elevated">ELEVATED</span></td></tr>
+        <tr><td class="td-primary">China–GCC Commerce</td><td>$250B/yr</td><td>35%</td><td>Belt &amp; Road rail</td><td>+18%</td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
+        <tr><td class="td-primary">Global Wheat / Grain</td><td>$85B/yr</td><td>15%</td><td>Atlantic corridors</td><td>+12%</td><td><span class="status-dot status-elevated">ELEVATED</span></td></tr>`;
+    }
+  }
+
+  // Supply chain
+  const scEl = document.getElementById('supply-chain-container');
+  if (scEl) scEl.innerHTML = UI.renderSupplyChain();
+
+  // Commodity shocks
+  const cgrid = document.getElementById('commodity-grid');
+  if (cgrid) {
+    const md = GEOWIRE.marketData || {};
+    const commodities = [
+      { key: 'oil', label: 'Brent Crude', icon: '🛢️' },
+      { key: 'wti', label: 'WTI Crude', icon: '🛢️' },
+      { key: 'natgas', label: 'Natural Gas', icon: '🔥' },
+      { key: 'ttf', label: 'EU Gas TTF', icon: '⚡' },
+      { key: 'wheat', label: 'Wheat Futures', icon: '🌾' },
+      { key: 'gold', label: 'Gold Spot', icon: '🥇' },
+    ];
+    cgrid.innerHTML = commodities.map(c => {
+      const d = md[c.key] || {};
+      return `<div class="commodity-card">
+        <div class="commodity-icon">${c.icon}</div>
+        <div class="commodity-label">${d.label || c.label}</div>
+        <div class="commodity-value">${d.value ? d.value.toLocaleString() : '—'} <small>${d.unit || ''}</small></div>
+        <div class="commodity-change ${d.change > 0 ? 'positive' : 'negative'}">${d.change > 0 ? '▲' : '▼'} ${d.change ? Math.abs(d.change) + '%' : '—'} since conflict</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+
+  try { await API.loadMarketData(); } catch(e) {}
+
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

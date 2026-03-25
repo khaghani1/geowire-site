@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Narrative War — Information warfare, propaganda, and competing framings of Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Narrative War — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-multisource">MULTISOURCE</span>
+          <span class="tag tag-political">INFORMATION OPS</span>
+        </div>
+        <h1 class="page-hero-title">The Narrative War</h1>
+        <p class="page-hero-subtitle">Competing information environments, state-sponsored propaganda, and the battle over how Operation Epic Fury is framed — across Western, Iranian, Chinese, and Russian media ecosystems.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- NARRATIVE FRAMES GRID -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Competing Narrative Frames</h2>
+      <p class="section-subtitle">Each actor constructs a distinct information reality. GeoWire maps them without endorsing any.</p>
+      <div class="narrative-grid" id="narrative-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- KEY CLAIMS TRACKER -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Key Claims Tracker</h2>
+      <p class="section-subtitle">Contested factual claims with current assessment status.</p>
+      <div class="claims-list" id="claims-list">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- DISINFO OPERATIONS -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Active Disinformation Campaigns</h2>
+      <div class="disinfo-grid" id="disinfo-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section section-dark">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(() => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('narrative-war.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Narrative frames
+  const frames = (GEOWIRE.narrativeFrames && GEOWIRE.narrativeFrames.length)
+    ? GEOWIRE.narrativeFrames
+    : [
+      {
+        actor: 'United States / West',
+        flag: '🇺🇸',
+        label: 'Defensive Preemption',
+        frame: 'Iran's nuclear program crossed a red line. Operation Epic Fury is a necessary, proportionate response to prevent nuclear proliferation — not regime change.',
+        keyMessages: ['Precision strikes minimizing civilian harm', 'Acting in self-defense under UN Charter Article 51', 'Iran had months of diplomatic off-ramps'],
+        mediaOutlets: 'CNN, BBC, NYT, Reuters, AP',
+        confidence: 'confirmed',
+        type: 'western'
+      },
+      {
+        actor: 'Iran / State Media',
+        flag: '🇮🇷',
+        label: 'Zionist Aggression / Martyrdom',
+        frame: 'American-Zionist aggression against the Islamic Republic. Iran is defending its sovereign right to peaceful nuclear development. Resistance will prevail.',
+        keyMessages: ['Civilian casualties deliberately targeted', 'US acting as proxy for Israel', 'Iran's nuclear program is peaceful and legal'],
+        mediaOutlets: 'IRNA, PressTV, Tasnim News',
+        confidence: 'confirmed',
+        type: 'iranian'
+      },
+      {
+        actor: 'China / Russia',
+        flag: '🇨🇳',
+        label: 'Western Imperialism',
+        frame: 'Unilateral US aggression violating international law. The real agenda is regime change and domination of Middle East energy resources.',
+        keyMessages: ['US ignoring UNSC authority', 'Double standard vs. Israeli nuclear weapons', 'China and Russia call for immediate ceasefire'],
+        mediaOutlets: 'CGTN, RT, Xinhua, TASS',
+        confidence: 'multisource',
+        type: 'adversarial'
+      },
+      {
+        actor: 'Al Jazeera / Global South',
+        flag: '🌍',
+        label: 'Humanitarian Crisis Framing',
+        frame: 'Civilian suffering and regional destabilization are the primary story. Western media underreporting Iranian civilian casualties.',
+        keyMessages: ['Over 14,000 civilian deaths', 'Food and medicine blockaded', 'Global South bears economic cost of rich-country conflict'],
+        mediaOutlets: 'Al Jazeera, TRT World, Middle East Eye',
+        confidence: 'multisource',
+        type: 'regional'
+      },
+    ];
+
+  const ngrid = document.getElementById('narrative-grid');
+  if (ngrid) {
+    ngrid.innerHTML = frames.map(f => `
+      <div class="narrative-card narrative-${f.type || 'general'}">
+        <div class="narrative-header">
+          <span class="narrative-flag">${f.flag}</span>
+          <span class="narrative-actor">${f.actor}</span>
+          <span class="narrative-label">"${f.label}"</span>
+        </div>
+        <p class="narrative-frame">${f.frame}</p>
+        <div class="narrative-messages">
+          <div class="narrative-messages-title">Key Messages:</div>
+          <ul>${(f.keyMessages || []).map(m => `<li>${m}</li>`).join('')}</ul>
+        </div>
+        <div class="narrative-outlets">Outlets: <em>${f.mediaOutlets || '—'}</em></div>
+        ${UI.renderConfidenceBadge(f.confidence || 'multisource')}
+      </div>`).join('');
+  }
+
+  // Claims tracker
+  const claims = [
+    { claim: 'Fordow enrichment facility fully destroyed', usPosition: 'CONFIRMED', iranPosition: 'DENIED', assessment: 'LIKELY TRUE', confidence: 'multisource' },
+    { claim: 'Iranian civilian deaths exceed 8,000', usPosition: 'DISPUTED (says 4,200)', iranPosition: 'CONFIRMED', assessment: 'UNCERTAIN', confidence: 'singlesource' },
+    { claim: 'US used white phosphorus munitions', usPosition: 'DENIED', iranPosition: 'ALLEGED', assessment: 'UNVERIFIED', confidence: 'disputed' },
+    { claim: 'Hezbollah has received Shahab-3 transfers', usPosition: 'ALLEGED', iranPosition: 'DENIED', assessment: 'POSSIBLE', confidence: 'inferred' },
+    { claim: 'Chinese military advisors present in Iran', usPosition: 'ALLEGED', iranPosition: 'DENIED', assessment: 'DISPUTED', confidence: 'singlesource' },
+    { claim: 'Iranian biological weapon program active', usPosition: 'ALLEGED', iranPosition: 'DENIED', assessment: 'UNVERIFIED', confidence: 'inferred' },
+  ];
+
+  const claimsEl = document.getElementById('claims-list');
+  if (claimsEl) {
+    claimsEl.innerHTML = claims.map(c => `
+      <div class="claim-row">
+        <div class="claim-text">${c.claim}</div>
+        <div class="claim-positions">
+          <span class="claim-pos claim-us">US: ${c.usPosition}</span>
+          <span class="claim-pos claim-iran">IR: ${c.iranPosition}</span>
+          <span class="claim-assessment assessment-${c.assessment.toLowerCase().replace(/\s/g,'-')}">${c.assessment}</span>
+        </div>
+        ${UI.renderConfidenceBadge(c.confidence)}
+      </div>`).join('');
+  }
+
+  // Disinfo operations
+  const disinfo = [
+    { title: 'Operation "BloodBath" — Iranian deepfake campaign', origin: 'Iran (IRGC linked)', description: 'AI-generated footage of US strikes on hospitals circulating on TikTok and Telegram. Meta and X removed 12,000 accounts. Still spreading via Telegram groups.', status: 'ACTIVE', threat: 'high' },
+    { title: '"Hezbollah is ready" false mobilization signals', origin: 'Unknown / possibly Russia', description: 'Forged IDF signals intercepts suggesting Hezbollah northern front activation. Designed to spook markets and trigger preemptive strikes.', status: 'DEGRADED', threat: 'moderate' },
+    { title: 'Fake UN ceasefire resolution text', origin: 'China-linked accounts', description: 'Circulated text of fake UNSC Resolution 2899 offering ceasefire terms. Used to pressure Western public opinion and confuse diplomatic channels.', status: 'DEBUNKED', threat: 'low' },
+    { title: 'US casualty inflation campaign', origin: 'Russian state media amplification', description: 'Claims US has 340 KIAs in theater (actual DoD reporting: 12). Amplified by RT, TASS, and affiliated accounts. Targeting US domestic war-weariness.', status: 'ACTIVE', threat: 'moderate' },
+  ];
+
+  const disinfoEl = document.getElementById('disinfo-grid');
+  if (disinfoEl) {
+    disinfoEl.innerHTML = disinfo.map(d => `
+      <div class="disinfo-card threat-${d.threat}">
+        <div class="disinfo-header">
+          <span class="disinfo-title">${d.title}</span>
+          <span class="disinfo-status status-${d.status.toLowerCase()}">${d.status}</span>
+        </div>
+        <div class="disinfo-origin">Origin: <strong>${d.origin}</strong></div>
+        <p class="disinfo-desc">${d.description}</p>
+        <span class="threat-label threat-${d.threat}">${d.threat.toUpperCase()} THREAT</span>
+      </div>`).join('');
+  }
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

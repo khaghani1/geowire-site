@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Energy — Oil chokepoints, energy market disruption, and supply chain risk during Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Energy Markets — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-confirmed">CONFIRMED</span>
+          <span class="tag tag-economic">ENERGY</span>
+        </div>
+        <h1 class="page-hero-title">Energy Markets &amp; Chokepoints</h1>
+        <p class="page-hero-subtitle">Real-time tracking of oil prices, Strait of Hormuz closure, and global energy disruption from Operation Epic Fury.</p>
+        <div class="page-hero-meta">
+          <span id="energy-live-badge"></span>
+          <span class="page-hero-updated">Updated continuously</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- ENERGY METRICS GRID -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Live Market Prices</h2>
+      <div class="metrics-grid" id="energy-metrics-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- CHOKEPOINTS -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Critical Chokepoints</h2>
+      <p class="section-subtitle">Strategic waterways and transit routes under threat or closure.</p>
+      <div class="chokepoint-grid" id="chokepoint-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPLY CHAIN RISK -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Supply Chain Risk</h2>
+      <div id="supply-chain-container"></div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- TRADE FLOWS TABLE -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Hormuz-Dependent Trade Flows</h2>
+      <div class="data-table-wrap">
+        <table class="data-table" id="trade-flows-table">
+          <thead>
+            <tr>
+              <th>Country / Route</th>
+              <th>Daily Volume</th>
+              <th>Dependency</th>
+              <th>Exposure</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="trade-flows-body">
+            <!-- populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(async () => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('energy.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Energy metrics from market data
+  const md = GEOWIRE.marketData || {};
+  const energyKeys = ['oil','wti','natgas','usgas','ttf','hormuz'];
+  const metricsGrid = document.getElementById('energy-metrics-grid');
+  if (metricsGrid) {
+    metricsGrid.innerHTML = energyKeys.map(k => {
+      const d = md[k];
+      if (!d) return '';
+      const isHormuz = k === 'hormuz';
+      const valDisplay = isHormuz
+        ? `<span class="metric-status-closed">CLOSED</span>`
+        : `<span class="metric-value">${typeof d.value === 'number' ? d.value.toLocaleString() : d.value} <small>${d.unit||''}</small></span>`;
+      const changeDisplay = d.change
+        ? `<span class="metric-change ${d.change > 0 ? 'positive' : 'negative'}">${d.change > 0 ? '▲' : '▼'} ${Math.abs(d.change)}%</span>`
+        : '';
+      return `<div class="metric-card ${isHormuz ? 'metric-card-alert' : ''}">
+        <div class="metric-label">${d.label}</div>
+        ${valDisplay}
+        ${changeDisplay}
+        <div class="metric-confidence">${UI.renderConfidenceBadge(d.confidence)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Chokepoints
+  const chokepoints = [
+    { name: 'Strait of Hormuz', status: 'CLOSED', volume: '21M bbl/day', countries: 'Iran/Oman', risk: 'critical', note: 'Iranian mines + naval blockade. Day 26.' },
+    { name: 'Strait of Malacca', status: 'OPEN', volume: '16M bbl/day', countries: 'Malaysia/Singapore/Indonesia', risk: 'elevated', note: 'Increased naval patrols. China watching.' },
+    { name: 'Suez Canal', status: 'REDUCED', volume: '5.5M bbl/day', countries: 'Egypt', risk: 'elevated', note: 'Traffic down 40% due to rerouting pressure.' },
+    { name: 'Bab el-Mandeb', status: 'CONTESTED', volume: '4.8M bbl/day', countries: 'Yemen/Djibouti/Eritrea', risk: 'high', note: 'Houthi resurgence since Day 8.' },
+    { name: 'Turkish Straits', status: 'OPEN', volume: '3M bbl/day', countries: 'Turkey', risk: 'low', note: 'Normal operations. Turkey neutral.' },
+    { name: 'Cape of Good Hope', status: 'REROUTING', volume: '+8M bbl/day', countries: 'South Africa', risk: 'moderate', note: 'Emergency reroute adding 14+ days transit.' },
+  ];
+  const chopGrid = document.getElementById('chokepoint-grid');
+  if (chopGrid) {
+    chopGrid.innerHTML = chokepoints.map(c => `
+      <div class="chokepoint-card risk-${c.risk}">
+        <div class="chokepoint-header">
+          <span class="chokepoint-name">${c.name}</span>
+          <span class="chokepoint-status status-${c.status.toLowerCase().replace(/\s/g,'-')}">${c.status}</span>
+        </div>
+        <div class="chokepoint-meta">
+          <span class="chokepoint-volume">${c.volume}</span>
+          <span class="chokepoint-countries">${c.countries}</span>
+        </div>
+        <p class="chokepoint-note">${c.note}</p>
+      </div>`).join('');
+  }
+
+  // Supply chain
+  const scContainer = document.getElementById('supply-chain-container');
+  if (scContainer) scContainer.innerHTML = UI.renderSupplyChain();
+
+  // Trade flows
+  const flows = GEOWIRE.tradeData || [];
+  const tbody = document.getElementById('trade-flows-body');
+  if (tbody && flows.length) {
+    tbody.innerHTML = flows.map(row => `
+      <tr>
+        <td class="td-primary">${row.country || row.route || '—'}</td>
+        <td>${row.volume || '—'}</td>
+        <td>${row.dependency || '—'}</td>
+        <td><span class="exposure-pill exposure-${(row.exposure||'').toLowerCase()}">${row.exposure||'—'}</span></td>
+        <td><span class="status-dot status-${(row.status||'').toLowerCase()}">${row.status||'—'}</span></td>
+      </tr>`).join('');
+  } else if (tbody) {
+    tbody.innerHTML = `
+      <tr><td class="td-primary">Japan</td><td>3.4M bbl/day</td><td>87%</td><td><span class="exposure-pill exposure-critical">CRITICAL</span></td><td><span class="status-dot status-disrupted">DISRUPTED</span></td></tr>
+      <tr><td class="td-primary">South Korea</td><td>2.8M bbl/day</td><td>82%</td><td><span class="exposure-pill exposure-critical">CRITICAL</span></td><td><span class="status-dot status-disrupted">DISRUPTED</span></td></tr>
+      <tr><td class="td-primary">China</td><td>6.2M bbl/day</td><td>41%</td><td><span class="exposure-pill exposure-high">HIGH</span></td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
+      <tr><td class="td-primary">India</td><td>1.9M bbl/day</td><td>66%</td><td><span class="exposure-pill exposure-high">HIGH</span></td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
+      <tr><td class="td-primary">European Union</td><td>1.2M bbl/day</td><td>18%</td><td><span class="exposure-pill exposure-moderate">MODERATE</span></td><td><span class="status-dot status-elevated">ELEVATED</span></td></tr>
+      <tr><td class="td-primary">United States</td><td>0.9M bbl/day</td><td>12%</td><td><span class="exposure-pill exposure-low">LOW</span></td><td><span class="status-dot status-stable">STABLE</span></td></tr>`;
+  }
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  document.getElementById('energy-live-badge').innerHTML = UI.renderLiveBadge(false);
+
+  UI.init();
+
+  // Live market data
+  try {
+    await API.loadMarketData();
+    document.getElementById('energy-live-badge').innerHTML = UI.renderLiveBadge(true);
+  } catch(e) {}
+
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire US Impact — How Operation Epic Fury hits American consumers, markets, and military posture.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>US Impact — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-confirmed">CONFIRMED</span>
+          <span class="tag tag-economic">US IMPACT</span>
+        </div>
+        <h1 class="page-hero-title">US Domestic Impact</h1>
+        <p class="page-hero-subtitle">From gas pump to Pentagon budget — how Operation Epic Fury reshapes American life, markets, and military posture.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- US IMPACT STATS -->
+  <section class="section">
+    <div class="container">
+      <div class="stat-banner" id="us-stat-banner"></div>
+    </div>
+  </section>
+
+  <!-- US IMPACT CATEGORIES -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Impact by Sector</h2>
+      <div class="impact-grid" id="us-impact-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKET DATA -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">US Market Snapshot</h2>
+      <div class="metrics-grid" id="us-market-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- US POLITICAL / POLICY -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Policy &amp; Political Dynamics</h2>
+      <div class="policy-grid" id="policy-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(async () => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('us-impact.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Stat banner
+  const banner = document.getElementById('us-stat-banner');
+  if (banner) {
+    banner.innerHTML = `
+      <div class="stat-item">
+        <div class="stat-value">$4.89</div>
+        <div class="stat-label">Avg US Gas Price/Gallon</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">+$180B</div>
+        <div class="stat-label">Defense Supplemental Request</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">-9.7%</div>
+        <div class="stat-label">S&amp;P 500 Since Day 1</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">+2.1%</div>
+        <div class="stat-label">CPI Estimated Add-On</div>
+      </div>`;
+  }
+
+  // US Impact data
+  const usData = GEOWIRE.usImpactData || [];
+  const igrid = document.getElementById('us-impact-grid');
+  if (igrid) {
+    if (usData.length) {
+      igrid.innerHTML = usData.map(item => `
+        <div class="impact-card impact-${(item.severity||'moderate').toLowerCase()}">
+          <div class="impact-header">
+            <span class="impact-sector">${item.sector}</span>
+            <span class="impact-severity severity-${(item.severity||'moderate').toLowerCase()}">${item.severity || 'MODERATE'}</span>
+          </div>
+          <p class="impact-desc">${item.description || item.summary || ''}</p>
+          ${item.metrics ? `<div class="impact-metrics">${item.metrics.map(m => `<div class="imet"><span class="imet-k">${m.key}</span><span class="imet-v">${m.value}</span></div>`).join('')}</div>` : ''}
+          ${UI.renderConfidenceBadge(item.confidence || 'confirmed')}
+        </div>`).join('');
+    } else {
+      igrid.innerHTML = `
+        <div class="impact-card impact-critical">
+          <div class="impact-header"><span class="impact-sector">Energy / Consumer</span><span class="impact-severity severity-critical">CRITICAL</span></div>
+          <p class="impact-desc">Gas prices surged 38% since Day 1. Average household paying $280/month more in fuel costs. Airlines surcharging passengers $45–90 per ticket.</p>
+        </div>
+        <div class="impact-card impact-high">
+          <div class="impact-header"><span class="impact-sector">Financial Markets</span><span class="impact-severity severity-high">HIGH</span></div>
+          <p class="impact-desc">S&amp;P 500 down 9.7%. VIX at 26. Fed holding rates but yield curve inverted. Defense stocks +34%. Energy majors +41%.</p>
+        </div>
+        <div class="impact-card impact-high">
+          <div class="impact-header"><span class="impact-sector">Defense Budget</span><span class="impact-severity severity-high">HIGH</span></div>
+          <p class="impact-desc">$180B supplemental authorization requested. Two carrier strike groups deployed. CENTCOM operating budget tripled. Munitions stockpiles at 60-day burn rate.</p>
+        </div>
+        <div class="impact-card impact-moderate">
+          <div class="impact-header"><span class="impact-sector">Manufacturing / Autos</span><span class="impact-severity severity-moderate">MODERATE</span></div>
+          <p class="impact-desc">Semiconductor supply tightening via Japan/Korea disruptions. EV battery materials up 22%. Detroit automakers extending lead times 8–12 weeks.</p>
+        </div>
+        <div class="impact-card impact-moderate">
+          <div class="impact-header"><span class="impact-sector">Agriculture</span><span class="impact-severity severity-moderate">MODERATE</span></div>
+          <p class="impact-desc">Fertilizer costs up 18% (nat gas input). Wheat futures elevated. US exports gaining market share from disrupted Middle East routes.</p>
+        </div>
+        <div class="impact-card impact-low">
+          <div class="impact-header"><span class="impact-sector">Technology</span><span class="impact-severity severity-low">LOW</span></div>
+          <p class="impact-desc">Cloud/AI sector resilient. Some supply chain exposure via Taiwan Strait nervousness. Cybersecurity stocks surging on Iranian cyber threat escalation.</p>
+        </div>`;
+    }
+  }
+
+  // US market metrics
+  const md = GEOWIRE.marketData || {};
+  const mkeys = ['sp500','treasury','gold','vix'];
+  const mgrid = document.getElementById('us-market-grid');
+  if (mgrid) {
+    mgrid.innerHTML = mkeys.map(k => {
+      const d = md[k];
+      if (!d) return '';
+      return `<div class="metric-card">
+        <div class="metric-label">${d.label}</div>
+        <span class="metric-value">${typeof d.value === 'number' ? d.value.toLocaleString() : d.value} <small>${d.unit||''}</small></span>
+        ${d.change ? `<span class="metric-change ${d.change > 0 ? 'positive' : 'negative'}">${d.change > 0 ? '▲' : '▼'} ${Math.abs(d.change)}%</span>` : ''}
+        ${UI.renderConfidenceBadge(d.confidence)}
+      </div>`;
+    }).join('');
+  }
+
+  // Policy grid
+  const pgrid = document.getElementById('policy-grid');
+  if (pgrid) {
+    pgrid.innerHTML = `
+      <div class="policy-card">
+        <div class="policy-tag tag-military">MILITARY</div>
+        <h3>CENTCOM Operations</h3>
+        <p>Two carrier strike groups in Persian Gulf. B-2 sorties from Diego Garcia. SOF units operating in theater. Rules of engagement expanded Day 14.</p>
+      </div>
+      <div class="policy-card">
+        <div class="policy-tag tag-economic">SANCTIONS</div>
+        <h3>Iran Sanctions Package III</h3>
+        <p>Full oil export blockade. SWIFT disconnection of all Iranian banks. Secondary sanctions threatening China's CIPS system. 47 nations participating.</p>
+      </div>
+      <div class="policy-card">
+        <div class="policy-tag tag-diplomatic">DIPLOMACY</div>
+        <h3>Ceasefire Framework Talks</h3>
+        <p>Qatar acting as intermediary. Backchannel via Oman. UN Security Council session called. China offering to broker—US skeptical.</p>
+      </div>
+      <div class="policy-card">
+        <div class="policy-tag tag-economic">SPR RELEASE</div>
+        <h3>Strategic Reserve Deployment</h3>
+        <p>IEA coordinated 180M barrel release. US contributing 60M barrels. Buffering ~2.8M bbl/day. Reserve at 68% capacity—18 months sustainable.</p>
+      </div>`;
+  }
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+  try { await API.loadMarketData(); } catch(e) {}
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

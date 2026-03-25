@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Geopolitical — Power shifts, alliance dynamics, and great-power competition during Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Geopolitical — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-inferred">ANALYTICAL</span>
+          <span class="tag tag-diplomatic">GEOPOLITICAL</span>
+        </div>
+        <h1 class="page-hero-title">Geopolitical Analysis</h1>
+        <p class="page-hero-subtitle">Power shifts, alliance realignment, great-power competition, and the long-term strategic implications of Operation Epic Fury.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- POWER MAP PREVIEW -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Great Power Positions</h2>
+      <div class="power-grid" id="power-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ALLIANCE GRID -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Alliance Dynamics</h2>
+      <div id="alliance-container"></div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- KEY DEVELOPMENTS -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Key Geopolitical Developments</h2>
+      <div class="news-feed" id="geo-news-feed">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- RISK HEATMAP -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Geopolitical Risk Matrix</h2>
+      <div id="risk-heatmap-container"></div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(async () => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('geopolitical.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Power grid
+  const powers = [
+    { name: 'United States', flag: '🇺🇸', posture: 'OFFENSIVE', summary: 'Leading Operation Epic Fury. Carrier strike groups deployed. Testing new doctrine of precision strike + economic coercion without regime change.', confidence: 'confirmed' },
+    { name: 'China', flag: '🇨🇳', posture: 'OPPORTUNISTIC', summary: 'Publicly condemning strikes while accelerating Belt and Road energy diversification. Iran is 12% of China\'s oil. Watching Taiwan strait.', confidence: 'multisource' },
+    { name: 'Russia', flag: '🇷🇺', posture: 'SPOILER', summary: 'Vetoed UNSC resolutions. Selling S-400 spare parts via third parties. Energy windfall from high oil prices partially offsetting Ukraine costs.', confidence: 'inferred' },
+    { name: 'Saudi Arabia', flag: '🇸🇦', posture: 'COALITION', summary: 'Intelligence sharing, airbase access, oil production surge to 12.5M bbl/day. MBS personally directing. Domestic hardliners growing uneasy.', confidence: 'confirmed' },
+    { name: 'Israel', flag: '🇮🇱', posture: 'COALITION', summary: 'Providing intelligence, targeting data, and limited strike capability. Northern front concern: Hezbollah restrained so far. Iron Dome at 94% efficiency.', confidence: 'confirmed' },
+    { name: 'Turkey', flag: '🇹🇷', posture: 'NEUTRAL', summary: 'Blocking Bosphorus to naval reinforcements. Offering mediation. Accepting Iranian refugees. NATO membership creating internal tension.', confidence: 'multisource' },
+    { name: 'India', flag: '🇮🇳', posture: 'HEDGING', summary: 'Abstaining on UNSC votes. Negotiating discounted Iranian oil via UAE middlemen. Military-to-military contact with both US and Russia ongoing.', confidence: 'multisource' },
+    { name: 'EU', flag: '🇪🇺', posture: 'SUPPORTIVE', summary: 'Sanctions aligned with US. 12 member states contributing to naval escort missions. Energy crisis accelerating renewables push and Norway LNG deals.', confidence: 'confirmed' },
+  ];
+
+  const pgrid = document.getElementById('power-grid');
+  if (pgrid) {
+    pgrid.innerHTML = powers.map(p => `
+      <div class="power-card posture-${p.posture.toLowerCase()}">
+        <div class="power-header">
+          <span class="power-flag">${p.flag}</span>
+          <span class="power-name">${p.name}</span>
+          <span class="power-posture">${p.posture}</span>
+        </div>
+        <p class="power-summary">${p.summary}</p>
+        ${UI.renderConfidenceBadge(p.confidence)}
+      </div>`).join('');
+  }
+
+  // Alliance container
+  const allianceEl = document.getElementById('alliance-container');
+  if (allianceEl) {
+    const alliances = GEOWIRE.alliancesData || [];
+    if (alliances.length) {
+      allianceEl.innerHTML = `<div class="alliance-grid">${alliances.map(a => `
+        <div class="alliance-card">
+          <div class="alliance-name">${a.name || a.label}</div>
+          <div class="alliance-members">${(a.members || []).join(', ')}</div>
+          ${a.posture ? `<div class="alliance-posture posture-${a.posture.toLowerCase()}">${a.posture}</div>` : ''}
+          ${a.note ? `<p class="alliance-note">${a.note}</p>` : ''}
+        </div>`).join('')}</div>`;
+    } else {
+      allianceEl.innerHTML = `<div class="alliance-grid">
+        <div class="alliance-card"><div class="alliance-name">Operation Epic Fury Coalition</div><div class="alliance-members">US, Israel, UK, Saudi Arabia, UAE, Bahrain, France</div><div class="alliance-posture posture-offensive">OFFENSIVE</div><p class="alliance-note">Full operational coordination. US CENTCOM commanding. Saudi airspace and basing critical.</p></div>
+        <div class="alliance-card"><div class="alliance-name">Axis of Resistance</div><div class="alliance-members">Iran, Hezbollah, Iraqi PMF, Houthis, Hamas remnants, PIJ</div><div class="alliance-posture posture-defensive">DEFENSIVE</div><p class="alliance-note">IRGC-QF coordinating. Proxy activation partially constrained by Day 18 interdiction of Iran-Iraq supply lines.</p></div>
+        <div class="alliance-card"><div class="alliance-name">SCO Observer Bloc</div><div class="alliance-members">China, Russia, Pakistan, Central Asian states</div><div class="alliance-posture posture-neutral">WATCHING</div><p class="alliance-note">Economic interests diverging from political positions. China-Russia coordination limited by each other's competing interests.</p></div>
+        <div class="alliance-card"><div class="alliance-name">Non-Aligned + Hedgers</div><div class="alliance-members">India, Turkey, Qatar, Indonesia, South Africa, Brazil</div><div class="alliance-posture posture-neutral">NEUTRAL</div><p class="alliance-note">Collectively blocking UN authorization. Back-channel diplomatic activity high. Seeking mediation role.</p></div>
+      </div>`;
+    }
+  }
+
+  // Geo news feed
+  const newsEl = document.getElementById('geo-news-feed');
+  if (newsEl) {
+    newsEl.innerHTML = '<p class="loading-state">Loading geopolitical intelligence…</p>';
+    try {
+      const { data } = await API.fetchGDELT('Iran war geopolitics alliance diplomacy ceasefire');
+      newsEl.innerHTML = data.map(item => UI.renderNewsCard(item)).join('');
+    } catch(e) {
+      newsEl.innerHTML = (GEOWIRE.newsCards || []).map(item => UI.renderNewsCard(item)).join('');
+    }
+  }
+
+  // Risk heatmap
+  const heatEl = document.getElementById('risk-heatmap-container');
+  if (heatEl) heatEl.innerHTML = UI.renderRiskHeatmap();
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

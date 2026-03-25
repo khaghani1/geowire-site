@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Global Intelligence Dashboard | US-Iran Conflict Tracker</title>
+  <meta name="description" content="Real-time geopolitical intelligence tracking Operation Epic Fury — the US-Iran conflict, global energy markets, and crisis analytics updated around the clock." />
+  <meta property="og:title" content="GeoWire — Global Intelligence Dashboard" />
+  <meta property="og:description" content="Real-time tracking of Operation Epic Fury: market impact, humanitarian crisis, and geopolitical shifts." />
+  <meta property="og:url" content="https://geowire.org/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="site-header"></div>
+<div id="site-nav"></div>
+<main>
+  <section class="war-status-bar">
+    <div class="container">
+      <div class="war-status-grid">
+        <div class="war-status-item"><span class="war-status-label">OPERATION</span><span class="war-status-value war-name">Epic Fury</span></div>
+        <div class="war-status-item"><span class="war-status-label">DAY</span><span class="war-status-value" id="war-day">26</span></div>
+        <div class="war-status-item"><span class="war-status-label">ACTIVE FRONTS</span><span class="war-status-value">4</span></div>
+        <div class="war-status-item"><span class="war-status-label">THREAT LEVEL</span><span class="war-status-value threat-critical">CRITICAL</span></div>
+        <div class="war-status-item"><span class="war-status-label">UTC</span><span class="war-status-value" id="utc-clock-ws">--:--:--</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ticker-section">
+    <div id="ticker-mount"></div>
+  </section>
+
+  <div class="container">
+    <div class="ad-slot" data-slot="top-banner"><span class="ad-label">Advertisement</span><ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;" data-ad-client="ca-pub-5068519853957013" data-ad-slot="top-banner" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+  </div>
+
+  <section class="hero-section container">
+    <div class="hero-inner">
+      <div class="hero-badge-row">
+        <span class="live-dot"></span>
+        <span class="hero-badge">LIVE INTELLIGENCE</span>
+        <span class="hero-sep">•</span>
+        <span class="hero-badge-sub">Operation Epic Fury — Day <span id="war-day-hero">26</span></span>
+      </div>
+      <h1 class="homepage-headline" data-en="US–Iran Conflict — What You Need to Know" data-fa="تعارض ایران و آمریکا — آخرین اطلاعات">
+        US–Iran Conflict — What You Need to Know
+      </h1>
+      <p class="hero-sub">Hormuz closed. Brent at $101. S&amp;P up 9.7% on defense/energy rally. GeoWire tracks every dimension of the crisis — markets, energy, humanitarian, and what happens next.</p>
+      <div class="hero-share" id="hero-share-buttons"></div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Intelligence Feed</h2>
+      <span id="news-live-badge"></span>
+    </div>
+    <div class="news-grid" id="news-feed-container">
+      <p class="loading-state">Loading intelligence feed…</p>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Conflict Timeline</h2>
+      <a href="analysis.html" class="section-link">Full Analysis →</a>
+    </div>
+    <div id="conflict-timeline"></div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Conflict Map</h2>
+      <span class="section-badge demo-badge">DEMO</span>
+    </div>
+    <div class="map-container" id="map-container">
+      <div class="map-placeholder">
+        <div class="map-placeholder-inner">
+          <div class="map-icon">🗺️</div>
+          <div class="map-placeholder-title">Interactive Conflict Map</div>
+          <div class="map-placeholder-sub">Strike zones · Naval positions · Refugee flows · Supply chain disruptions</div>
+          <div class="map-placeholder-tag">MapLibre integration — Phase 2</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">War Cost Meter</h2>
+      <a href="us-impact.html" class="section-link">US Impact →</a>
+    </div>
+    <div id="war-cost-ticker"></div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Country Risk Heatmap</h2>
+      <a href="countries.html" class="section-link">All Countries →</a>
+    </div>
+    <div id="risk-heatmap"></div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Supply Chain Status</h2>
+      <a href="trade.html" class="section-link">Trade Detail →</a>
+    </div>
+    <div id="supply-chain-status"></div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">What Changed</h2>
+      <a href="what-changed.html" class="section-link">Full Log →</a>
+    </div>
+    <div class="what-changed-grid" id="what-changed-preview"></div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Scenario Outlook</h2>
+      <a href="scenarios.html" class="section-link">Full Scenarios →</a>
+    </div>
+    <div class="scenario-preview-grid" id="scenario-preview"></div>
+  </section>
+
+  <section class="section container" id="email-section"></section>
+
+  <div class="container">
+    <div class="ad-slot" data-slot="bottom-banner"><span class="ad-label">Advertisement</span><ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;" data-ad-client="ca-pub-5068519853957013" data-ad-slot="bottom-banner" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
+  </div>
+</main>
+<div id="site-footer"></div>
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(async () => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('index.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  function calcDay() { return Math.max(1, Math.ceil((Date.now() - new Date(GEOWIRE.siteMeta.warStartDate)) / 86400000)); }
+  const warDay = calcDay();
+  document.querySelectorAll('#war-day, #war-day-hero').forEach(el => el.textContent = warDay);
+
+  // Ticker
+  document.getElementById('ticker-mount').innerHTML = UI.renderMarketTicker();
+
+  // Hero share
+  document.getElementById('hero-share-buttons').innerHTML = UI.renderShareButtons(
+    `US–Iran Conflict Day ${warDay} — Operation Epic Fury live tracking`, 'https://geowire.org/'
+  );
+
+  // Timeline
+  document.getElementById('conflict-timeline').innerHTML = UI.renderTimeline(GEOWIRE.timelineEvents);
+
+  // War cost
+  document.getElementById('war-cost-ticker').innerHTML = UI.renderWarCostTicker();
+  UI.startWarCostCounter();
+
+  // Risk heatmap
+  document.getElementById('risk-heatmap').innerHTML = UI.renderRiskHeatmap();
+
+  // Supply chain
+  document.getElementById('supply-chain-status').innerHTML = UI.renderSupplyChain();
+
+  // What changed
+  const wcEl = document.getElementById('what-changed-preview');
+  wcEl.innerHTML = (GEOWIRE.updateLog || []).slice(0, 6).map(u => `
+    <div class="what-changed-card">
+      <div class="wc-type tag-${(u.category||'update').toLowerCase()}">${u.category || 'UPDATE'}</div>
+      <div class="wc-time">${new Date(u.timestamp).toUTCString().replace(' GMT',' UTC')}</div>
+      <div class="wc-text">${u.item}: ${u.change}</div>
+    </div>`).join('');
+
+  // Scenarios
+  document.getElementById('scenario-preview').innerHTML = (GEOWIRE.scenarios || []).map(s => `
+    <div class="scenario-card scenario-${s.type}">
+      <div class="scenario-type-label">${s.type.toUpperCase()}</div>
+      <div class="scenario-title">${s.title}</div>
+      <div class="scenario-probability"><span class="prob-label">Probability</span><span class="prob-value">${s.probability}%</span></div>
+      <div class="scenario-desc">${s.summary}</div>
+      <a href="scenarios.html" class="scenario-cta">Full Analysis →</a>
+    </div>`).join('');
+
+  // Email capture
+  document.getElementById('email-section').innerHTML = UI.renderEmailCapture();
+
+  // Init
+  UI.init();
+
+  // Async: live market data
+  await API.loadMarketData();
+  // Async: news feed
+  await API.loadNews('news-feed-container');
+
+  // AdSense
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+})();
+</script>
+</body>
+</html>

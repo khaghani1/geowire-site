@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Exposure Calculator — Calculate your personal and business exposure to the Iran conflict and Hormuz closure.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Exposure Calculator — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-inferred">INTERACTIVE</span>
+          <span class="tag tag-economic">CALCULATOR</span>
+        </div>
+        <h1 class="page-hero-title">Conflict Exposure Calculator</h1>
+        <p class="page-hero-subtitle">Quantify your personal or business exposure to Operation Epic Fury's economic shockwaves — energy costs, supply chain disruption, and portfolio impact.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- CALCULATOR FORM -->
+  <section class="section">
+    <div class="container">
+      <div class="calc-layout">
+
+        <!-- INPUT PANEL -->
+        <div class="calc-panel calc-input-panel">
+          <h2 class="calc-panel-title">Your Profile</h2>
+
+          <div class="calc-section">
+            <h3 class="calc-section-title">Location &amp; Transport</h3>
+            <div class="calc-field">
+              <label class="calc-label" for="location">Country / Region</label>
+              <select class="calc-select" id="location">
+                <option value="us">United States</option>
+                <option value="europe">Europe (EU)</option>
+                <option value="japan">Japan / South Korea</option>
+                <option value="china">China</option>
+                <option value="india">India</option>
+                <option value="mideast">Middle East</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="calc-field">
+              <label class="calc-label" for="miles-driven">Miles Driven per Month</label>
+              <input class="calc-input" type="number" id="miles-driven" value="1000" min="0" max="10000">
+            </div>
+            <div class="calc-field">
+              <label class="calc-label" for="mpg">Vehicle MPG</label>
+              <input class="calc-input" type="number" id="mpg" value="28" min="5" max="150">
+            </div>
+          </div>
+
+          <div class="calc-section">
+            <h3 class="calc-section-title">Home Energy</h3>
+            <div class="calc-field">
+              <label class="calc-label" for="heating-fuel">Primary Heating Fuel</label>
+              <select class="calc-select" id="heating-fuel">
+                <option value="gas">Natural Gas</option>
+                <option value="electric">Electric (mixed)</option>
+                <option value="oil">Heating Oil</option>
+                <option value="renewables">Solar / Renewables</option>
+              </select>
+            </div>
+            <div class="calc-field">
+              <label class="calc-label" for="monthly-energy">Monthly Energy Bill ($)</label>
+              <input class="calc-input" type="number" id="monthly-energy" value="180" min="0" max="2000">
+            </div>
+          </div>
+
+          <div class="calc-section">
+            <h3 class="calc-section-title">Portfolio Exposure</h3>
+            <div class="calc-field">
+              <label class="calc-label" for="portfolio-size">Portfolio Size ($)</label>
+              <input class="calc-input" type="number" id="portfolio-size" value="50000" min="0">
+            </div>
+            <div class="calc-field">
+              <label class="calc-label" for="equity-pct">% in Equities</label>
+              <input class="calc-input" type="number" id="equity-pct" value="70" min="0" max="100">
+            </div>
+            <div class="calc-field">
+              <label class="calc-label" for="energy-pct">% in Energy Sector</label>
+              <input class="calc-input" type="number" id="energy-pct" value="10" min="0" max="100">
+            </div>
+          </div>
+
+          <div class="calc-section">
+            <h3 class="calc-section-title">Business (Optional)</h3>
+            <div class="calc-field">
+              <label class="calc-label" for="biz-sector">Business Sector</label>
+              <select class="calc-select" id="biz-sector">
+                <option value="none">None / Not Applicable</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="logistics">Logistics / Shipping</option>
+                <option value="retail">Retail / Consumer</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="tech">Technology</option>
+                <option value="energy">Energy</option>
+                <option value="finance">Finance</option>
+                <option value="healthcare">Healthcare</option>
+              </select>
+            </div>
+            <div class="calc-field">
+              <label class="calc-label" for="supply-chain-exposure">Supply Chain Middle East Dependence (%)</label>
+              <input class="calc-input" type="number" id="supply-chain-exposure" value="0" min="0" max="100">
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-full" id="calc-btn" onclick="calculateExposure()">Calculate My Exposure →</button>
+        </div>
+
+        <!-- RESULTS PANEL -->
+        <div class="calc-panel calc-results-panel" id="calc-results">
+          <div class="calc-results-placeholder">
+            <div class="calc-placeholder-icon">⚡</div>
+            <p>Fill in your profile and click <strong>Calculate</strong> to see your conflict exposure score and estimated monthly cost impact.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- EXPOSURE FACTORS -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">How Exposure is Calculated</h2>
+      <div class="exposure-factors" id="exposure-factors">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(() => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('exposure-calculator.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Exposure factors
+  const factorsEl = document.getElementById('exposure-factors');
+  const factors = (GEOWIRE.exposureFactors && GEOWIRE.exposureFactors.length)
+    ? GEOWIRE.exposureFactors
+    : [
+      { label: 'Energy Cost Shock', weight: '30%', desc: 'Direct fuel and utility cost increases from oil/gas price surge.' },
+      { label: 'Portfolio Volatility', weight: '25%', desc: 'S&P drawdown, sector concentration in energy/defense vs. tech.' },
+      { label: 'Supply Chain Disruption', weight: '20%', desc: 'Business input cost increases from rerouted shipping and scarcity.' },
+      { label: 'Geographic Risk Premium', weight: '15%', desc: 'Regional proximity to conflict zone and trade route dependency.' },
+      { label: 'Consumer Price Inflation', weight: '10%', desc: 'Downstream food, goods, and services price increases from energy pass-through.' },
+    ];
+
+  if (factorsEl) {
+    factorsEl.innerHTML = `<div class="factors-grid">${factors.map(f => `
+      <div class="factor-card">
+        <div class="factor-header"><span class="factor-label">${f.label}</span><span class="factor-weight">${f.weight}</span></div>
+        <p class="factor-desc">${f.desc}</p>
+      </div>`).join('')}</div>`;
+  }
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+
+function calculateExposure() {
+  const location    = document.getElementById('location').value;
+  const miles       = parseFloat(document.getElementById('miles-driven').value) || 0;
+  const mpg         = parseFloat(document.getElementById('mpg').value) || 28;
+  const heatingFuel = document.getElementById('heating-fuel').value;
+  const energyBill  = parseFloat(document.getElementById('monthly-energy').value) || 0;
+  const portfolio   = parseFloat(document.getElementById('portfolio-size').value) || 0;
+  const equityPct   = parseFloat(document.getElementById('equity-pct').value) / 100 || 0.7;
+  const energyPct   = parseFloat(document.getElementById('energy-pct').value) / 100 || 0.1;
+  const bizSector   = document.getElementById('biz-sector').value;
+  const scExposure  = parseFloat(document.getElementById('supply-chain-exposure').value) / 100 || 0;
+
+  // Location multipliers
+  const locationMultipliers = { us: 1.0, europe: 1.4, japan: 1.8, china: 1.3, india: 1.5, mideast: 2.2, other: 1.2 };
+  const locMult = locationMultipliers[location] || 1.0;
+
+  // Fuel cost increase (oil up ~34%)
+  const gallonsPerMonth = miles / mpg;
+  const preConflictGas = 3.30;
+  const currentGas = 4.89;
+  const fuelMonthlyIncrease = gallonsPerMonth * (currentGas - preConflictGas);
+
+  // Energy bill increase
+  const energyMultipliers = { gas: 0.32, electric: 0.12, oil: 0.38, renewables: 0.04 };
+  const energyIncrease = energyBill * (energyMultipliers[heatingFuel] || 0.15) * locMult;
+
+  // Portfolio impact
+  const equityPortfolio = portfolio * equityPct;
+  const sp500Down = -0.097; // -9.7%
+  const energySectorUp = 0.41; // +41%
+  const generalPortfolioImpact = equityPortfolio * (1 - energyPct) * sp500Down;
+  const energyPortfolioImpact  = equityPortfolio * energyPct * energySectorUp;
+  const netPortfolioImpact = generalPortfolioImpact + energyPortfolioImpact;
+
+  // Business impact
+  const bizMultipliers = { none: 0, manufacturing: 0.18, logistics: 0.28, retail: 0.08, agriculture: 0.12, tech: 0.04, energy: -0.15, finance: 0.06, healthcare: 0.03 };
+  const bizImpactPct = (bizMultipliers[bizSector] || 0) + (scExposure * 0.22 * locMult);
+
+  // Exposure score (0–100)
+  const fuelScore      = Math.min((fuelMonthlyIncrease / 200) * 20, 20);
+  const energyScore    = Math.min((energyIncrease / 100) * 15, 15);
+  const portfolioScore = Math.min(Math.abs(netPortfolioImpact) / 5000 * 25, 25);
+  const locationScore  = (locMult - 1) * 20;
+  const bizScore       = Math.min(bizImpactPct * 100, 20);
+  const totalScore     = Math.min(Math.round(fuelScore + energyScore + portfolioScore + locationScore + bizScore), 100);
+
+  const scoreLevel = totalScore < 25 ? { label: 'LOW', cls: 'score-low' }
+    : totalScore < 50 ? { label: 'MODERATE', cls: 'score-moderate' }
+    : totalScore < 75 ? { label: 'HIGH', cls: 'score-high' }
+    : { label: 'CRITICAL', cls: 'score-critical' };
+
+  const totalMonthlyCost = fuelMonthlyIncrease + energyIncrease;
+
+  document.getElementById('calc-results').innerHTML = `
+    <div class="results-inner">
+      <div class="results-score-wrap">
+        <div class="results-score ${scoreLevel.cls}">${totalScore}</div>
+        <div class="results-score-label">Exposure Score: <strong>${scoreLevel.label}</strong></div>
+      </div>
+      <div class="results-breakdown">
+        <h3 class="results-title">Monthly Cost Impact</h3>
+        <div class="results-line"><span>Fuel costs</span><span class="results-val negative">+$${fuelMonthlyIncrease.toFixed(0)}/mo</span></div>
+        <div class="results-line"><span>Energy bills</span><span class="results-val negative">+$${energyIncrease.toFixed(0)}/mo</span></div>
+        <div class="results-line results-total"><span>Total monthly increase</span><span class="results-val negative">+$${totalMonthlyCost.toFixed(0)}/mo</span></div>
+      </div>
+      <div class="results-breakdown">
+        <h3 class="results-title">Portfolio Impact (Est.)</h3>
+        <div class="results-line"><span>Equity drawdown</span><span class="results-val ${generalPortfolioImpact < 0 ? 'negative' : 'positive'}">$${Math.abs(generalPortfolioImpact).toFixed(0)} ${generalPortfolioImpact < 0 ? 'loss' : 'gain'}</span></div>
+        <div class="results-line"><span>Energy sector gain</span><span class="results-val positive">+$${energyPortfolioImpact.toFixed(0)}</span></div>
+        <div class="results-line results-total"><span>Net portfolio change</span><span class="results-val ${netPortfolioImpact >= 0 ? 'positive' : 'negative'}">${netPortfolioImpact >= 0 ? '+' : '-'}$${Math.abs(netPortfolioImpact).toFixed(0)}</span></div>
+      </div>
+      ${bizSector !== 'none' ? `<div class="results-breakdown">
+        <h3 class="results-title">Business Impact</h3>
+        <div class="results-line"><span>Input cost increase</span><span class="results-val ${bizImpactPct > 0 ? 'negative' : 'positive'}">${bizImpactPct > 0 ? '+' : ''}${(bizImpactPct * 100).toFixed(1)}% estimated</span></div>
+      </div>` : ''}
+      <div class="results-disclaimer">These are modeled estimates based on current market data. Not financial advice.</div>
+    </div>`;
+}
+</script>
+</body>
+</html>

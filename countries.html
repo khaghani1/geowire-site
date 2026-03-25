@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Countries — Profiles of every nation involved in Operation Epic Fury with threat levels and alliance mapping.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Countries — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-multisource">MULTISOURCE</span>
+          <span class="tag tag-military">COUNTRIES</span>
+        </div>
+        <h1 class="page-hero-title">Country Profiles</h1>
+        <p class="page-hero-subtitle">Threat levels, military posture, and economic exposure for every nation engaged in or affected by Operation Epic Fury.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="belligerent">Belligerent</button>
+        <button class="filter-btn" data-filter="allied">Allied</button>
+        <button class="filter-btn" data-filter="neutral">Neutral</button>
+        <button class="filter-btn" data-filter="affected">Affected</button>
+      </div>
+      <div class="country-grid" id="country-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ALLIANCE MAP -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Alliance Structure</h2>
+      <div id="alliance-grid-container"></div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(() => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('countries.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  const countries = GEOWIRE.countries || [];
+  const grid = document.getElementById('country-grid');
+
+  function renderCountries(filter) {
+    const filtered = filter === 'all' ? countries : countries.filter(c => c.role === filter);
+    grid.innerHTML = filtered.map(c => `
+      <div class="country-card" data-role="${c.role||'affected'}">
+        <div class="country-card-header">
+          <div class="country-name-wrap">
+            <span class="country-flag">${c.flag || '🏳️'}</span>
+            <span class="country-name">${c.name}</span>
+          </div>
+          <span class="threat-label threat-${(c.threat||'low').toLowerCase()}">${(c.threat||'LOW').toUpperCase()}</span>
+        </div>
+        <div class="country-role-wrap">
+          <span class="role-pill role-${(c.role||'affected').toLowerCase()}">${(c.role||'affected').toUpperCase()}</span>
+          ${c.alliance ? `<span class="alliance-pill">${c.alliance}</span>` : ''}
+        </div>
+        <p class="country-summary">${c.summary || ''}</p>
+        <div class="country-stats">
+          ${c.militaryStatus ? `<div class="cstat"><span class="cstat-label">Military</span><span class="cstat-val">${c.militaryStatus}</span></div>` : ''}
+          ${c.economicExposure ? `<div class="cstat"><span class="cstat-label">Economic</span><span class="cstat-val">${c.economicExposure}</span></div>` : ''}
+          ${c.oilDependency ? `<div class="cstat"><span class="cstat-label">Oil Dep.</span><span class="cstat-val">${c.oilDependency}</span></div>` : ''}
+        </div>
+        ${UI.renderConfidenceBadge(c.confidence || 'multisource')}
+      </div>`).join('');
+  }
+
+  renderCountries('all');
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCountries(btn.dataset.filter);
+    });
+  });
+
+  // Alliance grid
+  const allianceEl = document.getElementById('alliance-grid-container');
+  if (allianceEl) {
+    const alliances = GEOWIRE.alliancesData || [];
+    if (alliances.length) {
+      allianceEl.innerHTML = `<div class="alliance-grid">${alliances.map(a => `
+        <div class="alliance-card">
+          <div class="alliance-name">${a.name || a.label}</div>
+          <div class="alliance-members">${(a.members || []).join(', ')}</div>
+          ${a.posture ? `<div class="alliance-posture posture-${a.posture.toLowerCase()}">${a.posture}</div>` : ''}
+          ${a.note ? `<p class="alliance-note">${a.note}</p>` : ''}
+        </div>`).join('')}</div>`;
+    } else {
+      allianceEl.innerHTML = `<div class="alliance-grid">
+        <div class="alliance-card">
+          <div class="alliance-name">US-led Coalition</div>
+          <div class="alliance-members">United States, Israel, United Kingdom, Saudi Arabia</div>
+          <div class="alliance-posture posture-offensive">OFFENSIVE</div>
+          <p class="alliance-note">Operation Epic Fury command structure. Full naval + air coordination.</p>
+        </div>
+        <div class="alliance-card">
+          <div class="alliance-name">Axis of Resistance</div>
+          <div class="alliance-members">Iran, Hezbollah, Houthis, Iraqi PMF, Hamas remnants</div>
+          <div class="alliance-posture posture-defensive">DEFENSIVE</div>
+          <p class="alliance-note">Iranian-backed proxy network. Coordination via IRGC-QF.</p>
+        </div>
+        <div class="alliance-card">
+          <div class="alliance-name">Observers / Neutral</div>
+          <div class="alliance-members">China, Russia, India, Turkey, Qatar, UAE</div>
+          <div class="alliance-posture posture-neutral">NEUTRAL</div>
+          <p class="alliance-note">Watching. Economic interests at stake. Back-channel diplomacy active.</p>
+        </div>
+      </div>`;
+    }
+  }
+
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

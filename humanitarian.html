@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Humanitarian — Casualties, displacement, food insecurity, and aid access during Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Humanitarian Crisis — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-multisource">MULTISOURCE</span>
+          <span class="tag tag-humanitarian">HUMANITARIAN</span>
+        </div>
+        <h1 class="page-hero-title">Humanitarian Crisis</h1>
+        <p class="page-hero-subtitle">Tracking casualties, displacement, food insecurity, and humanitarian aid access across the conflict zone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- HUMANITARIAN HEADLINE STATS -->
+  <section class="section">
+    <div class="container">
+      <div class="stat-banner stat-banner-humanitarian" id="hum-stat-banner"></div>
+    </div>
+  </section>
+
+  <!-- HUMANITARIAN DATA -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">Crisis Metrics by Category</h2>
+      <div class="humanitarian-grid" id="humanitarian-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- AID ACCESS TABLE -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Humanitarian Aid Access</h2>
+      <div class="data-table-wrap">
+        <table class="data-table" id="aid-table">
+          <thead>
+            <tr>
+              <th>Region / Country</th>
+              <th>Population Affected</th>
+              <th>Aid Status</th>
+              <th>Primary Need</th>
+              <th>Access Level</th>
+            </tr>
+          </thead>
+          <tbody id="aid-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section section-dark">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(() => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('humanitarian.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Stat banner
+  const banner = document.getElementById('hum-stat-banner');
+  if (banner) {
+    banner.innerHTML = `
+      <div class="stat-item stat-item-red">
+        <div class="stat-value">14,200+</div>
+        <div class="stat-label">Confirmed Casualties</div>
+      </div>
+      <div class="stat-item stat-item-amber">
+        <div class="stat-value">2.8M</div>
+        <div class="stat-label">Internally Displaced</div>
+      </div>
+      <div class="stat-item stat-item-amber">
+        <div class="stat-value">8.4M</div>
+        <div class="stat-label">Food Insecure</div>
+      </div>
+      <div class="stat-item stat-item-red">
+        <div class="stat-value">62%</div>
+        <div class="stat-label">Medical Aid Blocked</div>
+      </div>`;
+  }
+
+  // Humanitarian data
+  const humData = GEOWIRE.humanitarianData || [];
+  const hgrid = document.getElementById('humanitarian-grid');
+  if (hgrid) {
+    if (humData.length) {
+      hgrid.innerHTML = humData.map(item => `
+        <div class="hum-card hum-${(item.severity||'critical').toLowerCase()}">
+          <div class="hum-header">
+            <span class="hum-category">${item.category}</span>
+            <span class="hum-severity severity-${(item.severity||'critical').toLowerCase()}">${item.severity||'CRITICAL'}</span>
+          </div>
+          <div class="hum-metric">${item.metric || item.value || ''}</div>
+          <p class="hum-desc">${item.description || item.note || ''}</p>
+          ${UI.renderConfidenceBadge(item.confidence || 'multisource')}
+        </div>`).join('');
+    } else {
+      hgrid.innerHTML = `
+        <div class="hum-card hum-critical">
+          <div class="hum-header"><span class="hum-category">Casualties</span><span class="hum-severity severity-critical">CRITICAL</span></div>
+          <div class="hum-metric">14,200+ confirmed</div>
+          <p class="hum-desc">Iranian civilian and military deaths. IRGC losses estimated 4,800. Civilian casualties rising in Tehran suburbs from precision strikes.</p>
+          ${UI.renderConfidenceBadge('multisource')}
+        </div>
+        <div class="hum-card hum-critical">
+          <div class="hum-header"><span class="hum-category">Displacement</span><span class="hum-severity severity-critical">CRITICAL</span></div>
+          <div class="hum-metric">2.8M IDP</div>
+          <p class="hum-desc">Internally displaced from Khuzestan, Isfahan, and southern Tehran. UNHCR corridors partially open but blockaded at 3 checkpoints.</p>
+          ${UI.renderConfidenceBadge('multisource')}
+        </div>
+        <div class="hum-card hum-critical">
+          <div class="hum-header"><span class="hum-category">Food Security</span><span class="hum-severity severity-critical">CRITICAL</span></div>
+          <div class="hum-metric">8.4M affected</div>
+          <p class="hum-desc">WFP Phase 4 (Emergency) designation for southern Iran. Wheat imports blocked. Domestic reserves estimated at 45 days.</p>
+          ${UI.renderConfidenceBadge('confirmed')}
+        </div>
+        <div class="hum-card hum-high">
+          <div class="hum-header"><span class="hum-category">Medical Access</span><span class="hum-severity severity-high">HIGH</span></div>
+          <div class="hum-metric">62% supply blocked</div>
+          <p class="hum-desc">MSF expelled Day 18. ICRC limited access. 14 hospitals damaged in coalition strikes — Iran claims targeting of civilian infrastructure.</p>
+          ${UI.renderConfidenceBadge('singlesource')}
+        </div>
+        <div class="hum-card hum-high">
+          <div class="hum-header"><span class="hum-category">Water / Sanitation</span><span class="hum-severity severity-high">HIGH</span></div>
+          <div class="hum-metric">1.2M without safe water</div>
+          <p class="hum-desc">Khuzestan water treatment plants offline after power grid disruption. Cholera risk elevated. UNICEF emergency response activated.</p>
+          ${UI.renderConfidenceBadge('confirmed')}
+        </div>
+        <div class="hum-card hum-moderate">
+          <div class="hum-header"><span class="hum-category">Refugees</span><span class="hum-severity severity-moderate">MODERATE</span></div>
+          <div class="hum-metric">340K cross-border</div>
+          <p class="hum-desc">Primarily to Turkey, Armenia, and Azerbaijan. European nations activating temporary protection. UNHCR funding gap at $2.1B.</p>
+          ${UI.renderConfidenceBadge('confirmed')}
+        </div>`;
+    }
+  }
+
+  // Aid access table
+  const tbody = document.getElementById('aid-table-body');
+  if (tbody) {
+    tbody.innerHTML = `
+      <tr><td class="td-primary">Southern Iran</td><td>4.2M</td><td><span class="status-dot status-blocked">BLOCKED</span></td><td>Food, Medicine</td><td><span class="access-pill access-0">0%</span></td></tr>
+      <tr><td class="td-primary">Tehran Suburbs</td><td>1.8M</td><td><span class="status-dot status-limited">LIMITED</span></td><td>Evacuation</td><td><span class="access-pill access-20">20%</span></td></tr>
+      <tr><td class="td-primary">Khuzestan Province</td><td>2.1M</td><td><span class="status-dot status-blocked">BLOCKED</span></td><td>Water, Food</td><td><span class="access-pill access-5">5%</span></td></tr>
+      <tr><td class="td-primary">Iraq (border zone)</td><td>0.9M</td><td><span class="status-dot status-partial">PARTIAL</span></td><td>Displacement</td><td><span class="access-pill access-60">60%</span></td></tr>
+      <tr><td class="td-primary">Lebanon (Hezbollah zone)</td><td>0.6M</td><td><span class="status-dot status-limited">LIMITED</span></td><td>Food, Shelter</td><td><span class="access-pill access-35">35%</span></td></tr>
+      <tr><td class="td-primary">Yemen (Houthi areas)</td><td>1.4M</td><td><span class="status-dot status-blocked">BLOCKED</span></td><td>All</td><td><span class="access-pill access-10">10%</span></td></tr>`;
+  }
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

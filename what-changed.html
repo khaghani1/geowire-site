@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire What Changed — Daily update log tracking every significant development in Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>What Changed — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-confirmed">CONFIRMED</span>
+          <span class="tag tag-political">UPDATE LOG</span>
+        </div>
+        <h1 class="page-hero-title">What Changed</h1>
+        <p class="page-hero-subtitle">Every significant development, every data revision, every new intelligence signal — logged chronologically with timestamps and confidence levels.</p>
+        <div class="page-hero-meta">
+          <span class="page-hero-updated">Updated continuously · Day <span id="war-day-display">26</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All Updates</button>
+        <button class="filter-btn" data-filter="military">Military</button>
+        <button class="filter-btn" data-filter="economic">Economic</button>
+        <button class="filter-btn" data-filter="diplomatic">Diplomatic</button>
+        <button class="filter-btn" data-filter="humanitarian">Humanitarian</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPDATE LOG -->
+  <section class="section section-dark" style="padding-top:0">
+    <div class="container">
+      <div class="update-log" id="update-log">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(() => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('what-changed.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Update log entries (from content.js or fallback)
+  const updates = GEOWIRE.updateLog || [];
+  const logEl = document.getElementById('update-log');
+
+  function renderUpdates(filter) {
+    const filtered = filter === 'all'
+      ? updates
+      : updates.filter(u => (u.category || u.type || '').toLowerCase() === filter);
+
+    if (filtered.length) {
+      logEl.innerHTML = filtered.map(u => `
+        <div class="update-entry update-${(u.category || u.type || 'general').toLowerCase()}" data-category="${(u.category || u.type || 'general').toLowerCase()}">
+          <div class="update-header">
+            <div class="update-meta-left">
+              <span class="update-day">Day ${u.day || '?'}</span>
+              <span class="update-timestamp">${u.timestamp || u.date || ''}</span>
+              <span class="tag tag-${(u.category || u.type || 'general').toLowerCase()}">${(u.category || u.type || 'GENERAL').toUpperCase()}</span>
+            </div>
+            ${UI.renderConfidenceBadge(u.confidence || 'confirmed')}
+          </div>
+          <div class="update-title">${u.title || u.headline || ''}</div>
+          <p class="update-body">${u.body || u.summary || u.description || ''}</p>
+          ${u.source ? `<div class="update-source">Source: ${u.source}</div>` : ''}
+        </div>`).join('');
+    } else {
+      // Fallback hardcoded entries
+      logEl.innerHTML = `
+        <div class="update-entry update-military">
+          <div class="update-header"><div class="update-meta-left"><span class="update-day">Day 26</span><span class="update-timestamp">06:14 UTC</span><span class="tag tag-military">MILITARY</span></div>${UI.renderConfidenceBadge('confirmed')}</div>
+          <div class="update-title">CENTCOM confirms destruction of Fordow hardened facility</div>
+          <p class="update-body">B-2 Spirit aircraft with GBU-57 Massive Ordnance Penetrators struck Fordow enrichment complex. DoD assessment: 90% probability of successful penetration. Iranian IRGC denies damage.</p>
+        </div>
+        <div class="update-entry update-economic">
+          <div class="update-header"><div class="update-meta-left"><span class="update-day">Day 25</span><span class="update-timestamp">14:32 UTC</span><span class="tag tag-economic">ECONOMIC</span></div>${UI.renderConfidenceBadge('multisource')}</div>
+          <div class="update-title">Brent crude hits $108 intraday — IEA emergency release announced</div>
+          <p class="update-body">IEA member states agree to release 60M barrels from strategic reserves. Brent retraced to $101 on news. Analysts say relief is temporary given sustained Hormuz closure.</p>
+        </div>
+        <div class="update-entry update-diplomatic">
+          <div class="update-header"><div class="update-meta-left"><span class="update-day">Day 24</span><span class="update-timestamp">09:55 UTC</span><span class="tag tag-diplomatic">DIPLOMATIC</span></div>${UI.renderConfidenceBadge('multisource')}</div>
+          <div class="update-title">Oman-mediated talks collapse — Iranian delegation walks out</div>
+          <p class="update-body">Three-day backchannel talks in Muscat ended without agreement. Iranian foreign ministry demands full strike halt as precondition. US refusing. Qatar signaling readiness to try again.</p>
+        </div>
+        <div class="update-entry update-humanitarian">
+          <div class="update-header"><div class="update-meta-left"><span class="update-day">Day 22</span><span class="update-timestamp">17:08 UTC</span><span class="tag tag-humanitarian">HUMANITARIAN</span></div>${UI.renderConfidenceBadge('confirmed')}</div>
+          <div class="update-title">MSF expelled from Iran — access to 4.2M civilians severed</div>
+          <p class="update-body">Iranian authorities declared all foreign NGOs persona non grata. MSF team of 43 expelled via Turkey. ICRC retains limited access to 2 sites. UNHCR calling for humanitarian corridor.</p>
+        </div>
+        <div class="update-entry update-military">
+          <div class="update-header"><div class="update-meta-left"><span class="update-day">Day 20</span><span class="update-timestamp">03:44 UTC</span><span class="tag tag-military">MILITARY</span></div>${UI.renderConfidenceBadge('confirmed')}</div>
+          <div class="update-title">Houthi ballistic missile intercepted 40km from USS Eisenhower</div>
+          <p class="update-body">SM-3 Block IIA intercept at 40km range. Houthis launched 2 Zolfaghar-class BMs from Al Hudaydah. Second missile fell into Red Sea without intercept attempt. CENTCOM downplaying significance.</p>
+        </div>
+        <div class="update-entry update-economic">
+          <div class="update-header"><div class="update-meta-left"><span class="update-day">Day 18</span><span class="update-timestamp">11:22 UTC</span><span class="tag tag-economic">ECONOMIC</span></div>${UI.renderConfidenceBadge('confirmed')}</div>
+          <div class="update-title">Japan declares energy emergency — LNG spot market frozen</div>
+          <p class="update-body">Japanese government activated energy emergency protocol. LNG spot price hit $48/MMBtu. Government ordering industry to cut gas consumption 15%. Korea following within hours.</p>
+        </div>`;
+    }
+  }
+
+  renderUpdates('all');
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderUpdates(btn.dataset.filter);
+    });
+  });
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  // Update log (full) via UI module if available
+  if (typeof UI.renderUpdateLog === 'function' && GEOWIRE.updateLog?.length) {
+    document.getElementById('update-log').innerHTML = UI.renderUpdateLog(GEOWIRE.updateLog);
+  }
+
+  UI.init();
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>

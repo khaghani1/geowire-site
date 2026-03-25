@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Analysis — In-depth articles and expert assessments on Operation Epic Fury and the Iran conflict.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Analysis — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="confidence-badge confidence-inferred">EDITORIAL</span>
+          <span class="tag tag-diplomatic">ANALYSIS</span>
+        </div>
+        <h1 class="page-hero-title">Deep Analysis</h1>
+        <p class="page-hero-subtitle">Long-form assessments, strategic analysis, and expert commentary on Operation Epic Fury — signal through the noise.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT TOP -->
+  <div class="container">
+    <div class="ad-slot ad-slot-top">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- FEATURED ARTICLE -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Featured Analysis</h2>
+      <div id="featured-article-container"></div>
+    </div>
+  </section>
+
+  <!-- ARTICLE GRID -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title">All Articles</h2>
+      <div class="article-grid" id="article-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- LIVE INTELLIGENCE FEED -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Live Intelligence Feed</h2>
+      <div id="news-feed-container" class="news-feed">
+        <p class="loading-state">Loading intelligence feed…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL CAPTURE -->
+  <section class="section section-dark">
+    <div class="container">
+      <div id="email-capture-container"></div>
+    </div>
+  </section>
+
+</main>
+
+<div id="site-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(async () => {
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('analysis.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // Featured article
+  const articles = GEOWIRE.articles || [];
+  const featuredEl = document.getElementById('featured-article-container');
+  if (featuredEl && articles.length > 0) {
+    const featured = articles[0];
+    featuredEl.innerHTML = `
+      <div class="featured-article-card">
+        <div class="featured-article-meta">
+          ${featured.tags ? featured.tags.map(t => `<span class="tag tag-${t.toLowerCase()}">${t}</span>`).join('') : ''}
+          <span class="featured-article-date">${featured.date || ''}</span>
+        </div>
+        <h2 class="featured-article-title"><a href="${featured.url || '#'}">${featured.title}</a></h2>
+        <p class="featured-article-excerpt">${featured.excerpt || featured.summary || ''}</p>
+        <div class="featured-article-footer">
+          <span class="featured-article-author">${featured.author || 'GeoWire Staff'}</span>
+          <a href="${featured.url || '#'}" class="btn btn-primary">Read Full Analysis →</a>
+        </div>
+      </div>`;
+  } else if (featuredEl) {
+    featuredEl.innerHTML = `
+      <div class="featured-article-card">
+        <div class="featured-article-meta">
+          <span class="tag tag-military">MILITARY</span>
+          <span class="tag tag-diplomatic">STRATEGY</span>
+          <span class="featured-article-date">Day 26</span>
+        </div>
+        <h2 class="featured-article-title"><a href="article-ghalibaf.html">Why Ghalibaf's Removal Changes Everything</a></h2>
+        <p class="featured-article-excerpt">The sudden removal of Mohammad Bagher Ghalibaf as Majles speaker signals a hardline consolidation inside the Iranian state — and may collapse the last diplomatic off-ramp. Our analysis of what comes next.</p>
+        <div class="featured-article-footer">
+          <span class="featured-article-author">GeoWire Intelligence Desk</span>
+          <a href="article-ghalibaf.html" class="btn btn-primary">Read Full Analysis →</a>
+        </div>
+      </div>`;
+  }
+
+  // Article grid
+  const agrid = document.getElementById('article-grid');
+  if (agrid) {
+    if (articles.length > 1) {
+      agrid.innerHTML = articles.slice(1).map(a => UI.renderArticleCard ? UI.renderArticleCard(a) : `
+        <div class="article-card">
+          <div class="article-meta">${a.tags ? a.tags.map(t => `<span class="tag tag-${t.toLowerCase()}">${t}</span>`).join('') : ''}</div>
+          <h3 class="article-title"><a href="${a.url || '#'}">${a.title}</a></h3>
+          <p class="article-excerpt">${a.excerpt || a.summary || ''}</p>
+          <div class="article-footer"><span class="article-date">${a.date || ''}</span></div>
+        </div>`).join('');
+    } else {
+      agrid.innerHTML = `
+        <div class="article-card">
+          <div class="article-meta"><span class="tag tag-economic">ENERGY</span></div>
+          <h3 class="article-title"><a href="energy.html">The $34B/Day Price Tag: What Hormuz Closure Really Costs</a></h3>
+          <p class="article-excerpt">A granular breakdown of how 21 million barrels per day offline cascades through every sector of the global economy — from Japanese auto plants to German bakeries.</p>
+          <div class="article-footer"><span class="article-date">Day 24</span></div>
+        </div>
+        <div class="article-card">
+          <div class="article-meta"><span class="tag tag-military">MILITARY</span></div>
+          <h3 class="article-title"><a href="#">Iran's Air Defense After Day 1: What Survived the Opening Salvo?</a></h3>
+          <p class="article-excerpt">US DoD confirms 74% degradation of Iranian radar networks. But mobile S-300 batteries remain active. The cat-and-mouse game over surviving SAM systems.</p>
+          <div class="article-footer"><span class="article-date">Day 18</span></div>
+        </div>
+        <div class="article-card">
+          <div class="article-meta"><span class="tag tag-diplomatic">DIPLOMACY</span></div>
+          <h3 class="article-title"><a href="#">China's Mediation Offer: Peace Broker or Strategic Wedge?</a></h3>
+          <p class="article-excerpt">Beijing's proposal for a UN-supervised ceasefire comes with conditions that Western analysts say would effectively end the sanctions regime. A deep dive into the fine print.</p>
+          <div class="article-footer"><span class="article-date">Day 21</span></div>
+        </div>
+        <div class="article-card">
+          <div class="article-meta"><span class="tag tag-humanitarian">HUMANITARIAN</span></div>
+          <h3 class="article-title"><a href="#">Inside Khuzestan: MSF's Last Report Before Expulsion</a></h3>
+          <p class="article-excerpt">The final Médecins Sans Frontières field report before Iranian authorities expelled foreign NGOs on Day 18. What they found — and what it means for 2.1 million civilians.</p>
+          <div class="article-footer"><span class="article-date">Day 17</span></div>
+        </div>
+        <div class="article-card">
+          <div class="article-meta"><span class="tag tag-economic">MARKETS</span></div>
+          <h3 class="article-title"><a href="#">The SPR Math: How Long Can Reserves Buffer the Shock?</a></h3>
+          <p class="article-excerpt">IEA's 180M barrel release looks big until you do the arithmetic. At current burn rates, coordinated reserves buy roughly 8–10 weeks. Then what?</p>
+          <div class="article-footer"><span class="article-date">Day 15</span></div>
+        </div>
+        <div class="article-card">
+          <div class="article-meta"><span class="tag tag-political">POLITICS</span></div>
+          <h3 class="article-title"><a href="#">The Domestic Politics of "Victory": What Each Side Needs</a></h3>
+          <p class="article-excerpt">For Washington, a face-saving ceasefire requires nuclear concessions. For Tehran's hardliners, survival means the nuclear program stays intact. The impossible geometry of negotiation.</p>
+          <div class="article-footer"><span class="article-date">Day 20</span></div>
+        </div>`;
+    }
+  }
+
+  // News feed (live GDELT)
+  await API.loadNews('news-feed-container');
+
+  // Email capture
+  const emailEl = document.getElementById('email-capture-container');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
+  (window.adsbygoogle || []).push({});
+  (window.adsbygoogle || []).push({});
+})();
+</script>
+</body>
+</html>
