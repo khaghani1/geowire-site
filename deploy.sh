@@ -1,37 +1,21 @@
 #!/bin/bash
-# GeoWire — Deploy to GitHub → Vercel
-# Double-click this file or run: bash deploy.sh
-
+# GeoWire — Deploy to geowire-site (the live Vercel repo)
 cd "$(dirname "$0")"
 
-echo "🚀 GeoWire Deploy Script"
-echo "========================"
-echo ""
+echo "🚀 GeoWire → geowire.org Deploy"
+echo "================================"
 
-# Init git if needed
-if [ ! -d ".git" ]; then
-  git init
-  git remote add origin https://github.com/khaghani1/geowire-static.git
-  echo "✓ Git initialized"
-fi
+# Point at the LIVE repo (geowire-site, not geowire-static)
+git init 2>/dev/null
+git remote remove origin 2>/dev/null
+git remote add origin https://github.com/khaghani1/geowire-site.git
 
-# Make sure remote is set
-git remote set-url origin https://github.com/khaghani1/geowire-static.git
-
-# Stage all files
 git add -A
-echo "✓ Files staged"
+git commit -m "Complete rebuild: 14 pages, GEOWIRE/UI/API namespace, 4 new pages" 2>/dev/null || echo "(nothing new to commit)"
 
-# Commit
-git commit -m "Complete rebuild: all 14 pages, production GEOWIRE/UI/API namespace, 4 new pages (what-changed, exposure-calculator, narrative-war, powermap)"
-echo "✓ Committed"
-
-# Push (force to overwrite old structure)
 echo ""
-echo "Pushing to GitHub... (you may be prompted for your GitHub credentials)"
-echo ""
+echo "Pushing to geowire-site → Vercel will auto-deploy to geowire.org"
 git push origin HEAD:main --force
 
 echo ""
-echo "✅ Done! Vercel will auto-deploy in ~30 seconds."
-echo "   Check: https://vercel.com/dashboard"
+echo "✅ Done! Check https://geowire.org in ~60 seconds."
