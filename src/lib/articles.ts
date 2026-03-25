@@ -355,8 +355,6 @@ But for now, the calculus is clear. The United States is spending $1.75 billion 
 
 In the zero-sum logic of great power competition, America's Iran quagmire is China's strategic windfall.`,
   },
-];
-
   {
     slug: 'russia-ukraine-war-iran-conflict-link',
     title: 'Two Wars, One Strategy: How Moscow Is Exploiting the Iran Crisis',
