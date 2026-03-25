@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Trade — Sanctions, counter-sanctions, trade route disruption, and currency impacts during Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Trade — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="main-nav"></div>
+<div id="ticker-bar"><div id="ticker-inner">Loading…</div></div>
+
+<div class="page-body">
+<div class="container">
+
+  <div id="page-header"></div>
+
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="trade-top"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 300px; gap:32px;" class="main-layout">
+    <div>
+
+      <!-- SANCTIONS SNAPSHOT -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Sanctions Landscape</span>
+        </div>
+        <div id="sanctions-table"></div>
+      </div>
+
+      <!-- TRADE ROUTE IMPACT -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Trade Route Disruption</span>
+        </div>
+        <div id="trade-routes-table"></div>
+      </div>
+
+      <!-- AD MID -->
+      <div class="ad-unit">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="trade-mid"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- TRADE ARTICLES -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Trade Intelligence</span>
+        </div>
+        <div id="trade-articles" class="article-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <div id="market-widget-container" class="mb-md"></div>
+
+      <!-- Currency snapshot -->
+      <div class="surface-card mb-md">
+        <div style="margin-bottom:12px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);">Currency Signals</div>
+        <div id="currency-metrics"></div>
+      </div>
+
+      <div class="ad-unit" style="min-height:250px;">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:250px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="trade-sidebar"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="main-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  GW.ui.initPage('trade');
+  GW.ui.renderSectionHeader('page-header', 'Trade & Sanctions', 'How Operation Epic Fury is reshaping global trade flows, sanctions regimes, and currency markets.');
+
+  const sanctionsCols = ['Package', 'Imposer', 'Target', 'Key Measures', 'Status'];
+  const sanctionsRows = [
+    { Package: 'OFAC Iran Package (expanded)', Imposer: 'USA', Target: 'Iran', Measures: 'SWIFT exclusion, oil embargo, FX freeze', Status: '✅ Active' },
+    { Package: 'EU Iran Sanctions Tier-4', Imposer: 'EU', Target: 'Iran', Measures: 'Asset freeze, export controls, shipping ban', Status: '✅ Active' },
+    { Package: 'Russia Counter-Sanctions', Imposer: 'Russia', Target: 'USA/G7', Measures: 'Boeing parts, tech export bans, dollar settlement ban', Status: '✅ Announced March 22' },
+    { Package: 'China Counter-Measures', Imposer: 'China', Target: 'USA/G7', Measures: 'Semiconductor equipment, BRI re-routing, Treasury review', Status: '⚠️ Partial / signaled' },
+    { Package: 'G7 Russia-China Dual Squeeze', Imposer: 'G7', Target: 'Russia+China', Measures: 'Secondary sanctions for Iranian oil buyers', Status: '🔄 Under consideration' },
+  ];
+  GW.ui.renderTable('sanctions-table', sanctionsCols, sanctionsRows);
+
+  const routesCols = ['Route', 'Normal Flow', 'Current Status', 'Diversion Impact'];
+  const routesRows = [
+    { Route: 'Persian Gulf (Hormuz)', 'Normal Flow': '21 Mbpd', 'Current Status': '⚠️ Threatened', Impact: 'If closed: Cape of Good Hope reroute (+12–18 days)' },
+    { Route: 'Red Sea / Suez', 'Normal Flow': '9.5 Mbpd', 'Current Status': '🔴 Disrupted (Houthi)', Impact: 'Rerouting ~4.5 Mbpd via Cape' },
+    { Route: 'Trans-Caspian / Central Asia', 'Normal Flow': '1.2 Mbpd', 'Current Status': '🟡 Expanding', Impact: 'China BRI $4.2B emergency upgrade' },
+    { Route: 'East-West Pipeline (Saudi)', 'Normal Flow': '5.0 Mbpd capacity', 'Current Status': '✅ Full Capacity', Impact: 'Alternate to Hormuz for Saudi' },
+    { Route: 'Russia-China pipeline (Power of Siberia)', 'Normal Flow': '10 bcm/yr gas', 'Current Status': '✅ Normal', Impact: 'China accelerating expansion Phase 2' },
+  ];
+  GW.ui.renderTable('trade-routes-table', routesCols, routesRows);
+
+  GW.ui.renderArticleGrid('trade-articles', 'trade');
+  GW.ui.renderMarketWidget('market-widget-container', null, false);
+
+  // Currency metrics
+  const currEl = document.getElementById('currency-metrics');
+  if (currEl) {
+    const items = [
+      { label: 'USD/CNY', value: '8.12', note: 'Weakest since 2015' },
+      { label: 'DXY', value: '103.24', note: 'Conflict haven bid' },
+      { label: 'Iran Rial', value: '↓ -72% YTD', note: 'Historic low' },
+      { label: 'Russian Ruble', value: '₽95/USD', note: 'Yuan trade offset' },
+    ];
+    currEl.innerHTML = items.map(i => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);">
+        <span style="font-size:.78rem; font-weight:600;">${i.label}</span>
+        <div style="text-align:right;">
+          <div style="font-family:var(--font-mono); font-size:.85rem; color:var(--amber);">${i.value}</div>
+          <div style="font-size:.65rem; color:var(--text-muted);">${i.note}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  GW.ui.renderFooter('main-footer');
+
+  document.addEventListener('gw:livedata', function (e) {
+    GW.ui.renderMarketWidget('market-widget-container', e.detail, GW.api.isAnyLive(e.detail));
+  });
+
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+
+  function checkLayout() {
+    const l = document.querySelector('.main-layout');
+    if (!l) return;
+    l.style.gridTemplateColumns = window.innerWidth < 900 ? '1fr' : '1fr 300px';
+  }
+  checkLayout();
+  window.addEventListener('resize', checkLayout);
+})();
+</script>
+</body>
+</html>

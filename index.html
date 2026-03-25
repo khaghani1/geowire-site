@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire — Real-time conflict intelligence. Operation Epic Fury coverage, energy markets, geopolitical analysis.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>GeoWire — Signal Through the Noise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<div id="main-nav"></div>
+
+<!-- TICKER -->
+<div id="ticker-bar"><div id="ticker-inner">Loading market data…</div></div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-title">GeoWire</div>
+        <p class="hero-subtitle">
+          Real-time conflict intelligence, energy market signals, and geopolitical analysis.
+          Covering <strong>Operation Epic Fury</strong> — the US-led coalition campaign against Iran's nuclear infrastructure.
+        </p>
+        <div class="flex gap-sm items-center mt-sm" id="hero-badges">
+          <span id="live-status-badge"></span>
+        </div>
+      </div>
+      <div class="hero-right" id="clock-container"></div>
+    </div>
+  </section>
+
+  <!-- AD UNIT (top) -->
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013"
+      data-ad-slot="homepage-top"
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- FEATURED STORY -->
+  <div class="featured-story mb-lg">
+    <div class="featured-label">📡 Top Story · Day <span id="featured-day">25</span></div>
+    <div class="featured-title">Operation Epic Fury: 25 Days In</div>
+    <p class="featured-summary">
+      US-led coalition forces continue precision strikes against Iran's hardened nuclear and missile infrastructure.
+      Diplomatic channels frozen. Iran threatens Hormuz closure. Energy markets surging.
+      Humanitarian crisis deepening with 2.3M displaced.
+    </p>
+    <div class="mt-sm flex gap-sm items-center">
+      <button class="btn-read-more" onclick="GW.ui.openArticle('epic-fury-day25-update')">Read Sitrep →</button>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div style="display:grid; grid-template-columns: 1fr 320px; gap: 32px;" class="main-layout">
+
+    <!-- LEFT: Articles -->
+    <div>
+      <!-- Latest Articles -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Latest Intelligence</span>
+        </div>
+        <div id="latest-articles" class="article-grid"></div>
+      </div>
+
+      <!-- SCENARIOS -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Conflict Scenarios</span>
+          <a href="scenarios.html" class="section-block-link">All Scenarios →</a>
+        </div>
+        <div id="scenarios-preview"></div>
+      </div>
+
+      <!-- AD UNIT (mid) -->
+      <div class="ad-unit">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="ca-pub-5068519853957013"
+          data-ad-slot="homepage-mid"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- ENERGY -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Energy &amp; Chokepoints</span>
+          <a href="energy.html" class="section-block-link">Full Energy →</a>
+        </div>
+        <div id="chokepoints-preview"></div>
+      </div>
+
+      <!-- COUNTRIES -->
+      <div class="section-block mt-lg">
+        <div class="section-block-header">
+          <span class="section-block-title">Key Countries</span>
+          <a href="countries.html" class="section-block-link">All Countries →</a>
+        </div>
+        <div id="countries-preview"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Sidebar -->
+    <div class="sidebar">
+      <!-- Market Widget -->
+      <div id="market-widget-container" class="mb-md"></div>
+
+      <!-- Humanitarian Snapshot -->
+      <div class="surface-card mb-md">
+        <div class="section-block-header" style="margin-bottom:14px">
+          <span class="section-block-title" style="font-size:.8rem;">Humanitarian</span>
+          <a href="humanitarian.html" class="section-block-link" style="font-size:.72rem;">Details →</a>
+        </div>
+        <div id="hum-summary-sidebar"></div>
+      </div>
+
+      <!-- Analysis Q&A -->
+      <div class="surface-card mb-md">
+        <div class="section-block-header" style="margin-bottom:14px">
+          <span class="section-block-title" style="font-size:.8rem;">Key Questions</span>
+          <a href="analysis.html" class="section-block-link" style="font-size:.72rem;">All →</a>
+        </div>
+        <div id="qa-sidebar"></div>
+      </div>
+
+      <!-- Sidebar AD -->
+      <div class="ad-unit" style="min-height:250px; flex-direction:column; gap:6px; font-size:.65rem;">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:250px;"
+          data-ad-client="ca-pub-5068519853957013"
+          data-ad-slot="homepage-sidebar"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+
+  </div><!-- /main-layout -->
+
+</div><!-- /container -->
+</div><!-- /page-body -->
+
+<!-- FOOTER -->
+<div id="main-footer"></div>
+
+<!-- SCRIPTS -->
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  // Init page
+  GW.ui.initPage(null); // no active section for homepage
+
+  // Conflict clock
+  GW.ui.renderConflictClock('clock-container');
+
+  // Update featured day
+  const dayEl = document.getElementById('featured-day');
+  if (dayEl) dayEl.textContent = GW.ui.daysSinceConflict();
+
+  // Latest articles (all sections, limit 6)
+  GW.ui.renderArticleGrid('latest-articles', null, 6);
+
+  // Scenarios preview (2 most recent)
+  const scenEl = document.getElementById('scenarios-preview');
+  if (scenEl) {
+    const scens = GW.articles.filter(a => a.section === 'scenarios').slice(0, 2);
+    scenEl.innerHTML = `<div class="scenario-grid">${scens.map(GW.ui.scenarioCard).join('')}</div>`;
+  }
+
+  // Chokepoints
+  GW.ui.renderChokepointStatus('chokepoints-preview');
+
+  // Countries (show principal + coalition only)
+  GW.ui.renderCountryCards('countries-preview');
+
+  // Humanitarian
+  GW.ui.renderHumanitarianSummary('hum-summary-sidebar');
+
+  // Analysis Q&A (first 2 questions)
+  const qaEl = document.getElementById('qa-sidebar');
+  if (qaEl) {
+    const items = GW.analysis.keyQuestions.slice(0, 2).map(item => {
+      const q = GW.ui.isFarsi() && item.qFa ? item.qFa : item.q;
+      return `
+        <div class="qa-item" style="padding:12px 0; border-bottom:1px solid var(--border);">
+          <div class="qa-question" style="font-size:.82rem; margin-bottom:6px;">${q}</div>
+          <div class="qa-answer" style="font-size:.78rem;">${item.shortAnswer} ${GW.ui.confidenceBadge(item.confidence)}</div>
+        </div>`;
+    }).join('');
+    qaEl.innerHTML = `<div>${items}</div>`;
+  }
+
+  // Footer
+  GW.ui.renderFooter('main-footer');
+
+  // Market widget — will update once live data arrives
+  GW.ui.renderMarketWidget('market-widget-container', null, false);
+  document.addEventListener('gw:livedata', function (e) {
+    const liveData = e.detail;
+    GW.ui.renderMarketWidget('market-widget-container', liveData, GW.api.isAnyLive(liveData));
+    const badge = document.getElementById('live-status-badge');
+    if (badge) badge.innerHTML = GW.ui.liveBadge(GW.api.isAnyLive(liveData));
+  });
+
+  // AdSense push for inline ads
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+
+  // Responsive sidebar
+  function checkLayout() {
+    const layout = document.querySelector('.main-layout');
+    if (!layout) return;
+    if (window.innerWidth < 900) {
+      layout.style.gridTemplateColumns = '1fr';
+    } else {
+      layout.style.gridTemplateColumns = '1fr 320px';
+    }
+  }
+  checkLayout();
+  window.addEventListener('resize', checkLayout);
+})();
+</script>
+
+</body>
+</html>

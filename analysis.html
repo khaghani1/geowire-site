@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Analysis — Deep intelligence analysis, key questions, and expert commentary on Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Analysis — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="main-nav"></div>
+<div id="ticker-bar"><div id="ticker-inner">Loading…</div></div>
+
+<div class="page-body">
+<div class="container">
+
+  <div id="page-header"></div>
+
+  <!-- METHODOLOGY -->
+  <div class="surface-card mb-lg" style="border-left:4px solid var(--purple);">
+    <div style="display:flex; gap:10px; align-items:flex-start;">
+      <span style="font-size:1.2rem;">🔬</span>
+      <div>
+        <div style="font-weight:600; margin-bottom:4px;">Confidence Rail System</div>
+        <p class="text-dim" style="font-size:.85rem; margin-bottom:10px;">
+          Every claim on GeoWire is tagged with a confidence indicator. Read these before drawing conclusions.
+        </p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;" id="confidence-legend"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="analysis-top"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 300px; gap:32px;" class="main-layout">
+    <div>
+
+      <!-- KEY QUESTIONS -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Key Intelligence Questions</span>
+        </div>
+        <div id="qa-main"></div>
+      </div>
+
+      <!-- AD MID -->
+      <div class="ad-unit">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="analysis-mid"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- ANALYSIS ARTICLES -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Analysis &amp; Commentary</span>
+        </div>
+        <div id="analysis-articles" class="article-grid"></div>
+      </div>
+
+      <!-- CROSS-DOMAIN ARTICLES (all sections) -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">All Recent Coverage</span>
+        </div>
+        <div id="all-articles" class="article-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <!-- Market context -->
+      <div id="market-widget-container" class="mb-md"></div>
+
+      <!-- Data sources -->
+      <div class="surface-card mb-md">
+        <div style="margin-bottom:12px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);">Data Sources</div>
+        <div id="data-sources-list"></div>
+      </div>
+
+      <!-- Conflict clock -->
+      <div class="surface-card mb-md">
+        <div id="clock-analysis"></div>
+      </div>
+
+      <div class="ad-unit" style="min-height:250px;">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:250px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="analysis-sidebar"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="main-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  GW.ui.initPage('analysis');
+  GW.ui.renderSectionHeader('page-header', 'Analysis', 'Deep intelligence analysis, key questions, and cross-domain reporting on Operation Epic Fury.');
+
+  // Confidence legend
+  const legendEl = document.getElementById('confidence-legend');
+  if (legendEl) {
+    legendEl.innerHTML = Object.keys(GW.confidence).map(key =>
+      GW.ui.confidenceBadge(key)
+    ).join('');
+  }
+
+  // Key questions
+  GW.ui.renderAnalysisQA('qa-main');
+
+  // Analysis articles
+  GW.ui.renderArticleGrid('analysis-articles', 'analysis');
+
+  // All articles (limit 6 across all sections except analysis)
+  const allEl = document.getElementById('all-articles');
+  if (allEl) {
+    const arts = GW.articles.filter(a => a.section !== 'analysis').slice(0, 6);
+    allEl.innerHTML = arts.map(GW.ui.articleCard).join('');
+  }
+
+  GW.ui.renderMarketWidget('market-widget-container', null, false);
+  GW.ui.renderConflictClock('clock-analysis');
+
+  // Data sources
+  const sourcesEl = document.getElementById('data-sources-list');
+  if (sourcesEl) {
+    const sources = [
+      { name: 'FRED (Federal Reserve)', type: 'Gold, DXY, Treasuries, S&P', live: true },
+      { name: 'EIA', type: 'WTI, Brent, Natural Gas', live: true },
+      { name: 'CoinGecko', type: 'Bitcoin, Crypto', live: true },
+      { name: 'GDELT Project', type: 'News signal analysis', live: true },
+      { name: 'UNHCR', type: 'Displacement estimates', live: false },
+      { name: 'CENTCOM', type: 'Military operations', live: false },
+      { name: 'UNAMI', type: 'Casualty estimates', live: false },
+    ];
+    sourcesEl.innerHTML = sources.map(s => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border); font-size:.78rem;">
+        <div>
+          <div style="font-weight:600;">${s.name}</div>
+          <div style="font-size:.68rem; color:var(--text-muted);">${s.type}</div>
+        </div>
+        ${GW.ui.liveBadge(s.live)}
+      </div>`).join('');
+  }
+
+  GW.ui.renderFooter('main-footer');
+
+  document.addEventListener('gw:livedata', function (e) {
+    GW.ui.renderMarketWidget('market-widget-container', e.detail, GW.api.isAnyLive(e.detail));
+  });
+
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+
+  function checkLayout() {
+    const l = document.querySelector('.main-layout');
+    if (!l) return;
+    l.style.gridTemplateColumns = window.innerWidth < 900 ? '1fr' : '1fr 300px';
+  }
+  checkLayout();
+  window.addEventListener('resize', checkLayout);
+})();
+</script>
+</body>
+</html>

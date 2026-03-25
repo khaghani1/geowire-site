@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Humanitarian — Displacement, casualties, aid access, and infrastructure damage in the Iran conflict.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Humanitarian — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="main-nav"></div>
+<div id="ticker-bar"><div id="ticker-inner">Loading…</div></div>
+
+<div class="page-body">
+<div class="container">
+
+  <div id="page-header"></div>
+
+  <!-- ACCESS WARNING BANNER -->
+  <div class="surface-card mb-lg" style="border-left:4px solid var(--red);">
+    <div style="display:flex; gap:10px; align-items:flex-start;">
+      <span style="font-size:1.2rem; color:var(--red);">🚨</span>
+      <div>
+        <div style="font-weight:600; color:var(--red); margin-bottom:4px;">Severely Limited Access</div>
+        <p class="text-dim" style="font-size:.85rem; margin:0;">
+          Independent humanitarian organization access to active conflict zones inside Iran is severely limited.
+          ICRC has been denied access by both coalition forces and Iranian authorities.
+          All figures carry significant uncertainty. Casualty estimates may be substantially understated.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADLINE STATS -->
+  <div id="hum-summary-main" class="mb-lg"></div>
+
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="humanitarian-top"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 300px; gap:32px;" class="main-layout">
+    <div>
+
+      <!-- AID ORGANIZATIONS -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Aid Organizations — Access Status</span>
+        </div>
+        <div id="aid-orgs-table"></div>
+      </div>
+
+      <!-- INFRASTRUCTURE DAMAGE -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Infrastructure Damage</span>
+        </div>
+        <div id="infra-table"></div>
+      </div>
+
+      <!-- AD MID -->
+      <div class="ad-unit">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="humanitarian-mid"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- ARTICLES -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Humanitarian Intelligence</span>
+        </div>
+        <div id="hum-articles" class="article-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <!-- Casualties breakdown -->
+      <div class="surface-card mb-md">
+        <div style="margin-bottom:14px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);">Casualties (Estimates)</div>
+        <div id="casualties-sidebar"></div>
+      </div>
+
+      <!-- IDP timeline -->
+      <div class="surface-card mb-md">
+        <div style="margin-bottom:10px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);">Displacement Timeline</div>
+        <div id="displacement-timeline"></div>
+      </div>
+
+      <div class="ad-unit" style="min-height:250px;">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:250px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="humanitarian-sidebar"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="main-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  GW.ui.initPage('humanitarian');
+  GW.ui.renderSectionHeader('page-header', 'Humanitarian Crisis', 'Displacement, casualties, aid access, and infrastructure damage from Operation Epic Fury.');
+  GW.ui.renderHumanitarianSummary('hum-summary-main');
+
+  const h = GW.humanitarian;
+
+  // Aid orgs table
+  const aidCols = ['Organization', 'Status', 'Focus'];
+  GW.ui.renderTable('aid-orgs-table', aidCols, h.aidOrgs.map(o => ({ Organization: o.name, Status: o.status.toUpperCase(), Focus: o.focus })));
+
+  // Infrastructure table
+  const infra = h.infrastructureDamage.map(d => ({
+    Type: d.type,
+    Count: d.cities ? `${d.cities} cities` : `${d.count} sites`,
+    Severity: d.severity.replace(/-/g, ' ').toUpperCase(),
+  }));
+  GW.ui.renderTable('infra-table', ['Infrastructure Type', 'Affected', 'Severity'], infra);
+
+  // Casualties sidebar
+  const casEl = document.getElementById('casualties-sidebar');
+  if (casEl) {
+    casEl.innerHTML = `
+      <div style="margin-bottom:12px;">
+        <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:2px;">Civilian (UNAMI estimate)</div>
+        <div style="font-family:var(--font-mono); font-size:1.4rem; font-weight:700; color:var(--red);">${h.casualties.civilian.confirmed.toLocaleString()}+</div>
+        <div style="font-size:.65rem; color:var(--text-muted);">${GW.ui.confidenceBadge(h.casualties.civilian.confidence)}</div>
+      </div>
+      <div>
+        <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:2px;">Military (CENTCOM confirmed)</div>
+        <div style="font-family:var(--font-mono); font-size:1.4rem; font-weight:700; color:var(--amber);">${h.casualties.military.confirmed.toLocaleString()}</div>
+        <div style="font-size:.65rem; color:var(--text-muted);">${GW.ui.confidenceBadge(h.casualties.military.confidence)}</div>
+      </div>`;
+  }
+
+  // Displacement timeline (approximate milestones)
+  const dispEl = document.getElementById('displacement-timeline');
+  if (dispEl) {
+    const milestones = [
+      { day: 'Day 1', figure: '50K', note: 'Initial urban evacuations' },
+      { day: 'Day 5', figure: '400K', note: 'Isfahan, western provinces' },
+      { day: 'Day 10', figure: '850K', note: 'Tehran suburbs movement' },
+      { day: 'Day 15', figure: '1.4M', note: 'Border crossing surge begins' },
+      { day: 'Day 25', figure: '2.3M', note: 'Current UNHCR estimate' },
+    ];
+    dispEl.innerHTML = milestones.map(m => `
+      <div style="display:flex; gap:12px; align-items:baseline; padding:6px 0; border-bottom:1px solid var(--border);">
+        <span style="font-family:var(--font-mono); font-size:.7rem; color:var(--text-muted); min-width:40px;">${m.day}</span>
+        <span style="font-family:var(--font-mono); font-weight:700; color:var(--amber); min-width:48px;">${m.figure}</span>
+        <span style="font-size:.72rem; color:var(--text-dim);">${m.note}</span>
+      </div>`).join('');
+  }
+
+  GW.ui.renderArticleGrid('hum-articles', 'humanitarian');
+  GW.ui.renderFooter('main-footer');
+
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+
+  function checkLayout() {
+    const l = document.querySelector('.main-layout');
+    if (!l) return;
+    l.style.gridTemplateColumns = window.innerWidth < 900 ? '1fr' : '1fr 300px';
+  }
+  checkLayout();
+  window.addEventListener('resize', checkLayout);
+})();
+</script>
+</body>
+</html>

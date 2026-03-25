@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Scenarios — Conflict outcome probabilities and wargame analysis for Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Scenarios — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="main-nav"></div>
+<div id="ticker-bar"><div id="ticker-inner">Loading…</div></div>
+
+<div class="page-body">
+<div class="container">
+
+  <div id="page-header"></div>
+
+  <!-- CONFIDENCE NOTE -->
+  <div class="surface-card mb-lg" style="border-left:4px solid var(--amber);">
+    <div style="display:flex; gap:10px; align-items:flex-start;">
+      <span style="font-size:1.2rem;">⚠️</span>
+      <div>
+        <div style="font-weight:600; margin-bottom:4px;">Methodology Note</div>
+        <p class="text-dim" style="font-size:.85rem; margin:0;">
+          Scenario probabilities are model-inferred estimates based on historical conflict pattern analysis.
+          They are NOT predictions. All scenarios carry significant uncertainty.
+          The <span class="confidence-badge conf-inferred" style="display:inline-flex;">⚫ Model-inferred</span> badge
+          indicates where human analyst consensus has not been established.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="scenarios-top"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- SCENARIOS -->
+  <div class="section-block">
+    <div class="section-block-header">
+      <span class="section-block-title">Conflict Outcome Scenarios</span>
+    </div>
+    <div id="scenarios-grid"></div>
+  </div>
+
+  <!-- AD MID -->
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="scenarios-mid"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- PROBABILITY SUMMARY TABLE -->
+  <div class="section-block">
+    <div class="section-block-header">
+      <span class="section-block-title">Probability Summary</span>
+    </div>
+    <div id="prob-table"></div>
+    <p class="text-muted mt-sm" style="font-size:.75rem;">
+      Probabilities sum to less than 100% — unknown/unmodeled outcomes account for the remainder.
+    </p>
+  </div>
+
+  <!-- MARKET IMPLICATIONS -->
+  <div class="section-block">
+    <div class="section-block-header">
+      <span class="section-block-title">Market Implications by Scenario</span>
+    </div>
+    <div class="table-wrap">
+      <table class="gw-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>WTI Oil</th>
+            <th>Gold</th>
+            <th>S&amp;P 500</th>
+            <th>USD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Rapid Ceasefire (&lt;30 days)</td>
+            <td class="text-green">-22%</td>
+            <td class="text-green">-12%</td>
+            <td class="text-green">+6-8%</td>
+            <td class="text-amber">+3%</td>
+          </tr>
+          <tr>
+            <td>Negotiated Settlement (30–90 days)</td>
+            <td class="text-amber">-10-15%</td>
+            <td class="text-amber">-6-8%</td>
+            <td class="text-green">+3-5%</td>
+            <td class="text-amber">+1-2%</td>
+          </tr>
+          <tr>
+            <td>Extended Conflict (90+ days)</td>
+            <td class="text-red">+35-45%</td>
+            <td class="text-red">+10-20%</td>
+            <td class="text-red">-18%</td>
+            <td class="text-amber">±3%</td>
+          </tr>
+          <tr>
+            <td>Hormuz Closure</td>
+            <td class="text-red">+60-80%</td>
+            <td class="text-red">+25-35%</td>
+            <td class="text-red">-25-35%</td>
+            <td class="text-red">-5-8%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="main-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  GW.ui.initPage('scenarios');
+  GW.ui.renderSectionHeader('page-header', 'Conflict Scenarios', 'Wargame analysis and outcome probability estimates for Operation Epic Fury.');
+  GW.ui.renderScenarios('scenarios-grid');
+  GW.ui.renderFooter('main-footer');
+
+  // Probability table
+  const cols = ['Scenario', 'Probability', 'Confidence', 'Key Driver'];
+  const rows = [
+    { Scenario: 'Rapid Ceasefire (<30 days)', Probability: '18%', Confidence: '⚫ Inferred', 'Key Driver': 'Iranian capitulation, Oman back-channel' },
+    { Scenario: 'Negotiated Settlement (30–90 days)', Probability: '35%', Confidence: '⚫ Inferred', 'Key Driver': 'Economic pressure + US domestic politics' },
+    { Scenario: 'Extended Conflict (90+ days)', Probability: '22%', Confidence: '⚫ Inferred', 'Key Driver': 'Hardened facilities survive; regime holds' },
+    { Scenario: 'Hormuz Closure', Probability: '28%', Confidence: '⚫ Inferred', 'Key Driver': 'Conditional on conflict > 30 more days' },
+    { Scenario: 'Regional Escalation (2nd front)', Probability: '15%', Confidence: '⚫ Inferred', 'Key Driver': 'Hezbollah full activation, Israeli ground' },
+  ];
+  GW.ui.renderTable('prob-table', cols, rows);
+
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+})();
+</script>
+</body>
+</html>

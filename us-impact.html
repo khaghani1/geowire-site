@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire US Impact — How Operation Epic Fury is affecting American households, economy, and politics.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>US Impact — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="main-nav"></div>
+<div id="ticker-bar"><div id="ticker-inner">Loading…</div></div>
+
+<div class="page-body">
+<div class="container">
+
+  <div id="page-header"></div>
+
+  <!-- HEADLINE STATS -->
+  <div class="grid-4 mb-lg" id="headline-stats"></div>
+
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="us-impact-top"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 300px; gap:32px;" class="main-layout">
+    <div>
+
+      <!-- ECONOMIC IMPACT -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Economic Impact</span>
+        </div>
+        <div id="economic-table"></div>
+      </div>
+
+      <!-- MILITARY OPERATIONS -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Military Operations</span>
+        </div>
+        <div id="military-table"></div>
+      </div>
+
+      <!-- AD MID -->
+      <div class="ad-unit">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="us-impact-mid"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- POLITICAL INDICATORS -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Political Indicators</span>
+        </div>
+        <div id="political-table"></div>
+      </div>
+
+      <!-- US IMPACT ARTICLES -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">US Impact Intelligence</span>
+        </div>
+        <div id="us-articles" class="article-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <div id="market-widget-container" class="mb-md"></div>
+
+      <div class="surface-card mb-md">
+        <div style="margin-bottom:12px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);">
+          Cost to US Taxpayer
+        </div>
+        <div style="font-family:var(--font-mono); font-size:1.6rem; font-weight:700; color:var(--red);">$850M+</div>
+        <div style="font-size:.72rem; color:var(--text-muted); margin-bottom:12px;">Estimated daily operational cost</div>
+        <div style="font-family:var(--font-mono); font-size:1.2rem; font-weight:700; color:var(--amber);" id="total-cost-est">$21.25B+</div>
+        <div style="font-size:.72rem; color:var(--text-muted);">25-day cumulative estimate</div>
+      </div>
+
+      <div class="ad-unit" style="min-height:250px;">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:250px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="us-impact-sidebar"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="main-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  GW.ui.initPage('us-impact');
+  GW.ui.renderSectionHeader('page-header', 'US Impact', 'How Operation Epic Fury is affecting American households, the economy, military, and domestic politics.');
+
+  // Headline stats
+  const statsEl = document.getElementById('headline-stats');
+  if (statsEl) {
+    const stats = [
+      { num: '$5.47', label: 'Avg. Gas Price/Gal', sub: '+38% since Feb 27', color: 'var(--red)' },
+      { num: '51%',   label: 'Op. Approval Rating', sub: 'Gallup, March 22', color: 'var(--amber)' },
+      { num: '$850M', label: 'Daily Op. Cost est.', sub: 'DoD estimate', color: 'var(--red)' },
+      { num: '2 CSG', label: 'Carrier Strike Groups', sub: 'Nimitz + Eisenhower', color: 'var(--blue)' },
+    ];
+    statsEl.innerHTML = stats.map(s => `
+      <div class="surface-card" style="text-align:center;">
+        <div style="font-family:var(--font-mono); font-size:1.6rem; font-weight:700; color:${s.color}; margin-bottom:4px;">${s.num}</div>
+        <div style="font-size:.82rem; font-weight:600; margin-bottom:2px;">${s.label}</div>
+        <div style="font-size:.7rem; color:var(--text-muted);">${s.sub}</div>
+      </div>`).join('');
+  }
+
+  // Tables
+  const econCols = ['Metric', 'Current Value', 'Change', 'Reference'];
+  const econRows = GW.usImpact.economic.map(e => ({
+    Metric: e.metric, 'Current Value': e.value, Change: e.change, Reference: e.since ? `Since ${e.since}` : e.change
+  }));
+  GW.ui.renderTable('economic-table', econCols, econRows);
+
+  const milCols = ['Item', 'Status / Value'];
+  GW.ui.renderTable('military-table', milCols, GW.usImpact.military);
+
+  const polCols = ['Indicator', 'Value', 'Source'];
+  GW.ui.renderTable('political-table', polCols, GW.usImpact.political);
+
+  GW.ui.renderArticleGrid('us-articles', 'us-impact');
+  GW.ui.renderMarketWidget('market-widget-container', null, false);
+  GW.ui.renderFooter('main-footer');
+
+  // Update cumulative cost
+  const costEl = document.getElementById('total-cost-est');
+  if (costEl) {
+    const days = GW.ui.daysSinceConflict();
+    costEl.textContent = `$${(days * 0.85).toFixed(2)}B+`;
+  }
+
+  document.addEventListener('gw:livedata', function (e) {
+    GW.ui.renderMarketWidget('market-widget-container', e.detail, GW.api.isAnyLive(e.detail));
+  });
+
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+
+  function checkLayout() {
+    const l = document.querySelector('.main-layout');
+    if (!l) return;
+    l.style.gridTemplateColumns = window.innerWidth < 900 ? '1fr' : '1fr 300px';
+  }
+  checkLayout();
+  window.addEventListener('resize', checkLayout);
+})();
+</script>
+</body>
+</html>

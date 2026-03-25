@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Geopolitical — Alliance dynamics, great power competition, and strategic implications of Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Geopolitical — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="main-nav"></div>
+<div id="ticker-bar"><div id="ticker-inner">Loading…</div></div>
+
+<div class="page-body">
+<div class="container">
+
+  <div id="page-header"></div>
+
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="geopolitical-top"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 300px; gap:32px;" class="main-layout">
+    <div>
+
+      <!-- ALLIANCE MAP -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Alliance Landscape</span>
+        </div>
+        <div class="grid-3 mb-md" id="alliance-grid">
+          <!-- Coalition -->
+          <div class="surface-card" style="border-top:3px solid var(--blue);">
+            <div style="font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--blue); margin-bottom:10px;">Coalition</div>
+            <div id="coalition-list"></div>
+          </div>
+          <!-- Opposing -->
+          <div class="surface-card" style="border-top:3px solid var(--amber);">
+            <div style="font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--amber); margin-bottom:10px;">Opposing / Counter</div>
+            <div id="opposing-list"></div>
+          </div>
+          <!-- Neutral -->
+          <div class="surface-card" style="border-top:3px solid var(--text-muted);">
+            <div style="font-size:.7rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); margin-bottom:10px;">Neutral / Mediating</div>
+            <div id="neutral-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KEY GEOPOLITICAL DEVELOPMENTS -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Key Developments</span>
+        </div>
+        <div id="geo-developments-table"></div>
+      </div>
+
+      <!-- AD MID -->
+      <div class="ad-unit">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="geopolitical-mid"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- GEOPOLITICAL ARTICLES -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Geopolitical Intelligence</span>
+        </div>
+        <div id="geo-articles" class="article-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <!-- Conflict clock -->
+      <div class="surface-card mb-md">
+        <div id="clock-sidebar"></div>
+      </div>
+
+      <!-- UNSC Status -->
+      <div class="surface-card mb-md">
+        <div style="margin-bottom:10px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);">UN Security Council</div>
+        <div id="unsc-status"></div>
+      </div>
+
+      <!-- Escalation risk meter -->
+      <div class="surface-card mb-md">
+        <div style="margin-bottom:10px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);">Escalation Indicators</div>
+        <div id="escalation-indicators"></div>
+      </div>
+
+      <div class="ad-unit" style="min-height:250px;">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:250px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="geopolitical-sidebar"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="main-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  GW.ui.initPage('geopolitical');
+  GW.ui.renderSectionHeader('page-header', 'Geopolitical', 'Alliance dynamics, great power competition, and strategic implications of Operation Epic Fury.');
+
+  // Alliance grid
+  function countryFlag(id) {
+    const c = GW.countries.find(x => x.id === id);
+    return c ? `${c.flag} ${GW.ui.isFarsi() && c.nameFa ? c.nameFa : c.name}` : id;
+  }
+
+  const coalitionEl = document.getElementById('coalition-list');
+  const opposingEl = document.getElementById('opposing-list');
+  const neutralEl = document.getElementById('neutral-list');
+
+  function makeList(countries) {
+    return countries.map(c => {
+      const name = GW.ui.isFarsi() && c.nameFa ? c.nameFa : c.name;
+      return `<div style="display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--border); font-size:.85rem;">
+        <span>${c.flag}</span><span>${name}</span>
+        <span style="font-size:.65rem; color:var(--text-muted); margin-left:auto;">${c.role}</span>
+      </div>`;
+    }).join('');
+  }
+
+  if (coalitionEl) coalitionEl.innerHTML = makeList(GW.countries.filter(c => c.stance === 'coalition'));
+  if (opposingEl)  opposingEl.innerHTML  = makeList(GW.countries.filter(c => c.stance === 'opposed' || c.stance === 'belligerent'));
+  if (neutralEl)   neutralEl.innerHTML   = makeList(GW.countries.filter(c => c.stance.startsWith('neutral')));
+
+  // Key developments table
+  const devCols = ['Date', 'Development', 'Actor', 'Significance'];
+  const devRows = [
+    { Date: 'Mar 24', Development: 'Day 25 — Fordow + Isfahan strikes', Actor: 'Coalition', Significance: 'Critical' },
+    { Date: 'Mar 23', Development: 'Hormuz closure threat issued', Actor: 'Iran', Significance: 'High' },
+    { Date: 'Mar 22', Development: 'Russia-China counter-sanctions', Actor: 'Russia/China', Significance: 'High' },
+    { Date: 'Mar 21', Development: 'UN Security Council deadlock (veto)', Actor: 'Russia/China', Significance: 'Medium' },
+    { Date: 'Mar 21', Development: 'China BRI rerouting $4.2B package', Actor: 'China', Significance: 'Medium' },
+    { Date: 'Mar 18', Development: 'IAEA inspection access suspended', Actor: 'Iran', Significance: 'High' },
+    { Date: 'Mar 15', Development: 'Houthi Red Sea attacks resume', Actor: 'Houthi/Iran', Significance: 'Medium' },
+    { Date: 'Mar 12', Development: 'Oman back-channel talks reported', Actor: 'Oman/US', Significance: 'High' },
+    { Date: 'Mar 03', Development: 'AUMF passes US Senate 54-46', Actor: 'USA', Significance: 'High' },
+    { Date: 'Feb 28', Development: 'Operation Epic Fury begins (Day 1)', Actor: 'Coalition', Significance: 'Critical' },
+  ];
+  GW.ui.renderTable('geo-developments-table', devCols, devRows);
+
+  GW.ui.renderArticleGrid('geo-articles', 'geopolitical');
+  GW.ui.renderConflictClock('clock-sidebar');
+
+  // UNSC status
+  const unscEl = document.getElementById('unsc-status');
+  if (unscEl) {
+    unscEl.innerHTML = `
+      <div style="font-size:.82rem;">
+        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+          <span>P5 Status</span><span style="color:var(--red); font-weight:600;">Deadlocked</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+          <span>Latest veto</span><span style="color:var(--text-dim);">Russia + China</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+          <span>Emergency sessions</span><span style="color:var(--amber);">3 convened</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:6px 0;">
+          <span>Resolution passed</span><span style="color:var(--red);">None</span>
+        </div>
+      </div>`;
+  }
+
+  // Escalation indicators
+  const escalEl = document.getElementById('escalation-indicators');
+  if (escalEl) {
+    const indicators = [
+      { name: 'Hormuz Closure', level: 'HIGH',   color: 'var(--red)' },
+      { name: 'Hezbollah 2nd Front', level: 'MEDIUM', color: 'var(--amber)' },
+      { name: 'China Direct Action', level: 'LOW',   color: 'var(--green)' },
+      { name: 'Iranian Ground War', level: 'LOW',   color: 'var(--green)' },
+      { name: 'Nuclear Use',          level: 'VERY LOW', color: 'var(--green-dim)' },
+    ];
+    escalEl.innerHTML = indicators.map(i => `
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border); font-size:.8rem;">
+        <span>${i.name}</span>
+        <span style="font-family:var(--font-mono); font-size:.65rem; font-weight:700; color:${i.color};">${i.level}</span>
+      </div>`).join('');
+  }
+
+  GW.ui.renderFooter('main-footer');
+
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+
+  function checkLayout() {
+    const l = document.querySelector('.main-layout');
+    if (!l) return;
+    l.style.gridTemplateColumns = window.innerWidth < 900 ? '1fr' : '1fr 300px';
+  }
+  checkLayout();
+  window.addEventListener('resize', checkLayout);
+})();
+</script>
+</body>
+</html>

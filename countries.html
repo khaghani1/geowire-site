@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Countries — Key actors, stances, and status during Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Countries — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="main-nav"></div>
+<div id="ticker-bar"><div id="ticker-inner">Loading…</div></div>
+
+<div class="page-body">
+<div class="container">
+
+  <div id="page-header"></div>
+
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="countries-top"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="section-block">
+    <div class="flex gap-sm items-center mb-md" id="stance-filters">
+      <button class="btn-filter active" data-stance="all">All</button>
+      <button class="btn-filter" data-stance="belligerent">Belligerent</button>
+      <button class="btn-filter" data-stance="coalition">Coalition</button>
+      <button class="btn-filter" data-stance="opposed">Opposing</button>
+      <button class="btn-filter" data-stance="neutral">Neutral</button>
+    </div>
+    <div id="country-cards"></div>
+  </div>
+
+  <!-- AD MID -->
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="countries-mid"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- COUNTRIES ARTICLES -->
+  <div class="section-block">
+    <div class="section-block-header">
+      <span class="section-block-title">Country Intelligence</span>
+    </div>
+    <div id="countries-articles" class="article-grid"></div>
+  </div>
+
+</div>
+</div>
+
+<div id="main-footer"></div>
+
+<style>
+.btn-filter {
+  padding: 5px 14px;
+  border: 1px solid var(--border2);
+  border-radius: 100px;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: transparent;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-filter:hover, .btn-filter.active {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(0,255,136,.08);
+}
+</style>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  GW.ui.initPage('countries');
+  GW.ui.renderSectionHeader('page-header', 'Countries', 'Key actors, alliances, and current status in the Operation Epic Fury conflict landscape.');
+  GW.ui.renderCountryCards('country-cards');
+  GW.ui.renderArticleGrid('countries-articles', 'geopolitical', 4);
+  GW.ui.renderFooter('main-footer');
+
+  // Filter buttons
+  document.querySelectorAll('.btn-filter').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const stance = this.dataset.stance;
+      if (stance === 'all') {
+        GW.ui.renderCountryCards('country-cards');
+      } else {
+        // filter by exact stance match or partial match (neutral-positive etc.)
+        const el = document.getElementById('country-cards');
+        const countries = GW.countries.filter(c => c.stance === stance || c.stance.startsWith(stance));
+        const cards = countries.map(c => {
+          const name = GW.ui.isFarsi() && c.nameFa ? c.nameFa : c.name;
+          const role = GW.ui.isFarsi() && c.roleFa ? c.roleFa : c.role;
+          const facts = c.keyFacts.map(f => `<li>${f}</li>`).join('');
+          return `<div class="country-card stance-${c.stance}">
+            <div class="country-header">
+              <span class="country-flag">${c.flag}</span>
+              <div><div class="country-name">${name}</div><div class="country-role">${role}</div></div>
+            </div>
+            <ul class="country-facts">${facts}</ul>
+            <p class="country-status">${c.currentStatus}</p>
+          </div>`;
+        }).join('');
+        el.innerHTML = `<div class="country-grid">${cards}</div>`;
+      }
+    });
+  });
+
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+})();
+</script>
+</body>
+</html>

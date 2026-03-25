@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Energy — Chokepoints, oil prices, and energy market disruption during Operation Epic Fury.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Energy — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="main-nav"></div>
+<div id="ticker-bar"><div id="ticker-inner">Loading…</div></div>
+
+<div class="page-body">
+<div class="container">
+
+  <div id="page-header"></div>
+
+  <!-- AD TOP -->
+  <div class="ad-unit">
+    <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+      data-ad-client="ca-pub-5068519853957013" data-ad-slot="energy-top"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div style="display:grid; grid-template-columns: 1fr 300px; gap:32px;" class="main-layout">
+    <div>
+
+      <!-- CHOKEPOINTS -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Strategic Chokepoints</span>
+          <span id="chokepoint-live-badge"></span>
+        </div>
+        <div id="chokepoints"></div>
+      </div>
+
+      <!-- OIL PRODUCERS TABLE -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Major Oil Producers — Current Output</span>
+        </div>
+        <div id="producers-table"></div>
+      </div>
+
+      <!-- AD MID -->
+      <div class="ad-unit">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="energy-mid"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- ENERGY ARTICLES -->
+      <div class="section-block">
+        <div class="section-block-header">
+          <span class="section-block-title">Energy Intelligence</span>
+        </div>
+        <div id="energy-articles" class="article-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+      <div id="market-widget-container" class="mb-md"></div>
+      <div class="surface-card mb-md">
+        <div style="margin-bottom:12px; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted);">Key Metrics</div>
+        <div class="market-grid" id="energy-metrics"></div>
+      </div>
+      <div class="ad-unit" style="min-height:250px;">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:250px;"
+          data-ad-client="ca-pub-5068519853957013" data-ad-slot="energy-sidebar"
+          data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div id="main-footer"></div>
+
+<script src="content.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  GW.ui.initPage('energy');
+  GW.ui.renderSectionHeader('page-header', 'Energy Markets', 'Oil chokepoints, production data, and price signals during Operation Epic Fury.');
+  GW.ui.renderChokepointStatus('chokepoints');
+
+  // Producers table
+  const cols = ['Country', 'Output (Mbpd)', 'Change vs Pre-Conflict', 'Notes'];
+  const rows = GW.energy.oilProducers.map(p => ({
+    Country: p.country, Output: p.output, Change: p.change, Notes: p.notes
+  }));
+  GW.ui.renderTable('producers-table', cols, rows);
+
+  // Energy articles
+  GW.ui.renderArticleGrid('energy-articles', 'energy');
+
+  // Market widget
+  GW.ui.renderMarketWidget('market-widget-container', null, false);
+
+  // Energy-specific metrics sidebar
+  const metricsEl = document.getElementById('energy-metrics');
+  if (metricsEl) {
+    const keys = ['wti', 'brent', 'nat_gas'];
+    metricsEl.innerHTML = keys.map(key => {
+      const d = GW.seedData[key];
+      return `<div class="market-item">
+        <span class="market-label">${d.label}</span>
+        <span class="market-value">${d.value} <small>${d.unit}</small></span>
+        ${GW.ui.liveBadge(false)}
+      </div>`;
+    }).join('');
+  }
+
+  GW.ui.renderFooter('main-footer');
+
+  document.addEventListener('gw:livedata', function (e) {
+    const liveData = e.detail;
+    GW.ui.renderMarketWidget('market-widget-container', liveData, GW.api.isAnyLive(liveData));
+    // Update energy metrics
+    const metricsEl = document.getElementById('energy-metrics');
+    if (metricsEl) {
+      const keys = ['wti', 'brent', 'nat_gas'];
+      metricsEl.innerHTML = keys.map(key => {
+        const d = liveData[key] || GW.seedData[key];
+        return `<div class="market-item">
+          <span class="market-label">${d.label}</span>
+          <span class="market-value">${d.value} <small>${d.unit}</small></span>
+          ${GW.ui.liveBadge(d.isLive)}
+        </div>`;
+      }).join('');
+    }
+  });
+
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+
+  function checkLayout() {
+    const l = document.querySelector('.main-layout');
+    if (!l) return;
+    l.style.gridTemplateColumns = window.innerWidth < 900 ? '1fr' : '1fr 300px';
+  }
+  checkLayout();
+  window.addEventListener('resize', checkLayout);
+})();
+</script>
+</body>
+</html>
