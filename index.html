@@ -11,6 +11,7 @@
   <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
   <meta name="google-adsense-account" content="ca-pub-5068519853957013">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 <div id="site-header"></div>
@@ -82,17 +83,15 @@
   <section class="section container">
     <div class="section-header">
       <h2 class="section-title">Conflict Map</h2>
-      <span class="section-badge demo-badge">DEMO</span>
+      <span class="section-subtitle">US bases · Iranian targets · Hormuz corridor · Coalition forces</span>
     </div>
-    <div class="map-container" id="map-container">
-      <div class="map-placeholder">
-        <div class="map-placeholder-inner">
-          <div class="map-icon">🗺️</div>
-          <div class="map-placeholder-title">Interactive Conflict Map</div>
-          <div class="map-placeholder-sub">Strike zones · Naval positions · Refugee flows · Supply chain disruptions</div>
-          <div class="map-placeholder-tag">MapLibre integration — Phase 2</div>
-        </div>
+    <div class="gw-map-wrap">
+      <div class="gw-map-legend" id="gw-map-legend">
+        <div class="gw-map-legend-item"><span class="gw-leg-dot" style="background:#E63946"></span>Iranian targets / strike sites</div>
+        <div class="gw-map-legend-item"><span class="gw-leg-dot" style="background:#5FA8D3"></span>US / coalition bases</div>
+        <div class="gw-map-legend-item"><span class="gw-leg-line" style="background:#F59E0B"></span>Hormuz corridor (blocked)</div>
       </div>
+      <div id="conflict-map" style="height:460px;width:100%;border-radius:12px;overflow:hidden"></div>
     </div>
   </section>
 
@@ -143,6 +142,7 @@
   </div>
 </main>
 <div id="site-footer"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="content.js"></script>
 <script src="scoring.js"></script>
 <script src="ui.js"></script>
@@ -214,6 +214,144 @@
   // AdSense
   try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
   try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+})();
+</script>
+
+<!-- ─── LEAFLET CONFLICT MAP ─────────────────────────────────────────────── -->
+<script>
+(function initConflictMap() {
+  if (typeof L === 'undefined') return;
+  const mapEl = document.getElementById('conflict-map');
+  if (!mapEl) return;
+
+  // Dark basemap via CartoDB
+  const map = L.map('conflict-map', {
+    center: [27.5, 56.5],
+    zoom: 5,
+    zoomControl: true,
+    attributionControl: true,
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
+  }).addTo(map);
+
+  // ── Icon factory
+  function mkIcon(color, size) {
+    size = size || 10;
+    return L.divIcon({
+      className: '',
+      html: `<div style="width:${size}px;height:${size}px;background:${color};border-radius:50%;border:2px solid rgba(255,255,255,0.5);box-shadow:0 0 8px ${color}80"></div>`,
+      iconSize: [size, size],
+      iconAnchor: [size/2, size/2],
+    });
+  }
+
+  // ── Layer groups
+  const lgIran    = L.layerGroup();
+  const lgUS      = L.layerGroup();
+  const lgHormuz  = L.layerGroup();
+  const lgNaval   = L.layerGroup();
+
+  // ── Iranian targets / strike sites
+  const iranTargets = [
+    { latlng: [35.70, 51.42],  label: 'Tehran — IRGC HQ',               detail: 'IRGC command & control. Day 1 primary target.' },
+    { latlng: [32.48, 48.75],  label: 'Ahvaz — Petroleum complex',       detail: 'Iran\'s largest oil refinery complex. Struck Day 2.' },
+    { latlng: [29.61, 52.53],  label: 'Shiraz Air Base',                 detail: 'IRGC Air Force hub. S-300 systems degraded.' },
+    { latlng: [36.57, 52.67],  label: 'Amol — Missile facility',        detail: 'Ballistic missile production. Heavily struck.' },
+    { latlng: [26.96, 56.27],  label: 'Bandar Abbas — Naval HQ',         detail: 'IRIN headquarters. Partially operational.' },
+    { latlng: [27.18, 56.28],  label: 'Qeshm Island — IRGC Naval',       detail: 'IRGC fast boat base. 60% capacity remaining.' },
+    { latlng: [25.97, 56.35],  label: 'Strait entry — Minefield zone',   detail: 'IRGC mines deployed. 3 vessels struck in first week.' },
+    { latlng: [33.72, 48.68],  label: 'Arak — Heavy water reactor',      detail: 'Nuclear-adjacent facility. Struck per US statement.' },
+    { latlng: [32.66, 51.68],  label: 'Isfahan — Natanz support',        detail: 'Nuclear enrichment support infrastructure.' },
+    { latlng: [35.37, 46.99],  label: 'Kermanshah — IRGC ground HQ',     detail: 'Western command hub. Disrupted.' },
+  ];
+
+  iranTargets.forEach(t => {
+    const m = L.marker(t.latlng, { icon: mkIcon('#E63946', 10) });
+    m.bindPopup(`<div class="gw-popup"><strong>${t.label}</strong><br><span>${t.detail}</span></div>`);
+    m.addTo(lgIran);
+  });
+
+  // ── US / Coalition bases
+  const usBases = [
+    { latlng: [25.24, 55.36],  label: 'Al Dhafra AB — UAE',              detail: 'Primary USAF hub. F-35As, B-2 sorties launched here.' },
+    { latlng: [26.27, 50.61],  label: 'NSA Bahrain — 5th Fleet HQ',      detail: '5th Fleet headquarters. CSS operations center.' },
+    { latlng: [29.33, 47.98],  label: 'Ali Al Salem AB — Kuwait',        detail: '386th AEW. A-10s and ISR platforms.' },
+    { latlng: [25.31, 51.57],  label: 'Al Udeid AB — Qatar',             detail: 'CENTCOM FWDQ. Largest US base in region. ~10,000 personnel.' },
+    { latlng: [24.43, 54.65],  label: 'Al Minhad AB — UAE (reserve)',    detail: 'Coalition logistics hub. UAE Air Force operational.' },
+    { latlng: [23.65, 58.19],  label: 'Masirah Island — Oman',          detail: 'Sensitive ISR and refueling. Oman cooperation confirmed.' },
+    { latlng: [27.36, 66.78],  label: 'Camp Dwyer — Pakistan (support)', detail: 'Logistical corridor only. Pakistan non-combatant.' },
+  ];
+
+  usBases.forEach(b => {
+    const m = L.marker(b.latlng, { icon: mkIcon('#5FA8D3', 11) });
+    m.bindPopup(`<div class="gw-popup"><strong>${b.label}</strong><br><span>${b.detail}</span></div>`);
+    m.addTo(lgUS);
+  });
+
+  // ── Hormuz corridor polyline
+  const hormuzPath = [
+    [25.30, 56.00],
+    [25.10, 56.50],
+    [24.80, 57.00],
+    [24.60, 57.40],
+    [24.30, 57.80],
+    [23.90, 58.30],
+    [23.60, 58.60],
+  ];
+
+  const hormuzLine = L.polyline(hormuzPath, {
+    color: '#F59E0B',
+    weight: 3,
+    opacity: 0.85,
+    dashArray: '8, 6',
+  }).bindPopup('<div class="gw-popup"><strong>Strait of Hormuz — BLOCKED</strong><br><span>97% transit closed. IRGC mines + denial operations. 21M bbl/day offline.</span></div>');
+  hormuzLine.addTo(lgHormuz);
+
+  // Hormuz width indicator (shaded zone)
+  const hormuzZone = L.polygon([
+    [26.5, 56.2], [25.0, 56.0], [24.0, 57.6], [23.6, 58.7],
+    [24.3, 59.0], [25.0, 58.5], [26.0, 57.5], [27.0, 56.8],
+  ], {
+    color: '#F59E0B',
+    fillColor: '#F59E0B',
+    fillOpacity: 0.08,
+    weight: 1,
+    opacity: 0.3,
+  }).bindPopup('<div class="gw-popup"><strong>Hormuz operational zone</strong><br><span>Denial area. Coalition patrols active. IRGC fast boats present.</span></div>');
+  hormuzZone.addTo(lgHormuz);
+
+  // ── Carrier strike groups
+  const navalPositions = [
+    { latlng: [20.0, 64.0],  label: 'USS Gerald R. Ford CSG',     detail: 'CVN-78. Northern Arabian Sea. 22 drones intercepted Mar 22.' },
+    { latlng: [24.5, 62.0],  label: 'USS Nimitz CSG',             detail: 'CVN-68. Western Arabian Sea. Air superiority role.' },
+    { latlng: [15.0, 50.5],  label: 'HMS Queen Elizabeth — Red Sea', detail: 'RN carrier. Houthi suppression + Hormuz deterrence.' },
+  ];
+
+  navalPositions.forEach(n => {
+    const m = L.marker(n.latlng, { icon: mkIcon('#8B5CF6', 12) });
+    m.bindPopup(`<div class="gw-popup"><strong>${n.label}</strong><br><span>${n.detail}</span></div>`);
+    m.addTo(lgNaval);
+  });
+
+  // ── Add all layers
+  lgUS.addTo(map);
+  lgIran.addTo(map);
+  lgHormuz.addTo(map);
+  lgNaval.addTo(map);
+
+  // ── Layer control
+  const overlays = {
+    '<span style="color:#E63946">● Iranian targets</span>':         lgIran,
+    '<span style="color:#5FA8D3">● US / coalition bases</span>':   lgUS,
+    '<span style="color:#F59E0B">━ Hormuz corridor</span>':        lgHormuz,
+    '<span style="color:#8B5CF6">● Carrier strike groups</span>':  lgNaval,
+  };
+  L.control.layers(null, overlays, { collapsed: false, position: 'topright' }).addTo(map);
+
 })();
 </script>
 </body>
