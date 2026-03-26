@@ -220,5 +220,41 @@ const API = (() => {
     }
   }
 
-  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, fetchAllRecessionData, fetchEIA, fetchNewsAPI, FRED_SERIES };
+  // ─── AI EXPLAIN STUB ──────────────────────────────────────────────────────────
+  // Calls an AI explanation endpoint for any GeoWire topic.
+  // Currently stubbed — wire to your preferred AI provider (Anthropic, OpenAI, etc.)
+  // Expected response shape: { explanation: string, sources: string[], confidence: 'high'|'medium'|'low' }
+  async function fetchAIExplain(topic, context) {
+    const AI_API_KEY = ''; // Set your AI provider key here
+    const AI_API_URL = ''; // Set your AI provider endpoint here
+
+    if (!AI_API_KEY || !AI_API_URL) {
+      console.warn('[GeoWire] AI Explain not configured — returning stub. Set AI_API_KEY and AI_API_URL in api.js.');
+      // Return a stub explanation so the UI can still render
+      return {
+        explanation: `This is a stub AI explanation for "${topic}". Configure AI_API_KEY and AI_API_URL in api.js to enable live explanations from your preferred AI provider.`,
+        sources: ['GeoWire seed data'],
+        confidence: 'low',
+        stub: true,
+      };
+    }
+
+    try {
+      const prompt = `You are GeoWire's geopolitical intelligence analyst. Explain the following in 2-3 clear sentences for a non-expert reader.\n\nTopic: ${topic}\nContext: ${context || ''}`;
+      const res = await fetch(AI_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AI_API_KEY}` },
+        body: JSON.stringify({ model: 'gpt-4o-mini', messages: [{ role: 'user', content: prompt }], max_tokens: 200 }),
+      });
+      if (!res.ok) throw new Error(`AI Explain HTTP ${res.status}`);
+      const json = await res.json();
+      const text = json.choices?.[0]?.message?.content || json.content?.[0]?.text || 'No explanation returned.';
+      return { explanation: text.trim(), sources: ['AI model'], confidence: 'medium', stub: false };
+    } catch (err) {
+      console.warn('[GeoWire] AI Explain error:', err.message);
+      return { explanation: 'Explanation temporarily unavailable.', sources: [], confidence: 'low', stub: true };
+    }
+  }
+
+  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, fetchAllRecessionData, fetchEIA, fetchNewsAPI, fetchAIExplain, FRED_SERIES };
 })();

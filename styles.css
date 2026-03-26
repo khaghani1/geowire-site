@@ -2163,3 +2163,97 @@ th, td { text-align: left; vertical-align: top; }
   flex-shrink: 0;
   background: #F59E0B;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   AI EXPLAIN COMPONENT
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.ai-explain-wrap { margin-top: 10px; }
+
+.ai-explain-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: #8B5CF6;
+  background: #8B5CF612;
+  border: 1px solid #8B5CF640;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  letter-spacing: 0.04em;
+}
+.ai-explain-btn:hover {
+  background: #8B5CF624;
+  border-color: #8B5CF680;
+}
+
+.ai-explain-loading {
+  font-size: 11px;
+  color: #8B5CF6;
+  font-family: var(--font-mono);
+  padding: 6px 0;
+  animation: pulse 1.4s infinite;
+}
+
+.ai-explain-result {
+  background: #8B5CF610;
+  border: 1px solid #8B5CF630;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-explain-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ai-explain-icon { font-size: 14px; }
+.ai-explain-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #8B5CF6;
+  font-family: var(--font-mono);
+}
+.ai-explain-confidence {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+.ai-conf-high   { background: #2D6A4F22; color: #2D6A4F; border: 1px solid #2D6A4F40; }
+.ai-conf-medium { background: #F59E0B22; color: #F59E0B; border: 1px solid #F59E0B40; }
+.ai-conf-low    { background: #E6394622; color: #E63946; border: 1px solid #E6394640; }
+
+.ai-explain-text {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+.ai-explain-sources {
+  font-size: 10px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+}
+.ai-explain-stub-note {
+  font-size: 10px;
+  color: #F59E0B;
+  font-family: var(--font-mono);
+  border-top: 1px solid #33415540;
+  padding-top: 6px;
+}
+.ai-explain-error {
+  font-size: 11px;
+  color: #E63946;
+  font-family: var(--font-mono);
+  padding: 6px 0;
+}

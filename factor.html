@@ -63,6 +63,11 @@
     <div class="related-factors" id="related-factors-mount"></div>
   </section>
 
+  <!-- AI Explain slot -->
+  <section class="section container">
+    <div id="factor-ai-explain"></div>
+  </section>
+
   <!-- Back nav -->
   <section class="section container">
     <div class="factor-nav-bar">
@@ -278,6 +283,16 @@
     document.querySelectorAll('.adsbygoogle').forEach(() => {
       try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
     });
+
+    // ── AI Explain — for the current factor
+    const aiEl = document.getElementById('factor-ai-explain');
+    if (aiEl && factorDetail) {
+      aiEl.innerHTML = UI.renderAIExplainButton(
+        `${name} — macro recession factor`,
+        factorDetail.description || '',
+        'factor-ai-explain'
+      );
+    }
 
     // ── Email capture
     document.getElementById('factor-email-capture').innerHTML = UI.renderEmailCapture();

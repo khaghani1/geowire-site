@@ -1061,5 +1061,54 @@ const UI = (() => {
     renderHormuzGauge, renderGoldmanCalculator, renderCommodityCascade,
     renderHeliumDeepDive, renderEnergyStoragePanel,
     renderScoreSummaryStrip, renderMacroPulsePanel, renderFactorExplorer,
+    renderAIExplainButton, mountAIExplain,
   };
+
+  // ─── AI EXPLAIN ───────────────────────────────────────────────────────────────
+  // renderAIExplainButton(topic, context, mountId)
+  //   Renders a compact "🤖 Explain" button. When clicked, calls API.fetchAIExplain
+  //   and replaces the button with the AI explanation inline.
+  //
+  // Usage in any page:
+  //   someContainer.innerHTML += UI.renderAIExplainButton('Hormuz closure', 'energy', 'explain-hormuz');
+  //   UI.mountAIExplain(); // call once after all buttons are in DOM
+  //
+  function renderAIExplainButton(topic, context, mountId) {
+    const safeId = mountId || ('ai-explain-' + Math.random().toString(36).slice(2, 7));
+    const safeTopic = _escHtml(topic || '');
+    return `<div class="ai-explain-wrap" id="${safeId}" data-topic="${safeTopic}" data-context="${_escHtml(context || '')}">
+      <button class="ai-explain-btn" onclick="UI.mountAIExplain('${safeId}')">🤖 AI Explain</button>
+    </div>`;
+  }
+
+  // mountAIExplain(mountId)
+  //   Called by the button's onclick. Calls API.fetchAIExplain, shows loading state,
+  //   then replaces button with explanation text.
+  async function mountAIExplain(mountId) {
+    const el = document.getElementById(mountId);
+    if (!el) return;
+    const topic   = el.dataset.topic   || 'this topic';
+    const context = el.dataset.context || '';
+    el.innerHTML = `<div class="ai-explain-loading">🤖 Analyzing…</div>`;
+    try {
+      const result = await API.fetchAIExplain(topic, context);
+      const stubNote = result.stub
+        ? `<div class="ai-explain-stub-note">⚙ AI explain stub — configure API keys in api.js to enable live explanations.</div>`
+        : '';
+      el.innerHTML = `
+        <div class="ai-explain-result">
+          <div class="ai-explain-header">
+            <span class="ai-explain-icon">🤖</span>
+            <span class="ai-explain-label">AI EXPLAIN</span>
+            <span class="ai-explain-confidence ai-conf-${result.confidence}">${(result.confidence || 'low').toUpperCase()}</span>
+          </div>
+          <div class="ai-explain-text">${_escHtml(result.explanation || '')}</div>
+          ${result.sources && result.sources.length ? `<div class="ai-explain-sources">Sources: ${result.sources.map(s => _escHtml(s)).join(' · ')}</div>` : ''}
+          ${stubNote}
+        </div>`;
+    } catch (err) {
+      el.innerHTML = `<div class="ai-explain-error">AI explain unavailable: ${_escHtml(err.message)}</div>`;
+    }
+  }
+
 })();

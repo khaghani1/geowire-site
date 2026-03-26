@@ -108,6 +108,7 @@
       Key divergence: <strong>Labor Market has not broken yet</strong> — this is either the last shoe to drop (historical pattern)
       or the resilience that prevents recession. The next 2 NFP prints are the decisive data.
     </div>
+    <div id="macro-cross-ai-explain"></div>
     <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
       <a class="macro-explore-link" href="recession.html" style="font-size:14px;padding:8px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
         📉 Full Recession Command Center →
@@ -183,6 +184,10 @@
     document.querySelectorAll('.adsbygoogle').forEach(() => {
       try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
     });
+
+    // ── AI Explain — cross-factor insight
+    document.getElementById('macro-cross-ai-explain').innerHTML =
+      UI.renderAIExplainButton('cross-factor recession signals', '6 of 10 macro factors deteriorating or stressed. Labor market resilient. Supply & Logistics highest risk.', 'macro-cross-ai-explain');
 
     // ── Email capture
     document.getElementById('macro-email-capture').innerHTML = UI.renderEmailCapture();
