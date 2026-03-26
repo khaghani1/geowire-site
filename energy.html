@@ -111,14 +111,14 @@
           <div>
             <div class="oil-stat-label">Pre-war Brent (Feb 27)</div>
             <div class="oil-stat-value" style="color:#5FA8D3">$68.20</div>
-            <div class="oil-stat-delta" style="color:var(--text-secondary)">Last normal close before Op. Epic Fury</div>
+            <div class="oil-stat-delta" style="color:var(--text-2)">Last normal close before Op. Epic Fury</div>
           </div>
         </div>
         <div class="oil-stat-card">
           <div>
             <div class="oil-stat-label">Goldman 3-Month Target</div>
             <div class="oil-stat-value" style="color:#F59E0B">$130.00</div>
-            <div class="oil-stat-delta" style="color:var(--text-secondary)">If Hormuz stays closed · GS Research</div>
+            <div class="oil-stat-delta" style="color:var(--text-2)">If Hormuz stays closed · GS Research</div>
           </div>
         </div>
         <div class="oil-stat-card">
@@ -211,7 +211,7 @@
     <div id="commodity-cascade-container">
       <!-- Rendered by JS -->
     </div>
-    <p style="font-size:12px;color:var(--text-secondary);margin-top:10px">
+    <p style="font-size:12px;color:var(--text-2);margin-top:10px">
       Sources: Bloomberg, Kpler, ICE, Gasworld, Albemarle/ICL filings, CoinGecko · Confidence: multisource unless noted.
       Disruption score is GeoWire model estimate combining hormuz exposure, substitutability, and buffer days.
     </p>
@@ -249,13 +249,31 @@
             <tr><td>Disruption scores</td><td>GeoWire model (hormuz exposure × substitutability × buffer)</td><td>Model-inferred</td><td>Manual update</td></tr>
           </tbody>
         </table>
-        <p style="font-size:12px;margin-top:10px;color:var(--text-secondary)">
+        <p style="font-size:12px;margin-top:10px;color:var(--text-2)">
           GeoWire is an independent intelligence platform. All data points carry confidence ratings.
           Model-inferred data should not be used for financial decisions. Goldman scenario calculator
           uses a simplified interpolation of published Goldman Sachs framework — not an exact reproduction.
         </p>
       </div>
     </details>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       RECESSION LINK BRIDGE
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="cross-factor-insight">
+      <strong>How does the energy shock translate to recession risk?</strong>
+      The Hormuz closure is the single highest-stress factor in GeoWire's 10-factor recession model — scoring 78/100 (STRESS).
+      Energy costs flow through to inflation, consumer spending, corporate margins, and global spillovers.
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <a href="recession.html" style="color:#5FA8D3;font-weight:600;font-size:13px">📉 Recession Command Center — Full 42% Probability Analysis →</a>
+        <span style="color:var(--text-3)">·</span>
+        <a href="factor.html?f=supplyLogistics" style="color:#E63946;font-weight:600;font-size:13px">⚡ Supply &amp; Logistics Factor Deep-Dive →</a>
+        <span style="color:var(--text-3)">·</span>
+        <a href="macro.html" style="color:#5FA8D3;font-weight:600;font-size:13px">📊 All 10 Macro Factors →</a>
+      </div>
+    </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════════════

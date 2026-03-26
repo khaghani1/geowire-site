@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Macro Pulse — All 10 recession factor families tracked in real time. Labor, rates, inflation, consumer, credit, housing, supply, global, market signals, and alternative indicators.">
+  <meta property="og:title" content="Macro Pulse Dashboard — GeoWire">
+  <meta property="og:description" content="10-factor recession model, deep-dive panels, second-order effects. Operation Epic Fury economic impact tracker.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Macro Pulse Dashboard — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       RECESSION RISK BAR
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="war-status-bar">
+    <div class="container">
+      <div class="war-status-inner">
+        <span class="war-status-label">6-MO RECESSION PROBABILITY</span>
+        <div class="war-status-track">
+          <div class="war-status-fill" id="macro-risk-bar" style="width:42%"></div>
+        </div>
+        <span class="war-status-pct" id="macro-risk-pct" style="color:#F59E0B">42%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       PAGE HERO
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="tag tag-economic">MACRO</span>
+          <span class="tag" style="background:#5FA8D320;color:#5FA8D3;border:1px solid #5FA8D340">📊 PULSE DASHBOARD</span>
+        </div>
+        <h1 class="page-hero-title">Macro Pulse Dashboard</h1>
+        <p class="page-hero-subtitle">10 factor families. Each drives recession probability. Ordered by weight — click any panel to drill into FRED data, second-order effects, and what to watch.</p>
+        <div class="page-hero-meta">
+          <span>Recession probability: <strong style="color:#F59E0B" id="macro-hero-prob">42%</strong> · RISING</span>
+          <span class="separator">·</span>
+          <span><strong style="color:#EA580C" id="macro-det-count">6</strong> of 10 factors DETERIORATING or STRESS</span>
+          <span class="separator">·</span>
+          <span>Updated <span id="macro-clock">—</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market ticker -->
+  <div id="market-ticker-bar"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SCORE SUMMARY STRIP
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Factor Scores — At a Glance</h2>
+      <span class="section-subtitle">Click any pill to explore that factor in depth</span>
+    </div>
+    <div id="score-strip-mount"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       10 FACTOR PANELS (ordered by weight descending)
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">All 10 Macro Factors</h2>
+      <span class="section-subtitle">Ordered by model weight. Click "Explore →" for FRED charts, cascade effects, and watchlist items.</span>
+    </div>
+    <div class="macro-pulse-grid" id="macro-panels-mount">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- AdSense mid -->
+  <div class="container" id="ad-macro-mid"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       CROSS-FACTOR INSIGHT
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Cross-Factor Insight</h2>
+    </div>
+    <div class="cross-factor-insight">
+      <strong>6 of 10 factors DETERIORATING or STRESS.</strong>
+      Mixed signal from <strong>Labor Market</strong> (still STABLE — unemployment 4.2%, claims rising but not recessionary)
+      and <strong>Market Signals</strong> (S&P +9.7% but rally driven by 2 sectors; breadth narrowing, VIX elevated at 26).
+      <br><br>
+      The <strong>Supply &amp; Logistics</strong> factor (score 78, STRESS) is the highest-risk single factor — Hormuz 97% closed
+      is an unprecedented physical disruption with no short-term fix.
+      <strong>Inflation Internals</strong> are the most dangerous for the Fed — import prices running 2× forecast
+      means the path to cuts is closing fast.
+      <br><br>
+      Key divergence: <strong>Labor Market has not broken yet</strong> — this is either the last shoe to drop (historical pattern)
+      or the resilience that prevents recession. The next 2 NFP prints are the decisive data.
+    </div>
+    <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
+      <a class="macro-explore-link" href="recession.html" style="font-size:14px;padding:8px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px">
+        📉 Full Recession Command Center →
+      </a>
+      <a class="macro-explore-link" href="factor.html?f=supplyLogistics" style="font-size:14px;padding:8px 16px;background:#E6394610;border:1px solid #E6394640;border-radius:8px;color:#E63946">
+        ⚡ Explore Highest-Risk Factor: Supply & Logistics →
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       ADSENSE + EMAIL + FOOTER
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container" id="ad-macro-bottom"></section>
+  <section class="section container" id="macro-email-capture"></section>
+  <div id="site-footer"></div>
+
+</main>
+
+<!-- ─── SCRIPTS ───────────────────────────────────────────────────────────── -->
+<script src="content.js"></script>
+<script src="scoring.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+  (async function () {
+    UI.init();
+    document.getElementById('site-header').innerHTML =
+      UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
+    document.getElementById('site-nav').innerHTML =
+      UI.renderNav(GEOWIRE.navigationItems, 'macro.html');
+    document.getElementById('market-ticker-bar').innerHTML =
+      UI.renderMarketTicker(GEOWIRE.marketData);
+    document.getElementById('site-footer').innerHTML =
+      UI.renderFooter(GEOWIRE.siteMeta);
+    UI.startClock('macro-clock');
+
+    const rec = GEOWIRE.recessionData;
+    const fd  = GEOWIRE.factorDetails;
+
+    // ── Score strip
+    document.getElementById('score-strip-mount').innerHTML =
+      UI.renderScoreSummaryStrip(rec.factorScores, fd);
+
+    // ── Panels ordered by weight descending
+    const ORDER = [
+      'laborMarket','ratesLiquidity','inflation','consumerHealth',
+      'corporateCredit','housing','supplyLogistics','globalSpillovers',
+      'marketSignals','outsideBox',
+    ];
+    const panelsHtml = ORDER.map(key =>
+      UI.renderMacroPulsePanel(key, rec.factorScores[key], fd[key])
+    ).join('');
+    document.getElementById('macro-panels-mount').innerHTML = panelsHtml;
+
+    // ── Count deteriorating/stress
+    const badCount = Object.values(rec.factorScores)
+      .filter(f => f.status === 'DETERIORATING' || f.status === 'STRESS').length;
+    const detEl = document.getElementById('macro-det-count');
+    if (detEl) detEl.textContent = badCount;
+
+    // ── Probability bar
+    const barEl = document.getElementById('macro-risk-bar');
+    if (barEl) barEl.style.width = rec.probability + '%';
+    const pctEl = document.getElementById('macro-risk-pct');
+    if (pctEl) pctEl.textContent = rec.probability + '%';
+    const heroEl = document.getElementById('macro-hero-prob');
+    if (heroEl) heroEl.textContent = rec.probability + '%';
+
+    // ── AdSense
+    document.getElementById('ad-macro-mid').innerHTML    = UI.renderAdSlot('macro-mid');
+    document.getElementById('ad-macro-bottom').innerHTML = UI.renderAdSlot('macro-bottom');
+    document.querySelectorAll('.adsbygoogle').forEach(() => {
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    });
+
+    // ── Email capture
+    document.getElementById('macro-email-capture').innerHTML = UI.renderEmailCapture();
+    UI.stubEmailCapture();
+
+    // ── Live FRED update async
+    try {
+      const liveData = await API.fetchAllRecessionData();
+      // Update probability bar if we got live data
+      if (liveData && Object.values(liveData).some(Boolean)) {
+        const recalc = RecessionModel.calcProbability(rec.factorScores);
+        if (barEl) barEl.style.width = recalc.probability + '%';
+        if (pctEl) pctEl.textContent = recalc.probability + '%';
+        if (heroEl) heroEl.textContent = recalc.probability + '%';
+      }
+    } catch (e) {
+      console.warn('[GeoWire Macro] FRED update error:', e.message);
+    }
+    try { await API.loadMarketData(); } catch(e) {}
+  })();
+</script>
+</body>
+</html>

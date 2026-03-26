@@ -541,7 +541,7 @@ const UI = (() => {
       const fillColor = (typeof RecessionModel !== 'undefined') ? RecessionModel.getStatusColor(factor.status) : '#94A3B8';
       const weight = Math.round((factor.weight || 0) * 100);
       return `
-        <a class="factor-card" href="macro.html?factor=${key}" data-status="${factor.status}">
+        <a class="factor-card" href="factor.html?f=${key}" data-status="${factor.status}">
           <div class="factor-card-header">
             <span class="factor-card-name">${name}</span>
             <span class="status-badge ${statusClass}">${factor.status}</span>
@@ -674,6 +674,161 @@ const UI = (() => {
           </div>
           <a href="recession.html" class="rw-cta">See Full Recession Dashboard →</a>
         </div>
+      </div>`;
+  }
+
+  // ─── SCORE SUMMARY STRIP ─────────────────────────────────────────────────────
+  function renderScoreSummaryStrip(factorScores, factorDetails) {
+    const order = ['laborMarket','ratesLiquidity','inflation','consumerHealth','corporateCredit','housing','supplyLogistics','globalSpillovers','marketSignals','outsideBox'];
+    const pills = order.map(key => {
+      const f = (factorScores || {})[key] || {};
+      const detail = (factorDetails || {})[key] || {};
+      const name = detail.name || (typeof RecessionModel !== 'undefined' ? RecessionModel.formatFactorName(key) : key);
+      const shortName = name.split(' ').slice(0,2).join(' ');
+      const color = typeof RecessionModel !== 'undefined' ? RecessionModel.getStatusColor(f.status) : '#94A3B8';
+      const score = f.score || 0;
+      return `<a class="score-pill" href="factor.html?f=${key}" title="${name}: ${score}/100 — ${f.status||''}">
+        <span class="score-pill-dot" style="background:${color}"></span>
+        <span class="score-pill-name">${_escHtml(shortName)}</span>
+        <span class="score-pill-num" style="color:${color}">${score}</span>
+      </a>`;
+    });
+    return `<div class="score-summary-strip" role="list" aria-label="Factor score overview">${pills.join('')}</div>`;
+  }
+
+  // ─── MACRO PULSE PANEL ───────────────────────────────────────────────────────
+  function renderMacroPulsePanel(factorKey, factorScore, factorDetail) {
+    if (!factorScore || !factorDetail) return '';
+    const name = factorDetail.name || (typeof RecessionModel !== 'undefined' ? RecessionModel.formatFactorName(factorKey) : factorKey);
+    const statusClass = typeof RecessionModel !== 'undefined' ? RecessionModel.getStatusClass(factorScore.status) : 'status-stable';
+    const color = typeof RecessionModel !== 'undefined' ? RecessionModel.getStatusColor(factorScore.status) : '#94A3B8';
+    const weight = Math.round((factorScore.weight || 0) * 100);
+    const score = factorScore.score || 0;
+
+    const trendArrow = { RISING: '↑', FALLING: '↓', DETERIORATING: '↘', STABLE: '→', STRESS: '⚠', ELEVATED: '↑', MIXED: '↔', VOLATILE: '~', DISRUPTED: '⚡', IMPROVING: '↗' };
+    const trendColor = { RISING: '#EA580C', FALLING: '#2D6A4F', DETERIORATING: '#EA580C', STABLE: '#F59E0B', STRESS: '#E63946', ELEVATED: '#EA580C', MIXED: '#F59E0B', VOLATILE: '#8B5CF6', DISRUPTED: '#E63946', IMPROVING: '#2D6A4F' };
+
+    const metricCells = (factorDetail.metrics || []).slice(0,4).map(m => {
+      const arrow = trendArrow[m.trend] || '→';
+      const tc = trendColor[m.trend] || '#94A3B8';
+      return `<div class="macro-metric">
+        <div class="macro-metric-label">${_escHtml(m.label)}</div>
+        <div class="macro-metric-value">${_escHtml(m.value)}</div>
+        <div class="macro-metric-change" style="color:${tc}">${arrow} ${_escHtml(m.change)}</div>
+      </div>`;
+    }).join('');
+
+    return `
+      <div class="macro-panel" data-status="${factorScore.status}">
+        <div class="macro-panel-header">
+          <div class="macro-panel-title-row">
+            <span class="macro-panel-name">${_escHtml(name)}</span>
+            <span class="status-badge ${statusClass}">${factorScore.status}</span>
+          </div>
+          <div class="macro-panel-weight">Weight: ${weight}% · Score: <strong style="color:${color}">${score}/100</strong></div>
+        </div>
+        <div class="macro-score-bar-wrap">
+          <div class="macro-score-bar-track">
+            <div class="macro-score-bar-fill" style="width:${score}%;background:${color}"></div>
+          </div>
+        </div>
+        <div class="macro-top-driver">${_escHtml(factorScore.topDriver || '')}</div>
+        <div class="macro-metrics-grid">${metricCells}</div>
+        <a class="macro-explore-link" href="factor.html?f=${factorKey}">Explore ${_escHtml(name)} →</a>
+      </div>`;
+  }
+
+  // ─── FACTOR EXPLORER (full-page component) ──────────────────────────────────
+  function renderFactorExplorer(factorKey, factorScore, factorDetail) {
+    if (!factorScore || !factorDetail) return '<p class="loading-state">Factor not found.</p>';
+    const name = factorDetail.name || factorKey;
+    const statusClass = typeof RecessionModel !== 'undefined' ? RecessionModel.getStatusClass(factorScore.status) : 'status-stable';
+    const color = typeof RecessionModel !== 'undefined' ? RecessionModel.getStatusColor(factorScore.status) : '#94A3B8';
+    const weight = Math.round((factorScore.weight || 0) * 100);
+    const score = factorScore.score || 0;
+
+    const trendArrow = { RISING: '↑', FALLING: '↓', DETERIORATING: '↘', STABLE: '→', STRESS: '⚠', ELEVATED: '↑', MIXED: '↔', VOLATILE: '~', DISRUPTED: '⚡', IMPROVING: '↗' };
+    const trendColor = { RISING: '#EA580C', FALLING: '#2D6A4F', DETERIORATING: '#EA580C', STABLE: '#F59E0B', STRESS: '#E63946', ELEVATED: '#EA580C', MIXED: '#F59E0B', VOLATILE: '#8B5CF6', DISRUPTED: '#E63946', IMPROVING: '#2D6A4F' };
+
+    // Large metric cards (all 4)
+    const metricCards = (factorDetail.metrics || []).map(m => {
+      const arrow = trendArrow[m.trend] || '→';
+      const tc = trendColor[m.trend] || '#94A3B8';
+      return `<div class="factor-metric-card">
+        <div class="factor-metric-label">${_escHtml(m.label)}</div>
+        <div class="factor-metric-value">${_escHtml(m.value)}</div>
+        <div class="factor-metric-row">
+          <span class="factor-metric-prewar">Pre-war: ${_escHtml(m.preWar)}</span>
+          <span class="factor-metric-change" style="color:${tc}">${arrow} ${_escHtml(m.change)}</span>
+        </div>
+        <div class="factor-metric-source">${_escHtml(m.series || m.source || '')}</div>
+      </div>`;
+    }).join('');
+
+    // Second-order effects chain
+    const chainItems = (factorDetail.secondOrderEffects || []).map((effect, i) => {
+      const steps = effect.split('→').map(s => s.trim());
+      const stepsHtml = steps.map((s, j) => `
+        <span class="soe-step">${_escHtml(s)}</span>${j < steps.length - 1 ? '<span class="soe-arrow">→</span>' : ''}`).join('');
+      return `<div class="second-order-card">
+        <div class="soe-number">${i + 1}</div>
+        <div class="soe-chain">${stepsHtml}</div>
+      </div>
+      ${i < (factorDetail.secondOrderEffects.length - 1) ? '<div class="second-order-connector"></div>' : ''}`;
+    }).join('');
+
+    // Watch items
+    const watchHtml = (factorDetail.watchItems || []).map(w =>
+      `<div class="watch-item"><span class="watch-item-dot">◉</span>${_escHtml(w)}</div>`
+    ).join('');
+
+    // First FRED series for chart
+    const chartSeriesId = (factorScore.fredSeries || [])[0] || null;
+
+    return `
+      <div class="factor-hero">
+        <div class="factor-hero-left">
+          <div class="factor-hero-name">${_escHtml(name)}</div>
+          <div class="factor-hero-desc">${_escHtml(factorDetail.description || '')}</div>
+          <div class="factor-hero-meta">
+            <span class="status-badge ${statusClass}">${factorScore.status}</span>
+            <span class="factor-hero-weight">Weight in model: ${weight}%</span>
+          </div>
+        </div>
+        <div class="factor-hero-right">
+          <div class="factor-score-display">
+            <div class="factor-score-big" style="color:${color}">${score}</div>
+            <div class="factor-score-max">/100</div>
+            <div class="factor-score-label">Stress score</div>
+          </div>
+          <div class="factor-score-track">
+            <div class="factor-score-fill-hero" style="width:${score}%;background:${color}"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="factor-metrics-4up">${metricCards}</div>
+
+      <div class="factor-chart-container" id="factor-chart-wrap">
+        ${chartSeriesId
+          ? `<canvas id="factor-chart" data-series="${_escHtml(chartSeriesId)}" height="280"></canvas>
+             <div class="factor-chart-caption">FRED series: ${_escHtml(chartSeriesId)} · Source: St. Louis Federal Reserve</div>`
+          : `<div class="factor-chart-placeholder">
+               <span>📊</span>
+               <p>No FRED series mapped for this factor.<br>Data sourced from external providers (Bloomberg, Bloomberg, FactSet).</p>
+             </div>`
+        }
+      </div>
+
+      <div class="second-order-chain">
+        <h3 class="soe-title">Second-Order Effects</h3>
+        <div class="soe-subtitle">How this factor cascades through the economy</div>
+        ${chainItems}
+      </div>
+
+      <div class="watch-items-box">
+        <div class="watch-items-title">⚠ What to Watch</div>
+        ${watchHtml}
       </div>`;
   }
 
@@ -905,5 +1060,6 @@ const UI = (() => {
     renderRecessionWidget,
     renderHormuzGauge, renderGoldmanCalculator, renderCommodityCascade,
     renderHeliumDeepDive, renderEnergyStoragePanel,
+    renderScoreSummaryStrip, renderMacroPulsePanel, renderFactorExplorer,
   };
 })();

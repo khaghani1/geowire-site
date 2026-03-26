@@ -339,6 +339,170 @@ const GEOWIRE = {
     ],
   },
 
+  // ─── FACTOR DETAILS ──────────────────────────────────────────────────────────
+  factorDetails: {
+    ratesLiquidity: {
+      name: 'Rates & Liquidity',
+      description: 'The policy and funding backdrop. When liquidity tightens, the entire system gets more fragile.',
+      metrics: [
+        { label: '10Y Treasury Yield', value: '4.39%',     preWar: '4.20%',      change: '+19bp',             series: 'DGS10',           source: 'FRED',         trend: 'RISING'        },
+        { label: '2s10s Yield Curve',  value: '-0.15%',    preWar: '-0.10%',     change: 'Deeper inversion',  series: 'T10Y2Y',          source: 'FRED',         trend: 'DETERIORATING' },
+        { label: 'Fed Funds Rate',     value: '4.50%',     preWar: '4.50%',      change: 'Unchanged',         series: 'FEDFUNDS',        source: 'FRED',         trend: 'STABLE'        },
+        { label: 'Dollar Index',       value: '99.15',     preWar: '104.2',      change: '-4.8%',             series: 'DTWEXBGS',        source: 'FRED',         trend: 'FALLING'       },
+      ],
+      secondOrderEffects: [
+        'Inverted curve → banks reduce lending → credit tightens → business investment falls',
+        'Rising real yields → higher mortgage rates → housing affordability drops → construction slows',
+        'Dollar weakness → import prices rise → inflation stickier → Fed boxed in on cuts',
+      ],
+      watchItems: ['Fed emergency meeting outcome', 'Treasury auction demand', 'Financial conditions index'],
+    },
+    inflation: {
+      name: 'Inflation Internals',
+      description: 'Energy shock flowing through to import prices, freight, and food. Will it embed or fade with oil?',
+      metrics: [
+        { label: 'CPI (Annual)',       value: '3.1%',      preWar: '2.8%',       change: '+0.3pp',            series: 'CPIAUCSL',        source: 'BLS',          trend: 'RISING'        },
+        { label: 'PCE (Core)',         value: '2.8%',      preWar: '2.6%',       change: '+0.2pp',            series: 'PCEPI',           source: 'BEA',          trend: 'RISING'        },
+        { label: 'Import Prices MoM',  value: '+1.3%',     preWar: '+0.6%',      change: '2x forecast',       series: 'IR',              source: 'BLS',          trend: 'DETERIORATING' },
+        { label: 'Oil Pass-Through',   value: 'Active',    preWar: 'Contained',  change: '2-3mo CPI lag',     series: null,              source: 'GeoWire',      trend: 'DETERIORATING' },
+      ],
+      secondOrderEffects: [
+        'Oil +48% → gas +30% → transport costs → consumer goods → CPI in 2-3 months',
+        'Fertilizer +100% → crop costs → food prices → grocery bills → lower-income impact',
+        "Import surge → Fed can't cut → financial conditions tight → recession risk elevated",
+      ],
+      watchItems: ['Next CPI print', 'Shelter/rent deceleration', 'Wage vs inflation gap'],
+    },
+    laborMarket: {
+      name: 'Labor Market',
+      description: 'Last shoe to drop in recession. Still resilient but leading indicators softening.',
+      metrics: [
+        { label: 'Unemployment',       value: '4.2%',      preWar: '4.1%',       change: '+0.1pp',            series: 'UNRATE',          source: 'BLS',          trend: 'STABLE'        },
+        { label: 'Initial Claims',     value: '225K',      preWar: '210K',       change: '+15K',              series: 'ICSA',            source: 'DOL',          trend: 'RISING'        },
+        { label: 'Nonfarm Payrolls',   value: '+150K',     preWar: '+180K',      change: 'Slowing',           series: 'PAYEMS',          source: 'BLS',          trend: 'DETERIORATING' },
+        { label: 'Avg Weekly Hours',   value: '34.2',      preWar: '34.4',       change: '-0.2hr',            series: null,              source: 'BLS',          trend: 'DETERIORATING' },
+      ],
+      secondOrderEffects: [
+        'Hours cut before layoffs → early warning already appearing in data',
+        'Claims rising but below 300K threshold → not yet recessionary but trending',
+        'Oil >$100 for 3+ months → energy-sector layoffs → claims spike risk',
+      ],
+      watchItems: ['Weekly claims trajectory', 'Next NFP print', 'JOLTS openings', 'Temp staffing'],
+    },
+    consumerHealth: {
+      name: 'Consumer Health',
+      description: 'Consumer = 70% of GDP. Mortgage rates 6.43%, gas up 30%, savings depleting.',
+      metrics: [
+        { label: '30Y Mortgage',       value: '6.43%',     preWar: '6.10%',      change: '+33bp',             series: 'MORTGAGE30US',    source: 'MBA',          trend: 'RISING'        },
+        { label: 'Retail Sales MoM',   value: '+0.2%',     preWar: '+0.4%',      change: 'Slowing',           series: 'RSXFS',           source: 'Census',       trend: 'DETERIORATING' },
+        { label: 'Savings Rate',       value: '4.1%',      preWar: '4.6%',       change: '-0.5pp',            series: 'PSAVERT',         source: 'BEA',          trend: 'FALLING'        },
+        { label: 'US Avg Gas',         value: '$3.88/gal', preWar: '$2.98',      change: '+30%',              series: null,              source: 'AAA',          trend: 'DETERIORATING' },
+      ],
+      secondOrderEffects: [
+        'Gas +30% = ~$90/mo extra per household → discretionary spending cuts',
+        'Mortgage spike → worst affordability since 2006 → home sales freeze',
+        'Savings falling → less buffer → next economic shock hits harder',
+      ],
+      watchItems: ['Consumer confidence', 'Card delinquencies', 'Mortgage purchase apps'],
+    },
+    corporateCredit: {
+      name: 'Corporate & Credit',
+      description: 'Spreads widening, lending tightening post-war. Credit cracks amplify everything.',
+      metrics: [
+        { label: 'IG Spread',          value: '1.45%',     preWar: '1.20%',      change: '+25bp',             series: null,              source: 'Bloomberg',    trend: 'DETERIORATING' },
+        { label: 'HY Spread',          value: '4.20%',     preWar: '3.50%',      change: '+70bp',             series: null,              source: 'Bloomberg',    trend: 'DETERIORATING' },
+        { label: 'Lending Standards',  value: 'Tightening',preWar: 'Easing',     change: 'Reversed',          series: null,              source: 'Fed SLOOS',    trend: 'DETERIORATING' },
+        { label: 'Earnings Revisions', value: 'Negative',  preWar: 'Mixed',      change: 'Down',              series: null,              source: 'FactSet',      trend: 'DETERIORATING' },
+      ],
+      secondOrderEffects: [
+        'Wider spreads → higher borrowing costs → capex deferred → hiring freezes',
+        'Tight lending → SMB credit squeeze → small business layoffs',
+        'Energy cost shock → margin compression → Q2 earnings miss risk',
+      ],
+      watchItems: ['Q1 earnings (April)', 'CRE defaults', 'Private credit stress'],
+    },
+    housing: {
+      name: 'Housing & Construction',
+      description: 'Housing leads most cycle turns. Builder confidence falling, starts declining, rates at 6.43%.',
+      metrics: [
+        { label: 'Housing Starts',     value: '1.35M',     preWar: '1.42M',      change: '-4.9%',             series: 'HOUST',           source: 'Census',       trend: 'DETERIORATING' },
+        { label: 'Building Permits',   value: '1.38M',     preWar: '1.45M',      change: '-4.8%',             series: 'PERMIT',          source: 'Census',       trend: 'DETERIORATING' },
+        { label: 'Mortgage Rate',      value: '6.43%',     preWar: '6.10%',      change: '+33bp',             series: 'MORTGAGE30US',    source: 'MBA',          trend: 'RISING'        },
+        { label: 'Mortgage Apps',      value: '-10% WoW',  preWar: 'Stable',     change: 'Sharp decline',     series: null,              source: 'MBA',          trend: 'DETERIORATING' },
+      ],
+      secondOrderEffects: [
+        'Higher rates → fewer buyers → prices plateau → negative wealth effect on homeowners',
+        'Starts declining → construction job losses (3-6 month lag)',
+        'Multifamily oversupply → rent deceleration → helps CPI but hurts landlords',
+      ],
+      watchItems: ['NAHB builder confidence', 'Existing home sales', 'Regional price divergence'],
+    },
+    supplyLogistics: {
+      name: 'Supply & Logistics',
+      description: 'Physical economy under extreme stress. Hormuz closure is the largest maritime disruption in history.',
+      metrics: [
+        { label: 'Hormuz Flow',        value: '3% normal', preWar: '100%',       change: '-97%',              series: null,              source: 'Kpler',        trend: 'STRESS'        },
+        { label: 'Insurance',          value: 'SUSPENDED', preWar: 'Available',  change: "By Lloyd's",        series: null,              source: "Lloyd's",      trend: 'STRESS'        },
+        { label: 'Rerouting Cost',     value: '+$800K/voy',preWar: 'Direct',     change: '+14 days via Cape', series: null,              source: 'Clarksons',    trend: 'DISRUPTED'     },
+        { label: 'Freight Index',      value: '+40%',      preWar: 'Normal',     change: 'Elevated',          series: null,              source: 'Baltic Exch',  trend: 'DETERIORATING' },
+      ],
+      secondOrderEffects: [
+        'Hormuz closure → 20% global oil offline → price shock → inflation → recession',
+        "Insurance suspended → vessels won't transit → restoring flow takes weeks even after ceasefire",
+        'Cape rerouting → +14 days → inventory delays → just-in-time manufacturing disruption',
+      ],
+      watchItems: ['Hormuz coalition operations', 'Insurance market signals', 'Port congestion'],
+    },
+    globalSpillovers: {
+      name: 'Global Spillovers',
+      description: 'Conflict spreading through energy dependency, trade routes, and financial conditions worldwide.',
+      metrics: [
+        { label: 'ECB Rate',           value: 'Cut postponed',preWar:'Cut expected', change: 'Reversed',       series: null,              source: 'ECB',          trend: 'DETERIORATING' },
+        { label: 'China Oil',          value: 'Emergency',  preWar: 'Normal',     change: 'Reserve release',   series: null,              source: 'Bloomberg',    trend: 'STRESS'        },
+        { label: 'India Energy',       value: 'Crisis protocol',preWar:'Normal',  change: 'Imports collapsed', series: null,              source: 'Econ Times',   trend: 'STRESS'        },
+        { label: 'EM FX',              value: 'Elevated stress',preWar:'Stable',  change: 'Oil importers weak',series: null,              source: 'Bloomberg',    trend: 'DETERIORATING' },
+      ],
+      secondOrderEffects: [
+        "ECB can't cut → Europe weakens → less US export demand → US GDP drag",
+        'China slowdown → commodity demand softens → but supply constrained → stagflation risk',
+        'India/Pakistan energy emergency → regional instability → complexity for US exit',
+      ],
+      watchItems: ['ECB next meeting', 'China PMI', 'India fuel rationing', 'Pakistan stability'],
+    },
+    marketSignals: {
+      name: 'Market-Implied Stress',
+      description: 'Markets sending mixed signals — defense/energy rally masking narrowing breadth. VIX elevated, not panic.',
+      metrics: [
+        { label: 'S&P 500',            value: '6,581',     preWar: '5,990',      change: '+9.7%',             series: 'SP500',           source: 'Bloomberg',    trend: 'MIXED'         },
+        { label: 'VIX',                value: '26.15',     preWar: '18.0',       change: '+45%',              series: null,              source: 'CBOE',         trend: 'ELEVATED'      },
+        { label: 'Breadth',            value: 'Narrowing', preWar: 'Broad',      change: '2 sectors only',    series: null,              source: 'Bloomberg',    trend: 'DETERIORATING' },
+        { label: 'Gold',               value: '$4,412',    preWar: '$3,200',     change: '+37.9%',            series: 'GOLDAMGBD228NLBM',source: 'FRED',         trend: 'VOLATILE'      },
+      ],
+      secondOrderEffects: [
+        'S&P rally sector-concentrated (defense/energy) → masks broad underlying weakness',
+        'VIX 26 = uncertainty not panic → watch for spike above 35 as recession signal',
+        'Copper/gold ratio declining → classic leading recession indicator',
+      ],
+      watchItems: ['Breadth divergence', 'Credit vs equity divergence', 'Small vs large cap spread'],
+    },
+    outsideBox: {
+      name: 'Alternative Signals',
+      description: 'Off-consensus indicators leading official data by weeks. Google Trends, job postings, mobility all flashing yellow.',
+      metrics: [
+        { label: 'Google "layoffs"',   value: 'Spiking',   preWar: 'Normal',     change: '+120% volume',      series: null,              source: 'Google Trends',trend: 'DETERIORATING' },
+        { label: 'Job Posting Decay',  value: '-8% MoM',   preWar: '-2% MoM',    change: 'Accelerating',      series: null,              source: 'Indeed',       trend: 'DETERIORATING' },
+        { label: 'Bankruptcy Search',  value: '+45%',      preWar: 'Normal',     change: 'Spiking',           series: null,              source: 'Google Trends',trend: 'DETERIORATING' },
+        { label: 'Electricity Load',   value: '-3%',       preWar: 'Normal',     change: 'Industrial soft',   series: null,              source: 'EIA',          trend: 'DETERIORATING' },
+      ],
+      secondOrderEffects: [
+        'Layoff searches spike 4-8 weeks before official unemployment data → early warning',
+        'Job posting decay → hiring freeze spreading → initial claims rise with lag',
+        'Electricity declining → industrial production weakening → manufacturing recession risk',
+      ],
+      watchItems: ['Google Trends momentum', 'Indeed index', 'OpenTable/TSA throughput'],
+    },
+  },
+
   // ─── UPDATE LOG ─────────────────────────────────────────────────────────────
   updateLog: [
     { timestamp: '2026-03-25T08:00Z', category: 'Diplomatic',   item: 'Oman ceasefire offer',     change: 'New → Ghalibaf signals openness via back-channel',                   source: 'Reuters',   confidence: 'multisource' },
