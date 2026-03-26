@@ -115,7 +115,7 @@
     document.getElementById('site-header').innerHTML =
       UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
     document.getElementById('site-nav').innerHTML =
-      UI.renderNav(GEOWIRE.navigationItems, 'macro.html');
+      UI.renderNav('macro.html');
     document.getElementById('site-footer').innerHTML =
       UI.renderFooter(GEOWIRE.siteMeta);
 
@@ -124,8 +124,8 @@
     const factorKey = params.get('f') || 'ratesLiquidity';
 
     const rec = GEOWIRE.recessionData;
-    const fd  = GEOWIRE.factorDetails;
-    const factorScore  = rec.factorScores[factorKey];
+    const fd  = GEOWIRE.factorDetails || {};
+    const factorScore  = (rec.factorScores || {})[factorKey];
     const factorDetail = fd[factorKey];
 
     if (!factorScore || !factorDetail) {
