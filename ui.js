@@ -1,11 +1,11 @@
-// ui.js — GeoWire shared rendering functions
+// ui.js â GeoWire shared rendering functions
 // All HTML generation lives here. Pages call these; no duplicated markup.
 
 const UI = (() => {
 
-  // ─── INTERNAL HELPERS ────────────────────────────────────────────────────────
-  function _getLang() { return localStorage.getItem('geowire-lang') || 'en'; }
-  function _t(enText, faText) { return _getLang() === 'fa' ? faText : enText; }
+  // âââ INTERNAL HELPERS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  function _getLang() { return 'en'; }
+  function _t(enText) { return enText; }
   function _warDay() {
     const start = new Date(GEOWIRE.siteMeta.warStartDate);
     return Math.max(1, Math.ceil((Date.now() - start) / 86400000));
@@ -32,33 +32,33 @@ const UI = (() => {
     return Math.round(n).toLocaleString();
   }
 
-  // ─── CONFIDENCE BADGE ────────────────────────────────────────────────────────
+  // âââ CONFIDENCE BADGE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderConfidenceBadge(level) {
     const conf = (GEOWIRE.confidenceLevels || {})[level] || GEOWIRE.confidenceLevels.inferred;
     return `<span class="confidence-badge confidence-${_escHtml(level)}" title="${_escHtml(conf.description)}">${conf.emoji} ${conf.label}</span>`;
   }
 
-  // ─── SOURCE LABEL ────────────────────────────────────────────────────────────
+  // âââ SOURCE LABEL ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderSourceLabel(source, freshness) {
     const time = freshness ? ` <span class="freshness">${_fmtTime(freshness)}</span>` : '';
-    return `<span class="source-label">Source: <strong>${_escHtml(source || '—')}</strong>${time}</span>`;
+    return `<span class="source-label">Source: <strong>${_escHtml(source || 'â')}</strong>${time}</span>`;
   }
 
-  // ─── LIVE / DEMO BADGE ───────────────────────────────────────────────────────
+  // âââ LIVE / DEMO BADGE âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderLiveBadge(isLive) {
     return isLive
       ? `<span class="badge badge-live" aria-label="Live data"><span class="live-pulse"></span>LIVE</span>`
       : `<span class="badge badge-demo" aria-label="Demo data">DEMO</span>`;
   }
 
-  // ─── SHARE BUTTONS ───────────────────────────────────────────────────────────
+  // âââ SHARE BUTTONS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderShareButtons(text, url) {
     const fullText = `${text} via @Geowire_org ${url} #GeoWire #IranWar`;
     return `<div class="share-cluster" aria-label="Share this">
-      <a class="share-btn share-x"    href="https://x.com/intent/tweet?text=${_encode(fullText)}" target="_blank" rel="noopener" aria-label="Share on X">𝕏 Share</a>
-      <a class="share-btn share-tg"   href="https://t.me/share/url?url=${_encode(url)}&text=${_encode(text)}" target="_blank" rel="noopener" aria-label="Share on Telegram">✈ Telegram</a>
-      <a class="share-btn share-wa"   href="https://wa.me/?text=${_encode(fullText)}" target="_blank" rel="noopener" aria-label="Share on WhatsApp">📱 WhatsApp</a>
-      <button class="share-btn share-copy share-btn-copy" type="button" aria-label="Copy link" onclick="UI._copyLink('${_encode(url)}',this)">🔗 Copy<span class="copy-toast">Copied!</span></button>
+      <a class="share-btn share-x"    href="https://x.com/intent/tweet?text=${_encode(fullText)}" target="_blank" rel="noopener" aria-label="Share on X">ð Share</a>
+      <a class="share-btn share-tg"   href="https://t.me/share/url?url=${_encode(url)}&text=${_encode(text)}" target="_blank" rel="noopener" aria-label="Share on Telegram">â Telegram</a>
+      <a class="share-btn share-wa"   href="https://wa.me/?text=${_encode(fullText)}" target="_blank" rel="noopener" aria-label="Share on WhatsApp">ð± WhatsApp</a>
+      <button class="share-btn share-copy share-btn-copy" type="button" aria-label="Copy link" onclick="UI._copyLink('${_encode(url)}',this)">ð Copy<span class="copy-toast">Copied!</span></button>
     </div>`;
   }
 
@@ -69,9 +69,9 @@ const UI = (() => {
     });
   }
 
-  // ─── AD SLOT ─────────────────────────────────────────────────────────────────
+  // âââ AD SLOT âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   // Renders a manual <ins> only when a real numeric ID is set in adConfig.slots.
-  // Without a valid ID the slot is invisible — Auto Ads fills it automatically.
+  // Without a valid ID the slot is invisible â Auto Ads fills it automatically.
   // To configure: set numeric IDs in GEOWIRE.adConfig.slots in content.js.
   function renderAdSlot(name) {
     const cfg    = (typeof GEOWIRE !== 'undefined' && GEOWIRE.adConfig) || {};
@@ -79,7 +79,7 @@ const UI = (() => {
     const slotId = (cfg.slots || {})[name] || '';
 
     if (slotId && /^\d{6,12}$/.test(slotId)) {
-      // Valid numeric ad unit ID → render manual placement
+      // Valid numeric ad unit ID â render manual placement
       return `<div class="ad-slot" data-slot="${_escHtml(name)}" aria-label="Advertisement">
         <span class="ad-label">Advertisement</span>
         <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
@@ -89,51 +89,23 @@ const UI = (() => {
           data-full-width-responsive="true"></ins>
       </div>`;
     }
-    // No valid ID → truly invisible; Google Auto Ads handles placement
+    // No valid ID â truly invisible; Google Auto Ads handles placement
     return `<div class="ad-slot ad-slot-auto" data-slot="${_escHtml(name)}" style="height:0;min-height:0;overflow:hidden;padding:0;margin:0;border:none"></div>`;
   }
 
-  // ─── SECTION HEADING ─────────────────────────────────────────────────────────
+  // âââ SECTION HEADING âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderSectionHeading(title, subtitle) {
     return `<div class="section-heading"><h2>${_escHtml(title)}</h2>${subtitle ? `<p class="section-subtitle">${_escHtml(subtitle)}</p>` : ''}</div>`;
   }
 
-  // ─── LANGUAGE TOGGLE ─────────────────────────────────────────────────────────
-  function renderLanguageToggle() {
-    const lang = _getLang();
-    return `<div class="lang-toggle" role="group" aria-label="Language selector">
-      <button class="lang-btn ${lang==='en'?'active':''}" onclick="UI.setLang('en')" aria-pressed="${lang==='en'}">EN</button>
-      <button class="lang-btn ${lang==='fa'?'active':''}" onclick="UI.setLang('fa')" aria-pressed="${lang==='fa'}">FA</button>
-    </div>`;
-  }
+  function renderLanguageToggle() { return ''; }
+  function setLang() {}
+  function _applyLang() {}
 
-  function setLang(lang) {
-    localStorage.setItem('geowire-lang', lang);
-    _applyLang(lang);
-  }
-
-  function _applyLang(lang) {
-    const fa = GEOWIRE.farsiLabels;
-    const isFa = lang === 'fa';
-    const titleEl = document.querySelector('.site-title');
-    if (titleEl) { titleEl.textContent = isFa ? fa.siteTitle : 'GeoWire'; titleEl.dir = isFa ? 'rtl' : 'ltr'; }
-    const headlineEl = document.querySelector('.homepage-headline');
-    if (headlineEl) { headlineEl.textContent = isFa ? fa.homepageHeadline : (headlineEl.dataset.en || headlineEl.textContent); headlineEl.dir = isFa ? 'rtl' : 'ltr'; }
-    document.querySelectorAll('[data-nav-label]').forEach(el => {
-      const k = el.dataset.navLabel;
-      el.textContent = isFa ? (fa.navItems[k] || k) : k;
-      el.dir = isFa ? 'rtl' : 'ltr';
-    });
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
-      btn.setAttribute('aria-pressed', btn.textContent === lang.toUpperCase());
-    });
-  }
-
-  // ─── EMAIL CAPTURE ───────────────────────────────────────────────────────────
+  // âââ EMAIL CAPTURE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const EMAIL_KEY      = 'geowire-subscribed';      // flag: any email saved
   const EMAIL_LIST_KEY = 'geowire-email-list';       // list of all emails (pre-Beehiiv)
-  // Beehiiv publication ID — set this when Beehiiv account is live
+  // Beehiiv publication ID â set this when Beehiiv account is live
   const BEEHIIV_PUB_ID = '';  // e.g. 'pub_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 
   function isSubscribed() { try { return !!localStorage.getItem(EMAIL_KEY); } catch(_) { return false; } }
@@ -167,7 +139,7 @@ const UI = (() => {
   }
 
   function stubEmailCapture(email) {
-    // Called from page scripts without args — no-op (wiring is in handleEmailSubmit)
+    // Called from page scripts without args â no-op (wiring is in handleEmailSubmit)
     if (!email) return;
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) return { success: false, message: 'Please enter a valid email address.' };
@@ -178,15 +150,171 @@ const UI = (() => {
 
   function renderEmailCapture() {
     if (isSubscribed()) return renderEmailCaptureSuccess();
-    const isFa = _getLang() === 'fa';
-    const title = isFa ? 'خبرنامه روزانه GeoWire — رایگان' : 'Get the GeoWire Daily Brief — Free';
-    const sub   = isFa ? 'هوش تعارض، سیگنال‌های بازار و تحلیل — هر روز صبح.' : 'Conflict intelligence, market signals, and analysis — every morning.';
-    const ph    = isFa ? 'ایمیل شما' : 'your@email.com';
-    const btn   = isFa ? 'عضویت' : 'Subscribe Free';
-    const note  = isFa ? '📭 بدون اسپم. لغو عضویت هر زمان.' : '📭 No spam. Unsubscribe anytime.';
-    return `<div class="email-capture" id="email-capture-block" dir="${isFa?'rtl':'ltr'}">
+    const title = 'Get the GeoWire Daily Brief â Free';
+    const sub   = 'Conflict intelligence, market signals, and analysis â every morning.';
+    const ph    = 'your@email.com';
+    const btn   = 'Subscribe Free';
+    const note  = 'ð­ No spam. Unsubscribe anytime.';
+    return `<div class="email-capture" id="email-capture-block">`;/ ui.js â GeoWire shared rendering functions
+// All HTML generation lives here. Pages call these; no duplicated markup.
+
+const UI = (() => {
+
+  // âââ INTERNAL HELPERS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  function _getLang() { return 'en'; }
+  function _t(enText) { return enText; }
+  function _warDay() {
+    const start = new Date(GEOWIRE.siteMeta.warStartDate);
+    return Math.max(1, Math.ceil((Date.now() - start) / 86400000));
+  }
+  function _encode(str) { return encodeURIComponent(str); }
+  function _escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function _fmtTime(iso) {
+    try {
+      const diff = Math.floor((Date.now() - new Date(iso)) / 60000);
+      if (diff < 1) return 'just now';
+      if (diff < 60) return `${diff}m ago`;
+      if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
+      return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+    } catch { return iso || ''; }
+  }
+  function _fmtDate(dateStr) {
+    try { return new Date(dateStr).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }); }
+    catch { return dateStr || ''; }
+  }
+  function _fmtBig(n) {
+    if (n >= 1e12) return (n/1e12).toFixed(3) + 'T';
+    if (n >= 1e9)  return (n/1e9).toFixed(3) + 'B';
+    if (n >= 1e6)  return (n/1e6).toFixed(2) + 'M';
+    return Math.round(n).toLocaleString();
+  }
+
+  // âââ CONFIDENCE BADGE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  function renderConfidenceBadge(level) {
+    const conf = (GEOWIRE.confidenceLevels || {})[level] || GEOWIRE.confidenceLevels.inferred;
+    return `<span class="confidence-badge confidence-${_escHtml(level)}" title="${_escHtml(conf.description)}">${conf.emoji} ${conf.label}</span>`;
+  }
+
+  // âââ SOURCE LABEL ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  function renderSourceLabel(source, freshness) {
+    const time = freshness ? ` <span class="freshness">${_fmtTime(freshness)}</span>` : '';
+    return `<span class="source-label">Source: <strong>${_escHtml(source || 'â')}</strong>${time}</span>`;
+  }
+
+  // âââ LIVE / DEMO BADGE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  function renderLiveBadge(isLive) {
+    return isLive
+      ? `<span class="badge badge-live" aria-label="Live data"><span class="live-pulse"></span>LIVE</span>`
+      : `<span class="badge badge-demo" aria-label="Demo data">DEMO</span>`;
+  }
+
+  // âââ SHARE BUTTONS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  function renderShareButtons(text, url) {
+    const fullText = `${text} via @Geowire_org ${url} #GeoWire #IranWar`;
+    return `<div class="share-cluster" aria-label="Share this">
+      <a class="share-btn share-x"    href="https://x.com/intent/tweet?text=${_encode(fullText)}" target="_blank" rel="noopener" aria-label="Share on X">ð Share</a>
+      <a class="share-btn share-tg"   href="https://t.me/share/url?url=${_encode(url)}&text=${_encode(text)}" target="_blank" rel="noopener" aria-label="Share on Telegram">â Telegram</a>
+      <a class="share-btn share-wa"   href="https://wa.me/?text=${_encode(fullText)}" target="_blank" rel="noopener" aria-label="Share on WhatsApp">ð± WhatsApp</a>
+      <button class="share-btn share-copy share-btn-copy" type="button" aria-label="Copy link" onclick="UI._copyLink('${_encode(url)}',this)">ð Copy<span class="copy-toast">Copied!</span></button>
+    </div>`;
+  }
+
+  function _copyLink(encodedUrl, btn) {
+    navigator.clipboard.writeText(decodeURIComponent(encodedUrl)).then(() => {
+      const toast = btn.querySelector('.copy-toast');
+      if (toast) { toast.style.opacity='1'; setTimeout(()=>{ toast.style.opacity=''; },1800); }
+    });
+  }
+
+  // âââ AD SLOT âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // Renders a manual <ins> only when a real numeric ID is set in adConfig.slots.
+  // Without a valid ID the slot is invisible â Auto Ads fills it automatically.
+  // To configure: set numeric IDs in GEOWIRE.adConfig.slots in content.js.
+  function renderAdSlot(name) {
+    const cfg    = (typeof GEOWIRE !== 'undefined' && GEOWIRE.adConfig) || {};
+    const pub    = cfg.publisherId || 'ca-pub-5068519853957013';
+    const slotId = (cfg.slots || {})[name] || '';
+
+    if (slotId && /^\d{6,12}$/.test(slotId)) {
+      // Valid numeric ad unit ID â render manual placement
+      return `<div class="ad-slot" data-slot="${_escHtml(name)}" aria-label="Advertisement">
+        <span class="ad-label">Advertisement</span>
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="${_escHtml(pub)}"
+          data-ad-slot="${_escHtml(slotId)}"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      </div>`;
+    }
+    // No valid ID â truly invisible; Google Auto Ads handles placement
+    return `<div class="ad-slot ad-slot-auto" data-slot="${_escHtml(name)}" style="height:0;min-height:0;overflow:hidden;padding:0;margin:0;border:none"></div>`;
+  }
+
+  // âââ SECTION HEADING âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  function renderSectionHeading(title, subtitle) {
+    return `<div class="section-heading"><h2>${_escHtml(title)}</h2>${subtitle ? `<p class="section-subtitle">${_escHtml(subtitle)}</p>` : ''}</div>`;
+  }
+
+  function renderLanguageToggle() { return ''; }
+  function setLang() {}
+  function _applyLang() {}
+
+  // âââ EMAIL CAPTURE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  const EMAIL_KEY      = 'geowire-subscribed';      // flag: any email saved
+  const EMAIL_LIST_KEY = 'geowire-email-list';       // list of all emails (pre-Beehiiv)
+  // Beehiiv publication ID â set this when Beehiiv account is live
+  const BEEHIIV_PUB_ID = '';  // e.g. 'pub_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+
+  function isSubscribed() { try { return !!localStorage.getItem(EMAIL_KEY); } catch(_) { return false; } }
+
+  function markSubscribed(email) {
+    try {
+      localStorage.setItem(EMAIL_KEY, email);
+      // Also keep the full list for Beehiiv bulk import later
+      const list = JSON.parse(localStorage.getItem(EMAIL_LIST_KEY) || '[]');
+      if (!list.includes(email)) {
+        list.push(email);
+        localStorage.setItem(EMAIL_LIST_KEY, JSON.stringify(list));
+      }
+    } catch(_) {}
+  }
+
+  async function _submitToBeehiiv(email) {
+    if (!BEEHIIV_PUB_ID) return false;
+    try {
+      const res = await fetch(`https://api.beehiiv.com/v2/publications/${BEEHIIV_PUB_ID}/subscriptions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, reactivate_existing: false, send_welcome_email: true }),
+      });
+      return res.ok;
+    } catch(_) { return false; }
+  }
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || '').trim());
+  }
+
+  function stubEmailCapture(email) {
+    // Called from page scripts without args â no-op (wiring is in handleEmailSubmit)
+    if (!email) return;
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(email)) return { success: false, message: 'Please enter a valid email address.' };
+    markSubscribed(email);
+    _submitToBeehiiv(email).catch(() => {});
+    return { success: true, message: "You're on the list. First brief coming tomorrow." };
+  }
+
+  function renderEmailCapture() {
+    if (isSubscribed()) return renderEmailCaptureSuccess();
+    const title = 'Get the GeoWire Daily Brief â Free';
+    const sub   = 'Conflict intelligence, market signals, and analysis â every morning.';
+    const ph    = 'your@email.com';
+    const btn   = 'Subscribe Free';
+    const note  = 'ð­ No spam. Unsubscribe anytime.';
+    return `<div class="email-capture" id="email-capture-block">`;
       <div class="email-capture-inner">
-        <div class="email-capture-icon">📬</div>
+        <div class="email-capture-icon">ð¬</div>
         <h3 class="email-capture-title">${title}</h3>
         <p class="email-capture-sub">${sub}</p>
         <form class="email-form" onsubmit="UI.handleEmailSubmit(event)" novalidate>
@@ -206,9 +334,9 @@ const UI = (() => {
   function renderEmailCaptureSuccess() {
     return `<div class="email-capture email-capture-done">
       <div class="email-capture-inner" style="text-align:center;">
-        <div style="font-size:40px;margin-bottom:12px;">✅</div>
+        <div style="font-size:40px;margin-bottom:12px;">â</div>
         <h3 class="email-capture-title">You're on the list</h3>
-        <p class="email-capture-sub">First brief coming tomorrow morning. Check your inbox — and your spam folder just in case.</p>
+        <p class="email-capture-sub">First brief coming tomorrow morning. Check your inbox â and your spam folder just in case.</p>
         <p style="font-size:12px;color:var(--text-3);margin:8px 0 0;font-family:var(--font-mono)">ADD briefings@geowire.org TO CONTACTS TO ENSURE DELIVERY</p>
       </div>
     </div>`;
@@ -233,7 +361,7 @@ const UI = (() => {
     }
 
     // Loading state
-    if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
+    if (btn) { btn.textContent = 'Savingâ¦'; btn.disabled = true; }
     msg.textContent = '';
     msg.className = 'email-msg';
 
@@ -243,7 +371,7 @@ const UI = (() => {
       msg.textContent = "You're on the list. First brief coming tomorrow.";
       msg.className = 'email-msg email-msg-success';
       input.value = '';
-      if (btn) { btn.textContent = '✓ Done'; btn.disabled = true; }
+      if (btn) { btn.textContent = 'â Done'; btn.disabled = true; }
       setTimeout(() => {
         const b = document.getElementById('email-capture-block');
         if (b) b.outerHTML = renderEmailCaptureSuccess();
@@ -251,7 +379,7 @@ const UI = (() => {
     });
   }
 
-  // ─── HEADER ──────────────────────────────────────────────────────────────────
+  // âââ HEADER ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderHeader() {
     const day = _warDay();
     return `<header class="site-header" role="banner">
@@ -266,7 +394,7 @@ const UI = (() => {
           </a>
           <div class="war-status-pill" aria-label="Conflict status">
             <span class="pulse-dot" aria-hidden="true"></span>
-            <span>LIVE — IRAN WAR DAY ${day}</span>
+            <span>LIVE â IRAN WAR DAY ${day}</span>
           </div>
         </div>
         <div class="header-right">
@@ -280,7 +408,7 @@ const UI = (() => {
     </header>`;
   }
 
-  // ─── NAV ─────────────────────────────────────────────────────────────────────
+  // âââ NAV âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderNav(activePage) {
     const items = GEOWIRE.navigationItems.map(item => {
       const isActive = item.href === activePage || item.href === activePage + '.html' || item.href.replace('.html','') === activePage;
@@ -291,7 +419,7 @@ const UI = (() => {
     </nav>`;
   }
 
-  // ─── FOOTER ──────────────────────────────────────────────────────────────────
+  // âââ FOOTER ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderFooter() {
     const year = new Date().getFullYear();
     const links = GEOWIRE.navigationItems.map(n=>`<a href="${_escHtml(n.href)}">${_escHtml(n.label)}</a>`).join('');
@@ -299,21 +427,21 @@ const UI = (() => {
       <div class="footer-inner container">
         <div class="footer-brand">
           <span class="logo-mark small">GW</span>
-          <span><strong>GeoWire</strong> — Global Intelligence Platform</span>
+          <span><strong>GeoWire</strong> â Global Intelligence Platform</span>
         </div>
         <div class="footer-links">${links}</div>
         <div class="footer-legal">
-          <p>© ${year} GeoWire. All analysis is original unless attributed. Confidence badges indicate source methodology, not certainty.</p>
+          <p>Â© ${year} GeoWire. All analysis is original unless attributed. Confidence badges indicate source methodology, not certainty.</p>
           <p class="footer-disclaimer">GeoWire is an independent intelligence platform. Seed data is editorial/demo content unless marked LIVE. Not financial or political advice.</p>
         </div>
       </div>
     </footer>`;
   }
 
-  // ─── UTC CLOCK ───────────────────────────────────────────────────────────────
-  // startClock(elementId?) — updates #utc-clock every second.
+  // âââ UTC CLOCK âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // startClock(elementId?) â updates #utc-clock every second.
   // If an extra elementId is supplied (e.g. 'macro-clock') that element also
-  // gets the live UTC time so page-level "Updated …" stamps stay current.
+  // gets the live UTC time so page-level "Updated â¦" stamps stay current.
   function startClock(elementId) {
     function tick() {
       const timeStr = new Date().toISOString().slice(11,19) + ' UTC';
@@ -328,13 +456,13 @@ const UI = (() => {
     setInterval(tick, 1000);
   }
 
-  // ─── WAR COST TICKER ─────────────────────────────────────────────────────────
+  // âââ WAR COST TICKER âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderWarCostTicker() {
     const wc = GEOWIRE.warCost;
     const day = _warDay();
     return `<div class="war-cost-module">
       <div class="war-cost-header">
-        ${renderSectionHeading('War Cost Tracker', 'US-Iran — Operation Epic Fury')}
+        ${renderSectionHeading('War Cost Tracker', 'US-Iran â Operation Epic Fury')}
         ${renderConfidenceBadge('inferred')}
         ${renderSourceLabel(wc.source)}
         ${renderLiveBadge(false)}
@@ -342,7 +470,7 @@ const UI = (() => {
       <div class="war-cost-grid">
         <div class="war-cost-card">
           <span class="war-cost-label">Total Estimated Cost</span>
-          <span class="war-cost-value" id="total-cost">Calculating…</span>
+          <span class="war-cost-value" id="total-cost">Calculatingâ¦</span>
         </div>
         <div class="war-cost-card">
           <span class="war-cost-label">Daily Rate</span>
@@ -373,7 +501,7 @@ const UI = (() => {
     setInterval(tick, 1000);
   }
 
-  // ─── MARKET TICKER ───────────────────────────────────────────────────────────
+  // âââ MARKET TICKER âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderMarketTicker() {
     const md = GEOWIRE.marketData;
     const items = Object.entries(md).map(([key, m]) => {
@@ -381,11 +509,11 @@ const UI = (() => {
         return `<div class="ticker-item" id="ticker-${key}">
           <span class="ticker-label" data-ticker-label="${key}" data-en="${_escHtml(m.label)}">${_escHtml(m.label)}</span>
           <span class="ticker-value"><strong class="ticker-closed">CLOSED</strong></span>
-          <span class="ticker-change negative">▼ ${Math.abs(m.change).toFixed(1)}%</span>
+          <span class="ticker-change negative">â¼ ${Math.abs(m.change).toFixed(1)}%</span>
         </div>`;
       }
       const chCls = m.change >= 0 ? 'positive' : 'negative';
-      const chStr = m.change >= 0 ? `▲ +${m.change.toFixed(1)}%` : `▼ ${Math.abs(m.change).toFixed(1)}%`;
+      const chStr = m.change >= 0 ? `â² +${m.change.toFixed(1)}%` : `â¼ ${Math.abs(m.change).toFixed(1)}%`;
       const valStr = typeof m.value === 'number' && m.value > 1000 ? m.value.toLocaleString() : m.value;
       return `<div class="ticker-item" id="ticker-${key}">
         <span class="ticker-label" data-ticker-label="${key}" data-en="${_escHtml(m.label)}">${_escHtml(m.label)}</span>
@@ -402,7 +530,7 @@ const UI = (() => {
     </div>`;
   }
 
-  // ─── TIMELINE ────────────────────────────────────────────────────────────────
+  // âââ TIMELINE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderTimeline(events) {
     const evs = events || GEOWIRE.timelineEvents;
     const items = evs.map(ev => `
@@ -421,7 +549,7 @@ const UI = (() => {
     return `<ol class="timeline" aria-label="Conflict timeline">${items}</ol>`;
   }
 
-  // ─── RISK HEATMAP ────────────────────────────────────────────────────────────
+  // âââ RISK HEATMAP ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderRiskHeatmap() {
     const top5 = GEOWIRE.countries.slice(0, 5);
     const cards = top5.map(c => `
@@ -430,14 +558,14 @@ const UI = (() => {
         <div class="heatmap-body">
           <div class="heatmap-name">${_escHtml(c.name)}</div>
           <span class="threat-label threat-${_escHtml(c.threatLevel)}">${c.threatLevel.toUpperCase()}</span>
-          <span class="heatmap-action">${_escHtml(c.latestAction.slice(0,90))}${c.latestAction.length>90?'…':''}</span>
+          <span class="heatmap-action">${_escHtml(c.latestAction.slice(0,90))}${c.latestAction.length>90?'â¦':''}</span>
         </div>
         ${renderConfidenceBadge(c.confidence)}
       </div>`).join('');
     return `<div class="risk-heatmap">${cards}</div>`;
   }
 
-  // ─── SUPPLY CHAIN STATUS ─────────────────────────────────────────────────────
+  // âââ SUPPLY CHAIN STATUS âââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderSupplyChain() {
     const routes = GEOWIRE.tradeData.shippingRoutes;
     const rows = routes.map(r => `
@@ -450,7 +578,7 @@ const UI = (() => {
     return `<div class="supply-chain">${rows}</div>`;
   }
 
-  // ─── NEWS CARD ───────────────────────────────────────────────────────────────
+  // âââ NEWS CARD âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderNewsCard(item) {
     const url = item.url && item.url !== '#' ? item.url : (GEOWIRE.siteMeta.baseUrl + '/');
     return `<article class="news-card">
@@ -470,7 +598,7 @@ const UI = (() => {
     </article>`;
   }
 
-  // ─── ARTICLE CARD ────────────────────────────────────────────────────────────
+  // âââ ARTICLE CARD ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderArticleCard(article) {
     const isComingSoon = !article.link || article.link === '#';
     return `<article class="article-card ${article.featured ? 'article-card-featured' : ''}">
@@ -489,12 +617,12 @@ const UI = (() => {
         <span class="article-readtime">${article.readTime} min read</span>
         ${renderSourceLabel(article.source)}
         ${!isComingSoon ? renderShareButtons(article.title, GEOWIRE.siteMeta.baseUrl + '/' + article.link) : ''}
-        ${!isComingSoon ? `<a href="${_escHtml(article.link)}" class="btn-read">Read →</a>` : ''}
+        ${!isComingSoon ? `<a href="${_escHtml(article.link)}" class="btn-read">Read â</a>` : ''}
       </div>
     </article>`;
   }
 
-  // ─── UPDATE LOG ──────────────────────────────────────────────────────────────
+  // âââ UPDATE LOG ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderUpdateLog(entries) {
     if (!entries || entries.length === 0) return '<p class="no-updates">No updates found for this period.</p>';
     return `<ul class="update-log">${entries.map(e => `
@@ -512,10 +640,10 @@ const UI = (() => {
     </ul>`;
   }
 
-  // ─── CONTRADICTION FLAG ──────────────────────────────────────────────────────
+  // âââ CONTRADICTION FLAG âââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderContradictionFlag(item) {
     return `<div class="contradiction-card">
-      <div class="contradiction-header">⚠️ <strong>Disputed</strong> — Conflicting claims</div>
+      <div class="contradiction-header">â ï¸ <strong>Disputed</strong> â Conflicting claims</div>
       <div class="contradiction-body">
         <div class="claim claim-a"><strong>${_escHtml(item.sourceA)}:</strong> ${_escHtml(item.claimA)}</div>
         <div class="vs">vs.</div>
@@ -525,7 +653,7 @@ const UI = (() => {
     </div>`;
   }
 
-  // ─── INIT ────────────────────────────────────────────────────────────────────
+  // âââ INIT ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function init() {
     const toggle = document.getElementById('nav-toggle');
     const nav    = document.getElementById('main-nav');
@@ -550,13 +678,13 @@ const UI = (() => {
     });
   }
 
-  // ─── RECESSION GAUGE ────────────────────────────────────────────────────────
+  // âââ RECESSION GAUGE ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderRecessionGauge(probability, momentum, confidence, lastUpdated) {
     // SVG semicircle gauge: 280px wide, 160px tall arc
     const W = 280, H = 160, cx = W / 2, cy = H - 10, r = 120;
     const toRad = (deg) => (deg * Math.PI) / 180;
 
-    // Arc from 180° to 0° (left to right) = 0% to 100%
+    // Arc from 180Â° to 0Â° (left to right) = 0% to 100%
     function arcPoint(pct) {
       const angle = 180 - pct * 180;
       return {
@@ -599,7 +727,7 @@ const UI = (() => {
 
     // Momentum + confidence badge colors
     const momColor = momentum === 'RISING' ? '#f87171' : momentum === 'FALLING' ? '#4ade80' : '#fbbf24';
-    const momArrow = momentum === 'RISING' ? '↑' : momentum === 'FALLING' ? '↓' : '→';
+    const momArrow = momentum === 'RISING' ? 'â' : momentum === 'FALLING' ? 'â' : 'â';
     const confColor = confidence === 'HIGH' ? '#4ade80' : confidence === 'MEDIUM' ? '#fbbf24' : '#94a3b8';
 
     return `
@@ -626,7 +754,7 @@ const UI = (() => {
       </div>`;
   }
 
-  // ─── FACTOR HEATMAP ─────────────────────────────────────────────────────────
+  // âââ FACTOR HEATMAP âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderFactorHeatmap(factorScores) {
     const cards = Object.entries(factorScores).map(([key, factor]) => {
       const name = (typeof RecessionModel !== 'undefined') ? RecessionModel.formatFactorName(key) : key;
@@ -652,7 +780,7 @@ const UI = (() => {
     return `<div class="factor-heatmap">${cards.join('')}</div>`;
   }
 
-  // ─── WHAT CHANGED TODAY ──────────────────────────────────────────────────────
+  // âââ WHAT CHANGED TODAY ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderWhatChangedToday(items) {
     const rows = (items || []).map(item => {
       const impactClass = item.impact === 'POSITIVE' ? 'impact-positive' : item.impact === 'NEGATIVE' ? 'impact-negative' : 'impact-neutral';
@@ -670,7 +798,7 @@ const UI = (() => {
     return `<div class="what-changed-list">${rows.join('')}</div>`;
   }
 
-  // ─── HISTORICAL COMPARISON ───────────────────────────────────────────────────
+  // âââ HISTORICAL COMPARISON âââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderHistoricalComparison(comparisons) {
     const cards = (comparisons || []).map(c => `
       <div class="historical-card">
@@ -684,7 +812,7 @@ const UI = (() => {
     return `<div class="historical-grid">${cards.join('')}</div>`;
   }
 
-  // ─── DIVERGENCE STRIP ────────────────────────────────────────────────────────
+  // âââ DIVERGENCE STRIP ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderDivergenceStrip(divergences) {
     const cards = (divergences || []).map(d => `
       <div class="divergence-card">
@@ -702,10 +830,10 @@ const UI = (() => {
     return `<div class="divergence-strip">${cards.join('')}</div>`;
   }
 
-  // ─── METRIC CARD ─────────────────────────────────────────────────────────────
+  // âââ METRIC CARD âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderMetricCard(label, value, delta, unit, source, deltaClass) {
     const dc = deltaClass || (typeof delta === 'number' ? (delta > 0 ? 'positive' : delta < 0 ? 'negative' : '') : '');
-    const deltaArrow = typeof delta === 'number' ? (delta > 0 ? '▲' : delta < 0 ? '▼' : '—') : '';
+    const deltaArrow = typeof delta === 'number' ? (delta > 0 ? 'â²' : delta < 0 ? 'â¼' : 'â') : '';
     const deltaStr = typeof delta === 'number' ? `${deltaArrow} ${Math.abs(delta)}%` : (delta || '');
     return `
       <div class="metric-card">
@@ -716,7 +844,7 @@ const UI = (() => {
       </div>`;
   }
 
-  // ─── RECESSION HOMEPAGE WIDGET ────────────────────────────────────────────────
+  // âââ RECESSION HOMEPAGE WIDGET ââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderRecessionWidget(recData) {
     if (!recData) return '';
     const { probability, momentum, confidence, factorScores } = recData;
@@ -728,7 +856,7 @@ const UI = (() => {
     } else {
       topDriverKeys = Object.keys(factorScores).slice(0, 3);
     }
-    const momArrow = momentum === 'RISING' ? '↑' : momentum === 'FALLING' ? '↓' : '→';
+    const momArrow = momentum === 'RISING' ? 'â' : momentum === 'FALLING' ? 'â' : 'â';
     const momColor = momentum === 'RISING' ? '#f87171' : momentum === 'FALLING' ? '#4ade80' : '#fbbf24';
     const needleColor = probability < 20 ? '#2D6A4F' : probability < 35 ? '#F59E0B' : probability < 50 ? '#EA580C' : '#E63946';
 
@@ -765,12 +893,12 @@ const UI = (() => {
             <div class="rw-drivers-label">Top drivers</div>
             ${driverItems}
           </div>
-          <a href="recession.html" class="rw-cta">See Full Recession Dashboard →</a>
+          <a href="recession.html" class="rw-cta">See Full Recession Dashboard â</a>
         </div>
       </div>`;
   }
 
-  // ─── SCORE SUMMARY STRIP ─────────────────────────────────────────────────────
+  // âââ SCORE SUMMARY STRIP âââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderScoreSummaryStrip(factorScores, factorDetails) {
     const order = ['laborMarket','ratesLiquidity','inflation','consumerHealth','corporateCredit','housing','supplyLogistics','globalSpillovers','marketSignals','outsideBox'];
     const pills = order.map(key => {
@@ -780,7 +908,7 @@ const UI = (() => {
       const shortName = name.split(' ').slice(0,2).join(' ');
       const color = typeof RecessionModel !== 'undefined' ? RecessionModel.getStatusColor(f.status) : '#94A3B8';
       const score = f.score || 0;
-      return `<a class="score-pill" href="factor.html?f=${key}" title="${name}: ${score}/100 — ${f.status||''}">
+      return `<a class="score-pill" href="factor.html?f=${key}" title="${name}: ${score}/100 â ${f.status||''}">
         <span class="score-pill-dot" style="background:${color}"></span>
         <span class="score-pill-name">${_escHtml(shortName)}</span>
         <span class="score-pill-num" style="color:${color}">${score}</span>
@@ -789,7 +917,7 @@ const UI = (() => {
     return `<div class="score-summary-strip" role="list" aria-label="Factor score overview">${pills.join('')}</div>`;
   }
 
-  // ─── MACRO PULSE PANEL ───────────────────────────────────────────────────────
+  // âââ MACRO PULSE PANEL âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderMacroPulsePanel(factorKey, factorScore, factorDetail) {
     if (!factorScore || !factorDetail) return '';
     const name = factorDetail.name || (typeof RecessionModel !== 'undefined' ? RecessionModel.formatFactorName(factorKey) : factorKey);
@@ -798,11 +926,11 @@ const UI = (() => {
     const weight = Math.round((factorScore.weight || 0) * 100);
     const score = factorScore.score || 0;
 
-    const trendArrow = { RISING: '↑', FALLING: '↓', DETERIORATING: '↘', STABLE: '→', STRESS: '⚠', ELEVATED: '↑', MIXED: '↔', VOLATILE: '~', DISRUPTED: '⚡', IMPROVING: '↗' };
+    const trendArrow = { RISING: 'â', FALLING: 'â', DETERIORATING: 'â', STABLE: 'â', STRESS: 'â ', ELEVATED: 'â', MIXED: 'â', VOLATILE: '~', DISRUPTED: 'â¡', IMPROVING: 'â' };
     const trendColor = { RISING: '#EA580C', FALLING: '#2D6A4F', DETERIORATING: '#EA580C', STABLE: '#F59E0B', STRESS: '#E63946', ELEVATED: '#EA580C', MIXED: '#F59E0B', VOLATILE: '#8B5CF6', DISRUPTED: '#E63946', IMPROVING: '#2D6A4F' };
 
     const metricCells = (factorDetail.metrics || []).slice(0,4).map(m => {
-      const arrow = trendArrow[m.trend] || '→';
+      const arrow = trendArrow[m.trend] || 'â';
       const tc = trendColor[m.trend] || '#94A3B8';
       return `<div class="macro-metric">
         <div class="macro-metric-label">${_escHtml(m.label)}</div>
@@ -818,7 +946,7 @@ const UI = (() => {
             <span class="macro-panel-name">${_escHtml(name)}</span>
             <span class="status-badge ${statusClass}">${factorScore.status}</span>
           </div>
-          <div class="macro-panel-weight">Weight: ${weight}% · Score: <strong style="color:${color}">${score}/100</strong></div>
+          <div class="macro-panel-weight">Weight: ${weight}% Â· Score: <strong style="color:${color}">${score}/100</strong></div>
         </div>
         <div class="macro-score-bar-wrap">
           <div class="macro-score-bar-track">
@@ -827,11 +955,11 @@ const UI = (() => {
         </div>
         <div class="macro-top-driver">${_escHtml(factorScore.topDriver || '')}</div>
         <div class="macro-metrics-grid">${metricCells}</div>
-        <a class="macro-explore-link" href="factor.html?f=${factorKey}">Explore ${_escHtml(name)} →</a>
+        <a class="macro-explore-link" href="factor.html?f=${factorKey}">Explore ${_escHtml(name)} â</a>
       </div>`;
   }
 
-  // ─── FACTOR EXPLORER (full-page component) ──────────────────────────────────
+  // âââ FACTOR EXPLORER (full-page component) ââââââââââââââââââââââââââââââââââ
   function renderFactorExplorer(factorKey, factorScore, factorDetail) {
     if (!factorScore || !factorDetail) return '<p class="loading-state">Factor not found.</p>';
     const name = factorDetail.name || factorKey;
@@ -840,12 +968,12 @@ const UI = (() => {
     const weight = Math.round((factorScore.weight || 0) * 100);
     const score = factorScore.score || 0;
 
-    const trendArrow = { RISING: '↑', FALLING: '↓', DETERIORATING: '↘', STABLE: '→', STRESS: '⚠', ELEVATED: '↑', MIXED: '↔', VOLATILE: '~', DISRUPTED: '⚡', IMPROVING: '↗' };
+    const trendArrow = { RISING: 'â', FALLING: 'â', DETERIORATING: 'â', STABLE: 'â', STRESS: 'â ', ELEVATED: 'â', MIXED: 'â', VOLATILE: '~', DISRUPTED: 'â¡', IMPROVING: 'â' };
     const trendColor = { RISING: '#EA580C', FALLING: '#2D6A4F', DETERIORATING: '#EA580C', STABLE: '#F59E0B', STRESS: '#E63946', ELEVATED: '#EA580C', MIXED: '#F59E0B', VOLATILE: '#8B5CF6', DISRUPTED: '#E63946', IMPROVING: '#2D6A4F' };
 
     // Large metric cards (all 4)
     const metricCards = (factorDetail.metrics || []).map(m => {
-      const arrow = trendArrow[m.trend] || '→';
+      const arrow = trendArrow[m.trend] || 'â';
       const tc = trendColor[m.trend] || '#94A3B8';
       return `<div class="factor-metric-card">
         <div class="factor-metric-label">${_escHtml(m.label)}</div>
@@ -860,9 +988,9 @@ const UI = (() => {
 
     // Second-order effects chain
     const chainItems = (factorDetail.secondOrderEffects || []).map((effect, i) => {
-      const steps = effect.split('→').map(s => s.trim());
+      const steps = effect.split('â').map(s => s.trim());
       const stepsHtml = steps.map((s, j) => `
-        <span class="soe-step">${_escHtml(s)}</span>${j < steps.length - 1 ? '<span class="soe-arrow">→</span>' : ''}`).join('');
+        <span class="soe-step">${_escHtml(s)}</span>${j < steps.length - 1 ? '<span class="soe-arrow">â</span>' : ''}`).join('');
       return `<div class="second-order-card">
         <div class="soe-number">${i + 1}</div>
         <div class="soe-chain">${stepsHtml}</div>
@@ -872,7 +1000,7 @@ const UI = (() => {
 
     // Watch items
     const watchHtml = (factorDetail.watchItems || []).map(w =>
-      `<div class="watch-item"><span class="watch-item-dot">◉</span>${_escHtml(w)}</div>`
+      `<div class="watch-item"><span class="watch-item-dot">â</span>${_escHtml(w)}</div>`
     ).join('');
 
     // First FRED series for chart
@@ -905,9 +1033,9 @@ const UI = (() => {
       <div class="factor-chart-container" id="factor-chart-wrap">
         ${chartSeriesId
           ? `<canvas id="factor-chart" data-series="${_escHtml(chartSeriesId)}" height="280"></canvas>
-             <div class="factor-chart-caption">FRED series: ${_escHtml(chartSeriesId)} · Source: St. Louis Federal Reserve</div>`
+             <div class="factor-chart-caption">FRED series: ${_escHtml(chartSeriesId)} Â· Source: St. Louis Federal Reserve</div>`
           : `<div class="factor-chart-placeholder">
-               <span>📊</span>
+               <span>ð</span>
                <p>No FRED series mapped for this factor.<br>Data sourced from external providers (Bloomberg, Bloomberg, FactSet).</p>
              </div>`
         }
@@ -920,12 +1048,12 @@ const UI = (() => {
       </div>
 
       <div class="watch-items-box">
-        <div class="watch-items-title">⚠ What to Watch</div>
+        <div class="watch-items-title">â  What to Watch</div>
         ${watchHtml}
       </div>`;
   }
 
-  // ─── HORMUZ GAUGE ────────────────────────────────────────────────────────────
+  // âââ HORMUZ GAUGE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderHormuzGauge(currentFlow, normalFlow) {
     const pct = Math.max(0, Math.min(100, (currentFlow / normalFlow) * 100));
     const pctLabel = pct.toFixed(0);
@@ -936,11 +1064,11 @@ const UI = (() => {
       <div class="hormuz-gauge">
         <div class="hormuz-gauge-header">
           <span class="hormuz-gauge-label">HORMUZ TRANSIT FLOW</span>
-          <span class="hormuz-gauge-updated">Source: Kpler · updated ${_fmtTime('2026-03-25T08:00Z')}</span>
+          <span class="hormuz-gauge-updated">Source: Kpler Â· updated ${_fmtTime('2026-03-25T08:00Z')}</span>
         </div>
         <div class="hormuz-gauge-main">
           <div class="hormuz-flow-number" style="color:${barColor}">${pctLabel}%<span class="hormuz-flow-unit">FLOWING</span></div>
-          <div class="hormuz-detail">${currentFlow}M of ${normalFlow}M bbl/day · 22-nation coalition blockade</div>
+          <div class="hormuz-detail">${currentFlow}M of ${normalFlow}M bbl/day Â· 22-nation coalition blockade</div>
           <div class="hormuz-bar-wrap">
             <div class="hormuz-bar-track">
               <div class="hormuz-bar-fill" style="width:${pct}%;background:${barColor}"></div>
@@ -951,7 +1079,7 @@ const UI = (() => {
             </div>
           </div>
           <div class="hormuz-status-badge" style="background:${statusColor}1a;color:${statusColor};border-color:${statusColor}60">
-            ⚠ ${statusText}
+            â  ${statusText}
           </div>
         </div>
         <div class="hormuz-gauge-facts">
@@ -965,7 +1093,7 @@ const UI = (() => {
       </div>`;
   }
 
-  // ─── GOLDMAN CALCULATOR ───────────────────────────────────────────────────────
+  // âââ GOLDMAN CALCULATOR âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderGoldmanCalculator(scenarios, preWarBrent) {
     const base = preWarBrent || 68;
     // Interpolated: premium = closurePct/100 * 15 - pipelineOffset/4.2 * 3 - sprRelease/2 * 2
@@ -1036,7 +1164,7 @@ const UI = (() => {
       </script>`;
   }
 
-  // ─── COMMODITY CASCADE ────────────────────────────────────────────────────────
+  // âââ COMMODITY CASCADE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderCommodityCascade(commodities) {
     if (!commodities || !commodities.length) return '<p class="loading-state">No commodity data.</p>';
     const statusColors = { CRITICAL: '#E63946', DISRUPTED: '#EA580C', ELEVATED: '#F59E0B', POSITIVE: '#00B86B', VOLATILE: '#8B5CF6', STABLE: '#5FA8D3' };
@@ -1058,14 +1186,14 @@ const UI = (() => {
           </div>
           <div class="commodity-score-label" style="color:${scoreColor}">Disruption: ${score}/100</div>
           <div class="commodity-status" style="background:${bg};color:${color};border:1px solid ${color}40">${_escHtml(c.status)}</div>
-          <div class="commodity-downstream">${downstream}${c.downstreamEffect && c.downstreamEffect.length > 80 ? '…' : ''}</div>
+          <div class="commodity-downstream">${downstream}${c.downstreamEffect && c.downstreamEffect.length > 80 ? 'â¦' : ''}</div>
         </div>`;
     }).join('');
     return `<div class="commodity-strip" role="list" aria-label="12-commodity cascade">${cards}</div>
-      <div class="commodity-scroll-hint">← Scroll to see all 12 commodities →</div>`;
+      <div class="commodity-scroll-hint">â Scroll to see all 12 commodities â</div>`;
   }
 
-  // ─── HELIUM DEEP DIVE ─────────────────────────────────────────────────────────
+  // âââ HELIUM DEEP DIVE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderHeliumDeepDive(heliumData) {
     if (!heliumData) return '';
     const { keyFacts, supplyChain } = heliumData;
@@ -1079,16 +1207,16 @@ const UI = (() => {
           <span class="helium-stage-status" style="background:${severityBg[s.severity]};color:${severityColor[s.severity]};border:1px solid ${severityColor[s.severity]}40">${_escHtml(s.status)}</span>
         </div>
         <div class="helium-stage-detail">${_escHtml(s.detail)}</div>
-        ${i < (supplyChain.length - 1) ? '<div class="helium-stage-arrow">↓</div>' : ''}
+        ${i < (supplyChain.length - 1) ? '<div class="helium-stage-arrow">â</div>' : ''}
       </div>`).join('');
 
     return `
       <details class="helium-deepdive" open>
         <summary class="helium-deepdive-summary">
-          <span class="helium-summary-icon">🔴</span>
+          <span class="helium-summary-icon">ð´</span>
           <span class="helium-summary-title">Helium Crisis Deep Dive</span>
-          <span class="helium-summary-tag">CRITICAL — No Substitute</span>
-          <span class="helium-summary-chevron">▾</span>
+          <span class="helium-summary-tag">CRITICAL â No Substitute</span>
+          <span class="helium-summary-chevron">â¾</span>
         </summary>
         <div class="helium-deepdive-body">
           <div class="helium-key-facts">
@@ -1104,12 +1232,12 @@ const UI = (() => {
       </details>`;
   }
 
-  // ─── EU GAS STORAGE PANEL ────────────────────────────────────────────────────
+  // âââ EU GAS STORAGE PANEL ââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderEnergyStoragePanel() {
     const data = [
       { year: '2024 (same date)', bcm: 77, color: '#5FA8D3', note: 'Normal seasonal level' },
       { year: '2025 (same date)', bcm: 60, color: '#F59E0B', note: 'Below 5yr average' },
-      { year: 'Current (2026)',   bcm: 46, color: '#E63946', note: 'Multi-year low — conflict drawdown' },
+      { year: 'Current (2026)',   bcm: 46, color: '#E63946', note: 'Multi-year low â conflict drawdown' },
     ];
     const maxBcm = 90;
     const bars = data.map(d => {
@@ -1129,7 +1257,7 @@ const UI = (() => {
         <div class="storage-panel-title">EU Natural Gas Storage</div>
         <div class="storage-bars">${bars}</div>
         <div class="storage-panel-note">
-          <span style="color:#E63946">▲ Deficit of 31 bcm vs. 2024 levels.</span>
+          <span style="color:#E63946">â² Deficit of 31 bcm vs. 2024 levels.</span>
           EU entering winter buffer drawdown well below normal.
           ${renderSourceLabel('GIE AGSI / IEA', '2026-03-25T00:00Z')}
         </div>
@@ -1157,9 +1285,9 @@ const UI = (() => {
     renderAIExplainButton, mountAIExplain,
   };
 
-  // ─── AI EXPLAIN ───────────────────────────────────────────────────────────────
+  // âââ AI EXPLAIN âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   // renderAIExplainButton(topic, context, mountId)
-  //   Renders a compact "🤖 Explain" button. When clicked, calls API.fetchAIExplain
+  //   Renders a compact "ð¤ Explain" button. When clicked, calls API.fetchAIExplain
   //   and replaces the button with the AI explanation inline.
   //
   // Usage in any page:
@@ -1170,7 +1298,7 @@ const UI = (() => {
     const safeId = mountId || ('ai-explain-' + Math.random().toString(36).slice(2, 7));
     const safeTopic = _escHtml(topic || '');
     return `<div class="ai-explain-wrap" id="${safeId}" data-topic="${safeTopic}" data-context="${_escHtml(context || '')}">
-      <button class="ai-explain-btn" onclick="UI.mountAIExplain('${safeId}')">🤖 AI Explain</button>
+      <button class="ai-explain-btn" onclick="UI.mountAIExplain('${safeId}')">ð¤ AI Explain</button>
     </div>`;
   }
 
@@ -1182,21 +1310,21 @@ const UI = (() => {
     if (!el) return;
     const topic   = el.dataset.topic   || 'this topic';
     const context = el.dataset.context || '';
-    el.innerHTML = `<div class="ai-explain-loading">🤖 Analyzing…</div>`;
+    el.innerHTML = `<div class="ai-explain-loading">ð¤ Analyzingâ¦</div>`;
     try {
       const result = await API.fetchAIExplain(topic, context);
       const stubNote = result.stub
-        ? `<div class="ai-explain-stub-note">⚙ AI explain stub — configure API keys in api.js to enable live explanations.</div>`
+        ? `<div class="ai-explain-stub-note">â AI explain stub â configure API keys in api.js to enable live explanations.</div>`
         : '';
       el.innerHTML = `
         <div class="ai-explain-result">
           <div class="ai-explain-header">
-            <span class="ai-explain-icon">🤖</span>
+            <span class="ai-explain-icon">ð¤</span>
             <span class="ai-explain-label">AI EXPLAIN</span>
             <span class="ai-explain-confidence ai-conf-${result.confidence}">${(result.confidence || 'low').toUpperCase()}</span>
           </div>
           <div class="ai-explain-text">${_escHtml(result.explanation || '')}</div>
-          ${result.sources && result.sources.length ? `<div class="ai-explain-sources">Sources: ${result.sources.map(s => _escHtml(s)).join(' · ')}</div>` : ''}
+          ${result.sources && result.sources.length ? `<div class="ai-explain-sources">Sources: ${result.sources.map(s => _escHtml(s)).join(' Â· ')}</div>` : ''}
           ${stubNote}
         </div>`;
     } catch (err) {
