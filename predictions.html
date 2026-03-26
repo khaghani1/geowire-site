@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Prediction Markets — Live Polymarket & Kalshi probabilities for Iran conflict resolution, Hormuz reopening, oil price scenarios, and recession odds.">
+  <meta property="og:title" content="Prediction Markets — GeoWire">
+  <meta property="og:description" content="Polymarket & Kalshi crowd forecasts vs. GeoWire model estimates. Ceasefire timeline, oil scenarios, insider trading watch.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Prediction Markets — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="tag" style="background:#8B5CF620;color:#8B5CF6;border:1px solid #8B5CF640">🔮 PREDICTION MARKETS</span>
+          <span class="tag" style="background:#5FA8D320;color:#5FA8D3;border:1px solid #5FA8D340">POLYMARKET · KALSHI</span>
+        </div>
+        <h1 class="page-hero-title">Prediction Markets</h1>
+        <p class="page-hero-subtitle">Crowd-aggregated probabilities from Polymarket &amp; Kalshi — live volumes, trend direction, and where GeoWire's model diverges from consensus.</p>
+        <div class="page-hero-meta">
+          <span>7 active markets tracked</span>
+          <span class="separator">·</span>
+          <span>Updated <span id="pred-clock">—</span></span>
+          <span class="separator">·</span>
+          <span style="color:#F59E0B">⚠ Not financial advice</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market ticker -->
+  <div id="market-ticker-bar"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       CEASEFIRE TIMELINE CHART
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Ceasefire Timeline — Polymarket</h2>
+      <span class="section-subtitle">Cumulative probability of ceasefire announcement by horizon</span>
+    </div>
+    <div class="pred-chart-card">
+      <div class="pred-chart-wrap" style="height:260px;position:relative">
+        <canvas id="ceasefire-chart"></canvas>
+      </div>
+      <div class="pred-chart-footnote">Source: Polymarket · as of Mar 26, 2026 · Horizontal bars = crowd probability. Vertical line = GeoWire model estimate.</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       7 PREDICTION MARKET CARDS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">All Active Markets</h2>
+      <span class="section-subtitle">Crowd forecast vs. GeoWire model. Green = GeoWire above market. Red = below.</span>
+    </div>
+    <div class="pred-cards-grid" id="pred-cards-mount"></div>
+  </section>
+
+  <!-- AdSense mid -->
+  <div class="container" id="ad-pred-mid"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       INSIDER TRADING WATCH
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Insider Trading Watch</h2>
+      <span class="section-subtitle">Form 4 filings since Day 1 of conflict — executives buying their own convictions</span>
+    </div>
+    <div class="pred-insider-disclaimer">
+      ⚠ Insider filings are public information via SEC Edgar. This is not evidence of illegal activity. Informational only. Do not trade on this data.
+    </div>
+    <div class="pred-insider-table" id="insider-table-mount"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       OUR EDGE
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Our Edge vs. The Market</h2>
+      <span class="section-subtitle">Where GeoWire's model systematically diverges — and why</span>
+    </div>
+    <div class="pred-edge-grid" id="pred-edge-mount"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       DISCLAIMER
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="pred-full-disclaimer" id="pred-disclaimer-mount"></div>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="section container">
+    <div class="factor-nav-bar">
+      <a class="factor-nav-link" href="recession.html">📉 Recession Command Center</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="energy.html">⚡ Energy Command Center</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="macro.html">📊 Macro Pulse</a>
+    </div>
+  </section>
+
+  <section class="section container" id="pred-email-capture"></section>
+  <div id="site-footer"></div>
+
+</main>
+
+<script src="content.js"></script>
+<script src="scoring.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  UI.init();
+  document.getElementById('site-header').innerHTML =
+    UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
+  document.getElementById('site-nav').innerHTML =
+    UI.renderNav('predictions.html');
+  document.getElementById('market-ticker-bar').innerHTML =
+    UI.renderMarketTicker(GEOWIRE.marketData);
+  document.getElementById('site-footer').innerHTML =
+    UI.renderFooter(GEOWIRE.siteMeta);
+  UI.startClock('pred-clock');
+
+  const pd = GEOWIRE.predictionsData || {};
+  const markets = pd.markets || [];
+  const insider = pd.insiderWatch || [];
+  const timeline = pd.ceasefireTimeline || [];
+
+  // ── Trend helpers
+  const trendColor = { RISING: '#2D6A4F', FALLING: '#E63946', STABLE: '#F59E0B' };
+  const trendArrow = { RISING: '↑', FALLING: '↓', STABLE: '→' };
+  const catColor = {
+    DIPLOMATIC: '#5FA8D3', MILITARY: '#E63946', MARKET: '#F59E0B',
+    POLITICAL: '#8B5CF6', REGIONAL: '#EA580C', ECONOMIC: '#F59E0B',
+  };
+
+  // ── Parse GeoWire probability from geowireEdge text
+  function parseGWProb(edge) {
+    const m = edge.match(/GeoWire model:\s*(\d+)%/);
+    return m ? parseInt(m[1], 10) : null;
+  }
+
+  // ── Prediction market cards
+  const cardsHtml = markets.map(m => {
+    const gwProb = parseGWProb(m.geowireEdge || '');
+    const diff = gwProb !== null ? gwProb - m.probability : null;
+    const diffColor = diff === null ? '#94A3B8' : diff > 0 ? '#2D6A4F' : '#E63946';
+    const diffLabel = diff === null ? '' : (diff > 0 ? `+${diff}pp above market` : `${diff}pp below market`);
+    const barColor = m.probability >= 60 ? '#E63946' : m.probability >= 40 ? '#EA580C' : m.probability >= 25 ? '#F59E0B' : '#5FA8D3';
+    const tc = trendColor[m.trend] || '#94A3B8';
+    const ta = trendArrow[m.trend] || '→';
+    const cc = catColor[m.category] || '#94A3B8';
+
+    return `<div class="pred-card">
+      <div class="pred-card-header">
+        <span class="pred-card-category" style="color:${cc};border-color:${cc}40;background:${cc}12">${m.category}</span>
+        <span class="pred-card-source">${m.source}</span>
+      </div>
+      <div class="pred-card-title">${m.title}</div>
+      <div class="pred-card-prob-row">
+        <div class="pred-card-prob" style="color:${barColor}">${m.probability}<span class="pred-card-pct-sign">%</span></div>
+        <div class="pred-card-trend" style="color:${tc}">${ta} ${m.trendDelta}</div>
+      </div>
+      <div class="pred-card-bar-track">
+        <div class="pred-card-bar-fill" style="width:${m.probability}%;background:${barColor}"></div>
+        ${gwProb !== null ? `<div class="pred-card-gw-marker" style="left:${gwProb}%"></div>` : ''}
+      </div>
+      <div class="pred-card-meta">
+        <span class="pred-card-volume">Vol: ${m.volume}</span>
+        ${diff !== null ? `<span class="pred-card-gw-diff" style="color:${diffColor}">GW: ${gwProb}% (${diffLabel})</span>` : ''}
+      </div>
+      <div class="pred-card-edge">${m.geowireEdge}</div>
+      <div class="pred-card-watch">⚠ Watch: ${m.watchFor}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('pred-cards-mount').innerHTML = cardsHtml;
+
+  // ── Insider table
+  const insiderHtml = `<table class="insider-table">
+    <thead>
+      <tr>
+        <th>Ticker</th><th>Company</th><th>Filing Date</th><th>Insider</th><th>Action</th><th>Value</th><th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${insider.map(r => {
+        const ac = r.action === 'BUY' ? '#2D6A4F' : '#E63946';
+        return `<tr>
+          <td><strong style="color:var(--text);font-family:var(--font-mono)">${r.ticker}</strong></td>
+          <td style="color:var(--text-2)">${r.name}</td>
+          <td style="color:var(--text-3);font-size:12px">${r.filingDate}</td>
+          <td style="color:var(--text-2);font-size:13px">${r.insider}</td>
+          <td><span class="insider-action-badge" style="background:${ac}22;color:${ac};border:1px solid ${ac}44">${r.action}</span></td>
+          <td style="font-family:var(--font-mono);color:var(--text)">${r.value}</td>
+          <td style="color:var(--text-3);font-size:12px;max-width:220px">${r.note}</td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>`;
+  document.getElementById('insider-table-mount').innerHTML = insiderHtml;
+
+  // ── Our Edge section
+  const edgeItems = markets.filter(m => parseGWProb(m.geowireEdge) !== null).map(m => {
+    const gwProb = parseGWProb(m.geowireEdge);
+    const diff = gwProb - m.probability;
+    const direction = diff > 0 ? 'ABOVE' : diff < 0 ? 'BELOW' : 'ALIGNED';
+    const dc = diff > 0 ? '#2D6A4F' : diff < 0 ? '#E63946' : '#F59E0B';
+    return `<div class="pred-edge-card">
+      <div class="pred-edge-title">${m.title}</div>
+      <div class="pred-edge-numbers">
+        <span class="pred-edge-market">Market: ${m.probability}%</span>
+        <span class="pred-edge-sep">vs.</span>
+        <span class="pred-edge-gw" style="color:${dc}">GeoWire: ${gwProb}% (${direction})</span>
+      </div>
+      <div class="pred-edge-reason">${m.geowireEdge.split('GeoWire model:')[0].trim()}</div>
+    </div>`;
+  });
+  document.getElementById('pred-edge-mount').innerHTML = edgeItems.join('');
+
+  // ── Disclaimer
+  document.getElementById('pred-disclaimer-mount').innerHTML =
+    `<div class="pred-disclaimer-text">⚠ ${pd.disclaimer || ''}</div>`;
+
+  // ── Chart.js horizontal bar — ceasefire timeline
+  const chartCanvas = document.getElementById('ceasefire-chart');
+  if (chartCanvas && typeof Chart !== 'undefined' && timeline.length) {
+    const labels = timeline.map(t => t.label);
+    const probs  = timeline.map(t => t.probability);
+    const colors = probs.map(p =>
+      p >= 60 ? '#2D6A4F' : p >= 40 ? '#5FA8D3' : p >= 25 ? '#F59E0B' : '#EA580C'
+    );
+
+    new Chart(chartCanvas, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Ceasefire Probability',
+          data: probs,
+          backgroundColor: colors.map(c => c + 'CC'),
+          borderColor: colors,
+          borderWidth: 1,
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0D1B2A',
+            titleColor: '#F1F5F9',
+            bodyColor: '#94A3B8',
+            borderColor: '#334155',
+            borderWidth: 1,
+            callbacks: {
+              label: ctx => ` ${ctx.raw}% probability`,
+            },
+          },
+          annotation: {
+            annotations: {
+              geowireLine: {
+                type: 'line',
+                scaleID: 'x',
+                value: 32,
+                borderColor: '#8B5CF6',
+                borderWidth: 2,
+                borderDash: [6, 3],
+                label: {
+                  content: 'GeoWire (30d: 32%)',
+                  display: true,
+                  color: '#8B5CF6',
+                  font: { size: 10 },
+                  position: 'start',
+                },
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            min: 0,
+            max: 100,
+            grid: { color: '#33415540' },
+            ticks: {
+              color: '#94A3B8',
+              font: { size: 11 },
+              callback: v => v + '%',
+            },
+          },
+          y: {
+            grid: { display: false },
+            ticks: { color: '#94A3B8', font: { size: 11 } },
+          },
+        },
+      },
+    });
+  }
+
+  // ── AdSense
+  document.getElementById('ad-pred-mid').innerHTML = UI.renderAdSlot('pred-mid');
+  document.querySelectorAll('.adsbygoogle').forEach(() => {
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+  });
+
+  // ── Email capture
+  document.getElementById('pred-email-capture').innerHTML = UI.renderEmailCapture();
+  UI.stubEmailCapture();
+
+  // ── Live FRED / market data
+  API.loadMarketData().catch(() => {});
+})();
+</script>
+</body>
+</html>
