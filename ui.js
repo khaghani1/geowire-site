@@ -112,14 +112,48 @@ const UI = (() => {
   }
 
   // ─── EMAIL CAPTURE ───────────────────────────────────────────────────────────
-  const EMAIL_KEY = 'geowire-subscribed';
+  const EMAIL_KEY      = 'geowire-subscribed';      // flag: any email saved
+  const EMAIL_LIST_KEY = 'geowire-email-list';       // list of all emails (pre-Beehiiv)
+  // Beehiiv publication ID — set this when Beehiiv account is live
+  const BEEHIIV_PUB_ID = '';  // e.g. 'pub_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+
   function isSubscribed() { try { return !!localStorage.getItem(EMAIL_KEY); } catch(_) { return false; } }
-  function markSubscribed(email) { try { localStorage.setItem(EMAIL_KEY, email); } catch(_) {} }
+
+  function markSubscribed(email) {
+    try {
+      localStorage.setItem(EMAIL_KEY, email);
+      // Also keep the full list for Beehiiv bulk import later
+      const list = JSON.parse(localStorage.getItem(EMAIL_LIST_KEY) || '[]');
+      if (!list.includes(email)) {
+        list.push(email);
+        localStorage.setItem(EMAIL_LIST_KEY, JSON.stringify(list));
+      }
+    } catch(_) {}
+  }
+
+  async function _submitToBeehiiv(email) {
+    if (!BEEHIIV_PUB_ID) return false;
+    try {
+      const res = await fetch(`https://api.beehiiv.com/v2/publications/${BEEHIIV_PUB_ID}/subscriptions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, reactivate_existing: false, send_welcome_email: true }),
+      });
+      return res.ok;
+    } catch(_) { return false; }
+  }
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || '').trim());
+  }
 
   function stubEmailCapture(email) {
+    // Called from page scripts without args — no-op (wiring is in handleEmailSubmit)
+    if (!email) return;
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!re.test(email)) return { success: false, message: 'Please enter a valid email address.' };
     markSubscribed(email);
+    _submitToBeehiiv(email).catch(() => {});
     return { success: true, message: "You're on the list. First brief coming tomorrow." };
   }
 
@@ -130,6 +164,7 @@ const UI = (() => {
     const sub   = isFa ? 'هوش تعارض، سیگنال‌های بازار و تحلیل — هر روز صبح.' : 'Conflict intelligence, market signals, and analysis — every morning.';
     const ph    = isFa ? 'ایمیل شما' : 'your@email.com';
     const btn   = isFa ? 'عضویت' : 'Subscribe Free';
+    const note  = isFa ? '📭 بدون اسپم. لغو عضویت هر زمان.' : '📭 No spam. Unsubscribe anytime.';
     return `<div class="email-capture" id="email-capture-block" dir="${isFa?'rtl':'ltr'}">
       <div class="email-capture-inner">
         <div class="email-capture-icon">📬</div>
@@ -137,32 +172,64 @@ const UI = (() => {
         <p class="email-capture-sub">${sub}</p>
         <form class="email-form" onsubmit="UI.handleEmailSubmit(event)" novalidate>
           <div class="email-form-row">
-            <input type="email" id="email-input" class="email-input" placeholder="${ph}" aria-label="Email address" required autocomplete="email">
-            <button type="submit" class="btn-subscribe">${btn}</button>
+            <input type="email" id="email-input" class="email-input" placeholder="${ph}"
+              aria-label="Email address" required autocomplete="email"
+              oninput="this.style.borderColor=''">
+            <button type="submit" class="btn-subscribe" id="email-submit-btn">${btn}</button>
           </div>
         </form>
         <p id="email-msg" class="email-msg" aria-live="polite"></p>
-        <p class="email-note">📭 No spam. Unsubscribe anytime.</p>
+        <p class="email-note">${note}</p>
       </div>
     </div>`;
   }
 
   function renderEmailCaptureSuccess() {
-    return `<div class="email-capture email-capture-done"><div class="email-capture-inner" style="text-align:center;"><div style="font-size:40px;margin-bottom:12px;">✅</div><h3 class="email-capture-title">You're on the list</h3><p class="email-capture-sub">First brief coming tomorrow morning.</p></div></div>`;
+    return `<div class="email-capture email-capture-done">
+      <div class="email-capture-inner" style="text-align:center;">
+        <div style="font-size:40px;margin-bottom:12px;">✅</div>
+        <h3 class="email-capture-title">You're on the list</h3>
+        <p class="email-capture-sub">First brief coming tomorrow morning. Check your inbox — and your spam folder just in case.</p>
+        <p style="font-size:12px;color:var(--text-3);margin:8px 0 0;font-family:var(--font-mono)">ADD briefings@geowire.org TO CONTACTS TO ENSURE DELIVERY</p>
+      </div>
+    </div>`;
   }
 
   function handleEmailSubmit(e) {
     e.preventDefault();
-    const input = document.getElementById('email-input');
-    const msg   = document.getElementById('email-msg');
+    const input  = document.getElementById('email-input');
+    const msg    = document.getElementById('email-msg');
+    const btn    = document.getElementById('email-submit-btn');
     if (!input || !msg) return;
-    const result = stubEmailCapture(input.value.trim());
-    msg.textContent = result.message;
-    msg.className = `email-msg ${result.success ? 'email-msg-success' : 'email-msg-error'}`;
-    if (result.success) {
-      input.value = '';
-      setTimeout(() => { const b = document.getElementById('email-capture-block'); if (b) b.outerHTML = renderEmailCaptureSuccess(); }, 1800);
+
+    const email = input.value.trim();
+
+    // Inline validation
+    if (!validateEmail(email)) {
+      input.style.borderColor = '#E63946';
+      msg.textContent = 'Please enter a valid email address.';
+      msg.className = 'email-msg email-msg-error';
+      input.focus();
+      return;
     }
+
+    // Loading state
+    if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
+    msg.textContent = '';
+    msg.className = 'email-msg';
+
+    // Store locally + attempt Beehiiv
+    markSubscribed(email);
+    _submitToBeehiiv(email).finally(() => {
+      msg.textContent = "You're on the list. First brief coming tomorrow.";
+      msg.className = 'email-msg email-msg-success';
+      input.value = '';
+      if (btn) { btn.textContent = '✓ Done'; btn.disabled = true; }
+      setTimeout(() => {
+        const b = document.getElementById('email-capture-block');
+        if (b) b.outerHTML = renderEmailCaptureSuccess();
+      }, 1600);
+    });
   }
 
   // ─── HEADER ──────────────────────────────────────────────────────────────────

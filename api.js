@@ -4,7 +4,8 @@
 const API = (() => {
 
   const FRED_KEY  = 'f8f377edb471980ac3d88f219145c071';
-  const EIA_KEY   = ''; // Register at eia.gov/developer
+  const EIA_KEY   = 'OinUeRE4Beo4k85b8U2YcWbjQCJEMIOPaHfdKOsm';
+  const BLS_KEY   = '01eb8f88445b45529eda4971281579ba';
   const FRED_BASE = 'https://api.stlouisfed.org/fred/series/observations';
   const COINGECKO_BASE = 'https://api.coingecko.com/api/v3/simple/price';
   const GDELT_BASE     = 'https://api.gdeltproject.org/api/v2/doc/doc';
@@ -194,7 +195,7 @@ const API = (() => {
 
   // ─── FETCH NEWS API ───────────────────────────────────────────────────────────
   async function fetchNewsAPI(query) {
-    const NEWS_API_KEY = ''; // Register at newsapi.org
+    const NEWS_API_KEY = 'ff5e642fe3a74c1faba5387d8e8a2865';
     if (!NEWS_API_KEY) {
       console.warn('[GeoWire] NewsAPI key not set — returning null. Register at newsapi.org.');
       return null;

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Farsi Intelligence Desk — Persian-language signals, regime analysis, source credibility tiers, and bilingual glossary for the US-Iran conflict.">
+  <meta property="og:title" content="Farsi Intelligence Desk — GeoWire">
+  <meta property="og:description" content="Regime signals, IRGC analysis, and Iran-sourced intelligence — bilingual English/Farsi.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Farsi Intelligence Desk — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+  <style>
+    /* ── Farsi / RTL overrides ─────────────────────────────────────────── */
+    .fa { font-family: 'Vazirmatn', sans-serif; }
+    .rtl { direction: rtl; text-align: right; font-family: 'Vazirmatn', sans-serif; }
+
+    /* Bilingual hero */
+    .farsi-hero-bilingual { display:flex; align-items:flex-start; gap:32px; flex-wrap:wrap; }
+    .farsi-hero-en { flex:1; min-width:240px; }
+    .farsi-hero-fa { flex:1; min-width:240px; direction:rtl; text-align:right; font-family:'Vazirmatn',sans-serif; }
+    .farsi-hero-fa h1 { font-size:clamp(1.4rem,3vw,2.2rem); color:var(--text); margin:0 0 8px; }
+    .farsi-hero-fa p  { font-size:1rem; color:var(--text-2); line-height:1.7; }
+    .farsi-divider { width:1px; background:var(--border); align-self:stretch; flex-shrink:0; }
+
+    /* Signal cards */
+    .signal-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
+    .signal-card-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+    .signal-card-titles { flex:1; }
+    .signal-card-title-en { font-size:1rem; font-weight:600; color:var(--text); margin:0 0 4px; }
+    .signal-card-title-fa { font-size:1.05rem; font-family:'Vazirmatn',sans-serif; color:var(--text-2); direction:rtl; margin:0; }
+    .signal-card-badges { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-start; }
+    .signal-badge { font-size:11px; font-family:var(--font-mono); padding:3px 8px; border-radius:4px; border:1px solid; white-space:nowrap; }
+    .signal-card-body { display:grid; gap:12px; }
+    .signal-card-body-en { font-size:0.92rem; color:var(--text-2); line-height:1.6; }
+    .signal-card-body-fa { font-size:0.95rem; color:var(--text-2); line-height:1.8; direction:rtl; font-family:'Vazirmatn',sans-serif; background:var(--surface-2); padding:12px; border-radius:8px; border:1px solid var(--border); }
+    .signal-card-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; flex-wrap:wrap; gap:8px; }
+    .signal-card-source { font-size:12px; color:#5FA8D3; font-family:var(--font-mono); }
+    .signal-card-watch { font-size:11px; color:#F59E0B; background:#F59E0B12; padding:4px 10px; border-radius:4px; border:1px solid #F59E0B30; }
+
+    /* Glossary */
+    .glossary-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+    .glossary-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; }
+    .glossary-term-fa { font-size:1.3rem; font-family:'Vazirmatn',sans-serif; color:var(--text); direction:rtl; text-align:right; margin:0 0 2px; }
+    .glossary-transliteration { font-size:11px; color:#5FA8D3; font-family:var(--font-mono); margin:0 0 6px; }
+    .glossary-term-en { font-size:0.85rem; font-weight:700; color:#F59E0B; font-family:var(--font-mono); margin:0 0 8px; }
+    .glossary-definition { font-size:0.87rem; color:var(--text-2); line-height:1.55; margin:0; }
+
+    /* Source tiers table */
+    .source-tier-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .source-tier-table th { background:var(--surface-2); color:var(--text-2); font-size:11px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.06em; padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+    .source-tier-table td { padding:12px 14px; border-bottom:1px solid var(--border); color:var(--text-2); vertical-align:top; }
+    .source-tier-table tr:last-child td { border-bottom:none; }
+    .source-tier-table tr:hover td { background:var(--surface-2); }
+    .source-name-fa { font-family:'Vazirmatn',sans-serif; direction:rtl; font-size:1rem; color:var(--text); display:block; }
+    .source-name-en { font-size:11px; color:var(--text-3); font-family:var(--font-mono); }
+    .tier-badge { font-size:10px; font-family:var(--font-mono); padding:2px 7px; border-radius:4px; border:1px solid; white-space:nowrap; }
+    .tier-1 { color:#2D6A4F; border-color:#2D6A4F60; background:#2D6A4F18; }
+    .tier-2 { color:#F59E0B; border-color:#F59E0B60; background:#F59E0B18; }
+    .tier-3 { color:#E63946; border-color:#E6394660; background:#E6394618; }
+
+    /* Severity colors */
+    .sev-CRITICAL { color:#E63946; border-color:#E6394640; background:#E6394618; }
+    .sev-HIGH { color:#EA580C; border-color:#EA580C40; background:#EA580C18; }
+    .sev-MEDIUM { color:#F59E0B; border-color:#F59E0B40; background:#F59E0B18; }
+    .sev-LOW { color:#5FA8D3; border-color:#5FA8D340; background:#5FA8D318; }
+
+    /* Category colors */
+    .cat-POLITICAL { color:#8B5CF6; border-color:#8B5CF640; background:#8B5CF618; }
+    .cat-MILITARY { color:#E63946; border-color:#E6394640; background:#E6394618; }
+    .cat-ECONOMIC { color:#F59E0B; border-color:#F59E0B40; background:#F59E0B18; }
+    .cat-DIPLOMATIC { color:#5FA8D3; border-color:#5FA8D340; background:#5FA8D318; }
+
+    /* Confidence dot */
+    .conf-confirmed::before { content:'🟢 '; }
+    .conf-multisource::before { content:'🟡 '; }
+    .conf-singlesource::before { content:'🟠 '; }
+    .conf-inferred::before { content:'⚫ '; }
+
+    /* Language toggle */
+    .lang-toggle-bar { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+    .lang-toggle-btn { font-size:13px; padding:6px 16px; border-radius:6px; border:1px solid var(--border); background:var(--surface); color:var(--text-2); cursor:pointer; font-family:var(--font-mono); transition:all .15s; }
+    .lang-toggle-btn.active { background:#5FA8D3; color:#fff; border-color:#5FA8D3; }
+    .lang-toggle-btn.fa-btn { font-family:'Vazirmatn',sans-serif; font-size:14px; }
+
+    /* Disclaimer RTL banner */
+    .farsi-disclaimer { background:#F59E0B12; border:1px solid #F59E0B30; border-radius:8px; padding:14px 18px; margin-bottom:24px; font-size:13px; color:#F59E0B; }
+    .farsi-disclaimer-fa { direction:rtl; font-family:'Vazirmatn',sans-serif; font-size:14px; margin-top:6px; color:var(--text-2); }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       HERO — BILINGUAL
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-label">
+        <span class="tag" style="background:#E6394620;color:#E63946;border:1px solid #E6394640">🇮🇷 FARSI INTEL DESK</span>
+        <span class="tag" style="background:#5FA8D320;color:#5FA8D3;border:1px solid #5FA8D340">میز اطلاعات فارسی</span>
+      </div>
+      <div class="farsi-hero-bilingual" style="margin-top:16px">
+        <div class="farsi-hero-en">
+          <h1 class="page-hero-title" style="margin:0 0 10px">Farsi Intelligence Desk</h1>
+          <p class="page-hero-subtitle">Iran-sourced signals translated and credibility-rated. IRGC posture, regime stability, economic stress indicators, and proxy network activity — direct from Persian-language sources.</p>
+          <div class="page-hero-meta" style="margin-top:12px">
+            <span>5 active signals</span>
+            <span class="separator">·</span>
+            <span>6 sources rated</span>
+            <span class="separator">·</span>
+            <span>Updated <span id="farsi-clock">—</span></span>
+          </div>
+        </div>
+        <div class="farsi-divider"></div>
+        <div class="farsi-hero-fa">
+          <h1>میز اطلاعات فارسی — جیووایر</h1>
+          <p>سیگنال‌های ایران، ارزیابی استحکام نظام، شاخص‌های بحران اقتصادی، و فعالیت شبکه نیابتی — مستقیم از منابع فارسی‌زبان با ترجمه و رتبه‌بندی اعتبار.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market ticker -->
+  <div id="market-ticker-bar"></div>
+
+  <!-- Disclaimer -->
+  <div class="container" style="margin-top:20px">
+    <div class="farsi-disclaimer">
+      ⚠ Intelligence translations are GeoWire summaries — not verbatim. Persian-language sources have varying reliability. See Source Credibility Tiers below.
+      <div class="farsi-disclaimer-fa">⚠ ترجمه‌های اطلاعاتی خلاصه‌های جیووایر هستند — نه کلمه به کلمه. منابع فارسی‌زبان قابلیت اطمینان متفاوتی دارند. جدول رتبه‌بندی اعتبار منابع را در پایین ببینید.</div>
+    </div>
+  </div>
+
+  <!-- AdSense top -->
+  <div class="container" id="ad-farsi-top"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       REGIME SIGNALS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Regime Signals</h2>
+      <span class="section-subtitle">شاخص‌های رژیم — Latest intelligence from Persian-language sources</span>
+    </div>
+    <div id="signals-mount"></div>
+  </section>
+
+  <!-- AdSense mid -->
+  <div class="container" id="ad-farsi-mid"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       BILINGUAL GLOSSARY
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Key Terms Glossary</h2>
+      <span class="section-subtitle">واژه‌نامه کلیدی — Persian political and military vocabulary</span>
+    </div>
+    <div class="glossary-grid" id="glossary-mount"></div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SOURCE CREDIBILITY TIERS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Source Credibility Tiers</h2>
+      <span class="section-subtitle">رتبه‌بندی اعتبار منابع — How GeoWire rates Persian-language outlets</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="source-tier-table" id="source-tiers-mount">
+        <thead>
+          <tr>
+            <th>Source / منبع</th>
+            <th>Tier / رتبه</th>
+            <th>Bias / گرایش</th>
+            <th>Notes / یادداشت</th>
+          </tr>
+        </thead>
+        <tbody id="source-tiers-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       AI EXPLAIN
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div id="farsi-ai-explain"></div>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="section container">
+    <div class="factor-nav-bar">
+      <a class="factor-nav-link" href="recession.html">📉 Recession Command Center</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="energy.html">⚡ Energy Command Center</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="countries.html">🌍 Countries</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="geopolitical.html">🗺️ Geopolitical</a>
+    </div>
+  </section>
+
+  <!-- Email capture -->
+  <section class="section container" id="farsi-email-capture"></section>
+  <div id="site-footer"></div>
+
+</main>
+
+<script src="content.js"></script>
+<script src="scoring.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  try {
+    UI.init();
+    document.getElementById('site-header').innerHTML =
+      UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
+    document.getElementById('site-nav').innerHTML =
+      UI.renderNav('farsi.html');
+    document.getElementById('market-ticker-bar').innerHTML =
+      UI.renderMarketTicker(GEOWIRE.marketData);
+    document.getElementById('site-footer').innerHTML =
+      UI.renderFooter(GEOWIRE.siteMeta);
+    UI.startClock('farsi-clock');
+
+    const fi = GEOWIRE.farsiIntel || {};
+    const signals   = fi.signals     || [];
+    const glossary  = fi.glossary    || [];
+    const tiers     = fi.sourceTiers || [];
+
+    // ── Severity / category color helpers
+    function sevColor(s) {
+      return { CRITICAL:'#E63946', HIGH:'#EA580C', MEDIUM:'#F59E0B', LOW:'#5FA8D3' }[s] || '#94A3B8';
+    }
+    function catColor(c) {
+      return { POLITICAL:'#8B5CF6', MILITARY:'#E63946', ECONOMIC:'#F59E0B', DIPLOMATIC:'#5FA8D3' }[c] || '#94A3B8';
+    }
+    function confBadge(c) {
+      const map = {
+        confirmed:    { label:'Confirmed',    emoji:'🟢' },
+        multisource:  { label:'Multi-source', emoji:'🟡' },
+        singlesource: { label:'Single-src',   emoji:'🟠' },
+        inferred:     { label:'Inferred',     emoji:'⚫' },
+        disputed:     { label:'Disputed',     emoji:'⚠️' },
+      };
+      const m = map[c] || { label: c, emoji: '?' };
+      return `${m.emoji} ${m.label}`;
+    }
+    function timeAgo(ts) {
+      if (!ts) return '';
+      const diff = Date.now() - new Date(ts).getTime();
+      const h = Math.floor(diff / 3600000);
+      return h < 24 ? `${h}h ago` : `${Math.floor(h/24)}d ago`;
+    }
+
+    // ── Signal cards
+    const signalsHtml = signals.map(s => {
+      const sc = sevColor(s.severity);
+      const cc = catColor(s.category);
+      return `<div class="signal-card">
+        <div class="signal-card-header">
+          <div class="signal-card-titles">
+            <p class="signal-card-title-en">${s.title}</p>
+            <p class="signal-card-title-fa">${s.titleFa}</p>
+          </div>
+          <div class="signal-card-badges">
+            <span class="signal-badge" style="color:${cc};border-color:${cc}40;background:${cc}12">${s.category}</span>
+            <span class="signal-badge" style="color:${sc};border-color:${sc}40;background:${sc}12">⚡ ${s.severity}</span>
+          </div>
+        </div>
+        <div class="signal-card-body">
+          <div class="signal-card-body-en">${s.en}</div>
+          <div class="signal-card-body-fa">${s.fa}</div>
+        </div>
+        <div class="signal-card-footer">
+          <div>
+            <span class="signal-card-source">📰 ${s.fa ? s.source + ' · ' : ''}${s.sourceEn}</span>
+            <span style="font-size:11px;color:var(--text-3);margin-left:8px">${confBadge(s.confidence)}</span>
+            <span style="font-size:11px;color:var(--text-3);margin-left:8px">${timeAgo(s.timestamp)}</span>
+          </div>
+          <div class="signal-card-watch">⚠ Watch: ${s.watchFor}</div>
+        </div>
+      </div>`;
+    }).join('');
+    document.getElementById('signals-mount').innerHTML = signalsHtml || '<p style="color:var(--text-3)">No signals loaded.</p>';
+
+    // ── Glossary
+    const glossaryHtml = glossary.map(g =>
+      `<div class="glossary-card">
+        <p class="glossary-term-fa">${g.term}</p>
+        <p class="glossary-transliteration">${g.transliteration}</p>
+        <p class="glossary-term-en">${g.en}</p>
+        <p class="glossary-definition">${g.definition}</p>
+      </div>`
+    ).join('');
+    document.getElementById('glossary-mount').innerHTML = glossaryHtml;
+
+    // ── Source tiers
+    const tiersHtml = tiers.map(t => {
+      const tierClass = { 'High':'tier-1', 'Medium':'tier-2', 'State':'tier-3' }[t.tierLabel] || 'tier-2';
+      return `<tr>
+        <td>
+          <span class="source-name-fa">${t.name}</span>
+          <span class="source-name-en">${t.nameEn}</span>
+        </td>
+        <td><span class="tier-badge ${tierClass}">${t.tierLabel}</span></td>
+        <td style="color:var(--text-2);font-size:13px">${t.bias}</td>
+        <td style="color:var(--text-3);font-size:12px;max-width:260px">${t.notes}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('source-tiers-tbody').innerHTML = tiersHtml;
+
+    // ── AI Explain
+    const aiEl = document.getElementById('farsi-ai-explain');
+    if (aiEl) {
+      aiEl.innerHTML = UI.renderAIExplainButton(
+        'Iran regime stability and Farsi intelligence desk',
+        'Persian-language signals on IRGC posture, ceasefire negotiations, economic stress, and proxy network activity.',
+        'farsi-ai-explain'
+      );
+    }
+
+    // ── AdSense
+    document.getElementById('ad-farsi-top').innerHTML  = UI.renderAdSlot('farsi-top');
+    document.getElementById('ad-farsi-mid').innerHTML  = UI.renderAdSlot('farsi-mid');
+    document.querySelectorAll('.adsbygoogle').forEach(() => {
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    });
+
+    // ── Email capture
+    document.getElementById('farsi-email-capture').innerHTML = UI.renderEmailCapture();
+    UI.stubEmailCapture();
+
+  } catch(err) {
+    console.error('[GeoWire Farsi] Fatal error:', err);
+  }
+})();
+</script>
+</body>
+</html>

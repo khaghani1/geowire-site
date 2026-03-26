@@ -115,6 +115,7 @@
   };
 
   (async function () {
+    try {
     // ── Init shared shell
     UI.init();
     document.getElementById('site-header').innerHTML =
@@ -128,17 +129,27 @@
     const params = new URLSearchParams(window.location.search);
     const factorKey = params.get('f') || 'ratesLiquidity';
 
-    const rec = GEOWIRE.recessionData;
-    const fd  = GEOWIRE.factorDetails || {};
-    const factorScore  = (rec.factorScores || {})[factorKey];
+    // Defensive: guard rec itself, not just rec.factorScores
+    const rec = GEOWIRE.recessionData   || {};
+    const fd  = GEOWIRE.factorDetails   || {};
+    const factorScore  = (rec.factorScores  || {})[factorKey];
     const factorDetail = fd[factorKey];
 
     if (!factorScore || !factorDetail) {
+      const validKeys = Object.keys(fd).length
+        ? Object.keys(fd)
+        : ['ratesLiquidity','inflation','laborMarket','consumerHealth','corporateCredit',
+           'housing','supplyLogistics','globalSpillovers','marketSignals','outsideBox'];
       document.getElementById('factor-explorer-mount').innerHTML =
-        `<div class="cross-factor-insight">
-           <strong>Factor not found:</strong> "${factorKey}".
-           <a href="macro.html" style="color:#5FA8D3">← Return to Macro Pulse</a>
+        `<div class="cross-factor-insight" style="text-align:left">
+           <strong style="color:#E63946">Factor not found:</strong> <code style="font-family:var(--font-mono);color:#F59E0B">${factorKey || '(none)'}</code>
+           <p style="margin:12px 0 8px;color:var(--text-2)">Valid factor keys:</p>
+           <div style="display:flex;flex-wrap:wrap;gap:8px">
+             ${validKeys.map(k => `<a href="factor.html?f=${k}" style="padding:4px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;color:#5FA8D3;font-family:var(--font-mono);font-size:12px;text-decoration:none">${k}</a>`).join('')}
+           </div>
+           <p style="margin-top:12px"><a href="macro.html" style="color:#5FA8D3">← Return to Macro Pulse</a></p>
          </div>`;
+      document.getElementById('breadcrumb-factor-name').textContent = 'Not found';
       return;
     }
 
@@ -298,6 +309,15 @@
     document.getElementById('factor-email-capture').innerHTML = UI.renderEmailCapture();
     UI.stubEmailCapture();
 
+    } catch(err) {
+      console.error('[GeoWire Factor] Fatal error:', err);
+      document.getElementById('factor-explorer-mount').innerHTML =
+        `<div class="cross-factor-insight" style="color:#E63946">
+           <strong>Error loading factor:</strong> ${err.message}<br>
+           <small style="color:var(--text-3)">Check browser console for details.
+           <a href="macro.html" style="color:#5FA8D3">← Return to Macro Pulse</a></small>
+         </div>`;
+    }
   })();
 </script>
 </body>
