@@ -4,8 +4,8 @@
 const UI = (() => {
 
   // âââ INTERNAL HELPERS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  function _getLang() { return 'en'; }
-  function _t(enText) { return enText; }
+  function _getLang() { return localStorage.getItem('geowire-lang') || 'en'; }
+  function _t(enText, faText) { return _getLang() === 'fa' ? faText : enText; }
   function _warDay() {
     const start = new Date(GEOWIRE.siteMeta.warStartDate);
     return Math.max(1, Math.ceil((Date.now() - start) / 86400000));
@@ -98,166 +98,37 @@ const UI = (() => {
     return `<div class="section-heading"><h2>${_escHtml(title)}</h2>${subtitle ? `<p class="section-subtitle">${_escHtml(subtitle)}</p>` : ''}</div>`;
   }
 
-  function renderLanguageToggle() { return ''; }
-  function setLang() {}
-  function _applyLang() {}
-
-  // âââ EMAIL CAPTURE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  const EMAIL_KEY      = 'geowire-subscribed';      // flag: any email saved
-  const EMAIL_LIST_KEY = 'geowire-email-list';       // list of all emails (pre-Beehiiv)
-  // Beehiiv publication ID â set this when Beehiiv account is live
-  const BEEHIIV_PUB_ID = '';  // e.g. 'pub_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-
-  function isSubscribed() { try { return !!localStorage.getItem(EMAIL_KEY); } catch(_) { return false; } }
-
-  function markSubscribed(email) {
-    try {
-      localStorage.setItem(EMAIL_KEY, email);
-      // Also keep the full list for Beehiiv bulk import later
-      const list = JSON.parse(localStorage.getItem(EMAIL_LIST_KEY) || '[]');
-      if (!list.includes(email)) {
-        list.push(email);
-        localStorage.setItem(EMAIL_LIST_KEY, JSON.stringify(list));
-      }
-    } catch(_) {}
-  }
-
-  async function _submitToBeehiiv(email) {
-    if (!BEEHIIV_PUB_ID) return false;
-    try {
-      const res = await fetch(`https://api.beehiiv.com/v2/publications/${BEEHIIV_PUB_ID}/subscriptions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, reactivate_existing: false, send_welcome_email: true }),
-      });
-      return res.ok;
-    } catch(_) { return false; }
-  }
-
-  function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((email || '').trim());
-  }
-
-  function stubEmailCapture(email) {
-    // Called from page scripts without args â no-op (wiring is in handleEmailSubmit)
-    if (!email) return;
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!re.test(email)) return { success: false, message: 'Please enter a valid email address.' };
-    markSubscribed(email);
-    _submitToBeehiiv(email).catch(() => {});
-    return { success: true, message: "You're on the list. First brief coming tomorrow." };
-  }
-
-  function renderEmailCapture() {
-    if (isSubscribed()) return renderEmailCaptureSuccess();
-    const title = 'Get the GeoWire Daily Brief â Free';
-    const sub   = 'Conflict intelligence, market signals, and analysis â every morning.';
-    const ph    = 'your@email.com';
-    const btn   = 'Subscribe Free';
-    const note  = 'ð­ No spam. Unsubscribe anytime.';
-    return `<div class="email-capture" id="email-capture-block">`;/ ui.js â GeoWire shared rendering functions
-// All HTML generation lives here. Pages call these; no duplicated markup.
-
-const UI = (() => {
-
-  // âââ INTERNAL HELPERS ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  function _getLang() { return 'en'; }
-  function _t(enText) { return enText; }
-  function _warDay() {
-    const start = new Date(GEOWIRE.siteMeta.warStartDate);
-    return Math.max(1, Math.ceil((Date.now() - start) / 86400000));
-  }
-  function _encode(str) { return encodeURIComponent(str); }
-  function _escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function _fmtTime(iso) {
-    try {
-      const diff = Math.floor((Date.now() - new Date(iso)) / 60000);
-      if (diff < 1) return 'just now';
-      if (diff < 60) return `${diff}m ago`;
-      if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
-      return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
-    } catch { return iso || ''; }
-  }
-  function _fmtDate(dateStr) {
-    try { return new Date(dateStr).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }); }
-    catch { return dateStr || ''; }
-  }
-  function _fmtBig(n) {
-    if (n >= 1e12) return (n/1e12).toFixed(3) + 'T';
-    if (n >= 1e9)  return (n/1e9).toFixed(3) + 'B';
-    if (n >= 1e6)  return (n/1e6).toFixed(2) + 'M';
-    return Math.round(n).toLocaleString();
-  }
-
-  // âââ CONFIDENCE BADGE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  function renderConfidenceBadge(level) {
-    const conf = (GEOWIRE.confidenceLevels || {})[level] || GEOWIRE.confidenceLevels.inferred;
-    return `<span class="confidence-badge confidence-${_escHtml(level)}" title="${_escHtml(conf.description)}">${conf.emoji} ${conf.label}</span>`;
-  }
-
-  // âââ SOURCE LABEL ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  function renderSourceLabel(source, freshness) {
-    const time = freshness ? ` <span class="freshness">${_fmtTime(freshness)}</span>` : '';
-    return `<span class="source-label">Source: <strong>${_escHtml(source || 'â')}</strong>${time}</span>`;
-  }
-
-  // âââ LIVE / DEMO BADGE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  function renderLiveBadge(isLive) {
-    return isLive
-      ? `<span class="badge badge-live" aria-label="Live data"><span class="live-pulse"></span>LIVE</span>`
-      : `<span class="badge badge-demo" aria-label="Demo data">DEMO</span>`;
-  }
-
-  // âââ SHARE BUTTONS âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  function renderShareButtons(text, url) {
-    const fullText = `${text} via @Geowire_org ${url} #GeoWire #IranWar`;
-    return `<div class="share-cluster" aria-label="Share this">
-      <a class="share-btn share-x"    href="https://x.com/intent/tweet?text=${_encode(fullText)}" target="_blank" rel="noopener" aria-label="Share on X">ð Share</a>
-      <a class="share-btn share-tg"   href="https://t.me/share/url?url=${_encode(url)}&text=${_encode(text)}" target="_blank" rel="noopener" aria-label="Share on Telegram">â Telegram</a>
-      <a class="share-btn share-wa"   href="https://wa.me/?text=${_encode(fullText)}" target="_blank" rel="noopener" aria-label="Share on WhatsApp">ð± WhatsApp</a>
-      <button class="share-btn share-copy share-btn-copy" type="button" aria-label="Copy link" onclick="UI._copyLink('${_encode(url)}',this)">ð Copy<span class="copy-toast">Copied!</span></button>
+  // âââ LANGUAGE TOGGLE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  function renderLanguageToggle() {
+    const lang = _getLang();
+    return `<div class="lang-toggle" role="group" aria-label="Language selector">
+      <button class="lang-btn ${lang==='en'?'active':''}" onclick="UI.setLang('en')" aria-pressed="${lang==='en'}">EN</button>
+      <button class="lang-btn ${lang==='fa'?'active':''}" onclick="UI.setLang('fa')" aria-pressed="${lang==='fa'}">FA</button>
     </div>`;
   }
 
-  function _copyLink(encodedUrl, btn) {
-    navigator.clipboard.writeText(decodeURIComponent(encodedUrl)).then(() => {
-      const toast = btn.querySelector('.copy-toast');
-      if (toast) { toast.style.opacity='1'; setTimeout(()=>{ toast.style.opacity=''; },1800); }
+  function setLang(lang) {
+    localStorage.setItem('geowire-lang', lang);
+    _applyLang(lang);
+  }
+
+  function _applyLang(lang) {
+    const fa = GEOWIRE.farsiLabels;
+    const isFa = lang === 'fa';
+    const titleEl = document.querySelector('.site-title');
+    if (titleEl) { titleEl.textContent = isFa ? fa.siteTitle : 'GeoWire'; titleEl.dir = isFa ? 'rtl' : 'ltr'; }
+    const headlineEl = document.querySelector('.homepage-headline');
+    if (headlineEl) { headlineEl.textContent = isFa ? fa.homepageHeadline : (headlineEl.dataset.en || headlineEl.textContent); headlineEl.dir = isFa ? 'rtl' : 'ltr'; }
+    document.querySelectorAll('[data-nav-label]').forEach(el => {
+      const k = el.dataset.navLabel;
+      el.textContent = isFa ? (fa.navItems[k] || k) : k;
+      el.dir = isFa ? 'rtl' : 'ltr';
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+      btn.setAttribute('aria-pressed', btn.textContent === lang.toUpperCase());
     });
   }
-
-  // âââ AD SLOT âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  // Renders a manual <ins> only when a real numeric ID is set in adConfig.slots.
-  // Without a valid ID the slot is invisible â Auto Ads fills it automatically.
-  // To configure: set numeric IDs in GEOWIRE.adConfig.slots in content.js.
-  function renderAdSlot(name) {
-    const cfg    = (typeof GEOWIRE !== 'undefined' && GEOWIRE.adConfig) || {};
-    const pub    = cfg.publisherId || 'ca-pub-5068519853957013';
-    const slotId = (cfg.slots || {})[name] || '';
-
-    if (slotId && /^\d{6,12}$/.test(slotId)) {
-      // Valid numeric ad unit ID â render manual placement
-      return `<div class="ad-slot" data-slot="${_escHtml(name)}" aria-label="Advertisement">
-        <span class="ad-label">Advertisement</span>
-        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
-          data-ad-client="${_escHtml(pub)}"
-          data-ad-slot="${_escHtml(slotId)}"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-      </div>`;
-    }
-    // No valid ID â truly invisible; Google Auto Ads handles placement
-    return `<div class="ad-slot ad-slot-auto" data-slot="${_escHtml(name)}" style="height:0;min-height:0;overflow:hidden;padding:0;margin:0;border:none"></div>`;
-  }
-
-  // âââ SECTION HEADING âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
-  function renderSectionHeading(title, subtitle) {
-    return `<div class="section-heading"><h2>${_escHtml(title)}</h2>${subtitle ? `<p class="section-subtitle">${_escHtml(subtitle)}</p>` : ''}</div>`;
-  }
-
-  function renderLanguageToggle() { return ''; }
-  function setLang() {}
-  function _applyLang() {}
 
   // âââ EMAIL CAPTURE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   const EMAIL_KEY      = 'geowire-subscribed';      // flag: any email saved
@@ -307,12 +178,13 @@ const UI = (() => {
 
   function renderEmailCapture() {
     if (isSubscribed()) return renderEmailCaptureSuccess();
-    const title = 'Get the GeoWire Daily Brief â Free';
-    const sub   = 'Conflict intelligence, market signals, and analysis â every morning.';
-    const ph    = 'your@email.com';
-    const btn   = 'Subscribe Free';
-    const note  = 'ð­ No spam. Unsubscribe anytime.';
-    return `<div class="email-capture" id="email-capture-block">`;
+    const isFa = _getLang() === 'fa';
+    const title = isFa ? 'Ø®Ø¨Ø±ÙØ§ÙÙ Ø±ÙØ²Ø§ÙÙ GeoWire â Ø±Ø§ÛÚ¯Ø§Ù' : 'Get the GeoWire Daily Brief â Free';
+    const sub   = isFa ? 'ÙÙØ´ ØªØ¹Ø§Ø±Ø¶Ø Ø³ÛÚ¯ÙØ§ÙâÙØ§Û Ø¨Ø§Ø²Ø§Ø± Ù ØªØ­ÙÛÙ â ÙØ± Ø±ÙØ² ØµØ¨Ø­.' : 'Conflict intelligence, market signals, and analysis â every morning.';
+    const ph    = isFa ? 'Ø§ÛÙÛÙ Ø´ÙØ§' : 'your@email.com';
+    const btn   = isFa ? 'Ø¹Ø¶ÙÛØª' : 'Subscribe Free';
+    const note  = isFa ? 'ð­ Ø¨Ø¯ÙÙ Ø§Ø³Ù¾Ù. ÙØºÙ Ø¹Ø¶ÙÛØª ÙØ± Ø²ÙØ§Ù.' : 'ð­ No spam. Unsubscribe anytime.';
+    return `<div class="email-capture" id="email-capture-block" dir="${isFa?'rtl':'ltr'}">
       <div class="email-capture-inner">
         <div class="email-capture-icon">ð¬</div>
         <h3 class="email-capture-title">${title}</h3>
@@ -640,7 +512,7 @@ const UI = (() => {
     </ul>`;
   }
 
-  // âââ CONTRADICTION FLAG âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // âââ CONTRADICTION FLAG ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderContradictionFlag(item) {
     return `<div class="contradiction-card">
       <div class="contradiction-header">â ï¸ <strong>Disputed</strong> â Conflicting claims</div>
@@ -678,7 +550,7 @@ const UI = (() => {
     });
   }
 
-  // âââ RECESSION GAUGE ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // âââ RECESSION GAUGE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderRecessionGauge(probability, momentum, confidence, lastUpdated) {
     // SVG semicircle gauge: 280px wide, 160px tall arc
     const W = 280, H = 160, cx = W / 2, cy = H - 10, r = 120;
@@ -1193,7 +1065,7 @@ const UI = (() => {
       <div class="commodity-scroll-hint">â Scroll to see all 12 commodities â</div>`;
   }
 
-  // âââ HELIUM DEEP DIVE ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+  // âââ HELIUM DEEP DIVE âââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
   function renderHeliumDeepDive(heliumData) {
     if (!heliumData) return '';
     const { keyFacts, supplyChain } = heliumData;
