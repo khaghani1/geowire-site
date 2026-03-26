@@ -3,12 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="GeoWire Exposure Calculator — Calculate your personal and business exposure to the Iran conflict and Hormuz closure.">
+  <meta name="description" content="GeoWire Personal War Cost Calculator — Find out exactly how much the Iran conflict costs you every month. Gas, food, heating, portfolio, mortgage. Share your result.">
+  <meta property="og:title" content="Personal War Cost Calculator — GeoWire">
+  <meta property="og:description" content="How much is the Iran war costing YOU per month? Gas, groceries, heating, mortgage, portfolio. Calculate and share.">
+  <meta property="og:url" content="https://geowire.org/exposure-calculator.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="google-adsense-account" content="ca-pub-5068519853957013">
-  <title>Exposure Calculator — GeoWire</title>
+  <title>Personal War Cost Calculator — GeoWire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -18,274 +24,602 @@
 
 <main class="page-main">
 
-  <!-- PAGE HERO -->
+  <!-- ═══ HERO ═══ -->
   <section class="page-hero">
     <div class="container">
       <div class="page-hero-inner">
         <div class="page-hero-label">
-          <span class="confidence-badge confidence-inferred">INTERACTIVE</span>
-          <span class="tag tag-economic">CALCULATOR</span>
+          <span class="tag" style="background:#EA580C20;color:#EA580C;border:1px solid #EA580C40">💸 PERSONAL IMPACT</span>
+          <span class="tag" style="background:#5FA8D320;color:#5FA8D3;border:1px solid #5FA8D340">5-STEP CALCULATOR</span>
         </div>
-        <h1 class="page-hero-title">Conflict Exposure Calculator</h1>
-        <p class="page-hero-subtitle">Quantify your personal or business exposure to Operation Epic Fury's economic shockwaves — energy costs, supply chain disruption, and portfolio impact.</p>
+        <h1 class="page-hero-title">Personal War Cost Calculator</h1>
+        <p class="page-hero-subtitle">Answer 5 questions. Get your exact monthly cost from the Iran conflict — gas, groceries, heating, portfolio, mortgage. Then share it.</p>
       </div>
     </div>
   </section>
 
-  <!-- AD SLOT TOP -->
-  <div class="container">
-    <div class="ad-slot ad-slot-top">
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <!-- ═══ WIZARD ═══ -->
+  <section class="section container">
+    <div class="calc-wizard" id="calc-wizard">
+
+      <!-- Progress -->
+      <div class="calc-progress" id="calc-progress">
+        <div class="calc-progress-track">
+          <div class="calc-progress-fill" id="calc-progress-fill" style="width:20%"></div>
+        </div>
+        <div class="calc-progress-dots">
+          <span class="calc-dot active" data-step="1">1</span>
+          <span class="calc-dot" data-step="2">2</span>
+          <span class="calc-dot" data-step="3">3</span>
+          <span class="calc-dot" data-step="4">4</span>
+          <span class="calc-dot" data-step="5">5</span>
+        </div>
+        <div class="calc-progress-label" id="calc-progress-label">Step 1 of 5 — Location</div>
+      </div>
+
+      <!-- ── STEP 1: Location ──────────────────────────────────── -->
+      <div class="calc-step active" id="step-1">
+        <h2 class="calc-step-title">Where do you live?</h2>
+        <p class="calc-step-sub">Gas prices vary by state — we use your local price for accurate calculations.</p>
+
+        <div class="calc-field">
+          <label class="calc-label">Country</label>
+          <div class="calc-option-cards">
+            <div class="calc-option-card selected" data-group="country" data-value="US" onclick="selectCard(this,'country')">🇺🇸 United States</div>
+            <div class="calc-option-card" data-group="country" data-value="UK" onclick="selectCard(this,'country')">🇬🇧 United Kingdom</div>
+            <div class="calc-option-card" data-group="country" data-value="EU" onclick="selectCard(this,'country')">🇪🇺 European Union</div>
+            <div class="calc-option-card" data-group="country" data-value="India" onclick="selectCard(this,'country')">🇮🇳 India</div>
+            <div class="calc-option-card" data-group="country" data-value="Pakistan" onclick="selectCard(this,'country')">🇵🇰 Pakistan</div>
+            <div class="calc-option-card" data-group="country" data-value="Japan" onclick="selectCard(this,'country')">🇯🇵 Japan</div>
+            <div class="calc-option-card" data-group="country" data-value="Other" onclick="selectCard(this,'country')">🌍 Other</div>
+          </div>
+        </div>
+
+        <div class="calc-field" id="state-field">
+          <label class="calc-label" for="state-select">US State</label>
+          <select class="calc-select" id="state-select" onchange="updateStateGasPrice()">
+            <option value="AL">Alabama ($3.72)</option>
+            <option value="AK">Alaska ($4.10)</option>
+            <option value="AZ">Arizona ($3.82)</option>
+            <option value="AR">Arkansas ($3.55)</option>
+            <option value="CA">California ($4.75)</option>
+            <option value="CO">Colorado ($3.70)</option>
+            <option value="CT">Connecticut ($4.30)</option>
+            <option value="DC">Washington D.C. ($4.25)</option>
+            <option value="DE">Delaware ($3.85)</option>
+            <option value="FL">Florida ($3.65)</option>
+            <option value="GA">Georgia ($3.60)</option>
+            <option value="HI">Hawaii ($4.90)</option>
+            <option value="ID">Idaho ($3.78)</option>
+            <option value="IL">Illinois ($4.10)</option>
+            <option value="IN">Indiana ($3.68)</option>
+            <option value="IA">Iowa ($3.65)</option>
+            <option value="KS">Kansas ($3.52)</option>
+            <option value="KY">Kentucky ($3.58)</option>
+            <option value="LA">Louisiana ($3.55)</option>
+            <option value="ME">Maine ($3.95)</option>
+            <option value="MD">Maryland ($3.90)</option>
+            <option value="MA">Massachusetts ($4.20)</option>
+            <option value="MI">Michigan ($3.80)</option>
+            <option value="MN">Minnesota ($3.72)</option>
+            <option value="MS">Mississippi ($3.52)</option>
+            <option value="MO">Missouri ($3.55)</option>
+            <option value="MT">Montana ($3.75)</option>
+            <option value="NE">Nebraska ($3.60)</option>
+            <option value="NV">Nevada ($4.20)</option>
+            <option value="NH">New Hampshire ($3.90)</option>
+            <option value="NJ">New Jersey ($3.95)</option>
+            <option value="NM">New Mexico ($3.60)</option>
+            <option value="NY">New York ($4.20)</option>
+            <option value="NC">North Carolina ($3.62)</option>
+            <option value="ND">North Dakota ($3.68)</option>
+            <option value="OH">Ohio ($3.72)</option>
+            <option value="OK">Oklahoma ($3.48)</option>
+            <option value="OR">Oregon ($4.30)</option>
+            <option value="PA">Pennsylvania ($3.95)</option>
+            <option value="RI">Rhode Island ($4.05)</option>
+            <option value="SC">South Carolina ($3.58)</option>
+            <option value="SD">South Dakota ($3.65)</option>
+            <option value="TN">Tennessee ($3.58)</option>
+            <option value="TX">Texas ($3.45)</option>
+            <option value="UT">Utah ($3.82)</option>
+            <option value="VT">Vermont ($4.00)</option>
+            <option value="VA">Virginia ($3.72)</option>
+            <option value="WA">Washington ($4.50)</option>
+            <option value="WV">West Virginia ($3.72)</option>
+            <option value="WI">Wisconsin ($3.68)</option>
+            <option value="WY">Wyoming ($3.60)</option>
+          </select>
+          <div class="calc-state-info">
+            Current avg: <strong id="state-gas-current">$3.72/gal</strong>
+            &nbsp;|&nbsp; Pre-war: <strong>$2.98/gal</strong>
+            &nbsp;|&nbsp; War premium: <strong id="state-gas-premium" style="color:#E63946">+$0.74/gal</strong>
+          </div>
+        </div>
+
+        <div class="calc-nav">
+          <button class="calc-btn-next" onclick="nextStep(1)">Next: Transportation →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2: Transportation ─────────────────────────────── -->
+      <div class="calc-step" id="step-2">
+        <h2 class="calc-step-title">How do you get around?</h2>
+        <p class="calc-step-sub">Your vehicle type and commute distance determine your gas cost exposure.</p>
+
+        <div class="calc-field">
+          <label class="calc-label">Vehicle type</label>
+          <div class="calc-option-cards">
+            <div class="calc-option-card" data-group="vehicle" data-value="sedan" onclick="selectCard(this,'vehicle');toggleCommute(true)">
+              🚗 Sedan <span class="calc-card-sub">~25 MPG</span>
+            </div>
+            <div class="calc-option-card" data-group="vehicle" data-value="suv" onclick="selectCard(this,'vehicle');toggleCommute(true)">
+              🚙 SUV <span class="calc-card-sub">~18 MPG</span>
+            </div>
+            <div class="calc-option-card" data-group="vehicle" data-value="truck" onclick="selectCard(this,'vehicle');toggleCommute(true)">
+              🛻 Truck <span class="calc-card-sub">~15 MPG</span>
+            </div>
+            <div class="calc-option-card" data-group="vehicle" data-value="ev" onclick="selectCard(this,'vehicle');toggleCommute(false)">
+              ⚡ EV <span class="calc-card-sub">No gas costs</span>
+            </div>
+            <div class="calc-option-card" data-group="vehicle" data-value="none" onclick="selectCard(this,'vehicle');toggleCommute(false)">
+              🚇 No car <span class="calc-card-sub">Transit / WFH</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-field" id="commute-field" style="display:none">
+          <label class="calc-label">Daily round-trip commute: <strong id="commute-label">30 miles</strong></label>
+          <input type="range" class="calc-slider" id="commute-slider" min="0" max="100" step="5" value="30"
+            oninput="document.getElementById('commute-label').textContent=this.value+' miles'">
+          <div class="calc-slider-ends"><span>0 miles</span><span>100 miles</span></div>
+        </div>
+
+        <div class="calc-nav">
+          <button class="calc-btn-back" onclick="prevStep(2)">← Back</button>
+          <button class="calc-btn-next" onclick="nextStep(2)">Next: Home →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 3: Home ──────────────────────────────────────── -->
+      <div class="calc-step" id="step-3">
+        <h2 class="calc-step-title">About your home</h2>
+        <p class="calc-step-sub">Heating fuel and mortgage type each add to your monthly war cost.</p>
+
+        <div class="calc-field">
+          <label class="calc-label">Primary heating source</label>
+          <div class="calc-option-cards">
+            <div class="calc-option-card" data-group="heating" data-value="gas" onclick="selectCard(this,'heating')">
+              🔥 Natural Gas <span class="calc-card-sub">+$45/mo war premium</span>
+            </div>
+            <div class="calc-option-card" data-group="heating" data-value="electric" onclick="selectCard(this,'heating')">
+              ⚡ Electric <span class="calc-card-sub">+$15/mo indirect</span>
+            </div>
+            <div class="calc-option-card" data-group="heating" data-value="oil" onclick="selectCard(this,'heating')">
+              🛢 Heating Oil <span class="calc-card-sub">+$60/mo tracks crude</span>
+            </div>
+            <div class="calc-option-card" data-group="heating" data-value="none" onclick="selectCard(this,'heating')">
+              ☀️ Warm climate <span class="calc-card-sub">No heating needed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-field">
+          <label class="calc-label">Mortgage / housing situation</label>
+          <div class="calc-option-cards">
+            <div class="calc-option-card" data-group="mortgage" data-value="fixed" onclick="selectCard(this,'mortgage')">
+              🔒 Fixed rate <span class="calc-card-sub">Locked in — $0 impact</span>
+            </div>
+            <div class="calc-option-card" data-group="mortgage" data-value="adjustable" onclick="selectCard(this,'mortgage')">
+              📈 Adjustable rate <span class="calc-card-sub">+$60/mo from rate rise</span>
+            </div>
+            <div class="calc-option-card" data-group="mortgage" data-value="renting" onclick="selectCard(this,'mortgage')">
+              🏘 Renting <span class="calc-card-sub">Indirect risk only</span>
+            </div>
+            <div class="calc-option-card" data-group="mortgage" data-value="none" onclick="selectCard(this,'mortgage')">
+              🏠 Own outright <span class="calc-card-sub">No mortgage</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-nav">
+          <button class="calc-btn-back" onclick="prevStep(3)">← Back</button>
+          <button class="calc-btn-next" onclick="nextStep(3)">Next: Finances →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 4: Finances ──────────────────────────────────── -->
+      <div class="calc-step" id="step-4">
+        <h2 class="calc-step-title">Your financial exposure</h2>
+        <p class="calc-step-sub">Market volatility hits portfolios differently depending on size and allocation.</p>
+
+        <div class="calc-field">
+          <label class="calc-label">Approximate portfolio value: <strong id="portfolio-label">$50,000</strong></label>
+          <input type="range" class="calc-slider" id="portfolio-slider" min="0" max="6" step="1" value="3"
+            oninput="updatePortfolioLabel(this.value)">
+          <div class="calc-slider-ends"><span>$0</span><span>$500K+</span></div>
+          <div class="calc-slider-steps">
+            <span>$0</span><span>$10K</span><span>$25K</span><span>$50K</span><span>$100K</span><span>$250K</span><span>$500K+</span>
+          </div>
+        </div>
+
+        <div class="calc-field">
+          <label class="calc-label">Portfolio allocation</label>
+          <div class="calc-option-cards">
+            <div class="calc-option-card" data-group="portfolio" data-value="stocks" onclick="selectCard(this,'portfolio')">
+              📈 Mostly stocks <span class="calc-card-sub">Broad market exposure</span>
+            </div>
+            <div class="calc-option-card" data-group="portfolio" data-value="balanced" onclick="selectCard(this,'portfolio')">
+              ⚖️ Balanced <span class="calc-card-sub">~60/40 allocation</span>
+            </div>
+            <div class="calc-option-card" data-group="portfolio" data-value="bonds" onclick="selectCard(this,'portfolio')">
+              🏛 Mostly bonds <span class="calc-card-sub">Rate risk moderate</span>
+            </div>
+            <div class="calc-option-card" data-group="portfolio" data-value="crypto" onclick="selectCard(this,'portfolio')">
+              ₿ Crypto heavy <span class="calc-card-sub">BTC -8% since war start</span>
+            </div>
+            <div class="calc-option-card" data-group="portfolio" data-value="none" onclick="selectCard(this,'portfolio')">
+              💰 No investments <span class="calc-card-sub">Cash / savings only</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-nav">
+          <button class="calc-btn-back" onclick="prevStep(4)">← Back</button>
+          <button class="calc-btn-next" onclick="nextStep(4)">Next: Food →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 5: Food ──────────────────────────────────────── -->
+      <div class="calc-step" id="step-5">
+        <h2 class="calc-step-title">Your grocery exposure</h2>
+        <p class="calc-step-sub">Fertilizer shortages and supply chain disruptions are driving food prices up ~7%.</p>
+
+        <div class="calc-field">
+          <label class="calc-label">Monthly grocery spend: <strong id="grocery-label">$600/month</strong></label>
+          <input type="range" class="calc-slider" id="grocery-slider" min="200" max="1500" step="50" value="600"
+            oninput="document.getElementById('grocery-label').textContent='$'+this.value+'/month'">
+          <div class="calc-slider-ends"><span>$200/mo</span><span>$1,500/mo</span></div>
+        </div>
+
+        <div class="calc-field">
+          <label class="calc-label">Diet type</label>
+          <div class="calc-option-cards">
+            <div class="calc-option-card" data-group="diet" data-value="standard" onclick="selectCard(this,'diet')">
+              🍽 Standard <span class="calc-card-sub">Mixed diet — 1× impact</span>
+            </div>
+            <div class="calc-option-card" data-group="diet" data-value="meat" onclick="selectCard(this,'diet')">
+              🥩 Meat-heavy <span class="calc-card-sub">Higher grain/fertilizer — 1.3×</span>
+            </div>
+            <div class="calc-option-card" data-group="diet" data-value="plant" onclick="selectCard(this,'diet')">
+              🥗 Plant-based <span class="calc-card-sub">Lower exposure — 0.7×</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-nav">
+          <button class="calc-btn-back" onclick="prevStep(5)">← Back</button>
+          <button class="calc-btn-calculate" onclick="calculateImpact()">💸 Calculate My Impact</button>
+        </div>
+      </div>
+
+      <!-- ── RESULTS ───────────────────────────────────────────── -->
+      <div class="calc-step" id="step-results">
+        <div class="calc-results-hero">
+          <div class="calc-results-label">The Iran war is costing you approximately</div>
+          <div class="calc-results-total" id="result-total-display">$0</div>
+          <div class="calc-results-period">per month</div>
+          <div class="calc-results-context" id="result-context"></div>
+        </div>
+
+        <div class="calc-breakdown">
+          <div class="calc-breakdown-title">Monthly breakdown</div>
+          <div class="calc-breakdown-grid" id="breakdown-grid"></div>
+        </div>
+
+        <div class="calc-defense-note" id="calc-defense-note" style="display:none">
+          💡 <strong>Defense/Energy note:</strong> If your portfolio includes defense stocks (RTX, LMT, NOC) or energy (XOM, CVX), you may actually be ahead — those sectors are up 10–18% since war start.
+        </div>
+
+        <div class="calc-methodology">
+          Estimates based on EIA gas prices, BLS import price data, FRED mortgage rates, and Bloomberg market data.
+          National gas avg $3.88/gal vs. pre-war $2.98. Food inflation +7% (BLS import prices). Mortgage impact assumes $2,000/mo base ARM payment. Individual results vary.
+        </div>
+
+        <div class="calc-share-section">
+          <div class="calc-share-title">Share your result</div>
+          <div class="calc-share-buttons">
+            <button class="calc-share-btn share-x"        onclick="shareOnX()">Share on 𝕏</button>
+            <button class="calc-share-btn share-whatsapp" onclick="shareOnWhatsApp()">WhatsApp</button>
+            <button class="calc-share-btn share-copy"     onclick="copyLink()">Copy Link</button>
+            <button class="calc-share-btn share-download" onclick="downloadCard()">⬇ Download Card</button>
+          </div>
+          <div class="calc-share-generating" id="share-generating" style="display:none">⏳ Generating share card…</div>
+        </div>
+
+        <div class="calc-nav" style="justify-content:center;margin-top:24px">
+          <button class="calc-btn-back" onclick="resetWizard()">↺ Start Over</button>
+        </div>
+      </div>
+
+    </div><!-- /.calc-wizard -->
+  </section>
+
+  <!-- ═══ SHARE CARD (hidden — captured by html2canvas) ═══ -->
+  <div class="calc-share-card" id="share-card" aria-hidden="true">
+    <div class="sc-header">
+      <span class="sc-logo">GeoWire</span>
+      <span class="sc-domain">geowire.org</span>
     </div>
+    <div class="sc-body">
+      <div class="sc-eyebrow">The Iran war costs me</div>
+      <div class="sc-total" id="sc-total">$0</div>
+      <div class="sc-period">per month</div>
+    </div>
+    <div class="sc-breakdown" id="sc-breakdown"></div>
+    <div class="sc-footer">Calculate yours: <strong>geowire.org/exposure-calculator.html</strong> · #IranWar #GeoWire</div>
   </div>
 
-  <!-- CALCULATOR FORM -->
-  <section class="section">
-    <div class="container">
-      <div class="calc-layout">
-
-        <!-- INPUT PANEL -->
-        <div class="calc-panel calc-input-panel">
-          <h2 class="calc-panel-title">Your Profile</h2>
-
-          <div class="calc-section">
-            <h3 class="calc-section-title">Location &amp; Transport</h3>
-            <div class="calc-field">
-              <label class="calc-label" for="location">Country / Region</label>
-              <select class="calc-select" id="location">
-                <option value="us">United States</option>
-                <option value="europe">Europe (EU)</option>
-                <option value="japan">Japan / South Korea</option>
-                <option value="china">China</option>
-                <option value="india">India</option>
-                <option value="mideast">Middle East</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div class="calc-field">
-              <label class="calc-label" for="miles-driven">Miles Driven per Month</label>
-              <input class="calc-input" type="number" id="miles-driven" value="1000" min="0" max="10000">
-            </div>
-            <div class="calc-field">
-              <label class="calc-label" for="mpg">Vehicle MPG</label>
-              <input class="calc-input" type="number" id="mpg" value="28" min="5" max="150">
-            </div>
-          </div>
-
-          <div class="calc-section">
-            <h3 class="calc-section-title">Home Energy</h3>
-            <div class="calc-field">
-              <label class="calc-label" for="heating-fuel">Primary Heating Fuel</label>
-              <select class="calc-select" id="heating-fuel">
-                <option value="gas">Natural Gas</option>
-                <option value="electric">Electric (mixed)</option>
-                <option value="oil">Heating Oil</option>
-                <option value="renewables">Solar / Renewables</option>
-              </select>
-            </div>
-            <div class="calc-field">
-              <label class="calc-label" for="monthly-energy">Monthly Energy Bill ($)</label>
-              <input class="calc-input" type="number" id="monthly-energy" value="180" min="0" max="2000">
-            </div>
-          </div>
-
-          <div class="calc-section">
-            <h3 class="calc-section-title">Portfolio Exposure</h3>
-            <div class="calc-field">
-              <label class="calc-label" for="portfolio-size">Portfolio Size ($)</label>
-              <input class="calc-input" type="number" id="portfolio-size" value="50000" min="0">
-            </div>
-            <div class="calc-field">
-              <label class="calc-label" for="equity-pct">% in Equities</label>
-              <input class="calc-input" type="number" id="equity-pct" value="70" min="0" max="100">
-            </div>
-            <div class="calc-field">
-              <label class="calc-label" for="energy-pct">% in Energy Sector</label>
-              <input class="calc-input" type="number" id="energy-pct" value="10" min="0" max="100">
-            </div>
-          </div>
-
-          <div class="calc-section">
-            <h3 class="calc-section-title">Business (Optional)</h3>
-            <div class="calc-field">
-              <label class="calc-label" for="biz-sector">Business Sector</label>
-              <select class="calc-select" id="biz-sector">
-                <option value="none">None / Not Applicable</option>
-                <option value="manufacturing">Manufacturing</option>
-                <option value="logistics">Logistics / Shipping</option>
-                <option value="retail">Retail / Consumer</option>
-                <option value="agriculture">Agriculture</option>
-                <option value="tech">Technology</option>
-                <option value="energy">Energy</option>
-                <option value="finance">Finance</option>
-                <option value="healthcare">Healthcare</option>
-              </select>
-            </div>
-            <div class="calc-field">
-              <label class="calc-label" for="supply-chain-exposure">Supply Chain Middle East Dependence (%)</label>
-              <input class="calc-input" type="number" id="supply-chain-exposure" value="0" min="0" max="100">
-            </div>
-          </div>
-
-          <button class="btn btn-primary btn-full" id="calc-btn" onclick="calculateExposure()">Calculate My Exposure →</button>
-        </div>
-
-        <!-- RESULTS PANEL -->
-        <div class="calc-panel calc-results-panel" id="calc-results">
-          <div class="calc-results-placeholder">
-            <div class="calc-placeholder-icon">⚡</div>
-            <p>Fill in your profile and click <strong>Calculate</strong> to see your conflict exposure score and estimated monthly cost impact.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- AD SLOT MID -->
-  <div class="container">
-    <div class="ad-slot ad-slot-mid">
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    </div>
-  </div>
-
-  <!-- EXPOSURE FACTORS -->
-  <section class="section section-dark">
-    <div class="container">
-      <h2 class="section-title">How Exposure is Calculated</h2>
-      <div class="exposure-factors" id="exposure-factors">
-        <!-- populated by JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- EMAIL CAPTURE -->
-  <section class="section">
-    <div class="container">
-      <div id="email-capture-container"></div>
-    </div>
-  </section>
+  <div class="section container" id="calc-email-capture"></div>
+  <div id="site-footer"></div>
 
 </main>
 
-<div id="site-footer"></div>
-
 <script src="content.js"></script>
+<script src="scoring.js"></script>
 <script src="ui.js"></script>
 <script src="api.js"></script>
 <script>
-(() => {
-  document.getElementById('site-header').innerHTML = UI.renderHeader();
-  document.getElementById('site-nav').innerHTML    = UI.renderNav('exposure-calculator.html');
-  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+// ── Data ──────────────────────────────────────────────────────────────────────
+const STATE_GAS = {
+  AL:3.72, AK:4.10, AZ:3.82, AR:3.55, CA:4.75, CO:3.70, CT:4.30, DC:4.25,
+  DE:3.85, FL:3.65, GA:3.60, HI:4.90, ID:3.78, IL:4.10, IN:3.68, IA:3.65,
+  KS:3.52, KY:3.58, LA:3.55, ME:3.95, MD:3.90, MA:4.20, MI:3.80, MN:3.72,
+  MS:3.52, MO:3.55, MT:3.75, NE:3.60, NV:4.20, NH:3.90, NJ:3.95, NM:3.60,
+  NY:4.20, NC:3.62, ND:3.68, OH:3.72, OK:3.48, OR:4.30, PA:3.95, RI:4.05,
+  SC:3.58, SD:3.65, TN:3.58, TX:3.45, UT:3.82, VT:4.00, VA:3.72, WA:4.50,
+  WV:3.72, WI:3.68, WY:3.60,
+};
+const PRE_WAR_GAS   = 2.98;
+const PORTFOLIO_MAP = [0, 10000, 25000, 50000, 100000, 250000, 500000];
+const STEP_LABELS   = ['Location','Transportation','Home','Finances','Food'];
 
-  // Exposure factors
-  const factorsEl = document.getElementById('exposure-factors');
-  const factors = (GEOWIRE.exposureFactors && GEOWIRE.exposureFactors.length)
-    ? GEOWIRE.exposureFactors
-    : [
-      { label: 'Energy Cost Shock', weight: '30%', desc: 'Direct fuel and utility cost increases from oil/gas price surge.' },
-      { label: 'Portfolio Volatility', weight: '25%', desc: 'S&P drawdown, sector concentration in energy/defense vs. tech.' },
-      { label: 'Supply Chain Disruption', weight: '20%', desc: 'Business input cost increases from rerouted shipping and scarcity.' },
-      { label: 'Geographic Risk Premium', weight: '15%', desc: 'Regional proximity to conflict zone and trade route dependency.' },
-      { label: 'Consumer Price Inflation', weight: '10%', desc: 'Downstream food, goods, and services price increases from energy pass-through.' },
-    ];
+let results     = {};
+let _portfolioI = 3; // slider index
 
-  if (factorsEl) {
-    factorsEl.innerHTML = `<div class="factors-grid">${factors.map(f => `
-      <div class="factor-card">
-        <div class="factor-header"><span class="factor-label">${f.label}</span><span class="factor-weight">${f.weight}</span></div>
-        <p class="factor-desc">${f.desc}</p>
-      </div>`).join('')}</div>`;
-  }
+// ── Wizard navigation ─────────────────────────────────────────────────────────
+function showStep(n) {
+  document.querySelectorAll('.calc-step').forEach(s => s.classList.remove('active'));
+  const id = n === 'results' ? 'step-results' : 'step-' + n;
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
 
-  // Email capture
-  const emailEl = document.getElementById('email-capture-container');
-  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
-
-  UI.init();
-  (window.adsbygoogle || []).push({});
-  (window.adsbygoogle || []).push({});
-})();
-
-function calculateExposure() {
-  const location    = document.getElementById('location').value;
-  const miles       = parseFloat(document.getElementById('miles-driven').value) || 0;
-  const mpg         = parseFloat(document.getElementById('mpg').value) || 28;
-  const heatingFuel = document.getElementById('heating-fuel').value;
-  const energyBill  = parseFloat(document.getElementById('monthly-energy').value) || 0;
-  const portfolio   = parseFloat(document.getElementById('portfolio-size').value) || 0;
-  const equityPct   = parseFloat(document.getElementById('equity-pct').value) / 100 || 0.7;
-  const energyPct   = parseFloat(document.getElementById('energy-pct').value) / 100 || 0.1;
-  const bizSector   = document.getElementById('biz-sector').value;
-  const scExposure  = parseFloat(document.getElementById('supply-chain-exposure').value) / 100 || 0;
-
-  // Location multipliers
-  const locationMultipliers = { us: 1.0, europe: 1.4, japan: 1.8, china: 1.3, india: 1.5, mideast: 2.2, other: 1.2 };
-  const locMult = locationMultipliers[location] || 1.0;
-
-  // Fuel cost increase (oil up ~34%)
-  const gallonsPerMonth = miles / mpg;
-  const preConflictGas = 3.30;
-  const currentGas = 4.89;
-  const fuelMonthlyIncrease = gallonsPerMonth * (currentGas - preConflictGas);
-
-  // Energy bill increase
-  const energyMultipliers = { gas: 0.32, electric: 0.12, oil: 0.38, renewables: 0.04 };
-  const energyIncrease = energyBill * (energyMultipliers[heatingFuel] || 0.15) * locMult;
-
-  // Portfolio impact
-  const equityPortfolio = portfolio * equityPct;
-  const sp500Down = -0.097; // -9.7%
-  const energySectorUp = 0.41; // +41%
-  const generalPortfolioImpact = equityPortfolio * (1 - energyPct) * sp500Down;
-  const energyPortfolioImpact  = equityPortfolio * energyPct * energySectorUp;
-  const netPortfolioImpact = generalPortfolioImpact + energyPortfolioImpact;
-
-  // Business impact
-  const bizMultipliers = { none: 0, manufacturing: 0.18, logistics: 0.28, retail: 0.08, agriculture: 0.12, tech: 0.04, energy: -0.15, finance: 0.06, healthcare: 0.03 };
-  const bizImpactPct = (bizMultipliers[bizSector] || 0) + (scExposure * 0.22 * locMult);
-
-  // Exposure score (0–100)
-  const fuelScore      = Math.min((fuelMonthlyIncrease / 200) * 20, 20);
-  const energyScore    = Math.min((energyIncrease / 100) * 15, 15);
-  const portfolioScore = Math.min(Math.abs(netPortfolioImpact) / 5000 * 25, 25);
-  const locationScore  = (locMult - 1) * 20;
-  const bizScore       = Math.min(bizImpactPct * 100, 20);
-  const totalScore     = Math.min(Math.round(fuelScore + energyScore + portfolioScore + locationScore + bizScore), 100);
-
-  const scoreLevel = totalScore < 25 ? { label: 'LOW', cls: 'score-low' }
-    : totalScore < 50 ? { label: 'MODERATE', cls: 'score-moderate' }
-    : totalScore < 75 ? { label: 'HIGH', cls: 'score-high' }
-    : { label: 'CRITICAL', cls: 'score-critical' };
-
-  const totalMonthlyCost = fuelMonthlyIncrease + energyIncrease;
-
-  document.getElementById('calc-results').innerHTML = `
-    <div class="results-inner">
-      <div class="results-score-wrap">
-        <div class="results-score ${scoreLevel.cls}">${totalScore}</div>
-        <div class="results-score-label">Exposure Score: <strong>${scoreLevel.label}</strong></div>
-      </div>
-      <div class="results-breakdown">
-        <h3 class="results-title">Monthly Cost Impact</h3>
-        <div class="results-line"><span>Fuel costs</span><span class="results-val negative">+$${fuelMonthlyIncrease.toFixed(0)}/mo</span></div>
-        <div class="results-line"><span>Energy bills</span><span class="results-val negative">+$${energyIncrease.toFixed(0)}/mo</span></div>
-        <div class="results-line results-total"><span>Total monthly increase</span><span class="results-val negative">+$${totalMonthlyCost.toFixed(0)}/mo</span></div>
-      </div>
-      <div class="results-breakdown">
-        <h3 class="results-title">Portfolio Impact (Est.)</h3>
-        <div class="results-line"><span>Equity drawdown</span><span class="results-val ${generalPortfolioImpact < 0 ? 'negative' : 'positive'}">$${Math.abs(generalPortfolioImpact).toFixed(0)} ${generalPortfolioImpact < 0 ? 'loss' : 'gain'}</span></div>
-        <div class="results-line"><span>Energy sector gain</span><span class="results-val positive">+$${energyPortfolioImpact.toFixed(0)}</span></div>
-        <div class="results-line results-total"><span>Net portfolio change</span><span class="results-val ${netPortfolioImpact >= 0 ? 'positive' : 'negative'}">${netPortfolioImpact >= 0 ? '+' : '-'}$${Math.abs(netPortfolioImpact).toFixed(0)}</span></div>
-      </div>
-      ${bizSector !== 'none' ? `<div class="results-breakdown">
-        <h3 class="results-title">Business Impact</h3>
-        <div class="results-line"><span>Input cost increase</span><span class="results-val ${bizImpactPct > 0 ? 'negative' : 'positive'}">${bizImpactPct > 0 ? '+' : ''}${(bizImpactPct * 100).toFixed(1)}% estimated</span></div>
-      </div>` : ''}
-      <div class="results-disclaimer">These are modeled estimates based on current market data. Not financial advice.</div>
-    </div>`;
+  const prog = document.getElementById('calc-progress');
+  if (n === 'results') { prog.style.display = 'none'; return; }
+  prog.style.display = 'block';
+  document.getElementById('calc-progress-fill').style.width = (n / 5 * 100) + '%';
+  document.querySelectorAll('.calc-dot').forEach(d => {
+    const ds = +d.dataset.step;
+    d.classList.toggle('active', ds === n);
+    d.classList.toggle('done',   ds < n);
+  });
+  document.getElementById('calc-progress-label').textContent =
+    'Step ' + n + ' of 5 — ' + STEP_LABELS[n - 1];
 }
+
+function nextStep(from) {
+  if (from === 2 && !sel('vehicle')) { alert('Please select a vehicle type.'); return; }
+  if (from === 3 && (!sel('heating') || !sel('mortgage'))) { alert('Please select heating and mortgage.'); return; }
+  if (from === 4 && !sel('portfolio')) { alert('Please select a portfolio type.'); return; }
+  if (from < 5) showStep(from + 1);
+}
+function prevStep(from) { if (from > 1) showStep(from - 1); }
+
+// ── Selection helpers ─────────────────────────────────────────────────────────
+function sel(group) {
+  const el = document.querySelector('[data-group="' + group + '"].selected');
+  return el ? el.dataset.value : null;
+}
+function selectCard(el, group) {
+  document.querySelectorAll('[data-group="' + group + '"]').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  if (group === 'country')
+    document.getElementById('state-field').style.display = el.dataset.value === 'US' ? 'block' : 'none';
+}
+function toggleCommute(show) {
+  document.getElementById('commute-field').style.display = show ? 'block' : 'none';
+}
+function updateStateGasPrice() {
+  const state   = document.getElementById('state-select').value;
+  const price   = STATE_GAS[state] || 3.88;
+  const premium = price - PRE_WAR_GAS;
+  document.getElementById('state-gas-current').textContent  = '$' + price.toFixed(2) + '/gal';
+  document.getElementById('state-gas-premium').textContent  = '+$' + premium.toFixed(2) + '/gal';
+}
+function updatePortfolioLabel(v) {
+  _portfolioI = +v;
+  const labels = ['$0','$10,000','$25,000','$50,000','$100,000','$250,000','$500,000+'];
+  document.getElementById('portfolio-label').textContent = labels[v] || '$0';
+}
+
+// ── Calculation ───────────────────────────────────────────────────────────────
+function calculateImpact() {
+  if (!sel('diet')) { alert('Please select a diet type.'); return; }
+
+  const country    = sel('country')   || 'US';
+  const vehicle    = sel('vehicle')   || 'none';
+  const heating    = sel('heating')   || 'none';
+  const mortgage   = sel('mortgage')  || 'none';
+  const portfolioT = sel('portfolio') || 'none';
+  const diet       = sel('diet')      || 'standard';
+
+  const stateCode  = document.getElementById('state-select').value;
+  const currentGas = country === 'US' ? (STATE_GAS[stateCode] || 3.88) : 3.88;
+  const gasDelta   = currentGas - PRE_WAR_GAS;
+
+  // Gas
+  const mpgMap = { sedan:25, suv:18, truck:15, ev:0, none:0 };
+  const mpg    = mpgMap[vehicle] || 0;
+  const commute = +(document.getElementById('commute-slider').value) || 30;
+  const gasImpact = mpg > 0 ? Math.round((commute / mpg) * gasDelta * 22) : 0;
+
+  // Grocery
+  const grocery       = +(document.getElementById('grocery-slider').value) || 600;
+  const dietMult      = { standard:1.0, meat:1.3, plant:0.7 }[diet] || 1.0;
+  const groceryImpact = Math.round(grocery * 0.07 * dietMult);
+
+  // Heating
+  const heatingImpact = { gas:45, electric:15, oil:60, none:0 }[heating] || 0;
+
+  // Portfolio
+  const portValue  = PORTFOLIO_MAP[_portfolioI] || 0;
+  const portRates  = { stocks:-0.045, balanced:-0.025, bonds:-0.01, crypto:-0.08, none:0 };
+  const portImpact = Math.round(portValue * (portRates[portfolioT] || 0) / 12);
+
+  // Mortgage
+  const mortgageImpact = mortgage === 'adjustable' ? 60 : 0;
+
+  const total = gasImpact + groceryImpact + heatingImpact + portImpact + mortgageImpact;
+
+  results = { gasImpact, groceryImpact, heatingImpact, portImpact, mortgageImpact, total,
+              portValue, portfolioT, vehicle, heating, mortgage, diet };
+
+  displayResults(results);
+  showStep('results');
+}
+
+// ── Display ───────────────────────────────────────────────────────────────────
+function displayResults(r) {
+  animateCounter('result-total-display', r.total, 1500);
+
+  const absTotal = Math.abs(r.total);
+  document.getElementById('result-context').textContent = r.total > 0
+    ? 'That\'s about ' + Math.round(absTotal / 15) + ' streaming subscriptions — or ' + Math.round(absTotal / 50) + ' tanks of gas — every month.'
+    : 'Your direct cost exposure is minimal. However, everyone pays through broader inflation.';
+
+  const items = [
+    { label:'⛽ Gas & transportation',  val: r.gasImpact,      note: r.vehicle === 'ev' ? 'EV — no gas cost' : r.vehicle === 'none' ? 'No vehicle' : '' },
+    { label:'🛒 Groceries & food',       val: r.groceryImpact,  note: '+7% food inflation from fertilizer disruption' },
+    { label:'🏠 Heating & utilities',    val: r.heatingImpact,  note: r.heating === 'gas' ? 'Natural gas nearly doubled' : r.heating === 'oil' ? 'Heating oil tracks crude' : '' },
+    { label:'📊 Portfolio (monthly)',    val: r.portImpact,     note: r.portValue > 0 ? 'Annualized war market impact ÷ 12' : 'No investment exposure' },
+    { label:'🏡 Mortgage / housing',     val: r.mortgageImpact, note: r.mortgage === 'fixed' ? 'Fixed rate — protected from rate rises' : r.mortgage === 'renting' ? 'No direct mortgage impact' : '' },
+  ];
+
+  document.getElementById('breakdown-grid').innerHTML = items.map(it => {
+    const color = it.val < 0 ? '#2D6A4F' : '#E63946';
+    const sign  = it.val < 0 ? '−' : '+';
+    return `<div class="calc-breakdown-item">
+      <div class="calc-breakdown-label">${it.label}</div>
+      <div class="calc-breakdown-value" style="color:${color}">${sign}$${Math.abs(it.val)}/mo</div>
+      ${it.note ? '<div class="calc-breakdown-note">' + it.note + '</div>' : ''}
+    </div>`;
+  }).join('');
+
+  document.getElementById('calc-defense-note').style.display =
+    r.portValue >= 50000 ? 'block' : 'none';
+
+  // Build share card
+  document.getElementById('sc-total').textContent =
+    (r.total < 0 ? '−$' : '$') + Math.abs(r.total).toLocaleString();
+
+  const scRows = [
+    ['⛽ Gas', r.gasImpact], ['🛒 Food', r.groceryImpact],
+    ['🏠 Heat', r.heatingImpact], ['📊 Port', r.portImpact],
+    ['🏡 Mortgage', r.mortgageImpact],
+  ].filter(([,v]) => v !== 0);
+
+  document.getElementById('sc-breakdown').innerHTML = scRows.map(([lbl, val]) => {
+    const c = val < 0 ? '#2D6A4F' : '#E63946';
+    const s = val < 0 ? '−$' : '+$';
+    return `<div class="sc-row"><span class="sc-row-label">${lbl}</span><span class="sc-row-val" style="color:${c}">${s}${Math.abs(val)}</span></div>`;
+  }).join('');
+}
+
+function animateCounter(id, target, ms) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const abs   = Math.abs(target);
+  const sign  = target < 0 ? '−$' : '$';
+  const start = performance.now();
+  (function tick(now) {
+    const t = Math.min((now - start) / ms, 1);
+    const e = 1 - Math.pow(1 - t, 3);
+    el.textContent = sign + Math.round(e * abs).toLocaleString();
+    if (t < 1) requestAnimationFrame(tick);
+  })(start);
+}
+
+// ── Share ─────────────────────────────────────────────────────────────────────
+function shareOnX() {
+  const t = results.total || 0;
+  const text = encodeURIComponent(
+    'The Iran war is costing me $' + Math.abs(t).toLocaleString() + '/month.\n' +
+    '⛽ Gas +$' + (results.gasImpact||0) + ' | 🛒 Food +$' + (results.groceryImpact||0) +
+    ' | 📊 Portfolio $' + (results.portImpact||0) + '\n' +
+    'Calculate yours: geowire.org/exposure-calculator.html\n#IranWar #GeoWire'
+  );
+  window.open('https://x.com/intent/tweet?text=' + text, '_blank', 'width=600,height=500');
+}
+function shareOnWhatsApp() {
+  const t = results.total || 0;
+  const text = encodeURIComponent(
+    'The Iran war costs me $' + Math.abs(t).toLocaleString() + '/month. ' +
+    'Gas +$' + (results.gasImpact||0) + ', Food +$' + (results.groceryImpact||0) + '. ' +
+    'Calculate yours: https://geowire.org/exposure-calculator.html'
+  );
+  window.open('https://wa.me/?text=' + text, '_blank');
+}
+async function copyLink() {
+  try {
+    await navigator.clipboard.writeText('https://geowire.org/exposure-calculator.html');
+    const btn = document.querySelector('.share-copy');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!'; btn.style.background = '#2D6A4F';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 2000);
+  } catch(e) { alert('Copy: https://geowire.org/exposure-calculator.html'); }
+}
+async function downloadCard() {
+  if (typeof html2canvas === 'undefined') { alert('html2canvas not loaded.'); return; }
+  const gen = document.getElementById('share-generating');
+  gen.style.display = 'block';
+  try {
+    const card = document.getElementById('share-card');
+    const canvas = await html2canvas(card, { width:1200, height:675, backgroundColor:'#0D1B2A', scale:1, useCORS:true, logging:false });
+    const a = document.createElement('a');
+    a.href  = canvas.toDataURL('image/png');
+    a.download = 'geowire-war-cost.png';
+    a.click();
+  } catch(e) { alert('Could not generate image: ' + e.message); }
+  finally { gen.style.display = 'none'; }
+}
+
+function resetWizard() {
+  results = {}; _portfolioI = 3;
+  document.querySelectorAll('[data-group]').forEach(c => c.classList.remove('selected'));
+  document.querySelector('[data-group="country"][data-value="US"]').classList.add('selected');
+  document.getElementById('commute-slider').value  = 30;
+  document.getElementById('grocery-slider').value  = 600;
+  document.getElementById('portfolio-slider').value = 3;
+  document.getElementById('commute-label').textContent    = '30 miles';
+  document.getElementById('grocery-label').textContent    = '$600/month';
+  document.getElementById('portfolio-label').textContent  = '$50,000';
+  document.getElementById('commute-field').style.display  = 'none';
+  document.getElementById('state-field').style.display    = 'block';
+  document.getElementById('calc-progress').style.display  = 'block';
+  showStep(1);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+(async function() {
+  UI.init();
+  document.getElementById('site-header').innerHTML = UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('exposure-calculator.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter(GEOWIRE.siteMeta);
+  document.getElementById('calc-email-capture').innerHTML = UI.renderEmailCapture();
+  UI.stubEmailCapture();
+  updateStateGasPrice();
+  try { await API.loadMarketData(); } catch(e) {}
+})();
 </script>
 </body>
 </html>
