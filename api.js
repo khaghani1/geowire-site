@@ -169,7 +169,22 @@ const API = (() => {
       }
     });
 
-    await Promise.allSettled(promises);
+    // Also fetch key BLS series in parallel (unemployment, nonfarm payrolls)
+    const blsPromises = [
+      { key: 'bls_unemployment',    seriesId: 'LNS14000000' },   // Unemployment Rate
+      { key: 'bls_nonfarmPayrolls', seriesId: 'CES0000000001' },  // Total Nonfarm Payrolls
+      { key: 'bls_cpi',             seriesId: 'CUUR0000SA0' },    // CPI All Urban
+      { key: 'bls_avgHourlyEarnings', seriesId: 'CES0500000003' }, // Average Hourly Earnings
+    ].map(async ({ key, seriesId }) => {
+      try {
+        const data = await fetchBLS(seriesId);
+        if (data) results[key] = data;
+      } catch (err) {
+        console.warn(`[GeoWire] BLS fallback (${key}):`, err.message);
+      }
+    });
+
+    await Promise.allSettled([...promises, ...blsPromises]);
     return results;
   }
 
@@ -221,6 +236,40 @@ const API = (() => {
     }
   }
 
+  // ─── FETCH BLS ────────────────────────────────────────────────────────────────
+  // Bureau of Labor Statistics API v2 — seriesId e.g. 'LNS14000000' (unemployment)
+  async function fetchBLS(seriesId) {
+    if (!BLS_KEY) {
+      console.warn('[GeoWire] BLS key not set — returning null.');
+      return null;
+    }
+    try {
+      const currentYear = new Date().getFullYear();
+      const url = 'https://api.bls.gov/publicAPI/v2/timeseries/data/';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          seriesid: [seriesId],
+          startyear: String(currentYear - 1),
+          endyear:   String(currentYear),
+          registrationkey: BLS_KEY,
+        }),
+      });
+      if (!res.ok) throw new Error(`BLS HTTP ${res.status}`);
+      const json = await res.json();
+      const series = json.Results?.series?.[0];
+      if (!series?.data?.length) throw new Error('No BLS data');
+      const latest = series.data[0];
+      const value = parseFloat(latest.value);
+      const timestamp = `${latest.year}-${String(latest.period).replace('M','').padStart(2,'0')}-01`;
+      return _norm(value, 'BLS', seriesId, 'confirmed', timestamp, true);
+    } catch (err) {
+      console.warn(`[GeoWire] BLS fallback (${seriesId}):`, err.message);
+      return null;
+    }
+  }
+
   // ─── AI EXPLAIN STUB ──────────────────────────────────────────────────────────
   // Calls an AI explanation endpoint for any GeoWire topic.
   // Currently stubbed — wire to your preferred AI provider (Anthropic, OpenAI, etc.)
@@ -257,5 +306,5 @@ const API = (() => {
     }
   }
 
-  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, fetchAllRecessionData, fetchEIA, fetchNewsAPI, fetchAIExplain, FRED_SERIES };
+  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, fetchAllRecessionData, fetchEIA, fetchBLS, fetchNewsAPI, fetchAIExplain, FRED_SERIES };
 })();
