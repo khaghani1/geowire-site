@@ -11,7 +11,7 @@ git remote remove origin 2>/dev/null
 git remote add origin https://github.com/khaghani1/geowire-site.git
 
 git add -A
-git commit -m "Complete rebuild: 14 pages, GEOWIRE/UI/API namespace, 4 new pages" 2>/dev/null || echo "(nothing new to commit)"
+git commit -m "Recession Command Center: scoring.js, recession.html, 10-factor model, UI components" 2>/dev/null || echo "(nothing new to commit)"
 
 echo ""
 echo "Pushing to geowire-site → Vercel will auto-deploy to geowire.org"
