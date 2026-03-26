@@ -3,13 +3,376 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="GeoWire Trade — Global shipping disruption, tariff cascades, and supply chain shock from Operation Epic Fury.">
+  <meta name="description" content="GeoWire Trade — Live Hormuz vessel tracking, real-time commodity prices, supply chain pressure index, and prediction markets.">
   <meta name="google-adsense-account" content="ca-pub-5068519853957013">
-  <title>Trade &amp; Supply Chain — GeoWire</title>
+  <title>Trade & Supply Chain — GeoWire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+  <style>
+    /* ──── Trade page live-feed styles ────────────────────────────────────────────────────── */
+
+    /* Hormuz Status Panel */
+    .hormuz-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .hormuz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .hormuz-title-group { display: flex; align-items: center; gap: 12px; }
+    .hormuz-title { font-size: 15px; font-weight: 700; color: var(--text); }
+    .hormuz-body { padding: 20px; }
+    .hormuz-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    @media (min-width: 768px) { .hormuz-grid { grid-template-columns: repeat(4, 1fr); } }
+    .hormuz-stat {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .hormuz-stat-value {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .hormuz-stat-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; }
+
+    /* Status badge variants */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .status-BLOCKED   { background: rgba(255,59,59,.15);  border: 1px solid rgba(255,59,59,.4);  color: var(--red); }
+    .status-RESTRICTED{ background: rgba(255,184,0,.15); border: 1px solid rgba(255,184,0,.4); color: var(--amber); }
+    .status-DEGRADED  { background: rgba(74,158,255,.15); border: 1px solid rgba(74,158,255,.4); color: var(--blue); }
+    .status-OPEN      { background: rgba(0,255,136,.12);  border: 1px solid rgba(0,255,136,.3);  color: var(--green); }
+
+    /* Blockade bar */
+    .blockade-bar-wrap { margin-top: 4px; }
+    .blockade-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+    .blockade-bar-track {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .blockade-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--amber), var(--red));
+      transition: width 1s ease;
+    }
+    .hormuz-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-3);
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    /* ──── Commodity Grid ─────────────────────────────────────────────────────────────────── */
+    .commodity-live-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 600px)  { .commodity-live-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .commodity-live-grid { grid-template-columns: repeat(4, 1fr); } }
+    .commodity-live-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      transition: border-color .15s;
+    }
+    .commodity-live-card:hover { border-color: var(--border-hover); }
+    .commodity-live-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .commodity-live-label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; }
+    .commodity-live-source { font-size: 10px; color: var(--text-3); font-family: var(--font-mono); }
+    .commodity-live-value {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .commodity-live-unit { font-size: 11px; color: var(--text-3); margin-bottom: 6px; }
+    .commodity-live-change {
+      font-size: 12px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    .commodity-live-change.up   { color: var(--red); }   /* price up = bad for consumers */
+    .commodity-live-change.down { color: var(--green); }
+    .commodity-live-change.flat { color: var(--text-3); }
+    .commodity-live-date { font-size: 10px; color: var(--text-3); margin-top: 4px; }
+
+    /* ──── GSCPI Score Panel ──────────────────────────────────────────────────────────────── */
+    .score-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .score-panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .score-panel-body { padding: 20px; }
+    .score-main-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .score-gauge-wrap { position: relative; flex-shrink: 0; }
+    .score-big {
+      font-family: var(--font-mono);
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .score-big.score-CRITICAL { color: var(--red); }
+    .score-big.score-HIGH     { color: #ff6b35; }
+    .score-big.score-ELEVATED { color: var(--amber); }
+    .score-big.score-MODERATE { color: #90d5ff; }
+    .score-big.score-NORMAL   { color: var(--green); }
+    .score-big.score-LOW      { color: var(--text-3); }
+    .score-level-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .score-level-label.score-CRITICAL { color: var(--red); }
+    .score-level-label.score-HIGH     { color: #ff6b35; }
+    .score-level-label.score-ELEVATED { color: var(--amber); }
+    .score-level-label.score-MODERATE { color: #90d5ff; }
+    .score-level-label.score-NORMAL   { color: var(--green); }
+    .score-level-label.score-LOW      { color: var(--text-3); }
+
+    .score-bar-wrap { flex: 1; min-width: 200px; }
+    .score-bar-track {
+      height: 12px;
+      background: var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      position: relative;
+    }
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--green) 0%, var(--amber) 50%, var(--red) 100%);
+      transition: width 1.2s ease;
+      position: relative;
+    }
+    .score-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -2px;
+      width: 4px;
+      height: calc(100% + 4px);
+      background: white;
+      border-radius: 2px;
+      box-shadow: 0 0 6px rgba(255,255,255,.6);
+    }
+    .score-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+    }
+
+    .score-components {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 600px) { .score-components { grid-template-columns: 1fr; } }
+    .score-component {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+    }
+    .score-component-name { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+    .score-component-row { display: flex; align-items: baseline; gap: 6px; }
+    .score-component-val { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--text); }
+    .score-component-weight { font-size: 10px; color: var(--text-3); }
+    .score-component-sub { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+
+    .score-interpretation {
+      margin-top: 16px;
+      padding: 12px 14px;
+      background: var(--surface-2);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    /* ──── Prediction Markets ───────────────────────────────────────────────────────────── */
+    .prediction-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 600px)  { .prediction-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 1024px) { .prediction-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .prediction-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color .15s;
+    }
+    .prediction-card:hover { border-color: var(--border-hover); }
+    .prediction-question {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+      flex: 1;
+    }
+    .prediction-prob-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .prediction-prob {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .prediction-prob.high  { color: var(--red); }
+    .prediction-prob.mid   { color: var(--amber); }
+    .prediction-prob.low   { color: var(--green); }
+    .prediction-prob-label { font-size: 11px; color: var(--text-3); }
+    .prediction-bar-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .prediction-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--amber);
+      transition: width 1s ease;
+    }
+    .prediction-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+    }
+
+    /* ──── Loading / Error states ────────────────────────────────────────────────────────── */
+    .live-loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 20px;
+      color: var(--text-3);
+      font-size: 13px;
+    }
+    .live-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--amber);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .live-error {
+      padding: 16px 20px;
+      font-size: 12px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+    }
+
+    /* ──── Auto-refresh badge ──────────────────────────────────────────────────────────── */
+    .refresh-badge {
+      font-size: 10px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .refresh-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse-anim 2s ease-in-out infinite;
+    }
+    .last-updated { font-size: 10px; color: var(--text-3); font-family: var(--font-mono); }
+
+    /* ──── Section layout helpers ──────────────────────────────────────────────────────── */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 900px) { .two-col-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
 </head>
 <body>
 
@@ -23,32 +386,136 @@
     <div class="container">
       <div class="page-hero-inner">
         <div class="page-hero-label">
-          <span class="confidence-badge confidence-confirmed">CONFIRMED</span>
+          <span class="confidence-badge confidence-confirmed">LIVE DATA</span>
           <span class="tag tag-economic">TRADE</span>
         </div>
-        <h1 class="page-hero-title">Trade &amp; Supply Chain Disruption</h1>
-        <p class="page-hero-subtitle">$1.4T in annual trade through the Strait of Hormuz is offline. Tracking global shipping reroutes, commodity shocks, and economic cascades.</p>
+        <h1 class="page-hero-title">Hormuz & Supply Chain Intelligence</h1>
+        <p class="page-hero-subtitle">Live vessel tracking, real-time commodity prices, global supply chain pressure index, and prediction markets — all updated continuously.</p>
       </div>
     </div>
   </section>
 
   <!-- AD SLOT TOP -->
   <div class="container">
-    <div class="ad-slot ad-slot-top">
-      <!-- Ad slot: configure numeric ID in GEOWIRE.adConfig.slots (content.js) -->
-    </div>
+    <div class="ad-slot ad-slot-top"></div>
   </div>
 
-  <!-- TRADE HEADLINE STATS -->
+  <!-- LIVE STAT BANNER -->
   <section class="section">
     <div class="container">
       <div class="stat-banner" id="trade-stat-banner">
-        <!-- populated by JS -->
+        <div class="stat-item">
+          <div class="stat-value" id="banner-blockade">—%</div>
+          <div class="stat-label">Hormuz Blockade</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="banner-oil">—</div>
+          <div class="stat-label">Brent Crude $/bbl</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="banner-mbpd">—</div>
+          <div class="stat-label">Mbpd Offline</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="banner-gscpi">—</div>
+          <div class="stat-label">Supply Chain Score</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- TRADE DATA TABLE -->
+  <!-- HORMUZ LIVE STATUS -->
+  <section class="section section-dark">
+    <div class="container">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+        <h2 class="section-title" style="margin:0;">Hormuz Strait — Live Status</h2>
+        <div id="ships-live-badge"></div>
+      </div>
+
+      <div class="hormuz-panel">
+        <div class="hormuz-header">
+          <div class="hormuz-title-group">
+            <span id="hormuz-status-badge" class="status-badge status-BLOCKED">⊙ LOADING…</span>
+            <span class="hormuz-title">Strait of Hormuz Vessel Intelligence</span>
+          </div>
+          <span class="refresh-badge"><span class="refresh-dot"></span>Auto-refresh 5 min</span>
+        </div>
+        <div class="hormuz-body">
+          <div id="hormuz-stats-grid" class="hormuz-grid">
+            <div class="live-loading"><span class="live-spinner"></span>Fetching live data…</div>
+          </div>
+
+          <div class="blockade-bar-wrap">
+            <div class="blockade-bar-label">
+              <span>Blockade Severity</span>
+              <span id="blockade-pct-label">—%</span>
+            </div>
+            <div class="blockade-bar-track">
+              <div class="blockade-bar-fill" id="blockade-bar" style="width:0%"></div>
+            </div>
+          </div>
+
+          <div class="hormuz-meta" id="hormuz-meta">
+            <span>Data source: —</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE COMMODITY PRICES -->
+  <section class="section">
+    <div class="container">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+        <h2 class="section-title" style="margin:0;">Live Commodity Prices</h2>
+        <div id="commodities-live-badge"></div>
+      </div>
+      <div class="commodity-live-grid" id="commodity-live-grid">
+        <div class="live-loading"><span class="live-spinner"></span>Fetching prices…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPLY CHAIN PRESSURE INDEX -->
+  <section class="section section-dark">
+    <div class="container">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+        <h2 class="section-title" style="margin:0;">Supply Chain Pressure Index</h2>
+        <div id="gscpi-live-badge"></div>
+      </div>
+
+      <div class="score-panel" id="gscpi-panel">
+        <div class="score-panel-header">
+          <span style="font-size:13px; color:var(--text-2);">GeoWire Composite — GSCPI 40% · BDI 35% · Hormuz 25%</span>
+          <span class="last-updated" id="gscpi-updated"></span>
+        </div>
+        <div class="score-panel-body" id="gscpi-body">
+          <div class="live-loading"><span class="live-spinner"></span>Computing composite score…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREDICTION MARKETS -->
+  <section class="section">
+    <div class="container">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+        <h2 class="section-title" style="margin:0;">Prediction Markets</h2>
+        <div id="poly-live-badge"></div>
+      </div>
+      <p style="font-size:12px; color:var(--text-3); margin-bottom:16px;">Real-money crowd forecasts via Polymarket — updated continuously.</p>
+      <div class="prediction-grid" id="prediction-grid">
+        <div class="live-loading"><span class="live-spinner"></span>Loading markets…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT MID -->
+  <div class="container">
+    <div class="ad-slot ad-slot-mid"></div>
+  </div>
+
+  <!-- TRADE ROUTE DISRUPTION MATRIX -->
   <section class="section section-dark">
     <div class="container">
       <h2 class="section-title">Trade Route Disruption Matrix</h2>
@@ -64,36 +531,17 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody id="trade-table-body">
-            <!-- populated by JS -->
-          </tbody>
+          <tbody id="trade-table-body"></tbody>
         </table>
       </div>
     </div>
   </section>
 
-  <!-- SUPPLY CHAIN -->
+  <!-- SUPPLY CHAIN RISK MAP -->
   <section class="section">
     <div class="container">
       <h2 class="section-title">Supply Chain Risk Map</h2>
       <div id="supply-chain-container"></div>
-    </div>
-  </section>
-
-  <!-- AD SLOT MID -->
-  <div class="container">
-    <div class="ad-slot ad-slot-mid">
-      <!-- Ad slot: configure numeric ID in GEOWIRE.adConfig.slots (content.js) -->
-    </div>
-  </div>
-
-  <!-- COMMODITY SHOCKS -->
-  <section class="section section-dark">
-    <div class="container">
-      <h2 class="section-title">Commodity Price Shocks</h2>
-      <div class="commodity-grid" id="commodity-grid">
-        <!-- populated by JS -->
-      </div>
     </div>
   </section>
 
@@ -112,95 +560,428 @@
 <script src="ui.js"></script>
 <script src="api.js"></script>
 <script>
+/* ─────────────────────────────────────────────────────────────────────────────────────────────────────────
+   trade.html — Live data orchestration
+   Calls 4 new serverless proxies in parallel, updates DOM sections independently
+   so a slow/failing API never blocks the others.
+─────────────────────────────────────────────────────────────────────────────────────────────────────────── */
+
+// ── Helpers ──────────────────────────────────────────────────────────────────────────────────────────────
+function liveBadge(isLive) {
+  return isLive
+    ? '<span class="badge badge-live" style="font-size:10px;"><span class="live-pulse"></span>LIVE</span>'
+    : '<span class="badge badge-demo" style="font-size:10px;">CACHED</span>';
+}
+
+function fmtChange(pct) {
+  if (pct === null || pct === undefined) return '<span class="commodity-live-change flat">—</span>';
+  const cls = pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat';
+  const arrow = pct > 0 ? '▲' : pct < 0 ? '▼' : '—';
+  return `<span class="commodity-live-change ${cls}">${arrow} ${Math.abs(pct).toFixed(1)}%</span>`;
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  // Handle YYYY-MM or YYYY-MM-DD
+  try { return new Date(d + (d.length === 7 ? '-01' : '')).toLocaleDateString('en-GB', { month:'short', year:'numeric' }); }
+  catch { return d; }
+}
+
+// ── 1. HORMUZ / SHIPS ────────────────────────────────────────────────────────────────────────────────────
+async function loadHormuzStatus() {
+  try {
+    const res = await fetch('/api/ships');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+
+    // Status badge
+    const statusEl = document.getElementById('hormuz-status-badge');
+    if (statusEl) {
+      const s = d.hormuzStatus || 'UNKNOWN';
+      statusEl.className = `status-badge status-${s}`;
+      const dot = s === 'BLOCKED' ? '🔴' : s === 'RESTRICTED' ? '🟡' : s === 'DEGRADED' ? '🔵' : '🟢';
+      statusEl.textContent = `${dot} ${s}`;
+    }
+
+    // Stats grid
+    const grid = document.getElementById('hormuz-stats-grid');
+    if (grid) {
+      const bp    = d.blockadePercent ?? '—';
+      const tankers = d.transitEstimate?.tankers ?? '—';
+      const baseline = d.baseline?.tankers ?? 21;
+      const mbpd  = d.supplyImpact?.oilSupplyBlockedMbpd ?? '—';
+      const vessels = d.transitEstimate?.total ?? '—';
+
+      grid.innerHTML = `
+        <div class="hormuz-stat">
+          <div class="hormuz-stat-value" style="color:var(--red)">${bp}%</div>
+          <div class="hormuz-stat-label">Blockade Severity</div>
+        </div>
+        <div class="hormuz-stat">
+          <div class="hormuz-stat-value">${tankers} <span style="font-size:13px;color:var(--text-3)">/ ${baseline}</span></div>
+          <div class="hormuz-stat-label">Tankers In Transit</div>
+        </div>
+        <div class="hormuz-stat">
+          <div class="hormuz-stat-value" style="color:var(--amber)">${mbpd}</div>
+          <div class="hormuz-stat-label">Mbpd Offline</div>
+        </div>
+        <div class="hormuz-stat">
+          <div class="hormuz-stat-value">${vessels}</div>
+          <div class="hormuz-stat-label">Total Vessels</div>
+        </div>`;
+    }
+
+    // Blockade bar
+    const bar = document.getElementById('blockade-bar');
+    const pctLabel = document.getElementById('blockade-pct-label');
+    if (bar && d.blockadePercent != null) {
+      bar.style.width = Math.min(100, d.blockadePercent) + '%';
+    }
+    if (pctLabel && d.blockadePercent != null) {
+      pctLabel.textContent = d.blockadePercent + '%';
+    }
+
+    // Meta
+    const meta = document.getElementById('hormuz-meta');
+    if (meta) {
+      const src = d.dataSource || 'model';
+      const ais = d.aisAvailable ? '✔ AIS live' : '✗ AIS offline — model estimate';
+      const ports = d.portwatch?.portsCalled ?? null;
+      const updated = d.lastUpdated ? new Date(d.lastUpdated).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' }) + ' UTC' : '';
+      meta.innerHTML = `
+        <span>Source: <strong>${src}</strong></span>
+        <span>·</span><span>${ais}</span>
+        ${ports !== null ? `<span>·</span><span>PortWatch calls: <strong>${ports}</strong></span>` : ''}
+        ${updated ? `<span>·</span><span>Updated ${updated}</span>` : ''}`;
+    }
+
+    // Live badge
+    const badge = document.getElementById('ships-live-badge');
+    if (badge) badge.innerHTML = liveBadge(d.aisAvailable || false);
+
+    // Update stat banner
+    const bp = d.blockadePercent ?? null;
+    if (bp !== null) {
+      const el = document.getElementById('banner-blockade');
+      if (el) el.textContent = bp + '%';
+    }
+    const mbpd2 = d.supplyImpact?.oilSupplyBlockedMbpd;
+    if (mbpd2 != null) {
+      const el = document.getElementById('banner-mbpd');
+      if (el) el.textContent = mbpd2 + 'M';
+    }
+
+  } catch (err) {
+    console.warn('[GeoWire] Ships feed error:', err.message);
+    const grid = document.getElementById('hormuz-stats-grid');
+    if (grid) grid.innerHTML = `<div class="live-error">⚠ Ships data temporarily unavailable — ${err.message}</div>`;
+    const badge = document.getElementById('ships-live-badge');
+    if (badge) badge.innerHTML = liveBadge(false);
+  }
+}
+
+// ── 2. COMMODITY PRICES ──────────────────────────────────────────────────────────────────────────────────
+const COMMODITY_META = [
+  { key: 'oil',       label: 'Brent Crude',    icon: '🛢️',  bannerId: 'banner-oil' },
+  { key: 'wti',       label: 'WTI Crude',       icon: '🛢️' },
+  { key: 'natgas_eu', label: 'EU Natural Gas',  icon: '🔥' },
+  { key: 'natgas_us', label: 'Henry Hub Gas',   icon: '⚡' },
+  { key: 'wheat',     label: 'Wheat (US HRW)',  icon: '🌾' },
+  { key: 'aluminum',  label: 'Aluminum',        icon: '🦾' },
+  { key: 'fertilizer',label: 'Fertilizer Index',icon: '🌿' },
+];
+
+async function loadCommodities() {
+  try {
+    const res = await fetch('/api/worldbank');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+    const commodities = d.commodities || {};
+
+    const grid = document.getElementById('commodity-live-grid');
+    if (!grid) return;
+
+    const cards = COMMODITY_META.map(m => {
+      const c = commodities[m.key];
+      if (!c) return `
+        <div class="commodity-live-card">
+          <div class="commodity-live-header">
+            <span class="commodity-live-label">${m.icon} ${m.label}</span>
+            <span class="commodity-live-source">—</span>
+          </div>
+          <div class="commodity-live-value">—</div>
+          <div class="commodity-live-unit">${m.unit || ''}</div>
+          <div class="commodity-live-change flat">No data</div>
+        </div>`;
+
+      // Update banner if applicable
+      if (m.bannerId) {
+        const el = document.getElementById(m.bannerId);
+        if (el && c.value) el.textContent = '$' + c.value.toLocaleString();
+      }
+
+      const src = c.source === 'FRED (daily)' ? 'FRED' : 'World Bank';
+      const dateStr = fmtDate(c.date);
+      return `
+        <div class="commodity-live-card">
+          <div class="commodity-live-header">
+            <span class="commodity-live-label">${m.icon} ${m.label}</span>
+            <span class="commodity-live-source">${src}</span>
+          </div>
+          <div class="commodity-live-value">${c.value != null ? c.value.toLocaleString() : '—'}</div>
+          <div class="commodity-live-unit">${c.unit || ''}</div>
+          ${fmtChange(c.pctChange)}
+          <div class="commodity-live-date">${dateStr}</div>
+        </div>`;
+    });
+
+    grid.innerHTML = cards.join('');
+
+    const badge = document.getElementById('commodities-live-badge');
+    if (badge) badge.innerHTML = liveBadge(true);
+
+  } catch (err) {
+    console.warn('[GeoWire] Commodities feed error:', err.message);
+    const grid = document.getElementById('commodity-live-grid');
+    if (grid) grid.innerHTML = `<div class="live-error">⚠ Commodity data temporarily unavailable — ${err.message}</div>`;
+    const badge = document.getElementById('commodities-live-badge');
+    if (badge) badge.innerHTML = liveBadge(false);
+  }
+}
+
+// ── 3. SUPPLY CHAIN PRESSURE (GSCPI) ──────────────────────────────────────────────────────────────────
+function levelColor(level) {
+  return { CRITICAL:'var(--red)', HIGH:'#ff6b35', ELEVATED:'var(--amber)',
+           MODERATE:'#90d5ff', NORMAL:'var(--green)', LOW:'var(--text-3)' }[level] || 'var(--text)';
+}
+
+async function loadGSCPI() {
+  try {
+    const res = await fetch('/api/gscpi');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+
+    const body = document.getElementById('gscpi-body');
+    if (!body) return;
+
+    const score   = d.compositeScore ?? 0;
+    const level   = d.pressureLevel  || 'UNKNOWN';
+    const gscpi   = d.gscpi;
+    const bdi     = d.bdi;
+    const comp    = d.components || {};
+    const interp  = d.interpretation || '';
+
+    // Update banner
+    const bannerEl = document.getElementById('banner-gscpi');
+    if (bannerEl) bannerEl.textContent = score + '/100';
+
+    body.innerHTML = `
+      <div class="score-main-row">
+        <div class="score-gauge-wrap">
+          <div class="score-big score-${level}">${score}</div>
+          <div class="score-level-label score-${level}">${level}</div>
+          <div style="font-size:10px; color:var(--text-3); margin-top:2px;">/ 100</div>
+        </div>
+        <div class="score-bar-wrap">
+          <div class="score-bar-track">
+            <div class="score-bar-fill" id="score-bar-fill" style="width:${score}%"></div>
+          </div>
+          <div class="score-bar-labels">
+            <span>LOW</span><span>MODERATE</span><span>ELEVATED</span><span>CRITICAL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="score-components">
+        <div class="score-component">
+          <div class="score-component-name">NY Fed GSCPI <span style="color:var(--text-3)">(40%)</span></div>
+          <div class="score-component-row">
+            <span class="score-component-val">${gscpi ? (gscpi.value > 0 ? '+' : '') + gscpi.value : 'N/A'}</span>
+            <span class="score-component-weight">std devs</span>
+          </div>
+          <div class="score-component-sub">${gscpi ? gscpi.pressureLevel + ' · ' + fmtDate(gscpi.date) : 'Unavailable'}</div>
+          <div class="score-component-sub" style="color:var(--amber)">Contribution: <strong>${comp.gscpi?.contribution ?? '—'} pts</strong></div>
+        </div>
+        <div class="score-component">
+          <div class="score-component-name">Baltic Dry Index <span style="color:var(--text-3)">(35%)</span></div>
+          <div class="score-component-row">
+            <span class="score-component-val">${bdi ? bdi.value.toLocaleString() : 'N/A'}</span>
+          </div>
+          <div class="score-component-sub">${bdi ? (bdi.trend || '') + ' · ' + fmtDate(bdi.date) : 'Unavailable'}</div>
+          <div class="score-component-sub" style="color:var(--amber)">Contribution: <strong>${comp.bdi?.contribution ?? '—'} pts</strong></div>
+        </div>
+        <div class="score-component">
+          <div class="score-component-name">Hormuz Blockade <span style="color:var(--text-3)">(25%)</span></div>
+          <div class="score-component-row">
+            <span class="score-component-val">${d.hormuzInput?.blockadePercent ?? '—'}</span>
+            <span class="score-component-weight">% blocked</span>
+          </div>
+          <div class="score-component-sub">Model estimate</div>
+          <div class="score-component-sub" style="color:var(--amber)">Contribution: <strong>${comp.hormuz?.contribution ?? '—'} pts</strong></div>
+        </div>
+      </div>
+
+      ${interp ? `<div class="score-interpretation">${interp}</div>` : ''}`;
+
+    const updated = document.getElementById('gscpi-updated');
+    if (updated && d.lastUpdated) {
+      updated.textContent = 'Updated ' + new Date(d.lastUpdated).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' }) + ' UTC';
+    }
+
+    const badge = document.getElementById('gscpi-live-badge');
+    if (badge) badge.innerHTML = liveBadge(!!(gscpi || bdi));
+
+  } catch (err) {
+    console.warn('[GeoWire] GSCPI feed error:', err.message);
+    const body = document.getElementById('gscpi-body');
+    if (body) body.innerHTML = `<div class="live-error">⚠ Supply chain index temporarily unavailable — ${err.message}</div>`;
+    const badge = document.getElementById('gscpi-live-badge');
+    if (badge) badge.innerHTML = liveBadge(false);
+  }
+}
+
+// ── 4. PREDICTION MARKETS ───────────────────────────────────────────────────────────────────────────────
+async function loadPredictionMarkets() {
+  try {
+    const res = await fetch('/api/polymarket');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+
+    const grid = document.getElementById('prediction-grid');
+    if (!grid) return;
+
+    // Collect markets — bundle has nested keyword groups, flatten them
+    let markets = [];
+
+    if (d.bundle) {
+      Object.values(d.bundle).forEach(group => {
+        if (group && group.markets) markets.push(...group.markets);
+      });
+    }
+    if (d.markets) markets.push(...d.markets);
+
+    // De-dupe by slug/id
+    const seen = new Set();
+    markets = markets.filter(m => {
+      const key = m.slug || m.id || m.question;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Sort by highest probability (most actionable)
+    markets.sort((a, b) => {
+      const pa = a.yesProb ?? a.probability ?? 50;
+      const pb = b.yesProb ?? b.probability ?? 50;
+      return pb - pa;
+    });
+
+    if (!markets.length) {
+      grid.innerHTML = `<div class="live-error">No active markets found.</div>`;
+      return;
+    }
+
+    grid.innerHTML = markets.slice(0, 9).map(m => {
+      const prob  = m.yesProb ?? m.probability ?? null;
+      const pct   = prob !== null ? Math.round(prob) : null;
+      const cls   = pct !== null ? (pct >= 60 ? 'high' : pct >= 35 ? 'mid' : 'low') : 'mid';
+      const vol   = m.volume24h ?? m.volume ?? null;
+      const volStr = vol != null ? '$' + (vol >= 1e6 ? (vol/1e6).toFixed(1)+'M' : Math.round(vol).toLocaleString()) : '—';
+      const dateStr = m.endDate ? 'Closes ' + new Date(m.endDate).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : '';
+
+      return `
+        <div class="prediction-card">
+          <div class="prediction-question">${m.question || m.title || '—'}</div>
+          <div class="prediction-prob-row">
+            <div>
+              <div class="prediction-prob ${cls}">${pct !== null ? pct + '%' : '—'}</div>
+              <div class="prediction-prob-label">YES probability</div>
+            </div>
+          </div>
+          <div class="prediction-bar-track">
+            <div class="prediction-bar-fill" style="width:${pct ?? 50}%; background:${cls==='high'?'var(--red)':cls==='low'?'var(--green)':'var(--amber)'}"></div>
+          </div>
+          <div class="prediction-meta">
+            <span>Vol 24h: ${volStr}</span>
+            <span>${dateStr}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+    const badge = document.getElementById('poly-live-badge');
+    if (badge) badge.innerHTML = liveBadge(true);
+
+  } catch (err) {
+    console.warn('[GeoWire] Polymarket feed error:', err.message);
+    const grid = document.getElementById('prediction-grid');
+    if (grid) grid.innerHTML = `<div class="live-error">⚠ Prediction markets temporarily unavailable — ${err.message}</div>`;
+    const badge = document.getElementById('poly-live-badge');
+    if (badge) badge.innerHTML = liveBadge(false);
+  }
+}
+
+// ── STATIC SECTIONS ────────────────────────────────────────────────────────────────────────────────────
+function renderTradeTable() {
+  const tradeData = GEOWIRE.tradeData || [];
+  const tbody = document.getElementById('trade-table-body');
+  if (!tbody) return;
+
+  if (tradeData.length) {
+    tbody.innerHTML = tradeData.map(r => `
+      <tr>
+        <td class="td-primary">${r.route || r.country || '—'}</td>
+        <td>${r.annualValue || r.volume || '—'}</td>
+        <td>${r.disruption || '—'}</td>
+        <td>${r.alternative || '—'}</td>
+        <td>${r.costPremium || '—'}</td>
+        <td><span class="status-dot status-${(r.status||'').toLowerCase().replace(/\s/g,'-')}">${r.status || '—'}</span></td>
+      </tr>`).join('');
+  } else {
+    tbody.innerHTML = `
+      <tr><td class="td-primary">Hormuz Oil Exports</td><td>$720B/yr</td><td>100%</td><td>Cape of Good Hope</td><td>+$8–14/bbl</td><td><span class="status-dot status-closed">CLOSED</span></td></tr>
+      <tr><td class="td-primary">LNG — Persian Gulf</td><td>$180B/yr</td><td>85%</td><td>Pipeline / LNG terminals</td><td>+340%</td><td><span class="status-dot status-disrupted">DISRUPTED</span></td></tr>
+      <tr><td class="td-primary">Japan Auto Parts</td><td>$42B/yr</td><td>60%</td><td>Air freight</td><td>+800%</td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
+      <tr><td class="td-primary">India–Europe Container</td><td>$280B/yr</td><td>40%</td><td>Suez + Cape mix</td><td>+22%</td><td><span class="status-dot status-elevated">ELEVATED</span></td></tr>
+      <tr><td class="td-primary">China–GCC Commerce</td><td>$250B/yr</td><td>35%</td><td>Belt & Road rail</td><td>+18%</td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
+      <tr><td class="td-primary">Global Wheat / Grain</td><td>$85B/yr</td><td>15%</td><td>Atlantic corridors</td><td>+12%</td><td><span class="status-dot status-elevated">ELEVATED</span></td></tr>`;
+  }
+}
+
+// ── BOOT ───────────────────────────────────────────────────────────────────────────────────────────────
 (async () => {
+  // Static shell
   document.getElementById('site-header').innerHTML = UI.renderHeader();
   document.getElementById('site-nav').innerHTML    = UI.renderNav('trade.html');
   document.getElementById('site-footer').innerHTML = UI.renderFooter();
 
-  // Stat banner
-  const banner = document.getElementById('trade-stat-banner');
-  if (banner) {
-    banner.innerHTML = `
-      <div class="stat-item">
-        <div class="stat-value">$1.4T</div>
-        <div class="stat-label">Annual Hormuz Trade Halted</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">21M</div>
-        <div class="stat-label">Barrels/Day Offline</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">+14 days</div>
-        <div class="stat-label">Cape Reroute Added Transit</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value">$34B</div>
-        <div class="stat-label">Daily Global Cost</div>
-      </div>`;
-  }
-
-  // Trade data table
-  const tradeData = GEOWIRE.tradeData || [];
-  const tbody = document.getElementById('trade-table-body');
-  if (tbody) {
-    if (tradeData.length) {
-      tbody.innerHTML = tradeData.map(r => `
-        <tr>
-          <td class="td-primary">${r.route || r.country || '—'}</td>
-          <td>${r.annualValue || r.volume || '—'}</td>
-          <td>${r.disruption || '—'}</td>
-          <td>${r.alternative || '—'}</td>
-          <td>${r.costPremium || '—'}</td>
-          <td><span class="status-dot status-${(r.status||'').toLowerCase().replace(/\s/g,'-')}">${r.status || '—'}</span></td>
-        </tr>`).join('');
-    } else {
-      tbody.innerHTML = `
-        <tr><td class="td-primary">Hormuz Oil Exports</td><td>$720B/yr</td><td>100%</td><td>Cape of Good Hope</td><td>+$8–14/bbl</td><td><span class="status-dot status-closed">CLOSED</span></td></tr>
-        <tr><td class="td-primary">LNG — Persian Gulf</td><td>$180B/yr</td><td>85%</td><td>Pipeline / LNG terminals</td><td>+340%</td><td><span class="status-dot status-disrupted">DISRUPTED</span></td></tr>
-        <tr><td class="td-primary">Japan Auto Parts</td><td>$42B/yr</td><td>60%</td><td>Air freight</td><td>+800%</td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
-        <tr><td class="td-primary">India–Europe Container</td><td>$280B/yr</td><td>40%</td><td>Suez + Cape mix</td><td>+22%</td><td><span class="status-dot status-elevated">ELEVATED</span></td></tr>
-        <tr><td class="td-primary">China–GCC Commerce</td><td>$250B/yr</td><td>35%</td><td>Belt &amp; Road rail</td><td>+18%</td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
-        <tr><td class="td-primary">Global Wheat / Grain</td><td>$85B/yr</td><td>15%</td><td>Atlantic corridors</td><td>+12%</td><td><span class="status-dot status-elevated">ELEVATED</span></td></tr>`;
-    }
-  }
-
-  // Supply chain
   const scEl = document.getElementById('supply-chain-container');
   if (scEl) scEl.innerHTML = UI.renderSupplyChain();
 
-  // Commodity shocks
-  const cgrid = document.getElementById('commodity-grid');
-  if (cgrid) {
-    const md = GEOWIRE.marketData || {};
-    const commodities = [
-      { key: 'oil', label: 'Brent Crude', icon: '🛢️' },
-      { key: 'wti', label: 'WTI Crude', icon: '🛢️' },
-      { key: 'natgas', label: 'Natural Gas', icon: '🔥' },
-      { key: 'ttf', label: 'EU Gas TTF', icon: '⚡' },
-      { key: 'wheat', label: 'Wheat Futures', icon: '🌾' },
-      { key: 'gold', label: 'Gold Spot', icon: '🥇' },
-    ];
-    cgrid.innerHTML = commodities.map(c => {
-      const d = md[c.key] || {};
-      return `<div class="commodity-card">
-        <div class="commodity-icon">${c.icon}</div>
-        <div class="commodity-label">${d.label || c.label}</div>
-        <div class="commodity-value">${d.value ? d.value.toLocaleString() : '—'} <small>${d.unit || ''}</small></div>
-        <div class="commodity-change ${d.change > 0 ? 'positive' : 'negative'}">${d.change > 0 ? '▲' : '▼'} ${d.change ? Math.abs(d.change) + '%' : '—'} since conflict</div>
-      </div>`;
-    }).join('');
-  }
-
-  // Email capture
   const emailEl = document.getElementById('email-capture-container');
   if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
 
+  renderTradeTable();
   UI.init();
 
-  try { await API.loadMarketData(); } catch(e) {}
+  // Fire all 4 live feeds in parallel — each is independent, failures are silent
+  await Promise.allSettled([
+    loadHormuzStatus(),
+    loadCommodities(),
+    loadGSCPI(),
+    loadPredictionMarkets(),
+    API.loadMarketData(),  // existing ticker
+  ]);
 
-  (window.adsbygoogle || []).push({});
-  (window.adsbygoogle || []).push({});
+  // Auto-refresh every 5 minutes
+  setInterval(() => {
+    loadHormuzStatus();
+    loadCommodities();
+    loadGSCPI();
+    loadPredictionMarkets();
+  }, 5 * 60 * 1000);
+
+  try { (window.adsbygoogle || []).push({}); } catch(e) {}
+  try { (window.adsbygoogle || []).push({}); } catch(e) {}
 })();
 </script>
 </body>
