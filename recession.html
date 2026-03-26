@@ -295,6 +295,25 @@
   } catch (err) {
     console.warn('[GeoWire] Live FRED data unavailable, using seed data.');
   }
+
+  // ── Async: live Kalshi recession odds (non-blocking, updates card after render)
+  try {
+    const kResp = await fetch('/api/kalshi?ticker=KXRECSSNBER-26');
+    const kData = await kResp.json();
+    const mkt = kData.market;
+    if (mkt && mkt.yes_ask_dollars) {
+      const liveOdds  = Math.round(parseFloat(mkt.yes_ask_dollars) * 100);
+      const prevOdds  = Math.round(parseFloat(mkt.previous_yes_ask_dollars || mkt.yes_ask_dollars) * 100);
+      const change    = liveOdds - prevOdds;
+      document.getElementById('metric-kalshi').innerHTML = UI.renderMetricCard(
+        'Kalshi Recession Odds', liveOdds, change || null, '%', 'Kalshi (live)', 'warn'
+      );
+      GEOWIRE.recessionData.kalshiOdds.recession2026 = liveOdds;
+      console.log('[GeoWire] Kalshi recession odds (live):', liveOdds + '%', '(prev:', prevOdds + '%)');
+    }
+  } catch (err) {
+    console.warn('[GeoWire] Live Kalshi data unavailable, using seed value:', rec.kalshiOdds.recession2026 + '%');
+  }
 })();
 </script>
 </body>
