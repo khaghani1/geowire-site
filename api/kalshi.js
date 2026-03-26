@@ -1,18 +1,14 @@
 // /api/kalshi.js — Vercel serverless proxy for Kalshi prediction markets
 // Bypasses browser CORS; runs server-side on Vercel.
-// Auth: Bearer token via KALSHI_KEY env var
-// Kalshi API docs: https://trading-api.readme.io/reference/getmarkets
+// Market data endpoints are PUBLIC — no API key required.
+// Auth (for trading) uses RSA signing — not needed for GeoWire reads.
+// Kalshi API docs: https://docs.kalshi.com/getting_started/quick_start_market_data
+// Base URL: https://api.elections.kalshi.com/trade-api/v2
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   if (req.method === 'OPTIONS') { res.status(200).end(); return; }
-
-  const KALSHI_KEY = process.env.KALSHI_KEY || '';
-  if (!KALSHI_KEY) {
-    res.status(503).json({ error: 'Kalshi key not configured. Set KALSHI_KEY in Vercel env vars.' });
-    return;
-  }
 
   // Supported query params:
   //   ?ticker=KXRECSSNBER-26          → single market
@@ -20,17 +16,14 @@ export default async function handler(req, res) {
   //   ?series=KXRECSSNBER             → all markets in a series
   const { ticker, tickers, series } = req.query;
 
-  const BASE = 'https://api.kalshi.com/trade-api/v2';
-  const headers = {
-    'Authorization': `Bearer ${KALSHI_KEY}`,
-    'Accept': 'application/json',
-  };
+  // NOTE: Despite "elections" subdomain, this serves ALL Kalshi markets.
+  const BASE = 'https://api.elections.kalshi.com/trade-api/v2';
 
   try {
     // ── Single market ────────────────────────────────────────────────────────
     if (ticker) {
       const url = `${BASE}/markets/${encodeURIComponent(ticker.toUpperCase())}`;
-      const upstream = await fetch(url, { headers });
+      const upstream = await fetch(url, { headers: { 'Accept': 'application/json' } });
       if (!upstream.ok) {
         const body = await upstream.text();
         res.status(upstream.status).json({ error: `Kalshi API ${upstream.status}`, detail: body });
@@ -49,7 +42,7 @@ export default async function handler(req, res) {
       await Promise.all(
         tickerList.map(async (t) => {
           try {
-            const upstream = await fetch(`${BASE}/markets/${encodeURIComponent(t)}`, { headers });
+            const upstream = await fetch(`${BASE}/markets/${encodeURIComponent(t)}`, { headers: { 'Accept': 'application/json' } });
             if (upstream.ok) {
               const data = await upstream.json();
               results[t] = data.market || data;
@@ -69,7 +62,7 @@ export default async function handler(req, res) {
     // ── All markets in a series ───────────────────────────────────────────────
     if (series) {
       const url = `${BASE}/series/${encodeURIComponent(series.toUpperCase())}/markets`;
-      const upstream = await fetch(url, { headers });
+      const upstream = await fetch(url, { headers: { 'Accept': 'application/json' } });
       if (!upstream.ok) {
         const body = await upstream.text();
         res.status(upstream.status).json({ error: `Kalshi API ${upstream.status}`, detail: body });
@@ -93,7 +86,7 @@ export default async function handler(req, res) {
     await Promise.all(
       GEOWIRE_TICKERS.map(async (t) => {
         try {
-          const upstream = await fetch(`${BASE}/markets/${encodeURIComponent(t)}`, { headers });
+          const upstream = await fetch(`${BASE}/markets/${encodeURIComponent(t)}`, { headers: { 'Accept': 'application/json' } });
           if (upstream.ok) {
             const data = await upstream.json();
             results[t] = data.market || data;
