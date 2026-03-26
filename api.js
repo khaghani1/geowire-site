@@ -10,10 +10,25 @@ const API = (() => {
   const GDELT_BASE     = 'https://api.gdeltproject.org/api/v2/doc/doc';
 
   const FRED_SERIES = {
-    treasury: 'DGS10',
-    dollar:   'DTWEXBGS',
-    sp500:    'SP500',
-    gold:     'GOLDAMGBD228NLBM',
+    treasury:         'DGS10',
+    dollar:           'DTWEXBGS',
+    sp500:            'SP500',
+    gold:             'GOLDAMGBD228NLBM',
+    yieldCurve:       'T10Y2Y',
+    cpi:              'CPIAUCSL',
+    unemployment:     'UNRATE',
+    initialClaims:    'ICSA',
+    mortgageRate:     'MORTGAGE30US',
+    housingStarts:    'HOUST',
+    personalSavings:  'PSAVERT',
+    pce:              'PCEPI',
+    consumerSentiment:'UMCSENT',
+    industrialProd:   'INDPRO',
+    fedFundsRate:     'FEDFUNDS',
+    importPrices:     'IR',
+    buildingPermits:  'PERMIT',
+    nonfarmPayrolls:  'PAYEMS',
+    retailSales:      'RSXFS',
   };
 
   function _norm(value, source, label, confidence, timestamp, isLive) {
@@ -138,5 +153,24 @@ const API = (() => {
     }
   }
 
-  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, FRED_SERIES };
+  // ─── FETCH ALL RECESSION DATA ─────────────────────────────────────────────────
+  async function fetchAllRecessionData() {
+    const seriesKeys = Object.keys(FRED_SERIES);
+    const results = {};
+
+    const promises = seriesKeys.map(async (key) => {
+      try {
+        const data = await fetchFRED(FRED_SERIES[key]);
+        results[key] = data;
+      } catch (err) {
+        console.warn(`[GeoWire] Recession FRED fallback (${key}):`, err.message);
+        results[key] = null;
+      }
+    });
+
+    await Promise.allSettled(promises);
+    return results;
+  }
+
+  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, fetchAllRecessionData, FRED_SERIES };
 })();

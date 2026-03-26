@@ -16,6 +16,9 @@ const GEOWIRE = {
 
   // ─── NAVIGATION ─────────────────────────────────────────────────────────────
   navigationItems: [
+    { label: 'Recession',    farsiLabel: 'رکود',          href: 'recession.html',   icon: '📉' },
+    { label: 'Macro',        farsiLabel: 'کلان',          href: 'macro.html',       icon: '📊' },
+    { label: 'Predictions',  farsiLabel: 'پیش‌بینی',      href: 'predictions.html', icon: '🔮' },
     { label: 'Dashboard',    farsiLabel: 'داشبورد',       href: 'index.html',       icon: '📊' },
     { label: 'Energy',       farsiLabel: 'انرژی',          href: 'energy.html',      icon: '⚡' },
     { label: 'Countries',    farsiLabel: 'کشورها',         href: 'countries.html',   icon: '🌍' },
@@ -65,7 +68,62 @@ const GEOWIRE = {
     usgas:    { label: 'US Avg Gas',          value: 3.88,   preWar: 2.98,   unit: '$/gal',    change: +30.2,  source: 'AAA/EIA',         confidence: 'confirmed',    lastUpdated: '2026-03-25T06:00Z' },
     ttf:      { label: 'TTF Gas (EU)',        value: 32.0,   preWar: 11.6,   unit: '€/MWh',    change: +175.9, source: 'ICE',             confidence: 'multisource',  lastUpdated: '2026-03-25T06:00Z' },
     wheat:    { label: 'Wheat',               value: 5.92,   preWar: 5.50,   unit: '$/bu',     change: +7.6,   source: 'CME',             confidence: 'multisource',  lastUpdated: '2026-03-25T06:00Z' },
-    hormuz:   { label: 'Hormuz Flow',         value: 0.6,    preWar: 21.0,   unit: 'M bbl/d',  change: -97.1,  source: 'Kpler',           confidence: 'singlesource', lastUpdated: '2026-03-25T08:00Z', status: 'CLOSED' },
+    hormuz:      { label: 'Hormuz Flow',         value: 0.6,    preWar: 21.0,   unit: 'M bbl/d',  change: -97.1,  source: 'Kpler',           confidence: 'singlesource', lastUpdated: '2026-03-25T08:00Z', status: 'CLOSED' },
+    mortgage30:  { label: '30Y Mortgage',        value: 6.43,   preWar: 6.10,   unit: '%',        change: +5.4,   source: 'MBA/FRED',         confidence: 'confirmed',    lastUpdated: '2026-03-25T06:00Z' },
+    helium:      { label: 'Helium Spot',         value: 200,    preWar: 100,    unit: 'idx',      change: +100.0, source: 'Gasworld',         confidence: 'singlesource', lastUpdated: '2026-03-20T00:00Z', status: 'CRISIS' },
+    fertilizerN: { label: 'Nitrogen Fert.',      value: 200,    preWar: 100,    unit: 'idx',      change: +100.0, source: 'Morningstar/Reuters',confidence: 'inferred',   lastUpdated: '2026-03-20T00:00Z' },
+  },
+
+  // ─── RECESSION DATA ──────────────────────────────────────────────────────
+  recessionData: {
+    probability: 42,
+    momentum: 'RISING',
+    confidence: 'MEDIUM',
+    lastUpdated: '2026-03-25T12:00Z',
+
+    factorScores: {
+      ratesLiquidity:  { score: 65, status: 'DETERIORATING', topDriver: '2s10s yield curve inverted at -0.15%. Real yields rising.',                           weight: 0.15, fredSeries: ['DGS10','T10Y2Y','FEDFUNDS'] },
+      inflation:       { score: 58, status: 'DETERIORATING', topDriver: 'Import prices +1.3% MoM — double forecast. Shelter sticky.',                         weight: 0.12, fredSeries: ['CPIAUCSL','PCEPI','IR'] },
+      laborMarket:     { score: 35, status: 'STABLE',        topDriver: 'Initial claims rising but still historically low.',                                   weight: 0.15, fredSeries: ['UNRATE','ICSA','PAYEMS'] },
+      consumerHealth:  { score: 52, status: 'DETERIORATING', topDriver: 'Mortgage apps -10%. Rates at 6.43%. Savings rate falling.',                          weight: 0.12, fredSeries: ['MORTGAGE30US','RSXFS','PSAVERT'] },
+      corporateCredit: { score: 48, status: 'ELEVATED',      topDriver: 'Credit spreads widening post-war. Lending standards tightening.',                    weight: 0.10, fredSeries: [] },
+      housing:         { score: 55, status: 'DETERIORATING', topDriver: 'Builder confidence falling. Starts declining. Permits weak.',                        weight: 0.10, fredSeries: ['HOUST','PERMIT','MORTGAGE30US'] },
+      supplyLogistics: { score: 78, status: 'STRESS',        topDriver: 'Hormuz 97% closed. Shipping insurance suspended. Freight +40%.',                    weight: 0.08, fredSeries: [] },
+      globalSpillovers:{ score: 62, status: 'DETERIORATING', topDriver: 'ECB cut postponed. China energy emergency. EM FX stress.',                           weight: 0.08, fredSeries: [] },
+      marketSignals:   { score: 45, status: 'ELEVATED',      topDriver: 'Defensive rotation underway. VIX at 26. Breadth narrowing.',                        weight: 0.05, fredSeries: ['SP500'] },
+      outsideBox:      { score: 55, status: 'ELEVATED',      topDriver: 'Google Trends "layoffs" spiking. Job posting decay accelerating.',                   weight: 0.05, fredSeries: [] },
+    },
+
+    whatChangedToday: [
+      { time: '11:30 UTC', factor: 'Inflation',  change: 'Import prices +1.3% MoM — double the forecast', impact: 'NEGATIVE', source: 'BLS' },
+      { time: '10:15 UTC', factor: 'Housing',    change: 'Mortgage rates hit 6.43% — highest since Oct 2025', impact: 'NEGATIVE', source: 'MBA' },
+      { time: '09:00 UTC', factor: 'Diplomatic', change: 'Iran rejects 15-point ceasefire plan outright', impact: 'NEGATIVE', source: 'Reuters/AP' },
+      { time: '08:30 UTC', factor: 'Energy',     change: 'Brent drops to $101 on reports of partial Hormuz flow', impact: 'POSITIVE', source: 'Bloomberg' },
+      { time: '07:00 UTC', factor: 'Predictions',change: 'Kalshi recession odds cross 36% — highest since November', impact: 'NEGATIVE', source: 'Kalshi' },
+    ],
+
+    historicalComparisons: [
+      { event: '1973 Oil Crisis',      oilChange: '+300%', recessionLag: '6 months',              similarity: 72, notes: 'OPEC embargo. Stagflation followed.' },
+      { event: '1979 Iran Revolution', oilChange: '+150%', recessionLag: '12 months',             similarity: 85, notes: 'Most similar precedent. Iran supply shock + global recession.' },
+      { event: '2022 Ukraine War',     oilChange: '+60%',  recessionLag: 'Avoided (SPR release)', similarity: 58, notes: 'SPR and rate hikes prevented recession. Different this time — Hormuz is physical blockage.' },
+    ],
+
+    divergences: [
+      { title: 'Our model vs Kalshi',    ours: '42% recession probability', market: 'Kalshi at 36%',     thesis: 'Market may be underpricing oil persistence and supply-chain stress.' },
+      { title: 'Ceasefire timing',       ours: '85%+ by Dec 31',            market: 'Polymarket at 78%', thesis: 'We think Trump political incentive + oil pain makes deal very likely by year-end.' },
+      { title: 'Oil price vs duration',  ours: '$130+ if 3 months',          market: 'Brent at $101',     thesis: 'Market pricing quick resolution. Goldman target $130 if Hormuz stays closed.' },
+    ],
+
+    kalshiOdds: {
+      recession2026:    36,
+      ceasefireMar31:   12,
+      ceasefireApr30:   44,
+      ceasefireJun30:   63,
+      ceasefireDec31:   78,
+      oilAbove100EndMar:41,
+      source: 'Kalshi/Polymarket',
+      lastUpdated: '2026-03-25',
+    },
   },
 
   // ─── TIMELINE EVENTS ────────────────────────────────────────────────────────

@@ -457,6 +457,226 @@ const UI = (() => {
     });
   }
 
+  // ─── RECESSION GAUGE ────────────────────────────────────────────────────────
+  function renderRecessionGauge(probability, momentum, confidence, lastUpdated) {
+    // SVG semicircle gauge: 280px wide, 160px tall arc
+    const W = 280, H = 160, cx = W / 2, cy = H - 10, r = 120;
+    const toRad = (deg) => (deg * Math.PI) / 180;
+
+    // Arc from 180° to 0° (left to right) = 0% to 100%
+    function arcPoint(pct) {
+      const angle = 180 - pct * 180;
+      return {
+        x: cx + r * Math.cos(toRad(angle)),
+        y: cy - r * Math.sin(toRad(angle)),
+      };
+    }
+
+    function describeArc(startPct, endPct, fillR) {
+      const s = arcPoint(startPct), e = arcPoint(endPct);
+      const large = (endPct - startPct) > 0.5 ? 1 : 0;
+      return `M ${s.x} ${s.y} A ${fillR} ${fillR} 0 ${large} 1 ${e.x} ${e.y}`;
+    }
+
+    // Zone arcs (track)
+    const zones = [
+      { start: 0,    end: 0.20, color: '#2D6A4F' },
+      { start: 0.20, end: 0.35, color: '#F59E0B' },
+      { start: 0.35, end: 0.50, color: '#EA580C' },
+      { start: 0.50, end: 1.00, color: '#E63946' },
+    ];
+
+    const trackArcs = zones.map(z =>
+      `<path d="${describeArc(z.start, z.end, r)}" stroke="${z.color}" stroke-width="14" fill="none" stroke-linecap="butt" opacity="0.7"/>`
+    ).join('');
+
+    // Needle
+    const needlePct = Math.min(1, Math.max(0, probability / 100));
+    const np = arcPoint(needlePct);
+    const needleColor = needlePct < 0.2 ? '#2D6A4F' : needlePct < 0.35 ? '#F59E0B' : needlePct < 0.5 ? '#EA580C' : '#E63946';
+
+    // Relative time
+    let updatedStr = '';
+    if (lastUpdated) {
+      const diff = (Date.now() - new Date(lastUpdated)) / 3600000;
+      if (diff < 1) updatedStr = 'Updated < 1 hour ago';
+      else if (diff < 24) updatedStr = `Updated ${Math.round(diff)}h ago`;
+      else updatedStr = `Updated ${Math.round(diff / 24)}d ago`;
+    }
+
+    // Momentum + confidence badge colors
+    const momColor = momentum === 'RISING' ? '#f87171' : momentum === 'FALLING' ? '#4ade80' : '#fbbf24';
+    const momArrow = momentum === 'RISING' ? '↑' : momentum === 'FALLING' ? '↓' : '→';
+    const confColor = confidence === 'HIGH' ? '#4ade80' : confidence === 'MEDIUM' ? '#fbbf24' : '#94a3b8';
+
+    return `
+      <div class="recession-gauge">
+        <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+          <!-- Background track -->
+          <path d="${describeArc(0, 1, r)}" stroke="#334155" stroke-width="14" fill="none" stroke-linecap="butt"/>
+          <!-- Colored zones -->
+          ${trackArcs}
+          <!-- Needle -->
+          <line x1="${cx}" y1="${cy}" x2="${np.x}" y2="${np.y}" stroke="${needleColor}" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="${cx}" cy="${cy}" r="6" fill="${needleColor}"/>
+          <!-- Zone labels -->
+          <text x="18" y="${H - 14}" fill="#4ade80" font-size="9" font-family="monospace">LOW</text>
+          <text x="${W - 30}" y="${H - 14}" fill="#f87171" font-size="9" font-family="monospace">HIGH</text>
+        </svg>
+        <div class="gauge-prob-number" style="color:${needleColor}">${probability}%</div>
+        <div class="gauge-label">6-Month Recession Probability</div>
+        <div class="gauge-badges">
+          <span class="status-badge" style="background:rgba(0,0,0,.3);color:${momColor};border-color:${momColor}40">${momentum} ${momArrow}</span>
+          <span class="status-badge" style="background:rgba(0,0,0,.3);color:${confColor};border-color:${confColor}40">${confidence} CONFIDENCE</span>
+        </div>
+        ${updatedStr ? `<div class="gauge-updated">${updatedStr}</div>` : ''}
+      </div>`;
+  }
+
+  // ─── FACTOR HEATMAP ─────────────────────────────────────────────────────────
+  function renderFactorHeatmap(factorScores) {
+    const cards = Object.entries(factorScores).map(([key, factor]) => {
+      const name = (typeof RecessionModel !== 'undefined') ? RecessionModel.formatFactorName(key) : key;
+      const statusClass = (typeof RecessionModel !== 'undefined') ? RecessionModel.getStatusClass(factor.status) : 'status-stable';
+      const fillColor = (typeof RecessionModel !== 'undefined') ? RecessionModel.getStatusColor(factor.status) : '#94A3B8';
+      const weight = Math.round((factor.weight || 0) * 100);
+      return `
+        <a class="factor-card" href="macro.html?factor=${key}" data-status="${factor.status}">
+          <div class="factor-card-header">
+            <span class="factor-card-name">${name}</span>
+            <span class="status-badge ${statusClass}">${factor.status}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+            <div class="factor-score-bar" style="flex:1">
+              <div class="factor-score-fill" style="width:${factor.score}%;background:${fillColor}"></div>
+            </div>
+            <span style="font-size:12px;font-weight:700;color:${fillColor};flex-shrink:0">${factor.score}</span>
+          </div>
+          <div class="factor-driver">${factor.topDriver}</div>
+          <div style="margin-top:6px;font-size:10px;color:var(--gw-text-secondary)">Weight: ${weight}%</div>
+        </a>`;
+    });
+    return `<div class="factor-heatmap">${cards.join('')}</div>`;
+  }
+
+  // ─── WHAT CHANGED TODAY ──────────────────────────────────────────────────────
+  function renderWhatChangedToday(items) {
+    const rows = (items || []).map(item => {
+      const impactClass = item.impact === 'POSITIVE' ? 'impact-positive' : item.impact === 'NEGATIVE' ? 'impact-negative' : 'impact-neutral';
+      return `
+        <div class="what-changed-item">
+          <div class="wc-time">${item.time || ''}</div>
+          <div class="wc-body">
+            <div class="wc-factor">${item.factor}</div>
+            <div class="wc-change">${item.change}</div>
+            <div class="wc-source">Source: ${item.source || 'GeoWire'}</div>
+          </div>
+          <div class="what-changed-impact ${impactClass}">${item.impact}</div>
+        </div>`;
+    });
+    return `<div class="what-changed-list">${rows.join('')}</div>`;
+  }
+
+  // ─── HISTORICAL COMPARISON ───────────────────────────────────────────────────
+  function renderHistoricalComparison(comparisons) {
+    const cards = (comparisons || []).map(c => `
+      <div class="historical-card">
+        <div class="historical-event">${c.event}</div>
+        <div class="historical-stat"><span class="historical-stat-label">Oil shock</span><span class="historical-stat-value">${c.oilChange}</span></div>
+        <div class="historical-stat"><span class="historical-stat-label">Recession lag</span><span class="historical-stat-value">${c.recessionLag}</span></div>
+        <div class="similarity-bar"><div class="similarity-fill" style="width:${c.similarity}%"></div></div>
+        <div class="similarity-label">${c.similarity}% similarity to current crisis</div>
+        <div class="historical-notes">${c.notes}</div>
+      </div>`);
+    return `<div class="historical-grid">${cards.join('')}</div>`;
+  }
+
+  // ─── DIVERGENCE STRIP ────────────────────────────────────────────────────────
+  function renderDivergenceStrip(divergences) {
+    const cards = (divergences || []).map(d => `
+      <div class="divergence-card">
+        <div class="divergence-title">${d.title}</div>
+        <div class="divergence-row">
+          <span class="divergence-label">Our model:</span>
+          <span class="divergence-value">${d.ours}</span>
+        </div>
+        <div class="divergence-row">
+          <span class="divergence-label">Market:</span>
+          <span class="divergence-value">${d.market}</span>
+        </div>
+        <div class="divergence-thesis">${d.thesis}</div>
+      </div>`);
+    return `<div class="divergence-strip">${cards.join('')}</div>`;
+  }
+
+  // ─── METRIC CARD ─────────────────────────────────────────────────────────────
+  function renderMetricCard(label, value, delta, unit, source, deltaClass) {
+    const dc = deltaClass || (typeof delta === 'number' ? (delta > 0 ? 'positive' : delta < 0 ? 'negative' : '') : '');
+    const deltaArrow = typeof delta === 'number' ? (delta > 0 ? '▲' : delta < 0 ? '▼' : '—') : '';
+    const deltaStr = typeof delta === 'number' ? `${deltaArrow} ${Math.abs(delta)}%` : (delta || '');
+    return `
+      <div class="metric-card">
+        <div class="metric-label">${label}</div>
+        <div class="metric-value">${value}${unit ? `<small style="font-size:14px;font-weight:400;color:var(--gw-text-secondary);margin-left:4px">${unit}</small>` : ''}</div>
+        ${deltaStr ? `<div class="metric-delta ${dc}">${deltaStr}</div>` : ''}
+        ${source ? `<div class="source-label">Source: ${source}</div>` : ''}
+      </div>`;
+  }
+
+  // ─── RECESSION HOMEPAGE WIDGET ────────────────────────────────────────────────
+  function renderRecessionWidget(recData) {
+    if (!recData) return '';
+    const { probability, momentum, confidence, factorScores } = recData;
+    // Compute top 3 drivers
+    let topDriverKeys = [];
+    if (typeof RecessionModel !== 'undefined') {
+      const { topDrivers } = RecessionModel.calcProbability(factorScores);
+      topDriverKeys = topDrivers;
+    } else {
+      topDriverKeys = Object.keys(factorScores).slice(0, 3);
+    }
+    const momArrow = momentum === 'RISING' ? '↑' : momentum === 'FALLING' ? '↓' : '→';
+    const momColor = momentum === 'RISING' ? '#f87171' : momentum === 'FALLING' ? '#4ade80' : '#fbbf24';
+    const needleColor = probability < 20 ? '#2D6A4F' : probability < 35 ? '#F59E0B' : probability < 50 ? '#EA580C' : '#E63946';
+
+    // Mini gauge SVG (200px)
+    const W = 200, H = 115, cx = W/2, cy = H - 8, r = 86;
+    const toRad = d => d * Math.PI / 180;
+    const arcPt = p => ({ x: cx + r * Math.cos(toRad(180 - p*180)), y: cy - r * Math.sin(toRad(180 - p*180)) });
+    const arc = (s,e,fillR) => { const a=arcPt(s),b=arcPt(e),lg=(e-s)>.5?1:0; return `M${a.x} ${a.y} A${fillR} ${fillR} 0 ${lg} 1 ${b.x} ${b.y}`; };
+    const np = arcPt(Math.min(1, probability/100));
+    const miniGauge = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+      <path d="${arc(0,1,r)}" stroke="#334155" stroke-width="10" fill="none"/>
+      <path d="${arc(0,.20,r)}" stroke="#2D6A4F" stroke-width="10" fill="none" opacity=".7"/>
+      <path d="${arc(.20,.35,r)}" stroke="#F59E0B" stroke-width="10" fill="none" opacity=".7"/>
+      <path d="${arc(.35,.50,r)}" stroke="#EA580C" stroke-width="10" fill="none" opacity=".7"/>
+      <path d="${arc(.50,1,r)}" stroke="#E63946" stroke-width="10" fill="none" opacity=".7"/>
+      <line x1="${cx}" y1="${cy}" x2="${np.x}" y2="${np.y}" stroke="${needleColor}" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="${cx}" cy="${cy}" r="5" fill="${needleColor}"/>
+    </svg>`;
+
+    const formatName = k => typeof RecessionModel !== 'undefined' ? RecessionModel.formatFactorName(k) : k;
+    const driverItems = topDriverKeys.map(k => `
+      <div class="rw-driver-item">${formatName(k)}: ${(factorScores[k]||{}).topDriver || ''}</div>`).join('');
+
+    return `
+      <div class="recession-widget">
+        <div class="rw-gauge-side">${miniGauge}</div>
+        <div class="rw-info-side">
+          <div class="rw-prob-display">
+            <span class="rw-prob-number" style="color:${needleColor}">${probability}%</span>
+            <span class="rw-prob-label">6-mo recession probability</span>
+            <span class="status-badge" style="margin-left:4px;background:rgba(0,0,0,.3);color:${momColor};border-color:${momColor}40">${momentum} ${momArrow}</span>
+          </div>
+          <div class="rw-drivers">
+            <div class="rw-drivers-label">Top drivers</div>
+            ${driverItems}
+          </div>
+          <a href="recession.html" class="rw-cta">See Full Recession Dashboard →</a>
+        </div>
+      </div>`;
+  }
+
   // Public API
   return {
     renderConfidenceBadge, renderSourceLabel, renderLiveBadge,
@@ -469,5 +689,8 @@ const UI = (() => {
     renderWarCostTicker, startWarCostCounter, startClock,
     renderTimeline, renderRiskHeatmap, renderSupplyChain,
     renderMarketTicker, setLang, init, _copyLink,
+    renderRecessionGauge, renderFactorHeatmap, renderWhatChangedToday,
+    renderHistoricalComparison, renderDivergenceStrip, renderMetricCard,
+    renderRecessionWidget,
   };
 })();

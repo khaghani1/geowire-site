@@ -52,6 +52,15 @@
     </div>
   </section>
 
+  <!-- Recession Risk Widget (above Intelligence Feed) -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Recession Risk</h2>
+      <a href="recession.html" class="section-link">Full Analysis →</a>
+    </div>
+    <div id="recession-widget"></div>
+  </section>
+
   <section class="section container">
     <div class="section-header">
       <h2 class="section-title">Intelligence Feed</h2>
@@ -135,6 +144,7 @@
 </main>
 <div id="site-footer"></div>
 <script src="content.js"></script>
+<script src="scoring.js"></script>
 <script src="ui.js"></script>
 <script src="api.js"></script>
 <script>
@@ -154,6 +164,9 @@
   document.getElementById('hero-share-buttons').innerHTML = UI.renderShareButtons(
     `US–Iran Conflict Day ${warDay} — Operation Epic Fury live tracking`, 'https://geowire.org/'
   );
+
+  // Recession widget
+  document.getElementById('recession-widget').innerHTML = UI.renderRecessionWidget(GEOWIRE.recessionData);
 
   // Timeline
   document.getElementById('conflict-timeline').innerHTML = UI.renderTimeline(GEOWIRE.timelineEvents);
