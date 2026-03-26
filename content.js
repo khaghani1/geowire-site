@@ -286,6 +286,59 @@ const GEOWIRE = {
     usGroundInvasion:      { value: 8,  unit: '%', source: 'DEMO — Polymarket (not live)', confidence: 'inferred', note: 'Market-implied probability.' },
   },
 
+  // ─── COMMODITY CASCADE ───────────────────────────────────────────────────────
+  commodityCascade: [
+    { name: 'Crude Oil (Brent)', currentPrice: '$101/bbl', preWarPrice: '$68/bbl', percentChange: +48.5, disruptionScore: 58, status: 'DISRUPTED',  hormuzExposure: 'Direct — 21M bbl/day transit', substitutability: 'Low (2–3yr to reroute)', bufferDays: 90,  demandElasticity: 0.10, downstreamEffect: 'Gasoline, diesel, jet fuel, plastics, chemicals', source: 'Bloomberg/Kpler',         confidence: 'multisource'  },
+    { name: 'LNG (Qatar/TTF)',  currentPrice: '€50/MWh',  preWarPrice: '€32/MWh', percentChange: +57.0, disruptionScore: 46, status: 'DISRUPTED',  hormuzExposure: 'Critical — 80M t/yr via Hormuz', substitutability: 'Low-Medium',        bufferDays: 45,  demandElasticity: 0.15, downstreamEffect: 'EU power generation, heating, industrial', source: 'ICE/Bloomberg',           confidence: 'multisource'  },
+    { name: 'Helium',           currentPrice: 'idx 200',  preWarPrice: 'idx 100', percentChange: +100,  disruptionScore: 92, status: 'CRITICAL',   hormuzExposure: 'Indirect — Qatar Ras Laffan OFFLINE', substitutability: 'NONE (zero substitutes)', bufferDays: 45, demandElasticity: 0.02, downstreamEffect: 'Semiconductor fabs, MRI machines, AI chip production, NASA/space', source: 'Gasworld/Linde filings', confidence: 'singlesource' },
+    { name: 'Nitrogen Fert.',   currentPrice: '~2× spot', preWarPrice: 'base',    percentChange: +100,  disruptionScore: 46, status: 'DISRUPTED',  hormuzExposure: 'Moderate — Iran 2M+ t/yr offline', substitutability: 'Low-Medium (6mo lag)', bufferDays: 60, demandElasticity: 0.08, downstreamEffect: 'Global agriculture — 3–6 month lag to food prices', source: 'Morningstar/Reuters',     confidence: 'inferred'     },
+    { name: 'Phosphate',        currentPrice: '+50%',     preWarPrice: 'base',    percentChange: +50,   disruptionScore: 40, status: 'ELEVATED',   hormuzExposure: 'Moderate — Jordan/Morocco rerouting', substitutability: 'Low',              bufferDays: 75,  demandElasticity: 0.08, downstreamEffect: 'Fertilizer chain, food security', source: 'World Bank/CRU',          confidence: 'inferred'     },
+    { name: 'Sulphur',          currentPrice: '+30%',     preWarPrice: 'base',    percentChange: +30,   disruptionScore: 38, status: 'ELEVATED',   hormuzExposure: 'Moderate',                            substitutability: 'Low-Medium',        bufferDays: 90,  demandElasticity: 0.10, downstreamEffect: 'Fertilizer production, pharmaceuticals', source: 'ICIS/Argus',              confidence: 'inferred'     },
+    { name: 'Ammonia',          currentPrice: '+40%',     preWarPrice: 'base',    percentChange: +40,   disruptionScore: 40, status: 'ELEVATED',   hormuzExposure: 'High — feedstock natural gas',        substitutability: 'Low',              bufferDays: 60,  demandElasticity: 0.08, downstreamEffect: 'Fertilizers, refrigeration, industrial chemicals', source: 'Green Markets/ICIS',      confidence: 'inferred'     },
+    { name: 'Bromine',          currentPrice: '+25%',     preWarPrice: 'base',    percentChange: +25,   disruptionScore: 35, status: 'ELEVATED',   hormuzExposure: 'Indirect — 66% from Israel/Jordan',   substitutability: 'Very Low',         bufferDays: 60,  demandElasticity: 0.05, downstreamEffect: 'Chip etching, flame retardants, pharmaceuticals', source: 'Albemarle/ICL filings',   confidence: 'singlesource' },
+    { name: 'Shipping (War Risk)', currentPrice: '+40% war premium', preWarPrice: 'base', percentChange: +40, disruptionScore: 55, status: 'DISRUPTED', hormuzExposure: 'Full — transit suspended', substitutability: 'Cape reroute (+14d)',  bufferDays: 0,   demandElasticity: 0.20, downstreamEffect: 'All imported goods, supply chain lead times, inflation', source: "Lloyd's/Clarksons",      confidence: 'confirmed'    },
+    { name: 'Defense Stocks',   currentPrice: '+18%',     preWarPrice: 'base',    percentChange: +18,   disruptionScore: 10, status: 'POSITIVE',   hormuzExposure: 'Inverse — conflict drives demand',   substitutability: 'N/A',              bufferDays: null, demandElasticity: null, downstreamEffect: 'RTX, LMT, NOC outperforming. JPM upgraded sector.',  source: 'Bloomberg/JPM',           confidence: 'multisource'  },
+    { name: 'Gold',             currentPrice: '$4,100/oz',preWarPrice: '$3,200/oz',percentChange: -8.8,  disruptionScore: 30, status: 'VOLATILE',   hormuzExposure: 'Safe haven flows offsetting war sell-off', substitutability: 'N/A',           bufferDays: null, demandElasticity: null, downstreamEffect: 'Flight-to-safety demand vs. risk-off selling tension', source: 'FRED/CME',               confidence: 'confirmed'    },
+    { name: 'Bitcoin',          currentPrice: '$87,420',  preWarPrice: '$95,000', percentChange: -8.0,  disruptionScore: 25, status: 'VOLATILE',   hormuzExposure: 'Indirect — risk sentiment, energy cost for mining', substitutability: 'N/A', bufferDays: null, demandElasticity: null, downstreamEffect: 'Risk-off pressure; miners facing higher energy costs', source: 'CoinGecko',              confidence: 'multisource'  },
+  ],
+
+  // ─── HELIUM CRISIS ───────────────────────────────────────────────────────────
+  heliumCrisis: {
+    keyFacts: {
+      offlineShare: 33,
+      bufferDays: 45,
+      substituteExists: false,
+      priceChange: +100,
+      atRiskInvestment: 650,
+      source: 'Gasworld / Linde / Air Products filings',
+      confidence: 'singlesource',
+      lastUpdated: '2026-03-20T00:00Z',
+    },
+    supplyChain: [
+      { stage: 'Qatar Ras Laffan',              status: 'OFFLINE',      severity: 'critical',     detail: '33% of global helium supply. Force majeure declared Mar 4. Linde, Air Products contracts suspended.', icon: '🇶🇦' },
+      { stage: 'Strait of Hormuz',              status: 'BLOCKED',      severity: 'critical',     detail: 'Primary export route. 97% closed. No tanker transits since Day 3 of conflict.',                       icon: '🚫' },
+      { stage: 'Distributors (Linde / Air Liquide / Iwatani)', status: 'RATIONING', severity: 'high', detail: 'Emergency allocation protocols active. Priority: medical (MRI). JPM upgraded Linde +15% YTD on shortage premium.', icon: '🏭' },
+      { stage: 'Samsung / SK Hynix Fabs',       status: 'MONITORING',   severity: 'elevated',     detail: '65% of fab helium sourced from Qatar. 45-day buffer. Alternative sourcing from US/Algeria underway.', icon: '💻' },
+      { stage: 'AI Chip Production',            status: 'AT RISK',      severity: 'elevated',     detail: 'No helium substitute exists for chip lithography cooling. TSMC, Intel, Samsung all exposed.',           icon: '🤖' },
+      { stage: 'Data Centers',                  status: 'WATCHING',     severity: 'moderate',     detail: '$650B in AI infrastructure investments at risk if fab output drops >20%. Cloud capacity expansion delays likely.', icon: '🌐' },
+      { stage: 'Consumer Goods',                status: 'DELAYED',      severity: 'low',          detail: 'Party balloons, airships trivial. Real concern is MRI scanner production and scientific instruments.',    icon: '👤' },
+    ],
+  },
+
+  // ─── GOLDMAN SCENARIOS ───────────────────────────────────────────────────────
+  goldmanScenarios: {
+    preWarBrent: 68,
+    source: 'Goldman Sachs Research (March 2026)',
+    confidence: 'singlesource',
+    scenarios: [
+      { label: 'Full closure, no offset',               closurePct: 100, pipelineOffset: 0,   sprRelease: 0,   oilPremium: 15 },
+      { label: 'Full closure + pipeline reroute',        closurePct: 100, pipelineOffset: 4.2, sprRelease: 0,   oilPremium: 12 },
+      { label: 'Full closure + pipeline + SPR',          closurePct: 100, pipelineOffset: 4.2, sprRelease: 2.0, oilPremium: 10 },
+      { label: '50% closure (partial Hormuz flow)',      closurePct: 50,  pipelineOffset: 2.0, sprRelease: 0,   oilPremium: 4  },
+      { label: '25% closure (near-normal)',              closurePct: 25,  pipelineOffset: 1.0, sprRelease: 0,   oilPremium: 1  },
+    ],
+  },
+
   // ─── UPDATE LOG ─────────────────────────────────────────────────────────────
   updateLog: [
     { timestamp: '2026-03-25T08:00Z', category: 'Diplomatic',   item: 'Oman ceasefire offer',     change: 'New → Ghalibaf signals openness via back-channel',                   source: 'Reuters',   confidence: 'multisource' },

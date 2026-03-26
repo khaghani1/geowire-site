@@ -1047,3 +1047,399 @@ th, td { text-align: left; vertical-align: top; }
 .rw-driver-item::before { content: '▸'; color: var(--gw-accent); flex-shrink: 0; margin-top: 1px; }
 .rw-cta { display: inline-block; margin-top: 14px; font-size: 13px; font-weight: 600; color: var(--gw-accent); text-decoration: none; }
 .rw-cta:hover { text-decoration: underline; }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ENERGY COMMAND CENTER — Component Styles
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─── HORMUZ GAUGE ─────────────────────────────────────────────────────────── */
+.hormuz-gauge {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  max-width: 780px;
+  margin: 0 auto;
+}
+.hormuz-gauge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hormuz-gauge-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--text-2);
+  text-transform: uppercase;
+}
+.hormuz-gauge-updated { font-size: 11px; color: var(--text-2); }
+.hormuz-gauge-main { text-align: center; margin-bottom: 24px; }
+.hormuz-flow-number {
+  font-family: var(--font-mono);
+  font-size: clamp(52px, 10vw, 88px);
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+}
+.hormuz-flow-unit {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 12px;
+  letter-spacing: .08em;
+}
+.hormuz-detail { font-size: 13px; color: var(--text-2); margin: 10px 0 18px; }
+.hormuz-bar-wrap { max-width: 480px; margin: 0 auto 16px; }
+.hormuz-bar-track {
+  height: 18px;
+  background: #1a2a3a;
+  border-radius: 9px;
+  overflow: hidden;
+  position: relative;
+}
+.hormuz-bar-fill {
+  height: 100%;
+  border-radius: 9px;
+  transition: width .4s ease;
+  min-width: 3px;
+}
+.hormuz-bar-normal-marker {
+  position: absolute;
+  right: 0; top: -3px; bottom: -3px;
+  width: 2px;
+  background: #5FA8D3;
+  opacity: .6;
+}
+.hormuz-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-2);
+  margin-top: 5px;
+}
+.hormuz-status-badge {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  border: 1px solid;
+  margin-top: 4px;
+}
+.hormuz-gauge-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+}
+.hormuz-fact {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.hormuz-fact-key { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); }
+.hormuz-fact-val { font-size: 13px; font-weight: 700; color: var(--text); font-family: var(--font-mono); }
+
+/* ─── TRADINGVIEW EMBED ────────────────────────────────────────────────────── */
+.tradingview-container {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.tradingview-container iframe { display: block; }
+
+/* ─── OIL PRICE PANEL ──────────────────────────────────────────────────────── */
+.oil-price-panel {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 767px) {
+  .oil-price-panel { grid-template-columns: 1fr; }
+}
+.oil-price-stats { display: flex; flex-direction: column; gap: 12px; }
+.oil-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.oil-stat-label { font-size: 12px; color: var(--text-2); text-transform: uppercase; letter-spacing: .06em; }
+.oil-stat-value { font-family: var(--font-mono); font-size: 22px; font-weight: 700; }
+.oil-stat-delta { font-size: 12px; margin-top: 2px; }
+
+/* ─── GOLDMAN CALCULATOR ───────────────────────────────────────────────────── */
+.goldman-calculator {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+}
+.goldman-calc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+.goldman-calc-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.goldman-calc-source { font-size: 11px; color: var(--text-2); }
+.goldman-sliders { display: flex; flex-direction: column; gap: 18px; margin-bottom: 22px; }
+.goldman-slider-row { display: flex; flex-direction: column; gap: 8px; }
+.goldman-slider-label { font-size: 13px; color: var(--text-2); font-weight: 500; }
+.goldman-slider-label span { color: var(--text); font-weight: 700; font-family: var(--font-mono); }
+.goldman-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #334155;
+  outline: none;
+  cursor: pointer;
+}
+.goldman-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #5FA8D3;
+  cursor: pointer;
+  border: 2px solid #0D1B2A;
+  box-shadow: 0 0 0 2px #5FA8D340;
+}
+.goldman-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #5FA8D3;
+  cursor: pointer;
+  border: 2px solid #0D1B2A;
+}
+.goldman-result {
+  text-align: center;
+  padding: 20px;
+  background: #0a1520;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+}
+.goldman-result-label { font-size: 11px; text-transform: uppercase; letter-spacing: .10em; color: var(--text-2); margin-bottom: 8px; }
+.goldman-result-price {
+  font-family: var(--font-mono);
+  font-size: 48px;
+  font-weight: 700;
+  color: #EA580C;
+  line-height: 1;
+  transition: color .3s;
+}
+.goldman-result-breakdown { font-size: 12px; color: var(--text-2); margin-top: 8px; }
+.goldman-presets { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.goldman-presets-label { font-size: 11px; color: var(--text-2); text-transform: uppercase; letter-spacing: .06em; }
+.goldman-preset-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-2, #1a2a3a);
+  color: var(--text-2);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.goldman-preset-btn:hover { border-color: #5FA8D3; color: #5FA8D3; }
+
+/* ─── COMMODITY STRIP ──────────────────────────────────────────────────────── */
+.commodity-strip {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.commodity-strip::-webkit-scrollbar { height: 4px; }
+.commodity-strip::-webkit-scrollbar-track { background: #0a1520; border-radius: 2px; }
+.commodity-strip::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+.commodity-card {
+  flex: 0 0 180px;
+  min-width: 180px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid #5FA8D3;
+  border-radius: 10px;
+  padding: 14px;
+  scroll-snap-align: start;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.commodity-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.4); }
+.commodity-name { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--text-2); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.commodity-price { font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.commodity-change { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.commodity-score-bar {
+  height: 4px;
+  background: #1a2a3a;
+  border-radius: 2px;
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+.commodity-score-fill { height: 100%; border-radius: 2px; transition: width .3s; }
+.commodity-score-label { font-size: 10px; color: var(--text-2); margin-bottom: 8px; }
+.commodity-status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.commodity-downstream { font-size: 10px; color: var(--text-2); line-height: 1.4; }
+.commodity-scroll-hint {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-2);
+  margin-top: 8px;
+  opacity: .6;
+}
+@media (min-width: 768px) { .commodity-scroll-hint { display: none; } }
+
+/* ─── HELIUM DEEP DIVE ─────────────────────────────────────────────────────── */
+.helium-deepdive {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.helium-deepdive-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 22px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: background .15s;
+}
+.helium-deepdive-summary::-webkit-details-marker { display: none; }
+.helium-deepdive-summary:hover { background: #1a2a3a; }
+.helium-summary-icon { font-size: 16px; }
+.helium-summary-title { font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+.helium-summary-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  background: #E6394615;
+  color: #E63946;
+  border: 1px solid #E6394640;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.helium-summary-chevron { font-size: 14px; color: var(--text-2); transition: transform .2s; }
+.helium-deepdive[open] .helium-summary-chevron { transform: rotate(180deg); }
+.helium-deepdive-body { padding: 0 22px 22px; }
+.helium-key-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #0a1520;
+  border-radius: 8px;
+}
+.helium-fact-item { display: flex; flex-direction: column; gap: 4px; }
+.helium-fact-k { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); }
+.helium-fact-v { font-size: 16px; font-weight: 700; font-family: var(--font-mono); }
+.helium-fact-v.danger { color: #E63946; }
+.helium-fact-v.warning { color: #F59E0B; }
+.helium-flow { display: flex; flex-direction: column; gap: 0; }
+.helium-stage {
+  border-left: 3px solid #5FA8D3;
+  padding: 12px 14px;
+  position: relative;
+  transition: background .15s;
+}
+.helium-stage:hover { background: #1a2a3a30; }
+.helium-stage-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+.helium-stage-icon { font-size: 16px; }
+.helium-stage-name { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }
+.helium-stage-status {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.helium-stage-detail { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+.helium-stage-arrow { text-align: left; padding: 2px 14px; font-size: 18px; color: var(--text-2); opacity: .5; }
+.helium-source { margin-top: 14px; }
+
+/* ─── GAS STORAGE PANEL ────────────────────────────────────────────────────── */
+.storage-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px;
+}
+.storage-panel-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; text-transform: uppercase; letter-spacing: .06em; }
+.storage-bars { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+.storage-bar-row { display: grid; grid-template-columns: 160px 1fr 70px; gap: 10px; align-items: center; }
+@media (max-width: 600px) {
+  .storage-bar-row { grid-template-columns: 1fr; gap: 4px; }
+}
+.storage-bar-label { font-size: 11px; color: var(--text-2); white-space: nowrap; }
+.storage-bar-track {
+  height: 14px;
+  background: #1a2a3a;
+  border-radius: 7px;
+  overflow: hidden;
+}
+.storage-bar-fill { height: 100%; border-radius: 7px; transition: width .4s ease; }
+.storage-bar-value { font-family: var(--font-mono); font-size: 13px; font-weight: 700; text-align: right; }
+.storage-bar-note { display: none; }
+.storage-panel-note { font-size: 12px; color: var(--text-2); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 12px; }
+
+/* ─── GAS & LNG CARDS ──────────────────────────────────────────────────────── */
+.gas-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.gas-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+}
+.gas-card.alert { border-color: #E63946; background: #E6394608; }
+.gas-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--text-2); margin-bottom: 6px; }
+.gas-card-value { font-family: var(--font-mono); font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.gas-card-delta { font-size: 13px; font-weight: 600; }
+.gas-card-note { font-size: 11px; color: var(--text-2); margin-top: 8px; line-height: 1.4; }
+.gas-card-status { display: inline-block; margin-top: 10px; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .06em; }
+
+/* ─── ENERGY HERO ZONE ─────────────────────────────────────────────────────── */
+.energy-hero-zone {
+  background: linear-gradient(135deg, #0a1520 0%, #0D1B2A 100%);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 30px;
+}

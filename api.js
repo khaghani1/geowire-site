@@ -172,5 +172,53 @@ const API = (() => {
     return results;
   }
 
-  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, fetchAllRecessionData, FRED_SERIES };
+  // ─── FETCH EIA ────────────────────────────────────────────────────────────────
+  async function fetchEIA(seriesId) {
+    if (!EIA_KEY) {
+      console.warn('[GeoWire] EIA key not set — returning null. Register at eia.gov/developer.');
+      return null;
+    }
+    try {
+      const url = `https://api.eia.gov/v2/seriesid/${encodeURIComponent(seriesId)}?api_key=${EIA_KEY}&data[0]=value&sort[0][column]=period&sort[0][direction]=desc&length=1`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`EIA HTTP ${res.status}`);
+      const json = await res.json();
+      const obs = json.response?.data?.[0];
+      if (!obs) throw new Error('No EIA data');
+      return _norm(parseFloat(obs.value), 'EIA', seriesId, 'confirmed', obs.period, true);
+    } catch (err) {
+      console.warn(`[GeoWire] EIA fallback (${seriesId}):`, err.message);
+      return null;
+    }
+  }
+
+  // ─── FETCH NEWS API ───────────────────────────────────────────────────────────
+  async function fetchNewsAPI(query) {
+    const NEWS_API_KEY = ''; // Register at newsapi.org
+    if (!NEWS_API_KEY) {
+      console.warn('[GeoWire] NewsAPI key not set — returning null. Register at newsapi.org.');
+      return null;
+    }
+    try {
+      const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&pageSize=6&apiKey=${NEWS_API_KEY}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`NewsAPI HTTP ${res.status}`);
+      const json = await res.json();
+      const articles = json.articles || [];
+      if (!articles.length) throw new Error('No NewsAPI results');
+      return articles.slice(0, 6).map(a => ({
+        headline: a.title || 'No title',
+        summary: a.description || 'No description.',
+        source: a.source?.name || 'Unknown',
+        confidence: 'multisource',
+        timestamp: a.publishedAt || new Date().toISOString(),
+        url: a.url || '#',
+      }));
+    } catch (err) {
+      console.warn(`[GeoWire] NewsAPI fallback (${query}):`, err.message);
+      return null;
+    }
+  }
+
+  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, fetchAllRecessionData, fetchEIA, fetchNewsAPI, FRED_SERIES };
 })();

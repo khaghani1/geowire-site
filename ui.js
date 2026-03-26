@@ -677,6 +677,217 @@ const UI = (() => {
       </div>`;
   }
 
+  // ─── HORMUZ GAUGE ────────────────────────────────────────────────────────────
+  function renderHormuzGauge(currentFlow, normalFlow) {
+    const pct = Math.max(0, Math.min(100, (currentFlow / normalFlow) * 100));
+    const pctLabel = pct.toFixed(0);
+    const barColor = pct < 10 ? '#E63946' : pct < 30 ? '#EA580C' : '#F59E0B';
+    const statusText = pct < 5 ? 'EFFECTIVELY CLOSED' : pct < 20 ? 'CRITICALLY RESTRICTED' : 'SEVERELY DISRUPTED';
+    const statusColor = pct < 5 ? '#E63946' : pct < 20 ? '#EA580C' : '#F59E0B';
+    return `
+      <div class="hormuz-gauge">
+        <div class="hormuz-gauge-header">
+          <span class="hormuz-gauge-label">HORMUZ TRANSIT FLOW</span>
+          <span class="hormuz-gauge-updated">Source: Kpler · updated ${_fmtTime('2026-03-25T08:00Z')}</span>
+        </div>
+        <div class="hormuz-gauge-main">
+          <div class="hormuz-flow-number" style="color:${barColor}">${pctLabel}%<span class="hormuz-flow-unit">FLOWING</span></div>
+          <div class="hormuz-detail">${currentFlow}M of ${normalFlow}M bbl/day · 22-nation coalition blockade</div>
+          <div class="hormuz-bar-wrap">
+            <div class="hormuz-bar-track">
+              <div class="hormuz-bar-fill" style="width:${pct}%;background:${barColor}"></div>
+              <div class="hormuz-bar-normal-marker" title="Pre-war normal"></div>
+            </div>
+            <div class="hormuz-bar-labels">
+              <span>0%</span><span>Pre-war: 100%</span>
+            </div>
+          </div>
+          <div class="hormuz-status-badge" style="background:${statusColor}1a;color:${statusColor};border-color:${statusColor}60">
+            ⚠ ${statusText}
+          </div>
+        </div>
+        <div class="hormuz-gauge-facts">
+          <div class="hormuz-fact"><span class="hormuz-fact-key">Pre-war flow</span><span class="hormuz-fact-val">21M bbl/day</span></div>
+          <div class="hormuz-fact"><span class="hormuz-fact-key">Current flow</span><span class="hormuz-fact-val" style="color:${barColor}">${currentFlow}M bbl/day</span></div>
+          <div class="hormuz-fact"><span class="hormuz-fact-key">% of global oil</span><span class="hormuz-fact-val" style="color:${barColor}">~20% offline</span></div>
+          <div class="hormuz-fact"><span class="hormuz-fact-key">Lloyd's status</span><span class="hormuz-fact-val" style="color:#E63946">War risk SUSPENDED</span></div>
+          <div class="hormuz-fact"><span class="hormuz-fact-key">Day of closure</span><span class="hormuz-fact-val">Day 26</span></div>
+          <div class="hormuz-fact"><span class="hormuz-fact-key">Coalition nations</span><span class="hormuz-fact-val">22 navies deployed</span></div>
+        </div>
+      </div>`;
+  }
+
+  // ─── GOLDMAN CALCULATOR ───────────────────────────────────────────────────────
+  function renderGoldmanCalculator(scenarios, preWarBrent) {
+    const base = preWarBrent || 68;
+    // Interpolated: premium = closurePct/100 * 15 - pipelineOffset/4.2 * 3 - sprRelease/2 * 2
+    return `
+      <div class="goldman-calculator" id="goldman-calc">
+        <div class="goldman-calc-header">
+          <span class="goldman-calc-title">Goldman Scenario Calculator</span>
+          <span class="goldman-calc-source">Framework: Goldman Sachs Research, March 2026</span>
+        </div>
+        <div class="goldman-sliders">
+          <div class="goldman-slider-row">
+            <label class="goldman-slider-label">Hormuz Closure <span id="gc-closure-val">97</span>%</label>
+            <input type="range" min="0" max="100" value="97" step="1" class="goldman-range" id="gc-closure"
+              oninput="document.getElementById('gc-closure-val').textContent=this.value; _updateGoldman()">
+          </div>
+          <div class="goldman-slider-row">
+            <label class="goldman-slider-label">Pipeline Offset <span id="gc-pipeline-val">4.2</span>M bbl/day</label>
+            <input type="range" min="0" max="42" value="42" step="1" class="goldman-range" id="gc-pipeline"
+              oninput="document.getElementById('gc-pipeline-val').textContent=(this.value/10).toFixed(1); _updateGoldman()">
+          </div>
+          <div class="goldman-slider-row">
+            <label class="goldman-slider-label">SPR Release <span id="gc-spr-val">0.0</span>M bbl/day</label>
+            <input type="range" min="0" max="20" value="0" step="1" class="goldman-range" id="gc-spr"
+              oninput="document.getElementById('gc-spr-val').textContent=(this.value/10).toFixed(1); _updateGoldman()">
+          </div>
+        </div>
+        <div class="goldman-result">
+          <div class="goldman-result-label">Estimated Brent Crude</div>
+          <div class="goldman-result-price" id="gc-result-price">$101</div>
+          <div class="goldman-result-breakdown" id="gc-result-breakdown">Pre-war $${base} + $33 conflict premium</div>
+        </div>
+        <div class="goldman-presets">
+          <span class="goldman-presets-label">Quick scenarios:</span>
+          <button class="goldman-preset-btn" onclick="_setGoldman(97,42,0)">Current</button>
+          <button class="goldman-preset-btn" onclick="_setGoldman(100,42,0)">Full Closure</button>
+          <button class="goldman-preset-btn" onclick="_setGoldman(100,42,20)">Full + SPR</button>
+          <button class="goldman-preset-btn" onclick="_setGoldman(50,20,0)">50% Closure</button>
+          <button class="goldman-preset-btn" onclick="_setGoldman(25,10,0)">25% Closure</button>
+        </div>
+      </div>
+      <script>
+        function _updateGoldman() {
+          var c = parseFloat(document.getElementById('gc-closure').value) / 100;
+          var p = parseFloat(document.getElementById('gc-pipeline').value) / 10;
+          var s = parseFloat(document.getElementById('gc-spr').value) / 10;
+          // Goldman framework: max premium at full closure = $15, pipeline offsets up to $3, SPR up to $2
+          var maxPremium = 15;
+          var premium = Math.round((c * maxPremium) - (p / 4.2 * 3) - (s / 2.0 * 2));
+          premium = Math.max(0, premium);
+          var brent = ${base} + premium;
+          var actual = Math.max(${base}, Math.round(brent + (c > 0.8 ? 25 : c > 0.4 ? 10 : 0)));
+          document.getElementById('gc-result-price').textContent = '$' + actual;
+          var color = actual > 120 ? '#E63946' : actual > 100 ? '#EA580C' : actual > 85 ? '#F59E0B' : '#00B86B';
+          document.getElementById('gc-result-price').style.color = color;
+          document.getElementById('gc-result-breakdown').textContent =
+            'Pre-war $${base} + $' + (actual - ${base}) + ' conflict premium (Goldman framework)';
+        }
+        function _setGoldman(closure, pipeline, spr) {
+          document.getElementById('gc-closure').value = closure;
+          document.getElementById('gc-pipeline').value = pipeline;
+          document.getElementById('gc-spr').value = spr;
+          document.getElementById('gc-closure-val').textContent = closure;
+          document.getElementById('gc-pipeline-val').textContent = (pipeline/10).toFixed(1);
+          document.getElementById('gc-spr-val').textContent = (spr/10).toFixed(1);
+          _updateGoldman();
+        }
+        _updateGoldman();
+      </script>`;
+  }
+
+  // ─── COMMODITY CASCADE ────────────────────────────────────────────────────────
+  function renderCommodityCascade(commodities) {
+    if (!commodities || !commodities.length) return '<p class="loading-state">No commodity data.</p>';
+    const statusColors = { CRITICAL: '#E63946', DISRUPTED: '#EA580C', ELEVATED: '#F59E0B', POSITIVE: '#00B86B', VOLATILE: '#8B5CF6', STABLE: '#5FA8D3' };
+    const statusBg = { CRITICAL: '#E6394620', DISRUPTED: '#EA580C20', ELEVATED: '#F59E0B20', POSITIVE: '#00B86B20', VOLATILE: '#8B5CF620', STABLE: '#5FA8D320' };
+    const cards = commodities.map(c => {
+      const color = statusColors[c.status] || '#5FA8D3';
+      const bg = statusBg[c.status] || '#5FA8D320';
+      const sign = c.percentChange >= 0 ? '+' : '';
+      const score = Math.max(0, Math.min(100, c.disruptionScore));
+      const scoreColor = score >= 80 ? '#E63946' : score >= 55 ? '#EA580C' : score >= 35 ? '#F59E0B' : '#00B86B';
+      const downstream = _escHtml((c.downstreamEffect || '').substring(0, 80));
+      return `
+        <div class="commodity-card" style="border-top-color:${color}" title="${_escHtml(c.downstreamEffect || '')}">
+          <div class="commodity-name">${_escHtml(c.name)}</div>
+          <div class="commodity-price">${_escHtml(c.currentPrice)}</div>
+          <div class="commodity-change" style="color:${c.percentChange >= 0 ? (c.status === 'POSITIVE' ? '#00B86B' : '#EA580C') : '#00B86B'}">${sign}${c.percentChange}%</div>
+          <div class="commodity-score-bar">
+            <div class="commodity-score-fill" style="width:${score}%;background:${scoreColor}"></div>
+          </div>
+          <div class="commodity-score-label" style="color:${scoreColor}">Disruption: ${score}/100</div>
+          <div class="commodity-status" style="background:${bg};color:${color};border:1px solid ${color}40">${_escHtml(c.status)}</div>
+          <div class="commodity-downstream">${downstream}${c.downstreamEffect && c.downstreamEffect.length > 80 ? '…' : ''}</div>
+        </div>`;
+    }).join('');
+    return `<div class="commodity-strip" role="list" aria-label="12-commodity cascade">${cards}</div>
+      <div class="commodity-scroll-hint">← Scroll to see all 12 commodities →</div>`;
+  }
+
+  // ─── HELIUM DEEP DIVE ─────────────────────────────────────────────────────────
+  function renderHeliumDeepDive(heliumData) {
+    if (!heliumData) return '';
+    const { keyFacts, supplyChain } = heliumData;
+    const severityColor = { critical: '#E63946', high: '#EA580C', elevated: '#F59E0B', moderate: '#5FA8D3', low: '#8B9AB0' };
+    const severityBg   = { critical: '#E6394615', high: '#EA580C15', elevated: '#F59E0B15', moderate: '#5FA8D315', low: '#8B9AB015' };
+    const stages = (supplyChain || []).map((s, i) => `
+      <div class="helium-stage" style="border-left-color:${severityColor[s.severity]||'#5FA8D3'}">
+        <div class="helium-stage-header">
+          <span class="helium-stage-icon">${s.icon}</span>
+          <span class="helium-stage-name">${_escHtml(s.stage)}</span>
+          <span class="helium-stage-status" style="background:${severityBg[s.severity]};color:${severityColor[s.severity]};border:1px solid ${severityColor[s.severity]}40">${_escHtml(s.status)}</span>
+        </div>
+        <div class="helium-stage-detail">${_escHtml(s.detail)}</div>
+        ${i < (supplyChain.length - 1) ? '<div class="helium-stage-arrow">↓</div>' : ''}
+      </div>`).join('');
+
+    return `
+      <details class="helium-deepdive" open>
+        <summary class="helium-deepdive-summary">
+          <span class="helium-summary-icon">🔴</span>
+          <span class="helium-summary-title">Helium Crisis Deep Dive</span>
+          <span class="helium-summary-tag">CRITICAL — No Substitute</span>
+          <span class="helium-summary-chevron">▾</span>
+        </summary>
+        <div class="helium-deepdive-body">
+          <div class="helium-key-facts">
+            <div class="helium-fact-item"><span class="helium-fact-k">Global supply offline</span><span class="helium-fact-v danger">${keyFacts.offlineShare}%</span></div>
+            <div class="helium-fact-item"><span class="helium-fact-k">Buffer remaining</span><span class="helium-fact-v warning">${keyFacts.bufferDays} days</span></div>
+            <div class="helium-fact-item"><span class="helium-fact-k">Substitute exists?</span><span class="helium-fact-v danger">NO</span></div>
+            <div class="helium-fact-item"><span class="helium-fact-k">Price change</span><span class="helium-fact-v danger">+${keyFacts.priceChange}%</span></div>
+            <div class="helium-fact-item"><span class="helium-fact-k">AI investment at risk</span><span class="helium-fact-v warning">$${keyFacts.atRiskInvestment}B</span></div>
+          </div>
+          <div class="helium-flow">${stages}</div>
+          <div class="helium-source">${renderSourceLabel(keyFacts.source, keyFacts.lastUpdated)}</div>
+        </div>
+      </details>`;
+  }
+
+  // ─── EU GAS STORAGE PANEL ────────────────────────────────────────────────────
+  function renderEnergyStoragePanel() {
+    const data = [
+      { year: '2024 (same date)', bcm: 77, color: '#5FA8D3', note: 'Normal seasonal level' },
+      { year: '2025 (same date)', bcm: 60, color: '#F59E0B', note: 'Below 5yr average' },
+      { year: 'Current (2026)',   bcm: 46, color: '#E63946', note: 'Multi-year low — conflict drawdown' },
+    ];
+    const maxBcm = 90;
+    const bars = data.map(d => {
+      const pct = Math.round((d.bcm / maxBcm) * 100);
+      return `
+        <div class="storage-bar-row">
+          <div class="storage-bar-label">${_escHtml(d.year)}</div>
+          <div class="storage-bar-track">
+            <div class="storage-bar-fill" style="width:${pct}%;background:${d.color}"></div>
+          </div>
+          <div class="storage-bar-value" style="color:${d.color}">${d.bcm} bcm</div>
+          <div class="storage-bar-note">${_escHtml(d.note)}</div>
+        </div>`;
+    }).join('');
+    return `
+      <div class="storage-panel">
+        <div class="storage-panel-title">EU Natural Gas Storage</div>
+        <div class="storage-bars">${bars}</div>
+        <div class="storage-panel-note">
+          <span style="color:#E63946">▲ Deficit of 31 bcm vs. 2024 levels.</span>
+          EU entering winter buffer drawdown well below normal.
+          ${renderSourceLabel('GIE AGSI / IEA', '2026-03-25T00:00Z')}
+        </div>
+      </div>`;
+  }
+
   // Public API
   return {
     renderConfidenceBadge, renderSourceLabel, renderLiveBadge,
@@ -692,5 +903,7 @@ const UI = (() => {
     renderRecessionGauge, renderFactorHeatmap, renderWhatChangedToday,
     renderHistoricalComparison, renderDivergenceStrip, renderMetricCard,
     renderRecessionWidget,
+    renderHormuzGauge, renderGoldmanCalculator, renderCommodityCascade,
+    renderHeliumDeepDive, renderEnergyStoragePanel,
   };
 })();

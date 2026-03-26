@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="GeoWire Energy — Oil chokepoints, energy market disruption, and supply chain risk during Operation Epic Fury.">
+  <meta name="description" content="GeoWire Energy Command Center — Hormuz closure impact on 12 commodity chains, Goldman scenario calculator, helium crisis deep dive, and EU gas storage. Operation Epic Fury Day 26+.">
+  <meta property="og:title" content="Energy Command Center — GeoWire">
+  <meta property="og:description" content="The largest energy supply disruption since 1973. Track Hormuz flow, 12 commodity cascades, Goldman oil scenarios, and the silent helium crisis threatening AI chip production.">
   <meta name="google-adsense-account" content="ca-pub-5068519853957013">
-  <title>Energy Markets — GeoWire</title>
+  <title>Energy Command Center — GeoWire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -18,202 +20,325 @@
 
 <main class="page-main">
 
-  <!-- PAGE HERO -->
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       PAGE HERO
+       ═══════════════════════════════════════════════════════════════════════ -->
   <section class="page-hero">
     <div class="container">
       <div class="page-hero-inner">
         <div class="page-hero-label">
-          <span class="confidence-badge confidence-confirmed">CONFIRMED</span>
+          <span class="confidence-badge confidence-multisource">MULTI-SOURCE</span>
           <span class="tag tag-economic">ENERGY</span>
+          <span class="tag" style="background:#E6394620;color:#E63946;border:1px solid #E6394640">⚡ COMMAND CENTER</span>
         </div>
-        <h1 class="page-hero-title">Energy Markets &amp; Chokepoints</h1>
-        <p class="page-hero-subtitle">Real-time tracking of oil prices, Strait of Hormuz closure, and global energy disruption from Operation Epic Fury.</p>
+        <h1 class="page-hero-title">Energy Command Center</h1>
+        <p class="page-hero-subtitle">The largest energy supply disruption since 1973. Hormuz at 3% flow. Tracking how the Strait closure cascades through 12 commodity chains — from crude oil to AI chips.</p>
         <div class="page-hero-meta">
-          <span id="energy-live-badge"></span>
-          <span class="page-hero-updated">Updated continuously</span>
+          <span>Operation Epic Fury — Day <span id="hero-war-day">26</span></span>
+          <span class="separator">·</span>
+          <span>Updated <span id="hero-clock">—</span></span>
+          <span class="separator">·</span>
+          <span>Brent <strong style="color:#EA580C" id="hero-brent">$101</strong> | Pre-war $68</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- AD SLOT TOP -->
-  <div class="container">
-    <div class="ad-slot ad-slot-top">
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <!-- Market ticker -->
+  <div id="market-ticker-bar"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       RISK BAR
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="war-status-bar">
+    <div class="container">
+      <div class="war-status-inner">
+        <span class="war-status-label">HORMUZ BLOCKADE</span>
+        <div class="war-status-track">
+          <div class="war-status-fill" id="hormuz-risk-bar" style="width:97%"></div>
+        </div>
+        <span class="war-status-pct" id="hormuz-risk-pct" style="color:#E63946">97% CLOSED</span>
+      </div>
     </div>
   </div>
 
-  <!-- ENERGY METRICS GRID -->
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Live Market Prices</h2>
-      <div class="metrics-grid" id="energy-metrics-grid">
-        <!-- populated by JS -->
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       1. HORMUZ TRANSIT MONITOR — HERO
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Hormuz Transit Monitor</h2>
+      <span class="section-subtitle">Primary choke point — 20% of global oil normally transits this 21-mile strait</span>
+    </div>
+    <div class="energy-hero-zone" id="hormuz-gauge-container">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       2. OIL PRICE PANEL + TRADINGVIEW CHART
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Oil Price Panel</h2>
+      <span class="section-subtitle">Brent crude — pre-war $68 → current $101. Goldman 3-month target: $130</span>
+    </div>
+    <div class="oil-price-panel">
+      <!-- TradingView Chart -->
+      <div>
+        <div class="tradingview-container">
+          <div class="tradingview-widget-container" style="height:400px;">
+            <iframe
+              scrolling="no" allowtransparency="true" frameborder="0"
+              src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_oil&symbol=TVC%3AUKOIL&interval=D&hidesidetoolbar=1&hidetoptoolbar=0&saveimage=0&toolbarbg=0D1B2A&theme=dark&style=1&timezone=Etc%2FUTC&studies=[]&hideideas=1&overrides={}&enabled_features=[]&disabled_features=[]&locale=en&utm_source=geowire.org&utm_medium=widget&utm_campaign=chart"
+              style="width:100%;height:400px;margin:0 !important;"
+              title="Brent Crude Oil (TVC:UKOIL) — TradingView">
+            </iframe>
+          </div>
+        </div>
+        <p class="source-label" style="margin-top:6px">Chart: TradingView (TVC:UKOIL) · Data: ICE Futures Europe</p>
+      </div>
+      <!-- Price stat cards -->
+      <div class="oil-price-stats">
+        <div class="oil-stat-card">
+          <div>
+            <div class="oil-stat-label">Brent Crude (Current)</div>
+            <div class="oil-stat-value" style="color:#EA580C">$101.15</div>
+            <div class="oil-stat-delta" style="color:#EA580C">+$32.95 (+48.5%) vs. pre-war</div>
+          </div>
+        </div>
+        <div class="oil-stat-card">
+          <div>
+            <div class="oil-stat-label">Pre-war Brent (Feb 27)</div>
+            <div class="oil-stat-value" style="color:#5FA8D3">$68.20</div>
+            <div class="oil-stat-delta" style="color:var(--text-secondary)">Last normal close before Op. Epic Fury</div>
+          </div>
+        </div>
+        <div class="oil-stat-card">
+          <div>
+            <div class="oil-stat-label">Goldman 3-Month Target</div>
+            <div class="oil-stat-value" style="color:#F59E0B">$130.00</div>
+            <div class="oil-stat-delta" style="color:var(--text-secondary)">If Hormuz stays closed · GS Research</div>
+          </div>
+        </div>
+        <div class="oil-stat-card">
+          <div>
+            <div class="oil-stat-label">WTI Crude</div>
+            <div class="oil-stat-value" style="color:#EA580C">$90.22</div>
+            <div class="oil-stat-delta" style="color:#EA580C">+$26.12 (+40.7%) vs. pre-war</div>
+          </div>
+        </div>
+        <div class="oil-stat-card">
+          <div>
+            <div class="oil-stat-label">US Average Gasoline</div>
+            <div class="oil-stat-value" style="color:#EA580C">$3.88/gal</div>
+            <div class="oil-stat-delta" style="color:#EA580C">+$0.90 (+30.2%) vs. pre-war · AAA</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- CHOKEPOINTS -->
-  <section class="section section-dark">
-    <div class="container">
-      <h2 class="section-title">Critical Chokepoints</h2>
-      <p class="section-subtitle">Strategic waterways and transit routes under threat or closure.</p>
-      <div class="chokepoint-grid" id="chokepoint-grid">
-        <!-- populated by JS -->
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       3. GOLDMAN SCENARIO CALCULATOR
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Goldman Scenario Calculator</h2>
+      <span class="section-subtitle">Adjust closure %, pipeline offset, and SPR release to model oil price outcomes</span>
+    </div>
+    <div id="goldman-calc-container">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- AdSense mid-page -->
+  <div class="container" id="ad-slot-energy-mid"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       4. GAS & LNG PANEL
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Gas &amp; LNG</h2>
+      <span class="section-subtitle">Qatar LNG halted · EU storage at multi-year lows · Henry Hub surging</span>
+    </div>
+    <div class="gas-cards-grid" style="margin-bottom:20px">
+      <div class="gas-card">
+        <div class="gas-card-label">TTF Gas (EU)</div>
+        <div class="gas-card-value" style="color:#EA580C">€50/MWh</div>
+        <div class="gas-card-delta" style="color:#EA580C">+57% vs. pre-war (€32/MWh)</div>
+        <div class="gas-card-note">European benchmark. Winter buffer drawdown below normal. Spot market tightening as Qatar LNG disrupted.</div>
+        <span class="source-label">Source: ICE · confirmed</span>
+      </div>
+      <div class="gas-card">
+        <div class="gas-card-label">Henry Hub (US)</div>
+        <div class="gas-card-value" style="color:#EA580C">$5.20/MMBtu</div>
+        <div class="gas-card-delta" style="color:#EA580C">+96.2% vs. pre-war ($2.65)</div>
+        <div class="gas-card-note">US natural gas nearly doubled. LNG export demand from Europe pulling domestic supply tight.</div>
+        <span class="source-label">Source: EIA · confirmed</span>
+      </div>
+      <div class="gas-card alert">
+        <div class="gas-card-label">Qatar LNG (Ras Laffan)</div>
+        <div class="gas-card-value" style="color:#E63946">HALTED</div>
+        <div class="gas-card-delta" style="color:#E63946">Force majeure declared Mar 4</div>
+        <div class="gas-card-note">Qatar = world's largest LNG exporter. 80M t/yr via Hormuz. No timeline for resumption.</div>
+        <span class="gas-card-status" style="background:#E6394620;color:#E63946;border:1px solid #E6394640">⚠ FORCE MAJEURE ACTIVE</span>
+        <br><span class="source-label">Source: Kpler/Reuters · multisource</span>
+      </div>
+      <div class="gas-card">
+        <div class="gas-card-label">Australia LNG (Gorgon/Prelude)</div>
+        <div class="gas-card-value" style="color:#00B86B">ACTIVE</div>
+        <div class="gas-card-delta" style="color:#00B86B">Surge in spot offers to EU/Japan</div>
+        <div class="gas-card-note">Australia filling partial Qatar gap. +4 LNG cargoes/week rerouted to Europe. Still insufficient to offset Qatar.</div>
+        <span class="source-label">Source: Kpler · multisource</span>
       </div>
     </div>
-  </section>
-
-  <!-- SUPPLY CHAIN RISK -->
-  <section class="section">
-    <div class="container">
-      <h2 class="section-title">Supply Chain Risk</h2>
-      <div id="supply-chain-container"></div>
+    <!-- EU Storage bars -->
+    <div id="storage-panel-container">
+      <!-- Rendered by JS -->
     </div>
   </section>
 
-  <!-- AD SLOT MID -->
-  <div class="container">
-    <div class="ad-slot ad-slot-mid">
-      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5068519853957013" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       5. 12-COMMODITY CASCADE
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">12-Commodity Cascade</h2>
+      <span class="section-subtitle">How Hormuz closure propagates through global supply chains — disruption score 0–100</span>
     </div>
-  </div>
+    <div id="commodity-cascade-container">
+      <!-- Rendered by JS -->
+    </div>
+    <p style="font-size:12px;color:var(--text-secondary);margin-top:10px">
+      Sources: Bloomberg, Kpler, ICE, Gasworld, Albemarle/ICL filings, CoinGecko · Confidence: multisource unless noted.
+      Disruption score is GeoWire model estimate combining hormuz exposure, substitutability, and buffer days.
+    </p>
+  </section>
 
-  <!-- TRADE FLOWS TABLE -->
-  <section class="section section-dark">
-    <div class="container">
-      <h2 class="section-title">Hormuz-Dependent Trade Flows</h2>
-      <div class="data-table-wrap">
-        <table class="data-table" id="trade-flows-table">
-          <thead>
-            <tr>
-              <th>Country / Route</th>
-              <th>Daily Volume</th>
-              <th>Dependency</th>
-              <th>Exposure</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="trade-flows-body">
-            <!-- populated by JS -->
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       6. HELIUM DEEP DIVE
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">The Silent Crisis: Helium</h2>
+      <span class="section-subtitle">33% of global supply offline. Zero substitutes. AI chip production at risk.</span>
+    </div>
+    <div id="helium-deepdive-container">
+      <!-- Rendered by JS -->
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       7. METHODOLOGY NOTE
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <details class="methodology-details">
+      <summary><strong>Data methodology &amp; sources</strong></summary>
+      <div class="methodology-body">
+        <table class="methodology-table">
+          <thead><tr><th>Data Point</th><th>Source</th><th>Confidence</th><th>Update Frequency</th></tr></thead>
+          <tbody>
+            <tr><td>Hormuz flow (0.6M bbl/day)</td><td>Kpler tanker tracking</td><td>Single-source</td><td>Near real-time</td></tr>
+            <tr><td>Brent crude ($101)</td><td>Bloomberg/ICE</td><td>Multi-source</td><td>Continuous</td></tr>
+            <tr><td>Goldman scenarios</td><td>Goldman Sachs Research, March 2026</td><td>Single-source</td><td>Report date</td></tr>
+            <tr><td>Helium pricing</td><td>Gasworld index</td><td>Single-source</td><td>Weekly</td></tr>
+            <tr><td>EU gas storage</td><td>GIE AGSI / IEA</td><td>Multi-source</td><td>Daily</td></tr>
+            <tr><td>Commodity prices</td><td>Bloomberg, CME, ICE, Reuters</td><td>Multi-source</td><td>Daily</td></tr>
+            <tr><td>Disruption scores</td><td>GeoWire model (hormuz exposure × substitutability × buffer)</td><td>Model-inferred</td><td>Manual update</td></tr>
           </tbody>
         </table>
+        <p style="font-size:12px;margin-top:10px;color:var(--text-secondary)">
+          GeoWire is an independent intelligence platform. All data points carry confidence ratings.
+          Model-inferred data should not be used for financial decisions. Goldman scenario calculator
+          uses a simplified interpolation of published Goldman Sachs framework — not an exact reproduction.
+        </p>
       </div>
-    </div>
+    </details>
   </section>
 
-  <!-- EMAIL CAPTURE -->
-  <section class="section">
-    <div class="container">
-      <div id="email-capture-container"></div>
-    </div>
-  </section>
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       ADSENSE + EMAIL + FOOTER
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container" id="ad-slot-energy-bottom"></section>
+  <section class="section container" id="email-capture-section"></section>
+  <div id="site-footer"></div>
 
 </main>
 
-<div id="site-footer"></div>
-
+<!-- ─── SCRIPTS (load order: content → scoring → ui → api) ─────────────────── -->
 <script src="content.js"></script>
+<script src="scoring.js"></script>
 <script src="ui.js"></script>
 <script src="api.js"></script>
 <script>
-(async () => {
-  document.getElementById('site-header').innerHTML = UI.renderHeader();
-  document.getElementById('site-nav').innerHTML    = UI.renderNav('energy.html');
-  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+  (async function () {
+    // ─── Init shared UI ──────────────────────────────────────────────────────
+    UI.init();
+    document.getElementById('site-header').innerHTML =
+      UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
+    document.getElementById('site-nav').innerHTML =
+      UI.renderNav(GEOWIRE.navigationItems, 'energy.html');
+    document.getElementById('market-ticker-bar').innerHTML =
+      UI.renderMarketTicker(GEOWIRE.marketData);
+    document.getElementById('site-footer').innerHTML =
+      UI.renderFooter(GEOWIRE.siteMeta);
 
-  // Energy metrics from market data
-  const md = GEOWIRE.marketData || {};
-  const energyKeys = ['oil','wti','natgas','usgas','ttf','hormuz'];
-  const metricsGrid = document.getElementById('energy-metrics-grid');
-  if (metricsGrid) {
-    metricsGrid.innerHTML = energyKeys.map(k => {
-      const d = md[k];
-      if (!d) return '';
-      const isHormuz = k === 'hormuz';
-      const valDisplay = isHormuz
-        ? `<span class="metric-status-closed">CLOSED</span>`
-        : `<span class="metric-value">${typeof d.value === 'number' ? d.value.toLocaleString() : d.value} <small>${d.unit||''}</small></span>`;
-      const changeDisplay = d.change
-        ? `<span class="metric-change ${d.change > 0 ? 'positive' : 'negative'}">${d.change > 0 ? '▲' : '▼'} ${Math.abs(d.change)}%</span>`
-        : '';
-      return `<div class="metric-card ${isHormuz ? 'metric-card-alert' : ''}">
-        <div class="metric-label">${d.label}</div>
-        ${valDisplay}
-        ${changeDisplay}
-        <div class="metric-confidence">${UI.renderConfidenceBadge(d.confidence)}</div>
-      </div>`;
-    }).join('');
-  }
+    // ─── War day + clock ─────────────────────────────────────────────────────
+    const warStart = new Date(GEOWIRE.siteMeta.warStartDate);
+    const warDay = Math.max(1, Math.ceil((Date.now() - warStart) / 86400000));
+    const heroDay = document.getElementById('hero-war-day');
+    if (heroDay) heroDay.textContent = warDay;
+    UI.startClock('hero-clock');
 
-  // Chokepoints
-  const chokepoints = [
-    { name: 'Strait of Hormuz', status: 'CLOSED', volume: '21M bbl/day', countries: 'Iran/Oman', risk: 'critical', note: 'Iranian mines + naval blockade. Day 26.' },
-    { name: 'Strait of Malacca', status: 'OPEN', volume: '16M bbl/day', countries: 'Malaysia/Singapore/Indonesia', risk: 'elevated', note: 'Increased naval patrols. China watching.' },
-    { name: 'Suez Canal', status: 'REDUCED', volume: '5.5M bbl/day', countries: 'Egypt', risk: 'elevated', note: 'Traffic down 40% due to rerouting pressure.' },
-    { name: 'Bab el-Mandeb', status: 'CONTESTED', volume: '4.8M bbl/day', countries: 'Yemen/Djibouti/Eritrea', risk: 'high', note: 'Houthi resurgence since Day 8.' },
-    { name: 'Turkish Straits', status: 'OPEN', volume: '3M bbl/day', countries: 'Turkey', risk: 'low', note: 'Normal operations. Turkey neutral.' },
-    { name: 'Cape of Good Hope', status: 'REROUTING', volume: '+8M bbl/day', countries: 'South Africa', risk: 'moderate', note: 'Emergency reroute adding 14+ days transit.' },
-  ];
-  const chopGrid = document.getElementById('chokepoint-grid');
-  if (chopGrid) {
-    chopGrid.innerHTML = chokepoints.map(c => `
-      <div class="chokepoint-card risk-${c.risk}">
-        <div class="chokepoint-header">
-          <span class="chokepoint-name">${c.name}</span>
-          <span class="chokepoint-status status-${c.status.toLowerCase().replace(/\s/g,'-')}">${c.status}</span>
-        </div>
-        <div class="chokepoint-meta">
-          <span class="chokepoint-volume">${c.volume}</span>
-          <span class="chokepoint-countries">${c.countries}</span>
-        </div>
-        <p class="chokepoint-note">${c.note}</p>
-      </div>`).join('');
-  }
+    // ─── Hormuz gauge ─────────────────────────────────────────────────────────
+    const hormuz = GEOWIRE.marketData.hormuz;
+    document.getElementById('hormuz-gauge-container').innerHTML =
+      UI.renderHormuzGauge(hormuz.value, hormuz.preWar);
 
-  // Supply chain
-  const scContainer = document.getElementById('supply-chain-container');
-  if (scContainer) scContainer.innerHTML = UI.renderSupplyChain();
+    // ─── Goldman calculator ───────────────────────────────────────────────────
+    document.getElementById('goldman-calc-container').innerHTML =
+      UI.renderGoldmanCalculator(
+        GEOWIRE.goldmanScenarios.scenarios,
+        GEOWIRE.goldmanScenarios.preWarBrent
+      );
 
-  // Trade flows
-  const flows = GEOWIRE.tradeData || [];
-  const tbody = document.getElementById('trade-flows-body');
-  if (tbody && flows.length) {
-    tbody.innerHTML = flows.map(row => `
-      <tr>
-        <td class="td-primary">${row.country || row.route || '—'}</td>
-        <td>${row.volume || '—'}</td>
-        <td>${row.dependency || '—'}</td>
-        <td><span class="exposure-pill exposure-${(row.exposure||'').toLowerCase()}">${row.exposure||'—'}</span></td>
-        <td><span class="status-dot status-${(row.status||'').toLowerCase()}">${row.status||'—'}</span></td>
-      </tr>`).join('');
-  } else if (tbody) {
-    tbody.innerHTML = `
-      <tr><td class="td-primary">Japan</td><td>3.4M bbl/day</td><td>87%</td><td><span class="exposure-pill exposure-critical">CRITICAL</span></td><td><span class="status-dot status-disrupted">DISRUPTED</span></td></tr>
-      <tr><td class="td-primary">South Korea</td><td>2.8M bbl/day</td><td>82%</td><td><span class="exposure-pill exposure-critical">CRITICAL</span></td><td><span class="status-dot status-disrupted">DISRUPTED</span></td></tr>
-      <tr><td class="td-primary">China</td><td>6.2M bbl/day</td><td>41%</td><td><span class="exposure-pill exposure-high">HIGH</span></td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
-      <tr><td class="td-primary">India</td><td>1.9M bbl/day</td><td>66%</td><td><span class="exposure-pill exposure-high">HIGH</span></td><td><span class="status-dot status-rerouting">REROUTING</span></td></tr>
-      <tr><td class="td-primary">European Union</td><td>1.2M bbl/day</td><td>18%</td><td><span class="exposure-pill exposure-moderate">MODERATE</span></td><td><span class="status-dot status-elevated">ELEVATED</span></td></tr>
-      <tr><td class="td-primary">United States</td><td>0.9M bbl/day</td><td>12%</td><td><span class="exposure-pill exposure-low">LOW</span></td><td><span class="status-dot status-stable">STABLE</span></td></tr>`;
-  }
+    // ─── EU gas storage panel ─────────────────────────────────────────────────
+    document.getElementById('storage-panel-container').innerHTML =
+      UI.renderEnergyStoragePanel();
 
-  // Email capture
-  const emailEl = document.getElementById('email-capture-container');
-  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+    // ─── 12-commodity cascade ─────────────────────────────────────────────────
+    document.getElementById('commodity-cascade-container').innerHTML =
+      UI.renderCommodityCascade(GEOWIRE.commodityCascade);
 
-  document.getElementById('energy-live-badge').innerHTML = UI.renderLiveBadge(false);
+    // ─── Helium deep dive ─────────────────────────────────────────────────────
+    document.getElementById('helium-deepdive-container').innerHTML =
+      UI.renderHeliumDeepDive(GEOWIRE.heliumCrisis);
 
-  UI.init();
+    // ─── AdSense slots ───────────────────────────────────────────────────────
+    document.getElementById('ad-slot-energy-mid').innerHTML =
+      UI.renderAdSlot('energy-mid');
+    document.getElementById('ad-slot-energy-bottom').innerHTML =
+      UI.renderAdSlot('energy-bottom');
+    if (window.adsbygoogle) {
+      document.querySelectorAll('.adsbygoogle').forEach(() => {
+        try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+      });
+    }
 
-  // Live market data
-  try {
-    await API.loadMarketData();
-    document.getElementById('energy-live-badge').innerHTML = UI.renderLiveBadge(true);
-  } catch(e) {}
+    // ─── Email capture ────────────────────────────────────────────────────────
+    document.getElementById('email-capture-section').innerHTML =
+      UI.renderEmailCapture();
+    UI.stubEmailCapture();
 
-  (window.adsbygoogle || []).push({});
-  (window.adsbygoogle || []).push({});
-})();
+    // ─── Live market data ─────────────────────────────────────────────────────
+    try {
+      await API.loadMarketData();
+    } catch (e) {
+      console.warn('[GeoWire Energy] Market data load error:', e.message);
+    }
+  })();
 </script>
 </body>
 </html>
