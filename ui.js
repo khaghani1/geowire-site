@@ -70,8 +70,27 @@ const UI = (() => {
   }
 
   // ─── AD SLOT ─────────────────────────────────────────────────────────────────
+  // Renders a manual <ins> only when a real numeric ID is set in adConfig.slots.
+  // Without a valid ID the slot is invisible — Auto Ads fills it automatically.
+  // To configure: set numeric IDs in GEOWIRE.adConfig.slots in content.js.
   function renderAdSlot(name) {
-    return `<div class="ad-slot" data-slot="${_escHtml(name)}" aria-label="Advertisement"><span class="ad-label">Advertisement</span><ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;" data-ad-client="ca-pub-5068519853957013" data-ad-slot="${_escHtml(name)}" data-ad-format="auto" data-full-width-responsive="true"></ins></div>`;
+    const cfg    = (typeof GEOWIRE !== 'undefined' && GEOWIRE.adConfig) || {};
+    const pub    = cfg.publisherId || 'ca-pub-5068519853957013';
+    const slotId = (cfg.slots || {})[name] || '';
+
+    if (slotId && /^\d{6,12}$/.test(slotId)) {
+      // Valid numeric ad unit ID → render manual placement
+      return `<div class="ad-slot" data-slot="${_escHtml(name)}" aria-label="Advertisement">
+        <span class="ad-label">Advertisement</span>
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:90px;"
+          data-ad-client="${_escHtml(pub)}"
+          data-ad-slot="${_escHtml(slotId)}"
+          data-ad-format="auto"
+          data-full-width-responsive="true"></ins>
+      </div>`;
+    }
+    // No valid ID → invisible div; Google Auto Ads handles this position
+    return `<div class="ad-slot ad-slot-auto" data-slot="${_escHtml(name)}" style="min-height:0"></div>`;
   }
 
   // ─── SECTION HEADING ─────────────────────────────────────────────────────────

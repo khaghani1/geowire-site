@@ -1,12 +1,24 @@
 // api.js — GeoWire external data fetching
 // Each function: async, try/catch, silent fallback to content.js seed data.
+//
+// CORS NOTE: FRED, BLS, and NewsAPI all block browser cross-origin requests.
+// All three are routed through Vercel serverless proxies in /api/*.js
+// Keys are stored server-side in those files. Client-side keys below are
+// kept only for reference / direct server-side use.
 
 const API = (() => {
 
+  // Keys kept here for reference — actual requests go through /api/ proxies
   const FRED_KEY  = 'f8f377edb471980ac3d88f219145c071';
   const EIA_KEY   = 'OinUeRE4Beo4k85b8U2YcWbjQCJEMIOPaHfdKOsm';
   const BLS_KEY   = '01eb8f88445b45529eda4971281579ba';
-  const FRED_BASE = 'https://api.stlouisfed.org/fred/series/observations';
+
+  // Local proxy routes (Vercel serverless functions)
+  const PROXY_FRED  = '/api/fred';
+  const PROXY_BLS   = '/api/bls';
+  const PROXY_NEWS  = '/api/news';
+  const PROXY_EIA   = '/api/eia';
+
   const COINGECKO_BASE = 'https://api.coingecko.com/api/v3/simple/price';
   const GDELT_BASE     = 'https://api.gdeltproject.org/api/v2/doc/doc';
 
@@ -36,15 +48,16 @@ const API = (() => {
     return { value, source, label, confidence, timestamp, isLive };
   }
 
-  // ─── FETCH FRED ──────────────────────────────────────────────────────────────
+  // ─── FETCH FRED (via /api/fred proxy — bypasses CORS) ───────────────────────
   async function fetchFRED(seriesId) {
     const key = Object.keys(FRED_SERIES).find(k => FRED_SERIES[k] === seriesId);
     const fallback = (GEOWIRE.marketData || {})[key] || {};
     try {
-      const url = `${FRED_BASE}?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=desc&limit=1`;
+      const url = `${PROXY_FRED}?series_id=${encodeURIComponent(seriesId)}&limit=1`;
       const res = await fetch(url);
-      if (!res.ok) throw new Error(`FRED HTTP ${res.status}`);
+      if (!res.ok) throw new Error(`FRED proxy HTTP ${res.status}`);
       const json = await res.json();
+      if (json.error) throw new Error(json.error);
       const obs = json.observations?.[0];
       if (!obs || obs.value === '.') throw new Error('No FRED data');
       return _norm(parseFloat(obs.value), 'FRED', fallback.label || seriesId, 'confirmed', obs.date, true);
@@ -188,17 +201,14 @@ const API = (() => {
     return results;
   }
 
-  // ─── FETCH EIA ────────────────────────────────────────────────────────────────
+  // ─── FETCH EIA (via /api/eia proxy) ──────────────────────────────────────────
   async function fetchEIA(seriesId) {
-    if (!EIA_KEY) {
-      console.warn('[GeoWire] EIA key not set — returning null. Register at eia.gov/developer.');
-      return null;
-    }
     try {
-      const url = `https://api.eia.gov/v2/seriesid/${encodeURIComponent(seriesId)}?api_key=${EIA_KEY}&data[0]=value&sort[0][column]=period&sort[0][direction]=desc&length=1`;
+      const url = `${PROXY_EIA}?seriesId=${encodeURIComponent(seriesId)}`;
       const res = await fetch(url);
-      if (!res.ok) throw new Error(`EIA HTTP ${res.status}`);
+      if (!res.ok) throw new Error(`EIA proxy HTTP ${res.status}`);
       const json = await res.json();
+      if (json.error) throw new Error(json.error);
       const obs = json.response?.data?.[0];
       if (!obs) throw new Error('No EIA data');
       return _norm(parseFloat(obs.value), 'EIA', seriesId, 'confirmed', obs.period, true);
@@ -208,20 +218,16 @@ const API = (() => {
     }
   }
 
-  // ─── FETCH NEWS API ───────────────────────────────────────────────────────────
+  // ─── FETCH NEWS API (via /api/news proxy — bypasses free-tier CORS block) ────
   async function fetchNewsAPI(query) {
-    const NEWS_API_KEY = 'ff5e642fe3a74c1faba5387d8e8a2865';
-    if (!NEWS_API_KEY) {
-      console.warn('[GeoWire] NewsAPI key not set — returning null. Register at newsapi.org.');
-      return null;
-    }
     try {
-      const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&pageSize=6&apiKey=${NEWS_API_KEY}`;
+      const url = `${PROXY_NEWS}?q=${encodeURIComponent(query)}&pageSize=6`;
       const res = await fetch(url);
-      if (!res.ok) throw new Error(`NewsAPI HTTP ${res.status}`);
+      if (!res.ok) throw new Error(`News proxy HTTP ${res.status}`);
       const json = await res.json();
+      if (json.error) throw new Error(json.error);
       const articles = json.articles || [];
-      if (!articles.length) throw new Error('No NewsAPI results');
+      if (!articles.length) throw new Error('No news results');
       return articles.slice(0, 6).map(a => ({
         headline: a.title || 'No title',
         summary: a.description || 'No description.',
@@ -236,28 +242,14 @@ const API = (() => {
     }
   }
 
-  // ─── FETCH BLS ────────────────────────────────────────────────────────────────
-  // Bureau of Labor Statistics API v2 — seriesId e.g. 'LNS14000000' (unemployment)
+  // ─── FETCH BLS (via /api/bls proxy — bypasses CORS) ─────────────────────────
   async function fetchBLS(seriesId) {
-    if (!BLS_KEY) {
-      console.warn('[GeoWire] BLS key not set — returning null.');
-      return null;
-    }
     try {
-      const currentYear = new Date().getFullYear();
-      const url = 'https://api.bls.gov/publicAPI/v2/timeseries/data/';
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          seriesid: [seriesId],
-          startyear: String(currentYear - 1),
-          endyear:   String(currentYear),
-          registrationkey: BLS_KEY,
-        }),
-      });
-      if (!res.ok) throw new Error(`BLS HTTP ${res.status}`);
+      const url = `${PROXY_BLS}?seriesid=${encodeURIComponent(seriesId)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`BLS proxy HTTP ${res.status}`);
       const json = await res.json();
+      if (json.error) throw new Error(json.error);
       const series = json.Results?.series?.[0];
       if (!series?.data?.length) throw new Error('No BLS data');
       const latest = series.data[0];
@@ -306,5 +298,112 @@ const API = (() => {
     }
   }
 
-  return { fetchFRED, fetchCoinGecko, fetchGDELT, loadMarketData, loadNews, fetchAllRecessionData, fetchEIA, fetchBLS, fetchNewsAPI, fetchAIExplain, FRED_SERIES };
+  // ─── FETCH EXCHANGE RATES (IRR, EUR, GBP, JPY vs USD) ────────────────────────
+  // Open ExchangeRate-API — FREE, no key required, CORS supported.
+  // Updates once per day. Perfect for Iranian Rial tracking.
+  async function fetchExchangeRates() {
+    try {
+      const res = await fetch('https://open.er-api.com/v6/latest/USD');
+      if (!res.ok) throw new Error(`ExchangeRate HTTP ${res.status}`);
+      const json = await res.json();
+      const rates = json.rates || {};
+      return {
+        IRR: rates.IRR || null,   // Iranian Rial — key for GeoWire conflict tracking
+        EUR: rates.EUR || null,
+        GBP: rates.GBP || null,
+        JPY: rates.JPY || null,
+        CNY: rates.CNY || null,
+        SAR: rates.SAR || null,   // Saudi Riyal
+        AED: rates.AED || null,   // UAE Dirham
+        source: 'ExchangeRate-API',
+        lastUpdate: json.time_last_update_utc || null,
+        isLive: true,
+      };
+    } catch (err) {
+      console.warn('[GeoWire] ExchangeRate fallback:', err.message);
+      return null;
+    }
+  }
+
+  // ─── FETCH ALPHA VANTAGE (via /api/alphavantage proxy) ───────────────────────
+  // Requires ALPHA_VANTAGE_KEY in Vercel env vars (free at alphavantage.co).
+  // Free tier: 25 requests/day. Use sparingly — call once on page load.
+  async function fetchAlphaVantage(fn, symbol, interval = 'daily') {
+    try {
+      const url = `/api/alphavantage?fn=${encodeURIComponent(fn)}&symbol=${encodeURIComponent(symbol)}&interval=${interval}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`AV proxy HTTP ${res.status}`);
+      const json = await res.json();
+      if (json.error) throw new Error(json.error);
+      return json;
+    } catch (err) {
+      console.warn(`[GeoWire] Alpha Vantage fallback (${symbol}):`, err.message);
+      return null;
+    }
+  }
+
+  // ─── FETCH POLYMARKET (conflict/ceasefire prediction markets) ─────────────────
+  // Free public API — no key needed. Returns market prices for GeoWire predictions.
+  async function fetchPolymarket(slug) {
+    try {
+      const url = `https://gamma-api.polymarket.com/markets?slug=${encodeURIComponent(slug)}&limit=1`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Polymarket HTTP ${res.status}`);
+      const json = await res.json();
+      const market = Array.isArray(json) ? json[0] : (json.markets?.[0] || null);
+      if (!market) throw new Error('No Polymarket data');
+      return {
+        slug,
+        question: market.question || market.title || slug,
+        probability: market.outcomePrices ? parseFloat(market.outcomePrices[0]) : null,
+        volume: market.volume24hr || market.volumeNum || null,
+        source: 'Polymarket',
+        isLive: true,
+      };
+    } catch (err) {
+      console.warn(`[GeoWire] Polymarket fallback (${slug}):`, err.message);
+      return null;
+    }
+  }
+
+  // ─── FETCH RELIEFWEB (humanitarian crisis data) ───────────────────────────────
+  // Free UN API — no key required, CORS supported.
+  // Returns latest humanitarian reports and situation updates for a country/crisis.
+  async function fetchReliefWeb(query, limit = 5) {
+    try {
+      const url = 'https://api.reliefweb.int/v1/reports?appname=geowire&profile=minimal&preset=latest&slim=1';
+      const body = {
+        query: { value: query, operator: 'AND' },
+        fields: { include: ['title', 'date', 'source', 'url_alias', 'body-html'] },
+        filter: { field: 'language.code', value: 'en' },
+        limit,
+        sort: ['date:desc'],
+      };
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error(`ReliefWeb HTTP ${res.status}`);
+      const json = await res.json();
+      return (json.data || []).map(item => ({
+        title: item.fields?.title || 'Untitled',
+        date: item.fields?.date?.created || null,
+        source: (item.fields?.source || []).map(s => s.name).join(', ') || 'UN OCHA',
+        url: `https://reliefweb.int${item.fields?.url_alias || ''}`,
+        summary: (item.fields?.['body-html'] || '').replace(/<[^>]+>/g, '').slice(0, 200) + '...',
+      }));
+    } catch (err) {
+      console.warn(`[GeoWire] ReliefWeb fallback (${query}):`, err.message);
+      return null;
+    }
+  }
+
+  return {
+    fetchFRED, fetchCoinGecko, fetchGDELT,
+    loadMarketData, loadNews, fetchAllRecessionData,
+    fetchEIA, fetchBLS, fetchNewsAPI, fetchAIExplain,
+    fetchExchangeRates, fetchAlphaVantage, fetchPolymarket, fetchReliefWeb,
+    FRED_SERIES,
+  };
 })();

@@ -14,6 +14,37 @@ const GEOWIRE = {
     warName: 'Operation Epic Fury',
   },
 
+  // ─── ADSENSE CONFIG ─────────────────────────────────────────────────────────
+  // HOW TO SET UP ADS:
+  //   1. Go to Google AdSense (adsense.google.com)
+  //   2. Ads → By ad unit → Display ads → Create
+  //   3. Copy the numeric data-ad-slot ID (e.g. "1234567890")
+  //   4. Paste it into the slots below for each position
+  //   5. OR leave slots empty — Auto Ads (enabled via the page <script> tag)
+  //      will automatically place ads wherever Google thinks they'll perform best.
+  // NOTE: Until your site is approved by Google (usually 24-48h for new sites),
+  //       NO ads will show regardless of configuration.
+  adConfig: {
+    publisherId: 'ca-pub-5068519853957013',
+    // Replace these with real numeric ad unit IDs from your AdSense account.
+    // Leave as '' to rely purely on Auto Ads for that position.
+    slots: {
+      'top-banner':    '',   // e.g. '1234567890'
+      'bottom-banner': '',
+      'mid-content':   '',
+      'sidebar':       '',
+      'rec-top':       '',
+      'rec-bottom':    '',
+      'macro-top':     '',
+      'macro-bottom':  '',
+      'energy-top':    '',
+      'farsi-top':     '',
+      'farsi-mid':     '',
+      'podcast-top':   '',
+      'podcast-mid':   '',
+    },
+  },
+
   // ─── NAVIGATION ─────────────────────────────────────────────────────────────
   navigationItems: [
     { label: 'Recession',    farsiLabel: 'رکود',          href: 'recession.html',   icon: '📉' },
