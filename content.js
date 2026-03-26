@@ -148,14 +148,14 @@ const GEOWIRE = {
     ],
 
     kalshiOdds: {
-      recession2026:    36,
+      recession2026:    37,   // live: 37% as of 2026-03-26 (yes_ask $0.37). Auto-updated by /api/kalshi on page load.
       ceasefireMar31:   12,
       ceasefireApr30:   44,
       ceasefireJun30:   63,
       ceasefireDec31:   78,
       oilAbove100EndMar:41,
       source: 'Kalshi/Polymarket',
-      lastUpdated: '2026-03-25',
+      lastUpdated: '2026-03-26',
     },
   },
 
