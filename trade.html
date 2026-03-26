@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="styles.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
   <style>
-    /* ──── Trade page live-feed styles ────────────────────────────────────────────────────── */
+    /* ────────────────────────────────────────────────────────────────────────────────────── Trade page live-feed styles ────────────────────────────────────────────────────────────── */
 
     /* Hormuz Status Panel */
     .hormuz-panel {
@@ -103,7 +103,7 @@
       margin-top: 12px;
     }
 
-    /* ──── Commodity Grid ─────────────────────────────────────────────────────────────────── */
+    /* ──────── Commodity Grid ──────────────────────────────────────────────────────────────────────────────────────────────────────────── */
     .commodity-live-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -145,7 +145,7 @@
     .commodity-live-change.flat { color: var(--text-3); }
     .commodity-live-date { font-size: 10px; color: var(--text-3); margin-top: 4px; }
 
-    /* ──── GSCPI Score Panel ──────────────────────────────────────────────────────────────── */
+    /* ──────── GSCPI Score Panel ──────────────────────────────────────────────────────────────────────────────────────────────────────────── */
     .score-panel {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -259,7 +259,7 @@
       line-height: 1.5;
     }
 
-    /* ──── Prediction Markets ───────────────────────────────────────────────────────────── */
+    /* ──────── Prediction Markets ──────────────────────────────────────────────────────────────────────────────────────────────────────────── */
     .prediction-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -321,7 +321,7 @@
       font-family: var(--font-mono);
     }
 
-    /* ──── Loading / Error states ────────────────────────────────────────────────────────── */
+    /* ──────── Loading / Error states ──────────────────────────────────────────────────────────────────────────────────────────────────────── */
     .live-loading {
       display: flex;
       align-items: center;
@@ -347,7 +347,7 @@
       font-family: var(--font-mono);
     }
 
-    /* ──── Auto-refresh badge ──────────────────────────────────────────────────────────── */
+    /* ──────── Auto-refresh badge ──────────────────────────────────────────────────────────────────────────────────────────────────────────── */
     .refresh-badge {
       font-size: 10px;
       color: var(--text-3);
@@ -365,7 +365,7 @@
     }
     .last-updated { font-size: 10px; color: var(--text-3); font-family: var(--font-mono); }
 
-    /* ──── Section layout helpers ──────────────────────────────────────────────────────── */
+    /* ──────── Section layout helpers ──────────────────────────────────────────────────────────────────────────────────────────────────────── */
     .two-col-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -435,7 +435,7 @@
       <div class="hormuz-panel">
         <div class="hormuz-header">
           <div class="hormuz-title-group">
-            <span id="hormuz-status-badge" class="status-badge status-BLOCKED">⊙ LOADING…</span>
+            <span id="hormuz-status-badge" class="status-badge status-BLOCKED">● LOADING…</span>
             <span class="hormuz-title">Strait of Hormuz Vessel Intelligence</span>
           </div>
           <span class="refresh-badge"><span class="refresh-dot"></span>Auto-refresh 5 min</span>
@@ -560,13 +560,13 @@
 <script src="ui.js"></script>
 <script src="api.js"></script>
 <script>
-/* ─────────────────────────────────────────────────────────────────────────────────────────────────────────
+/* ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
    trade.html — Live data orchestration
    Calls 4 new serverless proxies in parallel, updates DOM sections independently
    so a slow/failing API never blocks the others.
-─────────────────────────────────────────────────────────────────────────────────────────────────────────── */
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── */
 
-// ── Helpers ──────────────────────────────────────────────────────────────────────────────────────────────
+// ──── Helpers ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 function liveBadge(isLive) {
   return isLive
     ? '<span class="badge badge-live" style="font-size:10px;"><span class="live-pulse"></span>LIVE</span>'
@@ -583,11 +583,15 @@ function fmtChange(pct) {
 function fmtDate(d) {
   if (!d) return '';
   // Handle YYYY-MM or YYYY-MM-DD
-  try { return new Date(d + (d.length === 7 ? '-01' : '')).toLocaleDateString('en-GB', { month:'short', year:'numeric' }); }
-  catch { return d; }
+  try {
+    const iso = d.length === 7 ? d + '-01' : d;
+    const dt  = new Date(iso);
+    if (isNaN(dt.getTime())) return '';   // suppress "Invalid Date" — bad CSV date
+    return dt.toLocaleDateString('en-GB', { month:'short', year:'numeric' });
+  } catch { return ''; }
 }
 
-// ── 1. HORMUZ / SHIPS ────────────────────────────────────────────────────────────────────────────────────
+// ──── 1. HORMUZ / SHIPS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 async function loadHormuzStatus() {
   try {
     const res = await fetch('/api/ships');
@@ -645,7 +649,7 @@ async function loadHormuzStatus() {
     const meta = document.getElementById('hormuz-meta');
     if (meta) {
       const src = d.dataSource || 'model';
-      const ais = d.aisAvailable ? '✔ AIS live' : '✗ AIS offline — model estimate';
+      const ais = d.aisAvailable ? '✔ AIS live' : '✘ AIS offline — model estimate';
       const ports = d.portwatch?.portsCalled ?? null;
       const updated = d.lastUpdated ? new Date(d.lastUpdated).toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' }) + ' UTC' : '';
       meta.innerHTML = `
@@ -680,14 +684,14 @@ async function loadHormuzStatus() {
   }
 }
 
-// ── 2. COMMODITY PRICES ──────────────────────────────────────────────────────────────────────────────────
+// ──── 2. COMMODITY PRICES ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 const COMMODITY_META = [
   { key: 'oil',       label: 'Brent Crude',    icon: '🛢️',  bannerId: 'banner-oil' },
   { key: 'wti',       label: 'WTI Crude',       icon: '🛢️' },
   { key: 'natgas_eu', label: 'EU Natural Gas',  icon: '🔥' },
   { key: 'natgas_us', label: 'Henry Hub Gas',   icon: '⚡' },
   { key: 'wheat',     label: 'Wheat (US HRW)',  icon: '🌾' },
-  { key: 'aluminum',  label: 'Aluminum',        icon: '🦾' },
+  { key: 'aluminum',  label: 'Aluminum',        icon: '🥫' },
   { key: 'fertilizer',label: 'Fertilizer Index',icon: '🌿' },
 ];
 
@@ -749,7 +753,7 @@ async function loadCommodities() {
   }
 }
 
-// ── 3. SUPPLY CHAIN PRESSURE (GSCPI) ──────────────────────────────────────────────────────────────────
+// ──── 3. SUPPLY CHAIN PRESSURE (GSCPI) ────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 function levelColor(level) {
   return { CRITICAL:'var(--red)', HIGH:'#ff6b35', ELEVATED:'var(--amber)',
            MODERATE:'#90d5ff', NORMAL:'var(--green)', LOW:'var(--text-3)' }[level] || 'var(--text)';
@@ -840,7 +844,7 @@ async function loadGSCPI() {
   }
 }
 
-// ── 4. PREDICTION MARKETS ───────────────────────────────────────────────────────────────────────────────
+// ──── 4. PREDICTION MARKETS ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 async function loadPredictionMarkets() {
   try {
     const res = await fetch('/api/polymarket');
@@ -850,17 +854,24 @@ async function loadPredictionMarkets() {
     const grid = document.getElementById('prediction-grid');
     if (!grid) return;
 
-    // Collect markets — bundle has nested keyword groups, flatten them
+    // Collect markets — bundle structure: { keyword: [events] }
+    // Each event has a nested .markets[] array of individual market objects
     let markets = [];
 
     if (d.bundle) {
-      Object.values(d.bundle).forEach(group => {
-        if (group && group.markets) markets.push(...group.markets);
+      Object.values(d.bundle).forEach(eventList => {
+        if (!Array.isArray(eventList)) return;
+        eventList.forEach(event => {
+          if (event && Array.isArray(event.markets)) markets.push(...event.markets);
+        });
       });
     }
-    if (d.markets) markets.push(...d.markets);
+    if (Array.isArray(d.markets)) markets.push(...d.markets);
 
-    // De-dupe by slug/id
+    // Filter out closed markets, keep only active ones with liquidity
+    markets = markets.filter(m => !m.closed && m.active);
+
+    // De-dupe by slug
     const seen = new Set();
     markets = markets.filter(m => {
       const key = m.slug || m.id || m.question;
@@ -869,11 +880,11 @@ async function loadPredictionMarkets() {
       return true;
     });
 
-    // Sort by highest probability (most actionable)
+    // Sort by 24h volume descending — highest activity first
     markets.sort((a, b) => {
-      const pa = a.yesProb ?? a.probability ?? 50;
-      const pb = b.yesProb ?? b.probability ?? 50;
-      return pb - pa;
+      const va = a.volume24hr ?? a.volume24h ?? 0;
+      const vb = b.volume24hr ?? b.volume24h ?? 0;
+      return vb - va;
     });
 
     if (!markets.length) {
@@ -885,7 +896,7 @@ async function loadPredictionMarkets() {
       const prob  = m.yesProb ?? m.probability ?? null;
       const pct   = prob !== null ? Math.round(prob) : null;
       const cls   = pct !== null ? (pct >= 60 ? 'high' : pct >= 35 ? 'mid' : 'low') : 'mid';
-      const vol   = m.volume24h ?? m.volume ?? null;
+      const vol   = m.volume24hr ?? m.volume24h ?? m.volume ?? null;
       const volStr = vol != null ? '$' + (vol >= 1e6 ? (vol/1e6).toFixed(1)+'M' : Math.round(vol).toLocaleString()) : '—';
       const dateStr = m.endDate ? 'Closes ' + new Date(m.endDate).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : '';
 
@@ -920,7 +931,7 @@ async function loadPredictionMarkets() {
   }
 }
 
-// ── STATIC SECTIONS ────────────────────────────────────────────────────────────────────────────────────
+// ──── STATIC SECTIONS ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 function renderTradeTable() {
   const tradeData = GEOWIRE.tradeData || [];
   const tbody = document.getElementById('trade-table-body');
@@ -947,7 +958,7 @@ function renderTradeTable() {
   }
 }
 
-// ── BOOT ───────────────────────────────────────────────────────────────────────────────────────────────
+// ──── BOOT ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 (async () => {
   // Static shell
   document.getElementById('site-header').innerHTML = UI.renderHeader();
