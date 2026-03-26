@@ -89,8 +89,8 @@ const UI = (() => {
           data-full-width-responsive="true"></ins>
       </div>`;
     }
-    // No valid ID → invisible div; Google Auto Ads handles this position
-    return `<div class="ad-slot ad-slot-auto" data-slot="${_escHtml(name)}" style="min-height:0"></div>`;
+    // No valid ID → truly invisible; Google Auto Ads handles placement
+    return `<div class="ad-slot ad-slot-auto" data-slot="${_escHtml(name)}" style="height:0;min-height:0;overflow:hidden;padding:0;margin:0;border:none"></div>`;
   }
 
   // ─── SECTION HEADING ─────────────────────────────────────────────────────────
@@ -311,11 +311,18 @@ const UI = (() => {
   }
 
   // ─── UTC CLOCK ───────────────────────────────────────────────────────────────
-  function startClock() {
+  // startClock(elementId?) — updates #utc-clock every second.
+  // If an extra elementId is supplied (e.g. 'macro-clock') that element also
+  // gets the live UTC time so page-level "Updated …" stamps stay current.
+  function startClock(elementId) {
     function tick() {
-      const el = document.getElementById('utc-clock');
-      if (!el) return;
-      el.textContent = new Date().toISOString().slice(11,19) + ' UTC';
+      const timeStr = new Date().toISOString().slice(11,19) + ' UTC';
+      const main = document.getElementById('utc-clock');
+      if (main) main.textContent = timeStr;
+      if (elementId) {
+        const extra = document.getElementById(elementId);
+        if (extra) extra.textContent = timeStr;
+      }
     }
     tick();
     setInterval(tick, 1000);
