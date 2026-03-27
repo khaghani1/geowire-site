@@ -272,9 +272,9 @@ const UI = (() => {
             <span class="logo-mark">GW</span>
             <span class="site-title">GeoWire</span>
           </a>
-          <div class="war-status-pill" aria-label="Platform status">
-            <span class="pulse-dot" aria-hidden="true"></span>
-            <span>LIVE — RECESSION RISK TRACKER</span>
+          <div class="war-status-pill" aria-label="Recession status" style="background:rgba(74,158,255,.12);border-color:rgba(74,158,255,.3);color:#4a9eff">
+            <span class="pulse-dot" aria-hidden="true" style="background:#4a9eff"></span>
+            <span>RECESSION RISK 42% · RISING</span>
           </div>
         </div>
         <div class="header-right">
@@ -317,7 +317,7 @@ const UI = (() => {
         ${secondaryLinks ? `<div class="footer-secondary-links" style="margin-top:12px;line-height:2">${secondaryLinks}</div>` : ''}
         <div class="footer-legal">
           <p>© ${year} GeoWire. All analysis is original unless attributed. Confidence badges indicate source methodology, not certainty.</p>
-          <p class="footer-disclaimer">GeoWire is an independent intelligence platform. Seed data is editorial/demo content unless marked LIVE. Not financial or political advice.</p>
+          <p class="footer-disclaimer">GeoWire is an independent recession intelligence platform. All analysis is original unless attributed. Confidence badges indicate source methodology, not certainty. Not financial or political advice.</p>
         </div>
       </div>
     </footer>`;

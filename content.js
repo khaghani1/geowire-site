@@ -17,13 +17,13 @@ const GEOWIRE = {
 
   // ─── NAVIGATION ─────────────────────────────────────────────────────────────
   navigationItems: [
-    { label: 'Recession',    href: 'recession.html',   icon: '📉' },
-    { label: 'Macro',        href: 'macro.html',        icon: '📊' },
-    { label: 'Predictions',  href: 'predictions.html',  icon: '🔮' },
-    { label: 'Scenarios',    href: 'scenarios.html',    icon: '🧪' },
-    { label: 'Energy',       href: 'energy.html',       icon: '⚡' },
-    { label: 'Analysis',     href: 'analysis.html',     icon: '📝' },
-    { label: 'About',        href: 'about.html',        icon: 'ℹ️' },
+    { label: 'Recession',   farsiLabel: 'رکود',       href: 'recession.html',           icon: '📉' },
+    { label: 'Macro Pulse', farsiLabel: 'کلان',       href: 'macro.html',               icon: '📊' },
+    { label: 'Energy',      farsiLabel: 'انرژی',      href: 'energy.html',              icon: '⚡' },
+    { label: 'Predictions', farsiLabel: 'پیش‌بینی',   href: 'predictions.html',         icon: '🎲' },
+    { label: 'Scenarios',   farsiLabel: 'سناریوها',   href: 'scenarios.html',           icon: '🎯' },
+    { label: 'Calculator',  farsiLabel: 'ماشین‌حساب', href: 'exposure-calculator.html', icon: '💸' },
+    { label: 'About',       farsiLabel: 'درباره',     href: 'about.html',               icon: 'ℹ️' },
   ],
 
   // ─── SECONDARY NAV (footer) ──────────────────────────────────────────────────

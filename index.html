@@ -23,10 +23,17 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": "WebApplication",
     "name": "GeoWire — Recession Intelligence Platform",
     "description": "Track how geopolitical shocks, energy crises, inflation, rates, labor, and supply chains change recession probability in real time.",
     "url": "https://geowire.org/",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
     "publisher": {
       "@type": "Organization",
       "name": "GeoWire",
@@ -155,6 +162,22 @@
       .recession-prob-row { gap: 12px; }
       .recession-gauge-num { font-size: 40px; }
     }
+
+    /* ── Crisis Divider ── */
+    .crisis-divider { background: linear-gradient(135deg, #0d1117 0%, #1a0a0a 50%, #0d1117 100%); border-top: 1px solid rgba(255,68,68,.3); border-bottom: 1px solid rgba(255,68,68,.3); padding: 28px 0; margin: 8px 0; }
+    .crisis-divider-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .crisis-divider-left { display: flex; align-items: center; gap: 16px; }
+    .crisis-pulse { width: 10px; height: 10px; background: #ff4444; border-radius: 50%; box-shadow: 0 0 0 0 rgba(255,68,68,.4); animation: crisis-ping 1.5s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes crisis-ping { 0%,100%{box-shadow:0 0 0 0 rgba(255,68,68,.4)} 50%{box-shadow:0 0 0 10px rgba(255,68,68,0)} }
+    .crisis-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: #ff4444; font-weight: 700; }
+    .crisis-name { font-size: 18px; font-weight: 800; color: #f0f6fc; margin: 2px 0 0; }
+    .crisis-divider-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+    .crisis-stat { text-align: center; }
+    .crisis-stat-value { font-size: 24px; font-weight: 900; font-family: var(--font-mono, monospace); color: #ffb800; display: block; line-height: 1.1; }
+    .crisis-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: #6e7681; margin-top: 2px; }
+    .crisis-divider-cta { background: rgba(255,68,68,.08); border: 1px solid rgba(255,68,68,.25); color: #ff8888; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; transition: background .15s; white-space: nowrap; }
+    .crisis-divider-cta:hover { background: rgba(255,68,68,.15); }
+
   </style>
 </head>
 <body>
@@ -305,6 +328,36 @@
       </div>
     </section>
 
+    <!-- ════════════════════════════ CRISIS DIVIDER ── war-day break -->
+    <div class="crisis-divider">
+      <div class="container">
+        <div class="crisis-divider-inner">
+          <div class="crisis-divider-left">
+            <div class="crisis-pulse" aria-hidden="true"></div>
+            <div>
+              <div class="crisis-label">Active Shock</div>
+              <div class="crisis-name">Operation Epic Fury</div>
+            </div>
+          </div>
+          <div class="crisis-divider-stats">
+            <div class="crisis-stat">
+              <span class="crisis-stat-value" id="crisis-day-counter">—</span>
+              <span class="crisis-stat-label">Days Active</span>
+            </div>
+            <div class="crisis-stat">
+              <span class="crisis-stat-value" id="crisis-hormuz-pct">97%</span>
+              <span class="crisis-stat-label">Hormuz Risk</span>
+            </div>
+            <div class="crisis-stat">
+              <span class="crisis-stat-value" id="crisis-recession-pct">42%</span>
+              <span class="crisis-stat-label">Recession Risk</span>
+            </div>
+          </div>
+          <a href="scenarios.html" class="crisis-divider-cta">Model Scenarios →</a>
+        </div>
+      </div>
+    </div>
+
     <!-- ════════════════════════════ SECTION 8: CURRENT CRISIS CONTEXT -->
     <section class="section container">
       <div class="section-header">
@@ -404,6 +457,8 @@
       // ── War day counter (dynamic)
       const warDay = Math.max(1, Math.ceil((Date.now() - new Date('2026-02-28').getTime()) / 86400000));
       document.querySelectorAll('#war-day').forEach(el => el.textContent = warDay);
+      const crisisDayEl = document.getElementById('crisis-day-counter');
+      if (crisisDayEl) crisisDayEl.textContent = warDay;
 
       // ── Recession Command Bar
       const rd = GEOWIRE.recessionData || {};
