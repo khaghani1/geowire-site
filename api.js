@@ -75,21 +75,23 @@ const API = (() => {
     }
   }
 
-  // ─── FETCH WORLD BANK GOLD ────────────────────────────────────────────────────
-  // Replaces deprecated FRED series GOLDAMGBD228NLBM (London AM fixing, removed from FRED).
-  // World Bank Pink Sheet PGOLDUSDM is the standard replacement — monthly data.
+  // ─── FETCH GOLD PRICE (via CoinGecko PAXG) ───────────────────────────────────
+  // PAXG (PAX Gold) = exactly 1 troy oz of physical gold, backed 1:1.
+  // Uses the same CoinGecko API as BTC/ETH — no key, no proxy, CORS-friendly.
+  // Replaces deprecated FRED series GOLDAMGBD228NLBM and unreliable World Bank proxy.
   async function fetchWorldBankGold() {
     const fallback = (GEOWIRE.marketData || {}).gold || {};
     try {
-      const res = await fetch('/api/worldbank?commodity=gold');
-      if (!res.ok) throw new Error(`WorldBank proxy HTTP ${res.status}`);
+      const url = `${COINGECKO_BASE}?ids=pax-gold&vs_currencies=usd`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`CoinGecko gold HTTP ${res.status}`);
       const json = await res.json();
-      if (json.error) throw new Error(json.error);
-      if (!json.value) throw new Error('No gold value in response');
-      return _norm(json.value, json.source || 'World Bank', 'Gold', 'confirmed', json.date, true);
+      const price = json['pax-gold']?.usd;
+      if (!price) throw new Error('No PAXG price in response');
+      return _norm(price, 'CoinGecko (PAXG)', 'Gold', 'multisource', new Date().toISOString(), true);
     } catch (err) {
-      console.warn('[GeoWire] WorldBank gold fallback:', err.message);
-      return _norm(fallback.value, 'World Bank (cached)', 'Gold', fallback.confidence || 'confirmed', fallback.lastUpdated, false);
+      console.warn('[GeoWire] Gold fallback:', err.message);
+      return _norm(fallback.value, 'Gold (cached)', 'Gold', fallback.confidence || 'confirmed', fallback.lastUpdated, false);
     }
   }
 
