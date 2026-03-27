@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GeoWire — Recession Intelligence | How Shocks Change Recession Risk</title>
-  <meta name="description" content="GeoWire tracks how geopolitical shocks, energy crises, inflation, rates, labor, and supply chains change recession probability in real time." />
-  <meta property="og:title" content="GeoWire — Recession Intelligence Platform" />
-  <meta property="og:description" content="Track how shocks change recession probability — before consensus catches up." />
+  <title>GeoWire — Global Intelligence Dashboard | US-Iran Conflict Tracker</title>
+  <meta name="description" content="Real-time geopolitical intelligence tracking Operation Epic Fury — the US-Iran conflict, global energy markets, and crisis analytics updated around the clock." />
+  <meta property="og:title" content="GeoWire — Global Intelligence Dashboard" />
+  <meta property="og:description" content="Real-time tracking of Operation Epic Fury: market impact, humanitarian crisis, and geopolitical shifts." />
   <meta property="og:url" content="https://geowire.org/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
-  <link rel="canonical" href="https://geowire.org/" />
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
@@ -17,89 +18,74 @@
 <div id="site-header"></div>
 <div id="site-nav"></div>
 <main>
-
-  <!-- Section 1: Recession Command Bar -->
   <section class="war-status-bar">
     <div class="container">
       <div class="war-status-grid">
-        <div class="war-status-item"><span class="war-status-label">RECESSION RISK</span><span class="war-status-value threat-critical" id="rec-prob-bar">42%</span></div>
-        <div class="war-status-item"><span class="war-status-label">DIRECTION</span><span class="war-status-value" style="color:#f87171">RISING &#8593;</span></div>
-        <div class="war-status-item"><span class="war-status-label">CONFIDENCE</span><span class="war-status-value">MEDIUM</span></div>
-        <div class="war-status-item"><span class="war-status-label">MODEL</span><span class="war-status-value">10-FACTOR</span></div>
-        <div class="war-status-item"><span class="war-status-label">UPDATED</span><span class="war-status-value" id="rec-updated-bar">Today</span></div>
+        <div class="war-status-item"><span class="war-status-label">OPERATION</span><span class="war-status-value war-name">Epic Fury</span></div>
+        <div class="war-status-item"><span class="war-status-label">DAY</span><span class="war-status-value" id="war-day">26</span></div>
+        <div class="war-status-item"><span class="war-status-label">ACTIVE FRONTS</span><span class="war-status-value">4</span></div>
+        <div class="war-status-item"><span class="war-status-label">THREAT LEVEL</span><span class="war-status-value threat-critical">CRITICAL</span></div>
         <div class="war-status-item"><span class="war-status-label">UTC</span><span class="war-status-value" id="utc-clock-ws">--:--:--</span></div>
       </div>
     </div>
   </section>
 
-  <!-- Section 2: Market Ticker -->
-  <section class="ticker-section"><div id="ticker-mount"></div></section>
+  <section class="ticker-section">
+    <div id="ticker-mount"></div>
+  </section>
 
-  <!-- Section 3: Hero — Recession-first -->
+  <div class="container">
+    <!-- Ad slot: configure numeric ID in GEOWIRE.adConfig.slots (content.js) -->
+  </div>
+
   <section class="hero-section container">
     <div class="hero-inner">
       <div class="hero-badge-row">
         <span class="live-dot"></span>
-        <span class="hero-badge">RECESSION INTELLIGENCE</span>
-        <span class="hero-sep">&bull;</span>
-        <span class="hero-badge-sub">10-Factor Model &middot; Updated Daily</span>
+        <span class="hero-badge">LIVE INTELLIGENCE</span>
+        <span class="hero-sep">•</span>
+        <span class="hero-badge-sub">Operation Epic Fury — Day <span id="war-day-hero">26</span></span>
       </div>
-      <h1 class="homepage-headline">Are We Heading Toward Recession?</h1>
-      <p class="hero-sub">GeoWire tracks how geopolitical shocks, energy crises, inflation, rates, labor, housing, and supply chains change recession probability &mdash; before consensus catches up.</p>
-      <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="recession.html" style="display:inline-block;padding:10px 24px;background:var(--gw-accent,#5FA8D3);color:#fff;border-radius:6px;font-weight:600;font-size:14px;text-decoration:none;">See Recession Dashboard &rarr;</a>
-        <a href="scenarios.html" style="display:inline-block;padding:10px 24px;border:1px solid var(--gw-border,#334155);color:var(--gw-text-secondary,#94A3B8);border-radius:6px;font-size:14px;text-decoration:none;">Try Scenario Lab &rarr;</a>
-      </div>
+      <h1 class="homepage-headline" data-en="US–Iran Conflict — What You Need to Know" data-fa="تعارض ایران و آمریکا — آخرین اطلاعات">
+        US–Iran Conflict — What You Need to Know
+      </h1>
+      <p class="hero-sub">Hormuz closed. Brent at $101. S&amp;P up 9.7% on defense/energy rally. GeoWire tracks every dimension of the crisis — markets, energy, humanitarian, and what happens next.</p>
+      <div class="hero-share" id="hero-share-buttons"></div>
     </div>
   </section>
 
-  <!-- Section 4: Recession Widget -->
+  <!-- Recession Risk Widget (above Intelligence Feed) -->
   <section class="section container">
-    <div class="section-header"><h2 class="section-title">Recession Probability</h2><a href="recession.html" class="section-link">Full Dashboard &rarr;</a></div>
+    <div class="section-header">
+      <h2 class="section-title">Recession Risk</h2>
+      <a href="recession.html" class="section-link">Full Analysis →</a>
+    </div>
     <div id="recession-widget"></div>
   </section>
 
-  <!-- Section 5: What Changed Today -->
-  <section class="section container">
-    <div class="section-header"><h2 class="section-title">What Changed Today</h2><a href="what-changed.html" class="section-link">Full Log &rarr;</a></div>
-    <div class="what-changed-grid" id="what-changed-preview"></div>
-  </section>
-
-  <!-- Section 6: Where Markets Disagree -->
-  <section class="section container">
-    <div class="section-header"><h2 class="section-title">Where Markets Disagree</h2><a href="predictions.html" class="section-link">See All Predictions &rarr;</a></div>
-    <div id="divergence-preview"></div>
-  </section>
-
-  <!-- Section 7: Scenario Preview -->
-  <section class="section container">
-    <div class="section-header"><h2 class="section-title">Scenario Outlook</h2><a href="scenarios.html" class="section-link">Interactive Scenario Lab &rarr;</a></div>
-    <div class="scenario-preview-grid" id="scenario-preview"></div>
-  </section>
-
-  <!-- Section 8: Current Crisis Framing -->
   <section class="section container">
     <div class="section-header">
-      <h2 class="section-title">Current Crisis: Operation Epic Fury</h2>
-      <span style="font-size:12px;color:var(--gw-text-secondary,#94A3B8);">The geopolitical shock driving current recession risk</span>
+      <h2 class="section-title">Intelligence Feed</h2>
+      <span id="news-live-badge"></span>
+    </div>
+    <div class="news-grid" id="news-feed-container">
+      <p class="loading-state">Loading intelligence feed…</p>
     </div>
   </section>
 
-  <!-- Section 9: Intelligence Feed -->
   <section class="section container">
-    <div class="section-header"><h2 class="section-title">Intelligence Feed</h2><span id="news-live-badge"></span></div>
-    <div class="news-grid" id="news-feed-container"><p class="loading-state">Loading intelligence feed&hellip;</p></div>
-  </section>
-
-  <!-- Section 10: Conflict Timeline -->
-  <section class="section container">
-    <div class="section-header"><h2 class="section-title">Conflict Timeline</h2><a href="analysis.html" class="section-link">Full Analysis &rarr;</a></div>
+    <div class="section-header">
+      <h2 class="section-title">Conflict Timeline</h2>
+      <a href="analysis.html" class="section-link">Full Analysis →</a>
+    </div>
     <div id="conflict-timeline"></div>
   </section>
 
-  <!-- Section 11: Conflict Map -->
   <section class="section container">
-    <div class="section-header"><h2 class="section-title">Conflict Map</h2><span class="section-subtitle">US bases &middot; Iranian targets &middot; Hormuz corridor &middot; Coalition forces</span></div>
+    <div class="section-header">
+      <h2 class="section-title">Conflict Map</h2>
+      <span class="section-subtitle">US bases · Iranian targets · Hormuz corridor · Coalition forces</span>
+    </div>
     <div class="gw-map-wrap">
       <div class="gw-map-legend" id="gw-map-legend">
         <div class="gw-map-legend-item"><span class="gw-leg-dot" style="background:#E63946"></span>Iranian targets / strike sites</div>
@@ -110,231 +96,263 @@
     </div>
   </section>
 
-  <!-- Section 12: War Cost Meter -->
   <section class="section container">
-    <div class="section-header"><h2 class="section-title">War Cost Meter</h2><a href="us-impact.html" class="section-link">US Impact &rarr;</a></div>
+    <div class="section-header">
+      <h2 class="section-title">War Cost Meter</h2>
+      <a href="us-impact.html" class="section-link">US Impact →</a>
+    </div>
     <div id="war-cost-ticker"></div>
   </section>
 
-  <!-- Section 13: Country Risk Heatmap -->
   <section class="section container">
-    <div class="section-header"><h2 class="section-title">Country Risk Heatmap</h2><a href="countries.html" class="section-link">All Countries &rarr;</a></div>
+    <div class="section-header">
+      <h2 class="section-title">Country Risk Heatmap</h2>
+      <a href="countries.html" class="section-link">All Countries →</a>
+    </div>
     <div id="risk-heatmap"></div>
   </section>
 
-  <!-- Section 14: Supply Chain Status -->
   <section class="section container">
-    <div class="section-header"><h2 class="section-title">Supply Chain Status</h2><a href="trade.html" class="section-link">Trade Detail &rarr;</a></div>
+    <div class="section-header">
+      <h2 class="section-title">Supply Chain Status</h2>
+      <a href="trade.html" class="section-link">Trade Detail →</a>
+    </div>
     <div id="supply-chain-status"></div>
   </section>
 
-  <!-- Section 15: Email Capture -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">What Changed</h2>
+      <a href="what-changed.html" class="section-link">Full Log →</a>
+    </div>
+    <div class="what-changed-grid" id="what-changed-preview"></div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Scenario Outlook</h2>
+      <a href="scenarios.html" class="section-link">🧪 Interactive Scenario Lab →</a>
+    </div>
+    <div class="scenario-preview-grid" id="scenario-preview"></div>
+  </section>
+
   <section class="section container" id="email-section"></section>
 
+  <div class="container">
+    <!-- Ad slot: configure numeric ID in GEOWIRE.adConfig.slots (content.js) -->
+  </div>
 </main>
 <div id="site-footer"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="content.js"></script>
 <script src="scoring.js"></script>
 <script src="ui.js"></script>
 <script src="api.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (async () => {
   document.getElementById('site-header').innerHTML = UI.renderHeader();
   document.getElementById('site-nav').innerHTML    = UI.renderNav('index.html');
   document.getElementById('site-footer').innerHTML = UI.renderFooter();
 
-  // Recession command bar update
-  const recData = GEOWIRE.recessionData;
-  if (recData) {
-    const probBar = document.getElementById('rec-prob-bar');
-    if (probBar) probBar.textContent = recData.probability + '%';
-    const updBar = document.getElementById('rec-updated-bar');
-    if (updBar) {
-      const ago = Math.round((Date.now() - new Date(recData.lastUpdated).getTime()) / 3600000);
-      updBar.textContent = ago < 1 ? 'Just now' : ago + 'h ago';
-    }
-  }
-
-  // UTC clock in status bar
-  function tickWS() {
-    var el = document.getElementById('utc-clock-ws');
-    if (el) el.textContent = new Date().toISOString().slice(11,19);
-  }
-  tickWS(); setInterval(tickWS, 1000);
+  function calcDay() { return Math.max(1, Math.ceil((Date.now() - new Date(GEOWIRE.siteMeta.warStartDate)) / 86400000)); }
+  const warDay = calcDay();
+  document.querySelectorAll('#war-day, #war-day-hero').forEach(el => el.textContent = warDay);
 
   // Ticker
   document.getElementById('ticker-mount').innerHTML = UI.renderMarketTicker();
 
+  // Hero share
+  document.getElementById('hero-share-buttons').innerHTML = UI.renderShareButtons(
+    `US–Iran Conflict Day ${warDay} — Operation Epic Fury live tracking`, 'https://geowire.org/'
+  );
+
   // Recession widget
   document.getElementById('recession-widget').innerHTML = UI.renderRecessionWidget(GEOWIRE.recessionData);
 
-  // What Changed Today
-  var wcEl = document.getElementById('what-changed-preview');
-  if (wcEl) {
-    wcEl.innerHTML = (GEOWIRE.updateLog || []).slice(0, 6).map(function(u) {
-      return '<div class="what-changed-card"><div class="wc-type tag-' + (u.category||'update').toLowerCase() + '">' + (u.category || 'UPDATE') + '</div><div class="wc-time">' + new Date(u.timestamp).toUTCString().replace(' GMT',' UTC') + '</div><div class="wc-text">' + u.item + ': ' + u.change + '</div></div>';
-    }).join('');
-  }
-
-  // Where Markets Disagree — divergences
-  var divEl = document.getElementById('divergence-preview');
-  if (divEl && GEOWIRE.recessionData && GEOWIRE.recessionData.divergences) {
-    divEl.innerHTML = GEOWIRE.recessionData.divergences.map(function(d) {
-      return '<div class="what-changed-card" style="border-left:3px solid var(--gw-warning,#F59E0B)"><div class="wc-type" style="color:var(--gw-warning,#F59E0B)">' + d.title + '</div><div class="wc-text"><strong>Our model:</strong> ' + d.ours + '</div><div class="wc-text"><strong>Market:</strong> ' + d.market + '</div><div class="wc-text" style="color:var(--gw-text-secondary,#94A3B8);font-size:12px;margin-top:4px">' + d.thesis + '</div></div>';
-    }).join('');
-  } else if (divEl) {
-    divEl.innerHTML = '<p class="loading-state" style="padding:16px;color:var(--gw-text-secondary,#94A3B8)">Divergence data coming soon &mdash; check <a href="predictions.html">Predictions</a> for full market vs model comparison.</p>';
-  }
-
-  // Scenarios
-  document.getElementById('scenario-preview').innerHTML = (GEOWIRE.scenarios || []).map(function(s) {
-    return '<div class="scenario-card scenario-' + s.type + '"><div class="scenario-type-label">' + s.type.toUpperCase() + '</div><div class="scenario-title">' + s.title + '</div><div class="scenario-probability"><span class="prob-label">Probability</span><span class="prob-value">' + s.probability + '%</span></div><div class="scenario-desc">' + s.summary + '</div><a href="scenarios.html" class="scenario-cta">Full Analysis &rarr;</a></div>';
-  }).join('');
-
-  // Crisis content below recession stack
-  document.getElementById('news-live-badge').innerHTML = UI.renderLiveBadge(false);
+  // Timeline
   document.getElementById('conflict-timeline').innerHTML = UI.renderTimeline(GEOWIRE.timelineEvents);
+
+  // War cost
   document.getElementById('war-cost-ticker').innerHTML = UI.renderWarCostTicker();
   UI.startWarCostCounter();
+
+  // Risk heatmap
   document.getElementById('risk-heatmap').innerHTML = UI.renderRiskHeatmap();
+
+  // Supply chain
   document.getElementById('supply-chain-status').innerHTML = UI.renderSupplyChain();
+
+  // What changed
+  const wcEl = document.getElementById('what-changed-preview');
+  wcEl.innerHTML = (GEOWIRE.updateLog || []).slice(0, 6).map(u => `
+    <div class="what-changed-card">
+      <div class="wc-type tag-${(u.category||'update').toLowerCase()}">${u.category || 'UPDATE'}</div>
+      <div class="wc-time">${new Date(u.timestamp).toUTCString().replace(' GMT',' UTC')}</div>
+      <div class="wc-text">${u.item}: ${u.change}</div>
+    </div>`).join('');
+
+  // Scenarios
+  document.getElementById('scenario-preview').innerHTML = (GEOWIRE.scenarios || []).map(s => `
+    <div class="scenario-card scenario-${s.type}">
+      <div class="scenario-type-label">${s.type.toUpperCase()}</div>
+      <div class="scenario-title">${s.title}</div>
+      <div class="scenario-probability"><span class="prob-label">Probability</span><span class="prob-value">${s.probability}%</span></div>
+      <div class="scenario-desc">${s.summary}</div>
+      <a href="scenarios.html" class="scenario-cta">Full Analysis →</a>
+    </div>`).join('');
 
   // Email capture
   document.getElementById('email-section').innerHTML = UI.renderEmailCapture();
 
-  // Init clock etc.
+  // Init
   UI.init();
 
   // Async: live market data
   await API.loadMarketData();
   // Async: news feed
   await API.loadNews('news-feed-container');
+
+  // AdSense
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
 })();
 </script>
+
+<!-- ─── LEAFLET CONFLICT MAP ─────────────────────────────────────────────── -->
 <script>
 (function initConflictMap() {
   if (typeof L === 'undefined') return;
-  var mapEl = document.getElementById('conflict-map');
+  const mapEl = document.getElementById('conflict-map');
   if (!mapEl) return;
 
-  var map = L.map('conflict-map', {
+  // Dark basemap via CartoDB
+  const map = L.map('conflict-map', {
     center: [27.5, 56.5],
     zoom: 5,
     zoomControl: true,
-    attributionControl: true
+    attributionControl: true,
   });
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
     subdomains: 'abcd',
-    maxZoom: 19
+    maxZoom: 19,
   }).addTo(map);
 
+  // ── Icon factory
   function mkIcon(color, size) {
-    var dotSize = size || 10;
+    size = size || 10;
     return L.divIcon({
       className: '',
-      html: '<div style="width:' + dotSize + 'px;height:' + dotSize + 'px;background:' + color + ';border-radius:50%;border:2px solid rgba(255,255,255,0.5);box-shadow:0 0 8px ' + color + '80"></div>',
-      iconSize: [dotSize, dotSize],
-      iconAnchor: [dotSize / 2, dotSize / 2]
+      html: `<div style="width:${size}px;height:${size}px;background:${color};border-radius:50%;border:2px solid rgba(255,255,255,0.5);box-shadow:0 0 8px ${color}80"></div>`,
+      iconSize: [size, size],
+      iconAnchor: [size/2, size/2],
     });
   }
 
-  var lgIran = L.layerGroup();
-  var lgUS = L.layerGroup();
-  var lgHormuz = L.layerGroup();
-  var lgNaval = L.layerGroup();
+  // ── Layer groups
+  const lgIran    = L.layerGroup();
+  const lgUS      = L.layerGroup();
+  const lgHormuz  = L.layerGroup();
+  const lgNaval   = L.layerGroup();
 
-  var iranTargets = [
-    { latlng: [35.70, 51.42], label: 'Tehran - IRGC HQ', detail: 'IRGC command and control. Day 1 primary target.' },
-    { latlng: [32.48, 48.75], label: 'Ahvaz - Petroleum complex', detail: 'Iran\'s largest oil refinery complex. Struck Day 2.' },
-    { latlng: [29.61, 52.53], label: 'Shiraz Air Base', detail: 'IRGC Air Force hub. S-300 systems degraded.' },
-    { latlng: [36.57, 52.67], label: 'Amol - Missile facility', detail: 'Ballistic missile production. Heavily struck.' },
-    { latlng: [26.96, 56.27], label: 'Bandar Abbas - Naval HQ', detail: 'IRIN headquarters. Partially operational.' },
-    { latlng: [27.18, 56.28], label: 'Qeshm Island - IRGC Naval', detail: 'IRGC fast boat base. 60% capacity remaining.' },
-    { latlng: [25.97, 56.35], label: 'Strait entry - Minefield zone', detail: 'IRGC mines deployed. 3 vessels struck in first week.' },
-    { latlng: [33.72, 48.68], label: 'Arak - Heavy water reactor', detail: 'Nuclear-adjacent facility. Struck per US statement.' },
-    { latlng: [32.66, 51.68], label: 'Isfahan - Natanz support', detail: 'Nuclear enrichment support infrastructure.' },
-    { latlng: [35.37, 46.99], label: 'Kermanshah - IRGC ground HQ', detail: 'Western command hub. Disrupted.' }
+  // ── Iranian targets / strike sites
+  const iranTargets = [
+    { latlng: [35.70, 51.42],  label: 'Tehran — IRGC HQ',               detail: 'IRGC command & control. Day 1 primary target.' },
+    { latlng: [32.48, 48.75],  label: 'Ahvaz — Petroleum complex',       detail: 'Iran\'s largest oil refinery complex. Struck Day 2.' },
+    { latlng: [29.61, 52.53],  label: 'Shiraz Air Base',                 detail: 'IRGC Air Force hub. S-300 systems degraded.' },
+    { latlng: [36.57, 52.67],  label: 'Amol — Missile facility',        detail: 'Ballistic missile production. Heavily struck.' },
+    { latlng: [26.96, 56.27],  label: 'Bandar Abbas — Naval HQ',         detail: 'IRIN headquarters. Partially operational.' },
+    { latlng: [27.18, 56.28],  label: 'Qeshm Island — IRGC Naval',       detail: 'IRGC fast boat base. 60% capacity remaining.' },
+    { latlng: [25.97, 56.35],  label: 'Strait entry — Minefield zone',   detail: 'IRGC mines deployed. 3 vessels struck in first week.' },
+    { latlng: [33.72, 48.68],  label: 'Arak — Heavy water reactor',      detail: 'Nuclear-adjacent facility. Struck per US statement.' },
+    { latlng: [32.66, 51.68],  label: 'Isfahan — Natanz support',        detail: 'Nuclear enrichment support infrastructure.' },
+    { latlng: [35.37, 46.99],  label: 'Kermanshah — IRGC ground HQ',     detail: 'Western command hub. Disrupted.' },
   ];
 
-  iranTargets.forEach(function(t) {
-    var marker = L.marker(t.latlng, { icon: mkIcon('#E63946', 10) });
-    marker.bindPopup('<div class="gw-popup"><strong>' + t.label + '</strong><br><span>' + t.detail + '</span></div>');
-    marker.addTo(lgIran);
+  iranTargets.forEach(t => {
+    const m = L.marker(t.latlng, { icon: mkIcon('#E63946', 10) });
+    m.bindPopup(`<div class="gw-popup"><strong>${t.label}</strong><br><span>${t.detail}</span></div>`);
+    m.addTo(lgIran);
   });
 
-  var usBases = [
-    { latlng: [25.24, 55.36], label: 'Al Dhafra AB - UAE', detail: 'Primary USAF hub. F-35As and B-2 sorties launched here.' },
-    { latlng: [26.27, 50.61], label: 'NSA Bahrain - 5th Fleet HQ', detail: '5th Fleet headquarters. CSS operations center.' },
-    { latlng: [29.33, 47.98], label: 'Ali Al Salem AB - Kuwait', detail: '386th AEW. A-10s and ISR platforms.' },
-    { latlng: [25.31, 51.57], label: 'Al Udeid AB - Qatar', detail: 'CENTCOM FWDQ. Largest US base in region. Around 10,000 personnel.' },
-    { latlng: [24.43, 54.65], label: 'Al Minhad AB - UAE (reserve)', detail: 'Coalition logistics hub. UAE Air Force operational.' },
-    { latlng: [23.65, 58.19], label: 'Masirah Island - Oman', detail: 'Sensitive ISR and refueling. Oman cooperation confirmed.' },
-    { latlng: [27.36, 66.78], label: 'Camp Dwyer - Pakistan (support)', detail: 'Logistical corridor only. Pakistan non-combatant.' }
+  // ── US / Coalition bases
+  const usBases = [
+    { latlng: [25.24, 55.36],  label: 'Al Dhafra AB — UAE',              detail: 'Primary USAF hub. F-35As, B-2 sorties launched here.' },
+    { latlng: [26.27, 50.61],  label: 'NSA Bahrain — 5th Fleet HQ',      detail: '5th Fleet headquarters. CSS operations center.' },
+    { latlng: [29.33, 47.98],  label: 'Ali Al Salem AB — Kuwait',        detail: '386th AEW. A-10s and ISR platforms.' },
+    { latlng: [25.31, 51.57],  label: 'Al Udeid AB — Qatar',             detail: 'CENTCOM FWDQ. Largest US base in region. ~10,000 personnel.' },
+    { latlng: [24.43, 54.65],  label: 'Al Minhad AB — UAE (reserve)',    detail: 'Coalition logistics hub. UAE Air Force operational.' },
+    { latlng: [23.65, 58.19],  label: 'Masirah Island — Oman',          detail: 'Sensitive ISR and refueling. Oman cooperation confirmed.' },
+    { latlng: [27.36, 66.78],  label: 'Camp Dwyer — Pakistan (support)', detail: 'Logistical corridor only. Pakistan non-combatant.' },
   ];
 
-  usBases.forEach(function(b) {
-    var marker = L.marker(b.latlng, { icon: mkIcon('#5FA8D3', 11) });
-    marker.bindPopup('<div class="gw-popup"><strong>' + b.label + '</strong><br><span>' + b.detail + '</span></div>');
-    marker.addTo(lgUS);
+  usBases.forEach(b => {
+    const m = L.marker(b.latlng, { icon: mkIcon('#5FA8D3', 11) });
+    m.bindPopup(`<div class="gw-popup"><strong>${b.label}</strong><br><span>${b.detail}</span></div>`);
+    m.addTo(lgUS);
   });
 
-  var hormuzPath = [
+  // ── Hormuz corridor polyline
+  const hormuzPath = [
     [25.30, 56.00],
     [25.10, 56.50],
     [24.80, 57.00],
     [24.60, 57.40],
     [24.30, 57.80],
     [23.90, 58.30],
-    [23.60, 58.60]
+    [23.60, 58.60],
   ];
 
-  var hormuzLine = L.polyline(hormuzPath, {
+  const hormuzLine = L.polyline(hormuzPath, {
     color: '#F59E0B',
     weight: 3,
     opacity: 0.85,
-    dashArray: '8, 6'
-  }).bindPopup('<div class="gw-popup"><strong>Strait of Hormuz - BLOCKED</strong><br><span>97% transit closed. IRGC mines plus denial operations. 21M bbl/day offline.</span></div>');
+    dashArray: '8, 6',
+  }).bindPopup('<div class="gw-popup"><strong>Strait of Hormuz — BLOCKED</strong><br><span>97% transit closed. IRGC mines + denial operations. 21M bbl/day offline.</span></div>');
   hormuzLine.addTo(lgHormuz);
 
-  var hormuzZone = L.polygon([
+  // Hormuz width indicator (shaded zone)
+  const hormuzZone = L.polygon([
     [26.5, 56.2], [25.0, 56.0], [24.0, 57.6], [23.6, 58.7],
-    [24.3, 59.0], [25.0, 58.5], [26.0, 57.5], [27.0, 56.8]
+    [24.3, 59.0], [25.0, 58.5], [26.0, 57.5], [27.0, 56.8],
   ], {
     color: '#F59E0B',
     fillColor: '#F59E0B',
     fillOpacity: 0.08,
     weight: 1,
-    opacity: 0.3
+    opacity: 0.3,
   }).bindPopup('<div class="gw-popup"><strong>Hormuz operational zone</strong><br><span>Denial area. Coalition patrols active. IRGC fast boats present.</span></div>');
   hormuzZone.addTo(lgHormuz);
 
-  var navalPositions = [
-    { latlng: [20.0, 64.0], label: 'USS Gerald R. Ford CSG', detail: 'CVN-78. Northern Arabian Sea. 22 drones intercepted Mar 22.' },
-    { latlng: [24.5, 62.0], label: 'USS Nimitz CSG', detail: 'CVN-68. Western Arabian Sea. Air superiority role.' },
-    { latlng: [15.0, 50.5], label: 'HMS Queen Elizabeth - Red Sea', detail: 'RN carrier. Houthi suppression plus Hormuz deterrence.' }
+  // ── Carrier strike groups
+  const navalPositions = [
+    { latlng: [20.0, 64.0],  label: 'USS Gerald R. Ford CSG',     detail: 'CVN-78. Northern Arabian Sea. 22 drones intercepted Mar 22.' },
+    { latlng: [24.5, 62.0],  label: 'USS Nimitz CSG',             detail: 'CVN-68. Western Arabian Sea. Air superiority role.' },
+    { latlng: [15.0, 50.5],  label: 'HMS Queen Elizabeth — Red Sea', detail: 'RN carrier. Houthi suppression + Hormuz deterrence.' },
   ];
 
-  navalPositions.forEach(function(n) {
-    var marker = L.marker(n.latlng, { icon: mkIcon('#8B5CF6', 12) });
-    marker.bindPopup('<div class="gw-popup"><strong>' + n.label + '</strong><br><span>' + n.detail + '</span></div>');
-    marker.addTo(lgNaval);
+  navalPositions.forEach(n => {
+    const m = L.marker(n.latlng, { icon: mkIcon('#8B5CF6', 12) });
+    m.bindPopup(`<div class="gw-popup"><strong>${n.label}</strong><br><span>${n.detail}</span></div>`);
+    m.addTo(lgNaval);
   });
 
+  // ── Add all layers
   lgUS.addTo(map);
   lgIran.addTo(map);
   lgHormuz.addTo(map);
   lgNaval.addTo(map);
 
-  var overlays = {
-    '<span style="color:#E63946">&#9679; Iranian targets</span>': lgIran,
-    '<span style="color:#5FA8D3">&#9679; US / coalition bases</span>': lgUS,
-    '<span style="color:#F59E0B">&#9473; Hormuz corridor</span>': lgHormuz,
-    '<span style="color:#8B5CF6">&#9679; Carrier strike groups</span>': lgNaval
+  // ── Layer control
+  const overlays = {
+    '<span style="color:#E63946">● Iranian targets</span>':         lgIran,
+    '<span style="color:#5FA8D3">● US / coalition bases</span>':   lgUS,
+    '<span style="color:#F59E0B">━ Hormuz corridor</span>':        lgHormuz,
+    '<span style="color:#8B5CF6">● Carrier strike groups</span>':  lgNaval,
   };
   L.control.layers(null, overlays, { collapsed: false, position: 'topright' }).addTo(map);
+
 })();
 </script>
 </body>
