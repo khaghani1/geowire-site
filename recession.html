@@ -2,16 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GeoWire Atlas — Recession Intelligence Dashboard</title>
+  <title>GeoWire — Recession Command Center | 6-Month Probability Model</title>
+  <link rel="canonical" href="https://geowire.org/recession.html" />
   <meta name="description" content="Real-time recession probability tracking with 10-factor model, historical comparisons, and market divergence analysis. Updated daily." />
   <meta property="og:title" content="GeoWire — Recession Intelligence Dashboard" />
   <meta property="og:description" content="10-factor recession probability model tracking the economic impact of Operation Epic Fury. Updated daily." />
   <meta property="og:url" content="https://geowire.org/recession.html" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
-  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <div id="site-header"></div>
@@ -294,6 +293,26 @@
     }
   } catch (err) {
     console.warn('[GeoWire] Live FRED data unavailable, using seed data.');
+  }
+
+  // ── Async: live Kalshi recession odds (non-blocking, updates card after render)
+  try {
+    const kResp = await fetch('/api/kalshi?ticker=KXRECSSNBER-26');
+    const kData = await kResp.json();
+    const mkt = kData.market;
+    if (mkt && mkt.yes_ask_dollars) {
+      const liveOdds  = Math.round(parseFloat(mkt.yes_ask_dollars) * 100);
+      const prevOdds  = Math.round(parseFloat(mkt.previous_yes_ask_dollars || mkt.yes_ask_dollars) * 100);
+      const change    = liveOdds - prevOdds;
+      document.getElementById('metric-kalshi').innerHTML = UI.renderMetricCard(
+        'Kalshi Recession Odds', liveOdds, change || null, '%', 'Kalshi (live)', 'warn'
+      );
+      // Also update content.js seed so gauge/model reflect live value
+      GEOWIRE.recessionData.kalshiOdds.recession2026 = liveOdds;
+      console.log('[GeoWire] Kalshi recession odds (live):', liveOdds + '%', '(prev:', prevOdds + '%)');
+    }
+  } catch (err) {
+    console.warn('[GeoWire] Live Kalshi data unavailable, using seed value:', rec.kalshiOdds.recession2026 + '%');
   }
 })();
 </script>

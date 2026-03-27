@@ -5,8 +5,8 @@ const GEOWIRE = {
 
   // ─── SITE META ──────────────────────────────────────────────────────────────
   siteMeta: {
-    title: 'GeoWire — Global Intelligence Platform',
-    description: 'Real-time geopolitical intelligence tracking the US-Iran conflict, global energy markets, and crisis analytics.',
+    title: 'GeoWire — Recession Intelligence Platform',
+    description: 'Real-time recession intelligence: probability scoring, 10-factor macro model, prediction markets, and US–Iran conflict spillover analysis.',
     ogImage: 'https://geowire.org/og-default.png',
     twitterHandle: '@Geowire_org',
     baseUrl: 'https://geowire.org',
@@ -37,30 +37,31 @@ const GEOWIRE = {
       'rec-bottom':    '',
       'macro-top':     '',
       'macro-bottom':  '',
-      'energy-top':    '',
-      'farsi-top':     '',
-      'farsi-mid':     '',
-      'podcast-top':   '',
+      'energy-top':    '',      'podcast-top':   '',
       'podcast-mid':   '',
     },
   },
 
   // ─── NAVIGATION ─────────────────────────────────────────────────────────────
   navigationItems: [
-    { label: 'Recession',    farsiLabel: 'رکود',          href: 'recession.html',   icon: '📉' },
-    { label: 'Macro',        farsiLabel: 'کلان',          href: 'macro.html',       icon: '📊' },
-    { label: 'Predictions',  farsiLabel: 'پیش‌بینی',      href: 'predictions.html', icon: '🔮' },
-    { label: 'Dashboard',    farsiLabel: 'داشبورد',       href: 'index.html',       icon: '📊' },
-    { label: 'Energy',       farsiLabel: 'انرژی',          href: 'energy.html',      icon: '⚡' },
-    { label: 'Countries',    farsiLabel: 'کشورها',         href: 'countries.html',   icon: '🌍' },
-    { label: 'Scenarios',    farsiLabel: 'سناریوها',       href: 'scenarios.html',   icon: '🔮' },
-    { label: 'Trade',        farsiLabel: 'تجارت',          href: 'trade.html',       icon: '🚢' },
-    { label: 'US Impact',    farsiLabel: 'تأثیر آمریکا',  href: 'us-impact.html',   icon: '🇺🇸' },
-    { label: 'Humanitarian', farsiLabel: 'بشردوستانه',     href: 'humanitarian.html',icon: '🏥' },
-    { label: 'Geopolitical', farsiLabel: 'ژئوپلیتیک',     href: 'geopolitical.html',icon: '🗺️' },
-    { label: 'Analysis',     farsiLabel: 'تحلیل',          href: 'analysis.html',    icon: '📝' },
-    { label: 'Farsi',        farsiLabel: 'فارسی',           href: 'farsi.html',        icon: '🇮🇷' },
-    { label: 'Podcast',      farsiLabel: 'پادکست',          href: 'podcast.html',      icon: '🎙️' },
+    { label: 'Recession',    href: 'recession.html',    icon: '📉' },
+    { label: 'Macro Pulse',  href: 'macro.html',        icon: '📊' },
+    { label: 'Predictions',  href: 'predictions.html',  icon: '🔮' },
+    { label: 'Energy',       href: 'energy.html',       icon: '⚡' },
+    { label: 'Scenarios',    href: 'scenarios.html',    icon: '🗺️' },
+    { label: 'Analysis',     href: 'analysis.html',     icon: '📝' },
+    { label: 'About',        href: 'about.html',        icon: 'ℹ️' },
+  ],
+
+  // ─── SECONDARY NAV (footer + expanded menus) ────────────────────────────────
+  secondaryNavItems: [
+    { label: 'Dashboard',    href: 'index.html',        icon: '🏠' },
+    { label: 'Countries',    href: 'countries.html',    icon: '🌍' },
+    { label: 'Trade',        href: 'trade.html',        icon: '🚢' },
+    { label: 'US Impact',    href: 'us-impact.html',    icon: '🇺🇸' },
+    { label: 'Humanitarian', href: 'humanitarian.html', icon: '🏥' },
+    { label: 'Geopolitical', href: 'geopolitical.html', icon: '🗺️' },
+    { label: 'Podcast',      href: 'podcast.html',      icon: '🎙️' },
   ],
 
   // ─── CONFIDENCE LEVELS ──────────────────────────────────────────────────────
@@ -72,22 +73,7 @@ const GEOWIRE = {
     disputed:     { label: 'Disputed',       emoji: '⚠️', color: '#ff3b3b', description: 'Conflicting claims' },
   },
 
-  // ─── FARSI LABELS ───────────────────────────────────────────────────────────
-  farsiLabels: {
-    siteTitle: 'جیووایر — پلتفرم اطلاعات جهانی',
-    homepageHeadline: 'تعارض ایران و آمریکا — روز ۲۵',
-    navItems: {
-      'Dashboard': 'داشبورد', 'Energy': 'انرژی', 'Countries': 'کشورها',
-      'Scenarios': 'سناریوها', 'Trade': 'تجارت', 'US Impact': 'تأثیر آمریکا',
-      'Humanitarian': 'بشردوستانه', 'Geopolitical': 'ژئوپلیتیک', 'Analysis': 'تحلیل',
-    },
-    tickerLabels: {
-      oil: 'نفت خام', gold: 'طلا', treasury: 'اوراق خزانه ۱۰ ساله',
-      dollar: 'شاخص دلار', bitcoin: 'بیت‌کوین', warCost: 'هزینه جنگ',
-    },
-  },
-
-  // ─── MARKET DATA ────────────────────────────────────────────────────────────
+─ MARKET DATA ────────────────────────────────────────────────────────────
   marketData: {
     oil:      { label: 'Brent Crude',         value: 101.15, preWar: 68.20,  unit: '$/bbl',    change: +33.9,  source: 'Bloomberg',      confidence: 'multisource',  lastUpdated: '2026-03-25T06:00Z' },
     wti:      { label: 'WTI Crude',           value: 90.22,  preWar: 64.10,  unit: '$/bbl',    change: +28.9,  source: 'CME/Bloomberg',   confidence: 'multisource',  lastUpdated: '2026-03-25T06:00Z' },
@@ -148,14 +134,14 @@ const GEOWIRE = {
     ],
 
     kalshiOdds: {
-      recession2026:    36,
+      recession2026:    37,   // live: 37% as of 2026-03-26 (yes_ask $0.37). Auto-updated by /api/kalshi on page load.
       ceasefireMar31:   12,
       ceasefireApr30:   44,
       ceasefireJun30:   63,
       ceasefireDec31:   78,
       oilAbove100EndMar:41,
       source: 'Kalshi/Polymarket',
-      lastUpdated: '2026-03-25',
+      lastUpdated: '2026-03-26',
     },
   },
 

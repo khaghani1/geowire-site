@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire Factor Explorer — Deep dive into a single recession factor: FRED chart, second-order effects, watch items.">
-  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
-  <title id="page-title">Factor Explorer — GeoWire</title>
+<title>GeoWire — Factor Explorer | Macro Recession Indicator Detail</title>
+  <link rel="canonical" href="https://geowire.org/factor.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <!-- Chart.js via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -118,16 +117,42 @@
     try {
     // ── Init shared shell
     UI.init();
-    document.getElementById('site-header').innerHTML =
-      UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
-    document.getElementById('site-nav').innerHTML =
-      UI.renderNav('macro.html');
-    document.getElementById('site-footer').innerHTML =
-      UI.renderFooter(GEOWIRE.siteMeta);
+    document.getElementById('site-header').innerHTML = UI.renderHeader();
+    document.getElementById('site-nav').innerHTML    = UI.renderNav('macro.html');
+    document.getElementById('site-footer').innerHTML = UI.renderFooter();
 
     // ── Parse ?f= from URL
     const params = new URLSearchParams(window.location.search);
-    const factorKey = params.get('f') || 'ratesLiquidity';
+    const factorKey = params.get('f') || '';
+
+    // ── If no factor key, show a directory of all factors
+    if (!factorKey) {
+      document.title = 'Factor Explorer — GeoWire';
+      document.getElementById('breadcrumb-factor-name').textContent = 'All Factors';
+      const rec2 = GEOWIRE.recessionData || {};
+      const fd2  = GEOWIRE.factorDetails || {};
+      const statusColor = { STABLE: '#22c55e', ELEVATED: '#F59E0B', DETERIORATING: '#f97416', STRESS: '#E63946' };
+      document.getElementById('factor-explorer-mount').innerHTML =
+        `<h2 style="margin-bottom:16px;font-size:20px">Macro Factor Index</h2>
+         <p style="color:var(--text-2);margin-bottom:20px">Click any factor for a deep dive: FRED data, second-order effects, and watch items.</p>
+         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">` +
+        FACTOR_ORDER.map(k => {
+          const fs = (rec2.factorScores || {})[k] || {};
+          const fd_ = fd2[k] || {};
+          const color = statusColor[fs.status] || '#94A3B8';
+          return `<a href="factor.html?f=${k}" style="display:block;padding:16px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+              <span style="font-weight:600;font-size:14px">${fd_.name || k}</span>
+              <span style="font-family:var(--font-mono);font-weight:700;color:${color};font-size:18px">${fs.score || 0}</span>
+            </div>
+            <span style="font-size:11px;font-weight:600;color:${color};letter-spacing:0.05em">${fs.status || 'N/A'}</span>
+            <p style="font-size:12px;color:var(--text-2);margin:6px 0 0;line-height:1.4">${(fd_.description || '').slice(0, 80)}…</p>
+          </a>`;
+        }).join('') + `</div>`;
+      document.getElementById('factor-email-capture').innerHTML = UI.renderEmailCapture();
+      UI.stubEmailCapture();
+      return;
+    }
 
     // Defensive: guard rec itself, not just rec.factorScores
     const rec = GEOWIRE.recessionData   || {};
@@ -173,8 +198,7 @@
         const captionEl = chartWrap ? chartWrap.querySelector('.factor-chart-caption') : null;
 
         try {
-          const liveData = await API.fetchFRED(seriesId);
-          // Attempt to fetch last 24 months of data from FRED
+          // Fetch last 24 months of data from FRED
           const FRED_KEY = 'f8f377edb471980ac3d88f219145c071';
           const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=asc&limit=24`;
           const res = await fetch(url);
