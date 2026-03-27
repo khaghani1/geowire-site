@@ -36,6 +36,29 @@
   </script>
 
   <link rel="stylesheet" href="styles.css" />
+  <!-- Leaflet for interactive conflict map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <style>
+    /* ── Conflict Map ── */
+    #conflict-map-leaflet { height: 480px; width: 100%; border-radius: 8px; z-index: 1; background: #0d1117; }
+    .leaflet-container { background: #0d1117; }
+    .map-legend { background: rgba(13,17,23,0.92); border: 1px solid #30363d; border-radius: 6px; padding: 10px 14px; font-size: 11px; color: #c9d1d9; line-height: 1.8; }
+    .map-legend-item { display: flex; align-items: center; gap: 6px; }
+    .map-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    /* ── Hormuz Ship Status ── */
+    .hormuz-widget { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 20px; }
+    .hormuz-widget-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 16px; margin-top: 16px; }
+    .hormuz-stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 14px; text-align: center; }
+    .hormuz-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: #8b949e; margin-bottom: 6px; }
+    .hormuz-stat-value { font-size: 22px; font-weight: 700; color: #ff4444; font-family: var(--font-mono, monospace); }
+    .hormuz-stat-value.ok { color: #00ff88; }
+    .hormuz-stat-value.warn { color: #ffb800; }
+    .hormuz-stat-sub { font-size: 10px; color: #8b949e; margin-top: 4px; }
+    .hormuz-flow-bar { height: 8px; background: #161b22; border-radius: 4px; margin: 12px 0 4px; overflow: hidden; }
+    .hormuz-flow-fill { height: 100%; background: #ff4444; border-radius: 4px; transition: width 1s ease; }
+    .hormuz-banner-text { font-size: 12px; color: #8b949e; text-align: center; }
+    .hormuz-source { font-size: 10px; color: #6e7681; margin-top: 8px; text-align: right; }
+  </style>
 </head>
 <body>
 
@@ -130,20 +153,24 @@
       <div id="conflict-timeline"></div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════ MAP HOOK -->
+    <!-- ═══════════════════════════════════════════════════ CONFLICT MAP -->
     <section class="section container">
       <div class="section-header">
         <h2 class="section-title">Conflict Map</h2>
-        <span class="section-badge demo-badge">DEMO</span>
+        <span class="section-badge">LIVE</span>
       </div>
-      <div class="map-container" id="map-container">
-        <div class="map-placeholder">
-          <div class="map-placeholder-inner">
-            <div class="map-icon">🗺️</div>
-            <div class="map-placeholder-title">Interactive Conflict Map</div>
-            <div class="map-placeholder-sub">Strike zones · Naval positions · Refugee flows · Supply chain disruptions</div>
-            <div class="map-placeholder-tag">MapLibre integration — Phase 2</div>
-          </div>
+      <div id="conflict-map-leaflet"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ HORMUZ SHIP TRACKING -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Hormuz Strait — Vessel Status</h2>
+        <a href="trade.html" class="section-link">Full Trade Intel →</a>
+      </div>
+      <div id="hormuz-widget-container">
+        <div class="hormuz-widget">
+          <div style="color:#8b949e;font-size:13px;">Loading vessel data…</div>
         </div>
       </div>
     </section>
@@ -227,6 +254,7 @@
   <script src="content.js"></script>
   <script src="ui.js"></script>
   <script src="api.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPeE=" crossorigin=""></script>
 
   <script>
     (async () => {
@@ -305,6 +333,156 @@
 
       // ── Init (hamburger, clock, lang)
       UI.init();
+
+      // ── Interactive Conflict Map (Leaflet + OpenStreetMap)
+      (function initConflictMap() {
+        const map = L.map('conflict-map-leaflet', {
+          center: [25.5, 56.5],  // Gulf / Hormuz region
+          zoom: 5,
+          zoomControl: true,
+          attributionControl: true,
+        });
+
+        // Dark CartoDB tiles — matches GeoWire's dark theme
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 19,
+        }).addTo(map);
+
+        // Helper: colored circle marker
+        function circleMarker(lat, lon, color, radius, label, note) {
+          return L.circleMarker([lat, lon], {
+            radius, color, fillColor: color, fillOpacity: 0.7, weight: 2,
+          }).bindPopup(`<b>${label}</b><br><small>${note}</small>`);
+        }
+
+        // ── Strike Zones (red)
+        const strikeZones = [
+          { lat: 32.4, lon: 53.7,  r: 18, label: 'Central Iran Strike Zone',  note: 'US Air Force strikes — multiple waves' },
+          { lat: 35.7, lon: 51.4,  r: 12, label: 'Tehran',                    note: 'Command & control infrastructure targeted' },
+          { lat: 29.6, lon: 52.5,  r: 10, label: 'Shiraz Air Base',            note: 'IRGC Aerospace Force — degraded' },
+          { lat: 29.9, lon: 57.7,  r: 8,  label: 'Kerman Province',            note: 'Missile production facilities' },
+          { lat: 32.0, lon: 48.7,  r: 8,  label: 'Dezful — Shahid Nozari AB', note: 'Strike zone — IRGC drone base' },
+        ];
+        strikeZones.forEach(z => circleMarker(z.lat, z.lon, '#ff4444', z.r, z.label, z.note).addTo(map));
+
+        // ── Naval / Chokepoints (orange)
+        const naval = [
+          { lat: 26.6, lon: 56.3,  r: 14, label: '🚢 Strait of Hormuz',        note: 'BLOCKED — 3% capacity. IRGC interdiction + mines' },
+          { lat: 25.0, lon: 55.1,  r: 7,  label: 'Jebel Ali Port (UAE)',        note: 'Commercial traffic severely reduced' },
+          { lat: 25.1, lon: 56.4,  r: 7,  label: 'Fujairah (UAE)',              note: 'Emergency tanker staging area' },
+          { lat: 26.5, lon: 54.9,  r: 9,  label: 'Bandar Abbas (Iran)',         note: 'IRGC naval base — mine deployment origin' },
+          { lat: 26.2, lon: 50.6,  r: 7,  label: 'Bahrain — US 5th Fleet',     note: 'USS Gerald Ford CSG — operational' },
+        ];
+        naval.forEach(n => circleMarker(n.lat, n.lon, '#ff8c00', n.r, n.label, n.note).addTo(map));
+
+        // ── US / Allied Positions (blue)
+        const allied = [
+          { lat: 25.1, lon: 51.6,  r: 7,  label: 'Al Udeid AB (Qatar)',        note: 'USAF — B-2, F-22, refueling hub' },
+          { lat: 24.5, lon: 54.6,  r: 6,  label: 'Al Dhafra AB (UAE)',         note: 'USAF advanced operations' },
+          { lat: 29.1, lon: 48.1,  r: 6,  label: 'Ali Al Salem AB (Kuwait)',   note: 'US Army — forward staging' },
+          { lat: 36.6, lon: 36.1,  r: 6,  label: 'Incirlik AB (Turkey)',       note: 'NATO — ISR & refueling support' },
+        ];
+        allied.forEach(a => circleMarker(a.lat, a.lon, '#58a6ff', a.r, a.label, a.note).addTo(map));
+
+        // ── Missile / Drone launch corridors (dashed line)
+        L.polyline([[35.7, 51.4], [33.3, 44.4], [31.5, 34.8]], {
+          color: '#ff4444', weight: 2, dashArray: '6,6', opacity: 0.6,
+        }).bindPopup('Iranian missile corridor — Baghdad axis → Israel').addTo(map);
+
+        L.polyline([[26.6, 56.3], [12.8, 45.0]], {
+          color: '#ff8c00', weight: 1.5, dashArray: '4,8', opacity: 0.5,
+        }).bindPopup('Cape of Good Hope reroute — oil tankers bypassing Hormuz').addTo(map);
+
+        // ── Legend
+        const legend = L.control({ position: 'bottomright' });
+        legend.onAdd = () => {
+          const d = L.DomUtil.create('div', 'map-legend');
+          d.innerHTML = `
+            <div style="font-weight:600;margin-bottom:6px;font-size:12px;">MAP LEGEND</div>
+            <div class="map-legend-item"><span class="map-dot" style="background:#ff4444"></span> Strike zones</div>
+            <div class="map-legend-item"><span class="map-dot" style="background:#ff8c00"></span> Chokepoints / IRGC naval</div>
+            <div class="map-legend-item"><span class="map-dot" style="background:#58a6ff"></span> US / Allied bases</div>
+            <div class="map-legend-item"><span style="display:inline-block;width:20px;height:2px;background:#ff4444;border-bottom:2px dashed #ff4444"></span> Missile corridors</div>
+          `;
+          return d;
+        };
+        legend.addTo(map);
+      })();
+
+      // ── Hormuz Vessel Status (live from /api/ships)
+      (async function loadHormuzWidget() {
+        const el = document.getElementById('hormuz-widget-container');
+        try {
+          const res = await fetch('/api/ships');
+          const d = await res.json();
+          const blockPct = d.blockadePercent ?? 97;
+          const flowPct = 100 - blockPct;
+          const tankers = d.transitEstimate?.tankers ?? 1;
+          const total   = d.transitEstimate?.total ?? 2;
+          const normal  = d.normalBaseline ?? { tankers: 21, total: 40 };
+          const src     = d.dataSource || 'model';
+          const srcMap  = { aisstream: '🛰 AISStream (live AIS)', portwatch: '🏦 IMF PortWatch', model: '📊 GeoWire model estimate' };
+
+          el.innerHTML = `
+            <div class="hormuz-widget">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <span style="font-size:13px;color:#ff4444;font-weight:700;letter-spacing:.05em">⚠ HORMUZ STRAIT — NEAR-BLOCKED</span>
+                <span style="font-size:11px;color:#8b949e">${new Date(d.lastUpdated||Date.now()).toUTCString().split(' ').slice(0,5).join(' ')} UTC</span>
+              </div>
+              <div class="hormuz-flow-bar">
+                <div class="hormuz-flow-fill" style="width:${flowPct}%"></div>
+              </div>
+              <div class="hormuz-banner-text">${flowPct}% of normal capacity — ${blockPct}% blockaded</div>
+              <div class="hormuz-widget-grid">
+                <div class="hormuz-stat-card">
+                  <div class="hormuz-stat-label">Tankers Transiting / Day</div>
+                  <div class="hormuz-stat-value">${tankers}</div>
+                  <div class="hormuz-stat-sub">vs ${normal.tankers} normal</div>
+                </div>
+                <div class="hormuz-stat-card">
+                  <div class="hormuz-stat-label">Total Vessels / Day</div>
+                  <div class="hormuz-stat-value">${total}</div>
+                  <div class="hormuz-stat-sub">vs ${normal.total} normal</div>
+                </div>
+                <div class="hormuz-stat-card">
+                  <div class="hormuz-stat-label">Flow Status</div>
+                  <div class="hormuz-stat-value" style="font-size:14px">${d.hormuzStatus || 'BLOCKED'}</div>
+                  <div class="hormuz-stat-sub">IRGC interdiction + mines</div>
+                </div>
+                <div class="hormuz-stat-card">
+                  <div class="hormuz-stat-label">Oil Trade Impact</div>
+                  <div class="hormuz-stat-value" style="font-size:14px">20M bbl</div>
+                  <div class="hormuz-stat-sub">per day at risk</div>
+                </div>
+              </div>
+              ${d.portActivity ? `
+              <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">
+                ${Object.entries(d.portActivity).map(([port, data]) => `
+                  <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:10px;font-size:11px">
+                    <div style="color:#8b949e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">${port.replace(/([A-Z])/g,' $1').trim()}</div>
+                    <div style="color:#c9d1d9;font-weight:600">${data.totalCalls ?? data.vessels ?? '—'} vessels</div>
+                    ${data.trend ? `<div style="color:${data.trend==='down'?'#ff4444':'#00ff88'};font-size:10px">${data.trend==='down'?'↓ Declining':'↑ Activity'}</div>` : ''}
+                  </div>
+                `).join('')}
+              </div>` : ''}
+              <div class="hormuz-source">Data: ${srcMap[src] || src} · <a href="trade.html" style="color:#58a6ff">Full Trade Intel →</a></div>
+            </div>
+          `;
+        } catch(err) {
+          el.innerHTML = `
+            <div class="hormuz-widget">
+              <div class="hormuz-widget-grid">
+                <div class="hormuz-stat-card"><div class="hormuz-stat-label">Strait of Hormuz</div><div class="hormuz-stat-value">BLOCKED</div><div class="hormuz-stat-sub">3% capacity</div></div>
+                <div class="hormuz-stat-card"><div class="hormuz-stat-label">Tankers / Day</div><div class="hormuz-stat-value">1–2</div><div class="hormuz-stat-sub">vs 21 normal</div></div>
+                <div class="hormuz-stat-card"><div class="hormuz-stat-label">Oil at Risk</div><div class="hormuz-stat-value" style="font-size:14px">20M bbl/day</div><div class="hormuz-stat-sub">20% of global supply</div></div>
+              </div>
+              <div class="hormuz-source"><a href="trade.html" style="color:#58a6ff">Full Trade Intel →</a></div>
+            </div>
+          `;
+        }
+      })();
 
       // ── Async: load live market data
       await API.loadMarketData();
