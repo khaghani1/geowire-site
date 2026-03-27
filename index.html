@@ -9,8 +9,7 @@
   <meta property="og:url" content="https://geowire.org/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
-  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+  <link rel="canonical" href="https://geowire.org/" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
@@ -130,6 +129,14 @@
 
   <section class="section container">
     <div class="section-header">
+      <h2 class="section-title">Where Markets Disagree</h2>
+      <a href="predictions.html" class="section-link">See All Predictions →</a>
+    </div>
+    <div id="divergence-preview"></div>
+  </section>
+
+  <section class="section container">
+    <div class="section-header">
       <h2 class="section-title">Scenario Outlook</h2>
       <a href="scenarios.html" class="section-link">🧪 Interactive Scenario Lab →</a>
     </div>
@@ -169,6 +176,9 @@
   // Recession widget
   document.getElementById('recession-widget').innerHTML = UI.renderRecessionWidget(GEOWIRE.recessionData);
 
+  // Live badge
+  document.getElementById('news-live-badge').innerHTML = UI.renderLiveBadge(false);
+
   // Timeline
   document.getElementById('conflict-timeline').innerHTML = UI.renderTimeline(GEOWIRE.timelineEvents);
 
@@ -191,6 +201,21 @@
       <div class="wc-text">${u.item}: ${u.change}</div>
     </div>`).join('');
 
+  // Where Markets Disagree — divergences
+  const divEl = document.getElementById('divergence-preview');
+  if (divEl && GEOWIRE.recessionData && GEOWIRE.recessionData.divergences) {
+    divEl.innerHTML = GEOWIRE.recessionData.divergences.map(d => `
+      <div class="what-changed-card" style="border-left:3px solid var(--gw-warning,#F59E0B)">
+        <div class="wc-type" style="color:var(--gw-warning,#F59E0B)">${d.title}</div>
+        <div class="wc-text"><strong>Our model:</strong> ${d.ours}</div>
+        <div class="wc-text"><strong>Market:</strong> ${d.market}</div>
+        <div class="wc-text" style="color:var(--gw-text-secondary,#94A3B8);font-size:12px;margin-top:4px">${d.thesis}</div>
+      </div>
+    `).join('');
+  } else if (divEl) {
+    divEl.innerHTML = '<p class="loading-state" style="padding:16px;color:var(--gw-text-secondary,#94A3B8)">Divergence data coming soon — check <a href="predictions.html">Predictions</a> for full market vs model comparison.</p>';
+  }
+
   // Scenarios
   document.getElementById('scenario-preview').innerHTML = (GEOWIRE.scenarios || []).map(s => `
     <div class="scenario-card scenario-${s.type}">
@@ -212,9 +237,6 @@
   // Async: news feed
   await API.loadNews('news-feed-container');
 
-  // AdSense
-  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
-  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
 })();
 </script>
 
