@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Factor Explorer — Deep dive into a single recession factor: FRED chart, second-order effects, watch items.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title id="page-title">Factor Explorer — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- Recession risk bar -->
+  <div class="war-status-bar">
+    <div class="container">
+      <div class="war-status-inner">
+        <span class="war-status-label">6-MO RECESSION PROBABILITY</span>
+        <div class="war-status-track">
+          <div class="war-status-fill" style="width:42%"></div>
+        </div>
+        <span class="war-status-pct" style="color:#F59E0B">42%</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section container">
+
+    <!-- Breadcrumb -->
+    <div class="factor-breadcrumb" id="factor-breadcrumb">
+      <a href="recession.html">📉 Recession</a>
+      <span class="factor-breadcrumb-sep">›</span>
+      <a href="macro.html">📊 Macro Pulse</a>
+      <span class="factor-breadcrumb-sep">›</span>
+      <span id="breadcrumb-factor-name" style="color:var(--text)">Loading…</span>
+    </div>
+
+    <!-- Main factor explorer component -->
+    <div id="factor-explorer-mount">
+      <div class="loading-state">Loading factor data…</div>
+    </div>
+
+  </section>
+
+  <!-- AdSense -->
+  <div class="container" id="ad-factor-mid"></div>
+
+  <!-- Related factors -->
+  <section class="section container" id="related-factors-section" style="display:none">
+    <div class="section-header">
+      <h2 class="section-title">Related Factors</h2>
+      <span class="section-subtitle">Other factors strongly linked to this one</span>
+    </div>
+    <div class="related-factors" id="related-factors-mount"></div>
+  </section>
+
+  <!-- AI Explain slot -->
+  <section class="section container">
+    <div id="factor-ai-explain"></div>
+  </section>
+
+  <!-- Back nav -->
+  <section class="section container">
+    <div class="factor-nav-bar">
+      <a class="factor-nav-link" href="macro.html">← Back to Macro Pulse</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="recession.html">📉 Recession Command Center</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="energy.html">⚡ Energy Command Center</a>
+      <span class="factor-nav-sep" id="prev-next-sep" style="display:none">·</span>
+      <a class="factor-nav-link" href="#" id="next-factor-link" style="display:none">Next Factor →</a>
+    </div>
+  </section>
+
+  <!-- Email + Footer -->
+  <section class="section container" id="factor-email-capture"></section>
+  <div id="site-footer"></div>
+
+</main>
+
+<!-- ─── SCRIPTS ───────────────────────────────────────────────────────────── -->
+<script src="content.js"></script>
+<script src="scoring.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+  // Factor order for prev/next navigation
+  const FACTOR_ORDER = [
+    'laborMarket','ratesLiquidity','inflation','consumerHealth',
+    'corporateCredit','housing','supplyLogistics','globalSpillovers',
+    'marketSignals','outsideBox',
+  ];
+
+  // Related factors map
+  const RELATED_MAP = {
+    ratesLiquidity:   ['inflation','housing','consumerHealth'],
+    inflation:        ['ratesLiquidity','consumerHealth','supplyLogistics'],
+    laborMarket:      ['consumerHealth','corporateCredit','outsideBox'],
+    consumerHealth:   ['housing','ratesLiquidity','laborMarket'],
+    corporateCredit:  ['ratesLiquidity','marketSignals','consumerHealth'],
+    housing:          ['ratesLiquidity','consumerHealth','laborMarket'],
+    supplyLogistics:  ['inflation','globalSpillovers','corporateCredit'],
+    globalSpillovers: ['supplyLogistics','inflation','marketSignals'],
+    marketSignals:    ['corporateCredit','globalSpillovers','ratesLiquidity'],
+    outsideBox:       ['laborMarket','consumerHealth','marketSignals'],
+  };
+
+  (async function () {
+    try {
+    // ── Init shared shell
+    UI.init();
+    document.getElementById('site-header').innerHTML =
+      UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
+    document.getElementById('site-nav').innerHTML =
+      UI.renderNav('macro.html');
+    document.getElementById('site-footer').innerHTML =
+      UI.renderFooter(GEOWIRE.siteMeta);
+
+    // ── Parse ?f= from URL
+    const params = new URLSearchParams(window.location.search);
+    const factorKey = params.get('f') || 'ratesLiquidity';
+
+    // Defensive: guard rec itself, not just rec.factorScores
+    const rec = GEOWIRE.recessionData   || {};
+    const fd  = GEOWIRE.factorDetails   || {};
+    const factorScore  = (rec.factorScores  || {})[factorKey];
+    const factorDetail = fd[factorKey];
+
+    if (!factorScore || !factorDetail) {
+      const validKeys = Object.keys(fd).length
+        ? Object.keys(fd)
+        : ['ratesLiquidity','inflation','laborMarket','consumerHealth','corporateCredit',
+           'housing','supplyLogistics','globalSpillovers','marketSignals','outsideBox'];
+      document.getElementById('factor-explorer-mount').innerHTML =
+        `<div class="cross-factor-insight" style="text-align:left">
+           <strong style="color:#E63946">Factor not found:</strong> <code style="font-family:var(--font-mono);color:#F59E0B">${factorKey || '(none)'}</code>
+           <p style="margin:12px 0 8px;color:var(--text-2)">Valid factor keys:</p>
+           <div style="display:flex;flex-wrap:wrap;gap:8px">
+             ${validKeys.map(k => `<a href="factor.html?f=${k}" style="padding:4px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;color:#5FA8D3;font-family:var(--font-mono);font-size:12px;text-decoration:none">${k}</a>`).join('')}
+           </div>
+           <p style="margin-top:12px"><a href="macro.html" style="color:#5FA8D3">← Return to Macro Pulse</a></p>
+         </div>`;
+      document.getElementById('breadcrumb-factor-name').textContent = 'Not found';
+      return;
+    }
+
+    // ── Dynamic page title & breadcrumb
+    const name = factorDetail.name || factorKey;
+    document.title = `${name} — Macro Factor Explorer — GeoWire`;
+    document.getElementById('page-title').textContent = `${name} — GeoWire`;
+    document.getElementById('breadcrumb-factor-name').textContent = name;
+
+    // ── Render factor explorer
+    document.getElementById('factor-explorer-mount').innerHTML =
+      UI.renderFactorExplorer(factorKey, factorScore, factorDetail);
+
+    // ── Chart.js — render if FRED series available and Chart.js loaded
+    const chartCanvas = document.getElementById('factor-chart');
+    if (chartCanvas && typeof Chart !== 'undefined') {
+      const seriesId = chartCanvas.dataset.series;
+      if (seriesId) {
+        // Show loading state in chart container
+        const chartWrap = document.getElementById('factor-chart-wrap');
+        const captionEl = chartWrap ? chartWrap.querySelector('.factor-chart-caption') : null;
+
+        try {
+          const liveData = await API.fetchFRED(seriesId);
+          // Attempt to fetch last 24 months of data from FRED
+          const FRED_KEY = 'f8f377edb471980ac3d88f219145c071';
+          const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=asc&limit=24`;
+          const res = await fetch(url);
+          const json = await res.json();
+          const obs = (json.observations || []).filter(o => o.value !== '.');
+          if (obs.length < 2) throw new Error('Insufficient data points');
+
+          const labels = obs.map(o => {
+            const d = new Date(o.date);
+            return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+          });
+          const values = obs.map(o => parseFloat(o.value));
+
+          // Colour the line based on factor status
+          const lineColor = typeof RecessionModel !== 'undefined'
+            ? RecessionModel.getStatusColor(factorScore.status)
+            : '#5FA8D3';
+
+          new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: [{
+                label: name,
+                data: values,
+                borderColor: lineColor,
+                backgroundColor: lineColor + '18',
+                borderWidth: 2,
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                tension: 0.3,
+                fill: true,
+              }],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#0D1B2A',
+                  titleColor: '#F1F5F9',
+                  bodyColor: '#94A3B8',
+                  borderColor: '#334155',
+                  borderWidth: 1,
+                },
+              },
+              scales: {
+                x: {
+                  grid: { color: '#33415540', drawBorder: false },
+                  ticks: { color: '#94A3B8', font: { size: 10 } },
+                },
+                y: {
+                  grid: { color: '#33415540', drawBorder: false },
+                  ticks: { color: '#94A3B8', font: { size: 10 } },
+                },
+              },
+            },
+          });
+
+          if (captionEl) captionEl.textContent =
+            `FRED: ${seriesId} · ${obs.length} observations · Last: ${obs[obs.length-1].date} · Source: St. Louis Federal Reserve`;
+
+        } catch (err) {
+          console.warn('[GeoWire Factor] Chart fallback:', err.message);
+          const chartWrap2 = document.getElementById('factor-chart-wrap');
+          if (chartWrap2) {
+            chartWrap2.innerHTML = `<div class="factor-chart-placeholder">
+              <span>📊</span>
+              <p>Historical chart available when FRED connected.<br>
+              <small style="color:#5FA8D360">FRED series: ${seriesId} · ${err.message}</small></p>
+            </div>`;
+          }
+        }
+      }
+    } else if (chartCanvas && typeof Chart === 'undefined') {
+      console.warn('[GeoWire Factor] Chart.js did not load');
+    }
+
+    // ── Related factors
+    const related = (RELATED_MAP[factorKey] || []).slice(0, 3);
+    if (related.length) {
+      const relHtml = related.map(rk => {
+        const rf = rec.factorScores[rk] || {};
+        const rd = fd[rk] || {};
+        const rcolor = typeof RecessionModel !== 'undefined' ? RecessionModel.getStatusColor(rf.status) : '#94A3B8';
+        return `<a class="related-factor-link" href="factor.html?f=${rk}">
+          <span style="width:8px;height:8px;border-radius:50%;background:${rcolor};flex-shrink:0;display:inline-block"></span>
+          ${rd.name || rk} (${rf.score || 0})
+        </a>`;
+      }).join('');
+      document.getElementById('related-factors-mount').innerHTML = relHtml;
+      document.getElementById('related-factors-section').style.display = '';
+    }
+
+    // ── Next factor navigation
+    const currentIdx = FACTOR_ORDER.indexOf(factorKey);
+    if (currentIdx >= 0 && currentIdx < FACTOR_ORDER.length - 1) {
+      const nextKey = FACTOR_ORDER[currentIdx + 1];
+      const nextDetail = fd[nextKey] || {};
+      const nextLink = document.getElementById('next-factor-link');
+      const nextSep  = document.getElementById('prev-next-sep');
+      if (nextLink) {
+        nextLink.href = `factor.html?f=${nextKey}`;
+        nextLink.textContent = `Next: ${nextDetail.name || nextKey} →`;
+        nextLink.style.display = '';
+        if (nextSep) nextSep.style.display = '';
+      }
+    }
+
+    // ── Market ticker
+    document.getElementById('market-ticker-bar') &&
+      (document.getElementById('market-ticker-bar').innerHTML = ''); // factor page doesn't have ticker mount, skip
+
+    // ── AdSense
+    document.getElementById('ad-factor-mid').innerHTML = UI.renderAdSlot('factor-mid');
+    document.querySelectorAll('.adsbygoogle').forEach(() => {
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    });
+
+    // ── AI Explain — for the current factor
+    const aiEl = document.getElementById('factor-ai-explain');
+    if (aiEl && factorDetail) {
+      aiEl.innerHTML = UI.renderAIExplainButton(
+        `${name} — macro recession factor`,
+        factorDetail.description || '',
+        'factor-ai-explain'
+      );
+    }
+
+    // ── Email capture
+    document.getElementById('factor-email-capture').innerHTML = UI.renderEmailCapture();
+    UI.stubEmailCapture();
+
+    } catch(err) {
+      console.error('[GeoWire Factor] Fatal error:', err);
+      document.getElementById('factor-explorer-mount').innerHTML =
+        `<div class="cross-factor-insight" style="color:#E63946">
+           <strong>Error loading factor:</strong> ${err.message}<br>
+           <small style="color:var(--text-3)">Check browser console for details.
+           <a href="macro.html" style="color:#5FA8D3">← Return to Macro Pulse</a></small>
+         </div>`;
+    }
+  })();
+</script>
+</body>
+</html>

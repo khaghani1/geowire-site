@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Podcast — Weekly deep dives on the US-Iran conflict, oil markets, global recession risk, and geopolitical intelligence. Powered by Google NotebookLM.">
+  <meta property="og:title" content="GeoWire Podcast — Intelligence Briefings">
+  <meta property="og:description" content="AI-assisted intelligence podcast on the US-Iran conflict, energy markets, and global recession risk. New episodes weekly.">
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <title>Podcast — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+  <style>
+    /* ── Episode cards ─────────────────────────────────────────────────── */
+    .episode-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; }
+    .episode-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    .episode-card-cover { height:180px; display:flex; align-items:center; justify-content:center; font-size:3.5rem; background:var(--surface-2); position:relative; }
+    .episode-card-cover .ep-num { position:absolute; top:12px; left:12px; font-size:11px; font-family:var(--font-mono); color:var(--text-3); background:var(--surface); padding:3px 8px; border-radius:4px; border:1px solid var(--border); }
+    .episode-coming-soon { position:absolute; top:12px; right:12px; font-size:10px; font-family:var(--font-mono); background:#F59E0B18; color:#F59E0B; border:1px solid #F59E0B40; padding:3px 8px; border-radius:4px; }
+    .episode-card-body { padding:18px; }
+    .episode-card-title { font-size:1rem; font-weight:700; color:var(--text); margin:0 0 6px; line-height:1.4; }
+    .episode-card-subtitle { font-size:0.85rem; color:var(--text-2); margin:0 0 12px; line-height:1.5; }
+    .episode-card-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+    .episode-tag { font-size:10px; font-family:var(--font-mono); padding:2px 7px; border-radius:4px; border:1px solid var(--border); color:var(--text-3); }
+    .episode-card-cta { width:100%; padding:10px 0; border-radius:8px; border:1px dashed var(--border); background:var(--surface-2); color:var(--text-3); font-size:13px; font-family:var(--font-mono); cursor:default; text-align:center; }
+    .episode-card-runtime { font-size:11px; color:var(--text-3); font-family:var(--font-mono); margin-top:10px; text-align:center; }
+
+    /* ── Platform subscribe links ──────────────────────────────────────── */
+    .subscribe-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+    .subscribe-btn { display:flex; align-items:center; gap:10px; padding:14px 16px; background:var(--surface); border:1px solid var(--border); border-radius:10px; text-decoration:none; color:var(--text-2); transition:all .15s; }
+    .subscribe-btn:hover { border-color:#5FA8D3; color:var(--text); background:var(--surface-2); }
+    .subscribe-btn-icon { font-size:1.4rem; flex-shrink:0; }
+    .subscribe-btn-label { font-size:13px; }
+    .subscribe-btn-name { font-weight:600; display:block; color:var(--text); }
+    .subscribe-btn-sub { font-size:11px; color:var(--text-3); font-family:var(--font-mono); }
+
+    /* ── How We Make This ──────────────────────────────────────────────── */
+    .process-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:24px; }
+    .process-steps { display:grid; gap:0; }
+    .process-step { display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--border); }
+    .process-step:last-child { border-bottom:none; }
+    .process-step-num { width:32px; height:32px; border-radius:50%; background:#5FA8D320; border:1px solid #5FA8D340; color:#5FA8D3; font-family:var(--font-mono); font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    .process-step-title { font-size:0.92rem; font-weight:600; color:var(--text); margin:0 0 4px; }
+    .process-step-desc { font-size:0.85rem; color:var(--text-2); margin:0; line-height:1.55; }
+
+    /* ── Spotify embed placeholder ─────────────────────────────────────── */
+    .spotify-placeholder { background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:32px; text-align:center; }
+    .spotify-placeholder-icon { font-size:3rem; margin-bottom:12px; }
+    .spotify-placeholder-title { font-size:1.1rem; font-weight:600; color:var(--text); margin:0 0 8px; }
+    .spotify-placeholder-sub { font-size:0.9rem; color:var(--text-2); margin:0 0 16px; }
+    .spotify-placeholder-note { font-size:11px; color:var(--text-3); font-family:var(--font-mono); }
+
+    /* Notify form */
+    .notify-form { display:flex; gap:10px; max-width:480px; margin:0 auto; flex-wrap:wrap; justify-content:center; }
+    .notify-input { flex:1; min-width:200px; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:14px; outline:none; }
+    .notify-input:focus { border-color:#5FA8D3; }
+    .notify-btn { padding:10px 20px; background:#5FA8D3; color:#0D1B2A; border:none; border-radius:8px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; }
+    .notify-btn:hover { background:#7BC4E8; }
+  </style>
+</head>
+<body>
+
+<div id="site-header"></div>
+<div id="site-nav"></div>
+
+<main class="page-main">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-inner">
+        <div class="page-hero-label">
+          <span class="tag" style="background:#1DB95420;color:#1DB954;border:1px solid #1DB95440">🎙️ PODCAST</span>
+          <span class="tag" style="background:#F59E0B20;color:#F59E0B;border:1px solid #F59E0B40">COMING SOON</span>
+        </div>
+        <h1 class="page-hero-title">GeoWire Intelligence Briefing</h1>
+        <p class="page-hero-subtitle">Weekly deep dives on the US-Iran conflict, global energy markets, recession risk, and geopolitical flashpoints — powered by GeoWire data and Google NotebookLM AI synthesis.</p>
+        <div class="page-hero-meta">
+          <span>New episodes weekly</span>
+          <span class="separator">·</span>
+          <span>~25 min per episode</span>
+          <span class="separator">·</span>
+          <span style="color:#F59E0B">🚀 Launching soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market ticker -->
+  <div id="market-ticker-bar"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       NOTIFY FORM
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div style="text-align:center;max-width:600px;margin:0 auto">
+      <div style="font-size:2.5rem;margin-bottom:12px">🔔</div>
+      <h2 style="color:var(--text);margin:0 0 8px">Get notified when we launch</h2>
+      <p style="color:var(--text-2);margin:0 0 20px;font-size:0.95rem">Be first to hear the inaugural episode — a full briefing on Day 1 of Operation Epic Fury to now.</p>
+      <div class="notify-form" id="podcast-notify-form">
+        <input class="notify-input" type="email" id="podcast-email" placeholder="your@email.com">
+        <button class="notify-btn" id="podcast-notify-btn">Notify Me</button>
+      </div>
+      <p id="podcast-notify-msg" style="margin-top:12px;font-size:13px;color:#2D6A4F;display:none">✓ You're on the list! We'll email you when Episode 1 drops.</p>
+    </div>
+  </section>
+
+  <!-- AdSense top -->
+  <div class="container" id="ad-podcast-top"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SPOTIFY EMBED PLACEHOLDER
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Listen</h2>
+      <span class="section-subtitle">Embedded player — available at launch</span>
+    </div>
+    <div class="spotify-placeholder">
+      <div class="spotify-placeholder-icon">🎧</div>
+      <div class="spotify-placeholder-title">Spotify Player Coming Soon</div>
+      <div class="spotify-placeholder-sub">The GeoWire podcast will be embedded here directly. No app required — listen in your browser.</div>
+      <div class="spotify-placeholder-note">SPOTIFY EMBED · APPLE PODCASTS · RSS FEED — LAUNCHING SOON</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       UPCOMING EPISODES
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Upcoming Episodes</h2>
+      <span class="section-subtitle">Topics in production — first 3 episodes</span>
+    </div>
+    <div class="episode-grid">
+
+      <!-- EP 1 -->
+      <div class="episode-card">
+        <div class="episode-card-cover" style="background:linear-gradient(135deg,#0D1B2A 0%,#1a2d44 100%)">
+          <span>⚡</span>
+          <span class="ep-num">EP 01</span>
+          <span class="episode-coming-soon">COMING SOON</span>
+        </div>
+        <div class="episode-card-body">
+          <h3 class="episode-card-title">Day One to Now: How a Strike on Fordow Changed Everything</h3>
+          <p class="episode-card-subtitle">The full arc of Operation Epic Fury — the strike, the market shock, the Hormuz closure, and what comes next. Complete Day 1-26 timeline with analysis.</p>
+          <div class="episode-card-tags">
+            <span class="episode-tag">MILITARY</span>
+            <span class="episode-tag">OIL MARKETS</span>
+            <span class="episode-tag">HORMUZ</span>
+            <span class="episode-tag">TIMELINE</span>
+          </div>
+          <button class="episode-card-cta" disabled>▶ Coming Soon</button>
+          <div class="episode-card-runtime">~28 min · GeoWire Intelligence Briefing</div>
+        </div>
+      </div>
+
+      <!-- EP 2 -->
+      <div class="episode-card">
+        <div class="episode-card-cover" style="background:linear-gradient(135deg,#0D1B2A 0%,#1e1a2d 100%)">
+          <span>📉</span>
+          <span class="ep-num">EP 02</span>
+          <span class="episode-coming-soon">COMING SOON</span>
+        </div>
+        <div class="episode-card-body">
+          <h3 class="episode-card-title">Are We Heading Into Recession? The 10 Factors Driving the Model</h3>
+          <p class="episode-card-subtitle">A deep dive into GeoWire's recession probability model. Labor market fraying, credit tightening, housing freeze — what the data says and what to watch.</p>
+          <div class="episode-card-tags">
+            <span class="episode-tag">RECESSION</span>
+            <span class="episode-tag">MACRO</span>
+            <span class="episode-tag">FRED DATA</span>
+            <span class="episode-tag">42% PROBABILITY</span>
+          </div>
+          <button class="episode-card-cta" disabled>▶ Coming Soon</button>
+          <div class="episode-card-runtime">~22 min · GeoWire Intelligence Briefing</div>
+        </div>
+      </div>
+
+      <!-- EP 3 -->
+      <div class="episode-card">
+        <div class="episode-card-cover" style="background:linear-gradient(135deg,#0D1B2A 0%,#1d2a1a 100%)">
+          <span>🇮🇷</span>
+          <span class="ep-num">EP 03</span>
+          <span class="episode-coming-soon">COMING SOON</span>
+        </div>
+        <div class="episode-card-body">
+          <h3 class="episode-card-title">Inside Iran: Regime Fractures, Economic Collapse, and Ceasefire Odds</h3>
+          <p class="episode-card-subtitle">What Persian-language sources reveal about Ghalibaf's consolidation, IRGC internal tensions, and how economic pain is accelerating back-channel talks.</p>
+          <div class="episode-card-tags">
+            <span class="episode-tag">IRAN</span>
+            <span class="episode-tag">IRGC</span>
+            <span class="episode-tag">FARSI INTEL</span>
+            <span class="episode-tag">CEASEFIRE</span>
+          </div>
+          <button class="episode-card-cta" disabled>▶ Coming Soon</button>
+          <div class="episode-card-runtime">~25 min · GeoWire Intelligence Briefing</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- AdSense mid -->
+  <div class="container" id="ad-podcast-mid"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       HOW WE MAKE THIS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">How We Make This</h2>
+      <span class="section-subtitle">AI-assisted intelligence briefing — powered by Google NotebookLM</span>
+    </div>
+    <div class="process-card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+        <div style="font-size:2rem">🤖</div>
+        <div>
+          <div style="font-weight:700;color:var(--text);font-size:1rem">Powered by Google NotebookLM</div>
+          <div style="color:var(--text-2);font-size:0.87rem">GeoWire data feeds into NotebookLM to generate natural-sounding, fact-grounded intelligence audio.</div>
+        </div>
+      </div>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="process-step-num">1</div>
+          <div>
+            <p class="process-step-title">Live data ingestion</p>
+            <p class="process-step-desc">FRED economic data, GDELT conflict events, EIA oil stats, and GeoWire's own scoring models are pulled fresh before each episode production cycle.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="process-step-num">2</div>
+          <div>
+            <p class="process-step-title">Intelligence synthesis</p>
+            <p class="process-step-desc">GeoWire's editorial framework organizes raw data into narrative arcs: the conflict thread, the economic thread, the geopolitical thread. Each episode follows a structured briefing format.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="process-step-num">3</div>
+          <div>
+            <p class="process-step-title">NotebookLM audio generation</p>
+            <p class="process-step-desc">Google NotebookLM's "Audio Overview" feature synthesizes a two-host dialogue from the curated source documents. The result sounds like two analysts discussing the brief — not a robot reading text.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="process-step-num">4</div>
+          <div>
+            <p class="process-step-title">Editorial review</p>
+            <p class="process-step-desc">Every episode is reviewed for factual accuracy against GeoWire's confidence tiers before publishing. Disputed claims are either removed or clearly labeled.</p>
+          </div>
+        </div>
+        <div class="process-step">
+          <div class="process-step-num">5</div>
+          <div>
+            <p class="process-step-title">Multi-platform distribution</p>
+            <p class="process-step-desc">Episodes publish simultaneously on Spotify, Apple Podcasts, and via RSS. The player is also embedded directly on this page for frictionless listening.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SUBSCRIBE LINKS
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Subscribe</h2>
+      <span class="section-subtitle">Available on all major platforms at launch</span>
+    </div>
+    <div class="subscribe-grid">
+      <a class="subscribe-btn" href="#" onclick="return false" title="Spotify — coming soon">
+        <span class="subscribe-btn-icon">🟢</span>
+        <span class="subscribe-btn-label">
+          <span class="subscribe-btn-name">Spotify</span>
+          <span class="subscribe-btn-sub">COMING SOON</span>
+        </span>
+      </a>
+      <a class="subscribe-btn" href="#" onclick="return false" title="Apple Podcasts — coming soon">
+        <span class="subscribe-btn-icon">🎵</span>
+        <span class="subscribe-btn-label">
+          <span class="subscribe-btn-name">Apple Podcasts</span>
+          <span class="subscribe-btn-sub">COMING SOON</span>
+        </span>
+      </a>
+      <a class="subscribe-btn" href="#" onclick="return false" title="YouTube — coming soon">
+        <span class="subscribe-btn-icon">▶️</span>
+        <span class="subscribe-btn-label">
+          <span class="subscribe-btn-name">YouTube</span>
+          <span class="subscribe-btn-sub">COMING SOON</span>
+        </span>
+      </a>
+      <a class="subscribe-btn" href="#" onclick="return false" title="RSS — coming soon">
+        <span class="subscribe-btn-icon">📡</span>
+        <span class="subscribe-btn-label">
+          <span class="subscribe-btn-name">RSS Feed</span>
+          <span class="subscribe-btn-sub">COMING SOON</span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="section container">
+    <div class="factor-nav-bar">
+      <a class="factor-nav-link" href="recession.html">📉 Recession Command Center</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="energy.html">⚡ Energy Command Center</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="macro.html">📊 Macro Pulse</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="farsi.html">🇮🇷 Farsi Intel Desk</a>
+    </div>
+  </section>
+
+  <!-- Email capture -->
+  <section class="section container" id="podcast-email-capture"></section>
+  <div id="site-footer"></div>
+
+</main>
+
+<script src="content.js"></script>
+<script src="scoring.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(function () {
+  try {
+    UI.init();
+    document.getElementById('site-header').innerHTML =
+      UI.renderHeader(GEOWIRE.siteMeta.title, GEOWIRE.siteMeta.description);
+    document.getElementById('site-nav').innerHTML =
+      UI.renderNav('podcast.html');
+    document.getElementById('market-ticker-bar').innerHTML =
+      UI.renderMarketTicker(GEOWIRE.marketData);
+    document.getElementById('site-footer').innerHTML =
+      UI.renderFooter(GEOWIRE.siteMeta);
+
+    // ── Notify form
+    const notifyBtn = document.getElementById('podcast-notify-btn');
+    const notifyInput = document.getElementById('podcast-email');
+    const notifyMsg = document.getElementById('podcast-notify-msg');
+    if (notifyBtn && notifyInput) {
+      notifyBtn.addEventListener('click', function () {
+        const email = (notifyInput.value || '').trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          notifyInput.style.borderColor = '#E63946';
+          notifyInput.placeholder = 'Please enter a valid email';
+          return;
+        }
+        notifyInput.style.borderColor = '#5FA8D3';
+        // Save to localStorage
+        try {
+          const list = JSON.parse(localStorage.getItem('gw_podcast_notify') || '[]');
+          if (!list.includes(email)) { list.push(email); localStorage.setItem('gw_podcast_notify', JSON.stringify(list)); }
+        } catch(e) {}
+        notifyMsg.style.display = 'block';
+        document.getElementById('podcast-notify-form').style.display = 'none';
+      });
+    }
+
+    // ── AdSense
+    document.getElementById('ad-podcast-top').innerHTML = UI.renderAdSlot('podcast-top');
+    document.getElementById('ad-podcast-mid').innerHTML = UI.renderAdSlot('podcast-mid');
+    document.querySelectorAll('.adsbygoogle').forEach(() => {
+      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    });
+
+    // ── Email capture
+    document.getElementById('podcast-email-capture').innerHTML = UI.renderEmailCapture();
+    UI.stubEmailCapture();
+
+  } catch(err) {
+    console.error('[GeoWire Podcast] Fatal error:', err);
+  }
+})();
+</script>
+</body>
+</html>

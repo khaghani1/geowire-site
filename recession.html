@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire Atlas — Recession Intelligence Dashboard</title>
+  <meta name="description" content="Real-time recession probability tracking with 10-factor model, historical comparisons, and market divergence analysis. Updated daily." />
+  <meta property="og:title" content="GeoWire — Recession Intelligence Dashboard" />
+  <meta property="og:description" content="10-factor recession probability model tracking the economic impact of Operation Epic Fury. Updated daily." />
+  <meta property="og:url" content="https://geowire.org/recession.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
+  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="site-header"></div>
+<div id="site-nav"></div>
+<main>
+
+  <!-- War Status Bar -->
+  <section class="war-status-bar">
+    <div class="container">
+      <div class="war-status-grid">
+        <div class="war-status-item"><span class="war-status-label">OPERATION</span><span class="war-status-value war-name">Epic Fury</span></div>
+        <div class="war-status-item"><span class="war-status-label">DAY</span><span class="war-status-value" id="war-day">26</span></div>
+        <div class="war-status-item"><span class="war-status-label">RECESSION RISK</span><span class="war-status-value threat-critical" id="rec-risk-bar">42%</span></div>
+        <div class="war-status-item"><span class="war-status-label">MODEL</span><span class="war-status-value">RISING ↑</span></div>
+        <div class="war-status-item"><span class="war-status-label">UTC</span><span class="war-status-value" id="utc-clock-ws">--:--:--</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market Ticker -->
+  <section class="ticker-section">
+    <div id="ticker-mount"></div>
+  </section>
+
+  <!-- Ad Slot Top -->
+  <div class="container">
+    <!-- Ad slot: configure numeric ID in GEOWIRE.adConfig.slots (content.js) -->
+  </div>
+
+  <!-- Page Title -->
+  <section class="hero-section container">
+    <div class="hero-inner">
+      <div class="hero-badge-row">
+        <span class="live-dot"></span>
+        <span class="hero-badge">RECESSION INTELLIGENCE</span>
+        <span class="hero-sep">•</span>
+        <span class="hero-badge-sub">10-Factor Model · Updated <span id="rec-updated">Today</span></span>
+      </div>
+      <h1 class="homepage-headline">Recession Command Center</h1>
+      <p class="hero-sub">Is recession risk rising or falling? What is driving it? Where do data and markets disagree? What changed today? All four questions answered in one place.</p>
+    </div>
+  </section>
+
+  <!-- Crisis Banner -->
+  <section class="section container" id="crisis-banner-section">
+    <div class="crisis-banner" id="crisis-war-banner">
+      <div class="crisis-banner-text">
+        ⚠ <strong>ACTIVE CRISIS: Operation Epic Fury — Day <span id="war-day-banner">26</span>.</strong>
+        Hormuz transit down 97%. Energy shock is the #1 recession amplifier right now.
+        &nbsp;<a href="energy.html">See Energy Command →</a>
+      </div>
+      <button class="crisis-banner-close" id="crisis-close-btn" aria-label="Dismiss banner">✕</button>
+    </div>
+  </section>
+
+  <!-- Recession Hero Zone: Gauge + Metric Cards -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Recession Risk Overview</h2>
+      <span class="source-label" id="rec-confidence-badge">Model confidence: MEDIUM</span>
+    </div>
+    <div class="recession-hero">
+      <div class="gauge-side">
+        <div id="recession-gauge-mount"></div>
+      </div>
+      <div class="metrics-side">
+        <div id="metric-kalshi"></div>
+        <div id="metric-sp500"></div>
+        <div id="metric-oil"></div>
+        <div id="metric-mortgage"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Factor Heatmap -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Recession Factor Heatmap</h2>
+      <span class="source-label">10 macro factor families scored 0–100. Click any factor to explore.</span>
+    </div>
+    <div id="factor-heatmap-mount"></div>
+  </section>
+
+  <!-- What Changed Today -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">What Changed Today</h2>
+      <a href="what-changed.html" class="section-link">Full Log →</a>
+    </div>
+    <div id="what-changed-mount"></div>
+  </section>
+
+  <!-- Divergence Strip -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Where Data Disagrees With Markets</h2>
+      <span class="source-label">Divergence often contains the highest-value signal.</span>
+    </div>
+    <div id="divergence-mount"></div>
+  </section>
+
+  <!-- Historical Comparison -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Historical Precedents</h2>
+      <span class="source-label">Similarity scores based on oil shock magnitude, rate environment, and fiscal capacity.</span>
+    </div>
+    <div id="historical-mount"></div>
+  </section>
+
+  <!-- Methodology -->
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">Model Methodology</h2>
+    </div>
+    <details class="methodology-details">
+      <summary>How the GeoWire Recession Model Works</summary>
+      <div class="methodology-body">
+        <p>GeoWire scores 10 macro factor families from 0–100, applies weights based on historical recession predictive power, and calculates a weighted composite probability. The model is intentionally transparent: you can see every factor score, every driver, every source, and every weight.</p>
+        <p>We show confidence levels because <strong>uncertainty is information, not weakness.</strong> When 7+ factors agree on direction, confidence is HIGH. When factors are mixed, it's MEDIUM or LOW — and that tells you something important about the current environment.</p>
+        <table class="methodology-table">
+          <thead><tr><th>Factor Family</th><th>Weight</th><th>Key Series</th></tr></thead>
+          <tbody id="methodology-table-body"></tbody>
+        </table>
+        <p style="margin-top:12px">Scores of 0–35 = Low stress. 36–55 = Elevated. 56–75 = Deteriorating. 76–100 = Stress/Crisis.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- Email Capture -->
+  <!-- Cross-links to Scenario Lab -->
+  <section class="section container">
+    <div class="cross-factor-insight" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+      <div>
+        <strong>Want to model your own scenario?</strong>
+        <span style="color:var(--text-2);font-size:14px;display:block;margin-top:4px">Adjust oil price, Fed rate, Hormuz closure, and war duration — see recession probability update in real-time.</span>
+      </div>
+      <a href="scenarios.html" class="calc-btn-next" style="text-decoration:none;display:inline-block;padding:12px 22px;font-size:14px;white-space:nowrap">🧪 Scenario Lab →</a>
+    </div>
+  </section>
+
+  <section class="section container" id="email-section"></section>
+
+  <!-- Ad Slot Bottom -->
+  <div class="container">
+    <!-- Ad slot: configure numeric ID in GEOWIRE.adConfig.slots (content.js) -->
+  </div>
+
+</main>
+<div id="site-footer"></div>
+
+<!-- Load order: content → scoring → ui → api -->
+<script src="content.js"></script>
+<script src="scoring.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+(async () => {
+  // ── Shared chrome
+  document.getElementById('site-header').innerHTML = UI.renderHeader();
+  document.getElementById('site-nav').innerHTML    = UI.renderNav('recession.html');
+  document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+  // ── War day calc
+  function calcDay() { return Math.max(1, Math.ceil((Date.now() - new Date(GEOWIRE.siteMeta.warStartDate)) / 86400000)); }
+  const warDay = calcDay();
+  document.querySelectorAll('#war-day, #war-day-banner').forEach(el => el.textContent = warDay);
+
+  // ── Market ticker
+  document.getElementById('ticker-mount').innerHTML = UI.renderMarketTicker();
+
+  // ── Crisis banner dismiss
+  const banner    = document.getElementById('crisis-war-banner');
+  const closeBtn  = document.getElementById('crisis-close-btn');
+  if (sessionStorage.getItem('gw-crisis-banner-dismissed')) {
+    if (banner) banner.style.display = 'none';
+    const sec = document.getElementById('crisis-banner-section');
+    if (sec) sec.style.display = 'none';
+  }
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      sessionStorage.setItem('gw-crisis-banner-dismissed', '1');
+      const sec = document.getElementById('crisis-banner-section');
+      if (sec) sec.style.display = 'none';
+    });
+  }
+
+  // ── Recession data
+  const rec = GEOWIRE.recessionData;
+  const md  = GEOWIRE.marketData;
+
+  // ── Compute model probability
+  const model = RecessionModel.calcProbability(rec.factorScores);
+
+  // ── Update confidence badge
+  const confBadge = document.getElementById('rec-confidence-badge');
+  if (confBadge) confBadge.textContent = `Model confidence: ${rec.confidence}`;
+
+  // ── Gauge
+  document.getElementById('recession-gauge-mount').innerHTML =
+    UI.renderRecessionGauge(rec.probability, rec.momentum, rec.confidence, rec.lastUpdated);
+
+  // ── Metric cards
+  document.getElementById('metric-kalshi').innerHTML = UI.renderMetricCard(
+    'Kalshi Recession Odds', rec.kalshiOdds.recession2026, null, '%', 'Kalshi', 'warn'
+  );
+  document.getElementById('metric-sp500').innerHTML = UI.renderMetricCard(
+    'S&P 500', md.sp500.value.toLocaleString(), md.sp500.change, 'pts', md.sp500.source
+  );
+  document.getElementById('metric-oil').innerHTML = UI.renderMetricCard(
+    'Brent Crude', `$${md.oil.value}`, md.oil.change, '/bbl', md.oil.source
+  );
+  document.getElementById('metric-mortgage').innerHTML = UI.renderMetricCard(
+    '30Y Mortgage', md.mortgage30.value, md.mortgage30.change, '%', md.mortgage30.source, 'negative'
+  );
+
+  // ── Factor heatmap
+  document.getElementById('factor-heatmap-mount').innerHTML =
+    UI.renderFactorHeatmap(rec.factorScores);
+
+  // ── What Changed Today
+  document.getElementById('what-changed-mount').innerHTML =
+    UI.renderWhatChangedToday(rec.whatChangedToday);
+
+  // ── Divergence strip
+  document.getElementById('divergence-mount').innerHTML =
+    UI.renderDivergenceStrip(rec.divergences);
+
+  // ── Historical comparison
+  document.getElementById('historical-mount').innerHTML =
+    UI.renderHistoricalComparison(rec.historicalComparisons);
+
+  // ── Methodology table
+  const tbody = document.getElementById('methodology-table-body');
+  if (tbody) {
+    tbody.innerHTML = Object.entries(rec.factorScores).map(([key, factor]) => {
+      const name = RecessionModel.formatFactorName(key);
+      const seriesStr = (factor.fredSeries || []).join(', ') || 'Composite / External';
+      return `<tr>
+        <td>${name}</td>
+        <td>${Math.round(factor.weight * 100)}%</td>
+        <td style="color:var(--gw-text-secondary);font-size:11px">${seriesStr}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── Email capture
+  document.getElementById('email-section').innerHTML = UI.renderEmailCapture();
+
+  // ── Clock + language
+  UI.init();
+
+  // ── Updated date
+  const updEl = document.getElementById('rec-updated');
+  if (updEl && rec.lastUpdated) {
+    const d = new Date(rec.lastUpdated);
+    updEl.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  // ── AdSense
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+
+  // ── Async: live FRED data (updates metric cards when available)
+  try {
+    await API.loadMarketData();
+    const fredData = await API.fetchAllRecessionData();
+    // Update mortgage card if live FRED data available
+    if (fredData.mortgageRate && fredData.mortgageRate.value) {
+      document.getElementById('metric-mortgage').innerHTML = UI.renderMetricCard(
+        '30Y Mortgage', fredData.mortgageRate.value, null, '%', 'FRED (live)', 'negative'
+      );
+    }
+    // Update yield curve display with live data
+    if (fredData.yieldCurve && fredData.yieldCurve.value) {
+      const yc = fredData.yieldCurve.value;
+      const ycColor = yc < 0 ? '#f87171' : '#4ade80';
+      // Optionally update any element showing the yield curve
+      console.log('[GeoWire] 2s10s yield curve (live):', yc);
+    }
+  } catch (err) {
+    console.warn('[GeoWire] Live FRED data unavailable, using seed data.');
+  }
+
+  // ── Async: live Kalshi recession odds (non-blocking, updates card after render)
+  try {
+    const kResp = await fetch('/api/kalshi?ticker=KXRECSSNBER-26');
+    const kData = await kResp.json();
+    const mkt = kData.market;
+    if (mkt && mkt.yes_ask_dollars) {
+      const liveOdds  = Math.round(parseFloat(mkt.yes_ask_dollars) * 100);
+      const prevOdds  = Math.round(parseFloat(mkt.previous_yes_ask_dollars || mkt.yes_ask_dollars) * 100);
+      const change    = liveOdds - prevOdds;
+      document.getElementById('metric-kalshi').innerHTML = UI.renderMetricCard(
+        'Kalshi Recession Odds', liveOdds, change || null, '%', 'Kalshi (live)', 'warn'
+      );
+      GEOWIRE.recessionData.kalshiOdds.recession2026 = liveOdds;
+      console.log('[GeoWire] Kalshi recession odds (live):', liveOdds + '%', '(prev:', prevOdds + '%)');
+    }
+  } catch (err) {
+    console.warn('[GeoWire] Live Kalshi data unavailable, using seed value:', rec.kalshiOdds.recession2026 + '%');
+  }
+})();
+</script>
+</body>
+</html>
