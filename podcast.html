@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="canonical" href="https://geowire.org/podcast" />
+  <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire Podcast — Weekly deep dives on the US-Iran conflict, oil markets, global recession risk, and geopolitical intelligence. Powered by Google NotebookLM.">
   <meta property="og:title" content="GeoWire Podcast — Intelligence Briefings">
   <meta property="og:description" content="AI-assisted intelligence podcast on the US-Iran conflict, energy markets, and global recession risk. New episodes weekly.">
-  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
-  <title>Podcast — GeoWire</title>
+  <title>Intelligence Podcast — GeoWire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
   <style>
     /* ── Episode cards ─────────────────────────────────────────────────── */
     .episode-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; }
@@ -100,7 +100,7 @@
     <div style="text-align:center;max-width:600px;margin:0 auto">
       <div style="font-size:2.5rem;margin-bottom:12px">🔔</div>
       <h2 style="color:var(--text);margin:0 0 8px">Get notified when we launch</h2>
-      <p style="color:var(--text-2);margin:0 0 20px;font-size:0.95rem">Be first to hear the inaugural episode — a full briefing on Day 1 of Operation Epic Fury to now.</p>
+      <p style="color:var(--text-2);margin:0 0 20px;font-size:0.95rem">Be first to hear the inaugural episode — a full briefing on Day <span class="war-day-dynamic">—</span> of Operation Epic Fury to now.</p>
       <div class="notify-form" id="podcast-notify-form">
         <input class="notify-input" type="email" id="podcast-email" placeholder="your@email.com">
         <button class="notify-btn" id="podcast-notify-btn">Notify Me</button>
@@ -147,7 +147,7 @@
         </div>
         <div class="episode-card-body">
           <h3 class="episode-card-title">Day One to Now: How a Strike on Fordow Changed Everything</h3>
-          <p class="episode-card-subtitle">The full arc of Operation Epic Fury — the strike, the market shock, the Hormuz closure, and what comes next. Complete Day 1-26 timeline with analysis.</p>
+          <p class="episode-card-subtitle">The full arc of Operation Epic Fury — the strike, the market shock, the Hormuz closure, and what comes next. Complete Day <span class="war-day-dynamic">—</span>-26 timeline with analysis.</p>
           <div class="episode-card-tags">
             <span class="episode-tag">MILITARY</span>
             <span class="episode-tag">OIL MARKETS</span>
@@ -366,7 +366,7 @@
     document.getElementById('ad-podcast-top').innerHTML = UI.renderAdSlot('podcast-top');
     document.getElementById('ad-podcast-mid').innerHTML = UI.renderAdSlot('podcast-mid');
     document.querySelectorAll('.adsbygoogle').forEach(() => {
-      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+      try { } catch(e) {}
     });
 
     // ── Email capture

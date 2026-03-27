@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="canonical" href="https://geowire.org/exposure-calculator" />
+  <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GeoWire — Conflict Exposure Calculator | Personal &amp; Portfolio Impact</title>
+  <title>Impact Calculator — GeoWire</title>
   <meta name="description" content="Calculate your personal exposure to Operation Epic Fury: energy costs, portfolio impact, travel risk, and supply chain vulnerability." />
 
   <meta property="og:title" content="GeoWire — Conflict Exposure Calculator" />
@@ -351,7 +353,7 @@
       const risks = {
         iran:   { level: 'CRITICAL', text: 'All travel strongly advised against. Active conflict zone. No consular services. Internet blackout. Evacuation extremely difficult.', color: '#ff3b3b' },
         iraq:   { level: 'HIGH',     text: 'Green Zone on lockdown. PMF factions active. US Embassy in reduced operations. Avoid all non-essential travel.', color: '#ff8c00' },
-        uae:    { level: 'ELEVATED', text: 'Al Dhafra AFB target of Day 1 strike. Dubai operations largely normal. Monitor for ballistic missile alerts. Travel possible with awareness.', color: '#ffb800' },
+        uae:    { level: 'ELEVATED', text: 'Al Dhafra AFB target of Day <span class="war-day-dynamic">—</span> strike. Dubai operations largely normal. Monitor for ballistic missile alerts. Travel possible with awareness.', color: '#ffb800' },
         saudi:  { level: 'ELEVATED', text: 'Aramco suspended Gulf loading. Riyadh stable. US military presence elevated. Travel possible for most purposes.', color: '#ffb800' },
         israel: { level: 'HIGH',     text: 'Active co-belligerent. Rocket/drone alert system active. Ben Gurion operational. Embassy advisories in effect.', color: '#ff8c00' },
         europe: { level: 'LOW',      text: 'No direct conflict risk. Monitor for protest activity in some capitals. Normal travel operations.', color: '#00ff88' },

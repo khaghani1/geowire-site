@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="canonical" href="https://geowire.org/humanitarian" />
+  <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GeoWire — Humanitarian Crisis | Iran Casualties, Displacement &amp; Infrastructure</title>
+  <title>Humanitarian Tracker — GeoWire</title>
   <meta name="description" content="Tracking the human cost of Operation Epic Fury: Iranian casualties, displacement, internet blackout, medical system collapse, and civilian infrastructure damage." />
 
   <meta property="og:title" content="GeoWire — Humanitarian Crisis Tracker" />
@@ -204,7 +206,7 @@
             <div class="internet-stat-note">IranCel, MCI, Rightel — all disrupted</div>
           </div>
           <div class="internet-stat">
-            <div class="internet-stat-value">Day 19</div>
+            <div class="internet-stat-value">Day <span class="war-day-dynamic">—</span></div>
             <div class="internet-stat-label">Blackout Duration</div>
             <div class="internet-stat-note">Longest internet shutdown in Iranian history</div>
           </div>
@@ -219,7 +221,7 @@
           <div class="ic-grid">
             <div class="ic-item"><span class="ic-event">Ethiopia (Nov 2021)</span> <span class="ic-pct">50% disruption (worst prior case)</span></div>
             <div class="ic-item"><span class="ic-event">Iran (2019 protests)</span> <span class="ic-pct">96% disruption for 5 days</span></div>
-            <div class="ic-item ic-current"><span class="ic-event">Iran NOW (Operation Epic Fury)</span> <span class="ic-pct threat-critical">99% disruption — Day 19</span></div>
+            <div class="ic-item ic-current"><span class="ic-event">Iran NOW (Operation Epic Fury)</span> <span class="ic-pct threat-critical">99% disruption — Day <span class="war-day-dynamic">—</span></span></div>
           </div>
         </div>
       `;
@@ -229,7 +231,7 @@
         { category: 'Power Grid',        status: 'CRITICAL',  detail: 'Multiple substations destroyed. Rolling blackouts across 11 provinces. 40% capacity.', badge: 'inferred' },
         { category: 'Water Systems',     status: 'DEGRADED',  detail: 'Pump failures in Tehran, Isfahan. Contamination risk in Khuzestan.', badge: 'inferred' },
         { category: 'Oil Infrastructure',status: 'CRITICAL',  detail: 'Kharg Island export terminal struck Mar 2. Abadan refinery offline.', badge: 'multisource' },
-        { category: 'Military Sites',    status: 'DESTROYED', detail: '150+ IRGC sites struck Day 1. Natanz access road destroyed.', badge: 'confirmed' },
+        { category: 'Military Sites',    status: 'DESTROYED', detail: '150+ IRGC sites struck Day <span class="war-day-dynamic">—</span>. Natanz access road destroyed.', badge: 'confirmed' },
         { category: 'Communications',    status: 'CRITICAL',  detail: 'Fiber backbone cut. Satellite uplinks jammed. See internet panel above.', badge: 'confirmed' },
         { category: 'Hospitals',         status: 'STRAINED',  detail: 'WHO: 12 hospitals damaged. 68% bed capacity. Blood supply critical.', badge: 'singlesource' },
         { category: 'Roads / Bridges',   status: 'DAMAGED',   detail: '23 key bridges on Tehran-Iraq route destroyed. Humanitarian convoy blocked.', badge: 'inferred' },

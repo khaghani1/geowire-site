@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="canonical" href="https://geowire.org/about" />
+  <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
+  <title>About & Methodology — GeoWire</title>
+  <meta name="description" content="GeoWire is an independent recession intelligence platform. Learn how our 10-factor model works, our data sources, and our editorial principles." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .about-hero { padding: 56px 0 32px; }
+    .about-hero h1 { font-size: clamp(28px,5vw,42px); font-weight:800; color:#f0f6fc; margin-bottom:12px; }
+    .about-hero p { font-size:16px; color:#8b949e; max-width:600px; line-height:1.65; }
+
+    .about-section { padding: 32px 0; border-top: 1px solid #21262d; }
+    .about-section h2 { font-size: 22px; font-weight:700; color:#c9d1d9; margin-bottom:16px; }
+    .about-section p, .about-section li { font-size:14px; color:#8b949e; line-height:1.7; }
+    .about-section ul { list-style:none; padding:0; margin:0; }
+    .about-section ul li { padding: 4px 0 4px 20px; position:relative; }
+    .about-section ul li::before { content:'→'; position:absolute; left:0; color:#ffb800; font-size:12px; }
+
+    .factor-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin-top:16px; }
+    .factor-card { background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:16px; }
+    .factor-card-title { font-size:13px; font-weight:700; color:#c9d1d9; margin-bottom:4px; }
+    .factor-card-desc { font-size:12px; color:#8b949e; line-height:1.5; }
+    .factor-weight { display:inline-block; background:rgba(255,180,0,.12); color:#ffb800; font-size:10px; font-weight:700; padding:2px 8px; border-radius:3px; margin-top:6px; }
+
+    .confidence-table { width:100%; border-collapse:collapse; margin-top:12px; }
+    .confidence-table th { font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:#6e7681; text-align:left; padding:8px 12px; border-bottom:1px solid #21262d; }
+    .confidence-table td { font-size:13px; color:#c9d1d9; padding:10px 12px; border-bottom:1px solid #21262d; vertical-align:top; }
+    .confidence-table tr:last-child td { border-bottom:none; }
+
+    .source-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px; margin-top:16px; }
+    .source-card { background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:14px; }
+    .source-card-name { font-size:13px; font-weight:700; color:#58a6ff; margin-bottom:4px; }
+    .source-card-desc { font-size:12px; color:#8b949e; line-height:1.5; }
+  </style>
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="about-hero container">
+      <h1>Methodology & Trust</h1>
+      <p>GeoWire is an independent recession intelligence platform. We track how geopolitical shocks, energy crises, monetary policy shifts, and supply chain disruptions change recession probability — before consensus catches up.</p>
+      <p style="margin-top:12px">We are not affiliated with any government, financial institution, or political party. All outputs carry confidence ratings.</p>
+    </section>
+
+    <!-- ═══ 10-FACTOR MODEL ═══ -->
+    <section class="about-section container">
+      <h2>The 10-Factor Recession Model</h2>
+      <p>Our 12-month recession probability score is a weighted composite of ten macro and geopolitical factors. Each factor is scored on a 0–100 scale and combined using a proprietary weighting model calibrated against post-WWII US recession history.</p>
+
+      <div class="factor-grid">
+        <div class="factor-card">
+          <div class="factor-card-title">Energy Shock</div>
+          <div class="factor-card-desc">Oil price surge relative to 12-month baseline. Energy cost pass-through to CPI is the fastest recession transmission channel.</div>
+          <span class="factor-weight">Weight: HIGH</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Yield Curve</div>
+          <div class="factor-card-desc">10Y–2Y Treasury spread. Inversion has preceded every US recession since 1970 with a 6–18 month lag.</div>
+          <span class="factor-weight">Weight: HIGH</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Supply Chain Disruption</div>
+          <div class="factor-card-desc">Global shipping stress index including Hormuz flow, Suez disruptions, and container rate volatility.</div>
+          <span class="factor-weight">Weight: HIGH</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Equity Market Stress</div>
+          <div class="factor-card-desc">S&P 500 drawdown from 52-week high, VIX level, and credit spread widening.</div>
+          <span class="factor-weight">Weight: MEDIUM</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Labor Market</div>
+          <div class="factor-card-desc">Unemployment trend, initial jobless claims, and Sahm Rule threshold proximity.</div>
+          <span class="factor-weight">Weight: MEDIUM</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Inflation / Real Rates</div>
+          <div class="factor-card-desc">CPI vs. Fed Funds Rate spread. Real rate compression destroys business investment confidence.</div>
+          <span class="factor-weight">Weight: MEDIUM</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Consumer Confidence</div>
+          <div class="factor-card-desc">University of Michigan and Conference Board surveys. Leading indicator for spending collapse.</div>
+          <span class="factor-weight">Weight: MEDIUM</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Housing / Credit</div>
+          <div class="factor-card-desc">30-year mortgage rate, housing starts, and consumer credit delinquency rates.</div>
+          <span class="factor-weight">Weight: LOW-MEDIUM</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Geopolitical Risk Premium</div>
+          <div class="factor-card-desc">GeoWire's composite geopolitical stress index. Quantifies uncertainty spillover into business planning.</div>
+          <span class="factor-weight">Weight: MEDIUM</span>
+        </div>
+        <div class="factor-card">
+          <div class="factor-card-title">Trade / Dollar</div>
+          <div class="factor-card-desc">DXY index trend, trade balance deterioration, and import price inflation from currency effects.</div>
+          <span class="factor-weight">Weight: LOW-MEDIUM</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CONFIDENCE LEVELS ═══ -->
+    <section class="about-section container">
+      <h2>Confidence Levels</h2>
+      <p>Every data point and claim on GeoWire carries a confidence badge. These are honest descriptions of sourcing methodology — not certainty levels.</p>
+
+      <table class="confidence-table">
+        <thead>
+          <tr>
+            <th>Badge</th>
+            <th>Level</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody id="confidence-table-body">
+          <tr>
+            <td>🟢</td>
+            <td>Confirmed</td>
+            <td>Official source + 2+ independent sources agree</td>
+          </tr>
+          <tr>
+            <td>🟡</td>
+            <td>Multi-source</td>
+            <td>2+ sources confirm, but no official statement</td>
+          </tr>
+          <tr>
+            <td>🟠</td>
+            <td>Single-source</td>
+            <td>One outlet only — treat with appropriate skepticism</td>
+          </tr>
+          <tr>
+            <td>⚫</td>
+            <td>Model-inferred</td>
+            <td>AI or analyst estimate, not independently sourced</td>
+          </tr>
+          <tr>
+            <td>⚠️</td>
+            <td>Disputed</td>
+            <td>Conflicting claims from multiple credible sources</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ═══ DATA SOURCES ═══ -->
+    <section class="about-section container">
+      <h2>Data Sources</h2>
+      <p>GeoWire pulls from the following APIs and databases. All data is attributed on each card.</p>
+
+      <div class="source-grid">
+        <div class="source-card">
+          <div class="source-card-name">FRED (Federal Reserve)</div>
+          <div class="source-card-desc">Treasury yields, DXY, S&P 500, unemployment, CPI, GDP components. Primary macroeconomic data source.</div>
+        </div>
+        <div class="source-card">
+          <div class="source-card-name">BLS (Bureau of Labor Statistics)</div>
+          <div class="source-card-desc">Jobs reports, initial jobless claims, PPI, CPI granular breakdowns.</div>
+        </div>
+        <div class="source-card">
+          <div class="source-card-name">EIA (Energy Information Admin)</div>
+          <div class="source-card-desc">US gasoline prices, natural gas spot, crude inventories, and refinery utilization.</div>
+        </div>
+        <div class="source-card">
+          <div class="source-card-name">CoinGecko</div>
+          <div class="source-card-desc">Bitcoin, Ethereum, and PAXG (gold price proxy) live prices. No API key required.</div>
+        </div>
+        <div class="source-card">
+          <div class="source-card-name">Kalshi / Polymarket</div>
+          <div class="source-card-desc">Prediction market probabilities for ceasefire, oil price, and recession events. Marked as DEMO until live API connects.</div>
+        </div>
+        <div class="source-card">
+          <div class="source-card-name">GDELT Project</div>
+          <div class="source-card-desc">Global news intelligence feed. GeoWire filters for conflict, economic, and diplomatic events via GDELT's event database.</div>
+        </div>
+        <div class="source-card">
+          <div class="source-card-name">IMF PortWatch</div>
+          <div class="source-card-desc">Strait vessel flow data for Hormuz, Suez, and Bab el-Mandeb. Updated daily from satellite-derived AIS signals.</div>
+        </div>
+        <div class="source-card">
+          <div class="source-card-name">GeoWire Intelligence Desk</div>
+          <div class="source-card-desc">Analyst estimates, scenario modeling, and inferred conclusions. Always marked as Model-inferred (⚫).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ EDITORIAL PRINCIPLES ═══ -->
+    <section class="about-section container">
+      <h2>Editorial Principles</h2>
+      <ul>
+        <li><strong>Not financial advice.</strong> GeoWire is an intelligence platform, not a financial advisor. Nothing here should be treated as investment guidance.</li>
+        <li><strong>Not political advice.</strong> GeoWire does not endorse any government, military action, or political position. Scenario analysis reflects probability modeling, not moral endorsement.</li>
+        <li><strong>All outputs carry confidence ratings.</strong> We label every claim with its sourcing methodology so you can calibrate your own trust level.</li>
+        <li><strong>Farsi sources included.</strong> GeoWire actively monitors Persian-language sources that Western outlets miss. These are labeled GeoWire / منابع داخلی and carry appropriate confidence caveats.</li>
+        <li><strong>Seed data is editorial/demo content.</strong> Values marked DEMO are illustrative starting points. Values marked LIVE are fetched from real APIs in real time.</li>
+        <li><strong>We correct the record.</strong> If our analysis is wrong, we update it with a What Changed entry, not silence.</li>
+      </ul>
+    </section>
+
+    <!-- ═══ EMAIL CAPTURE ═══ -->
+    <section class="section container">
+      <div id="email-capture-block"></div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    document.getElementById('site-header').innerHTML = UI.renderHeader();
+    document.getElementById('site-nav').innerHTML    = UI.renderNav('about');
+    document.getElementById('site-footer').innerHTML = UI.renderFooter();
+    document.getElementById('email-capture-block').innerHTML = UI.renderEmailCapture();
+    UI.init();
+  </script>
+
+</body>
+</html>

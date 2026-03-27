@@ -272,9 +272,9 @@ const UI = (() => {
             <span class="logo-mark">GW</span>
             <span class="site-title">GeoWire</span>
           </a>
-          <div class="war-status-pill" aria-label="Conflict status">
+          <div class="war-status-pill" aria-label="Platform status">
             <span class="pulse-dot" aria-hidden="true"></span>
-            <span>LIVE — IRAN WAR DAY ${day}</span>
+            <span>LIVE — RECESSION RISK TRACKER</span>
           </div>
         </div>
         <div class="header-right">
@@ -302,15 +302,19 @@ const UI = (() => {
   // ─── FOOTER ──────────────────────────────────────────────────────────────────
   function renderFooter() {
     const year = new Date().getFullYear();
+    const secondaryLinks = (GEOWIRE.secondaryNavItems || [])
+      .map(n => `<a href="${n.href}" style="color:var(--text-3,#8b949e);font-size:12px;text-decoration:none">${n.label}</a>`)
+      .join('<span style="color:var(--text-3,#8b949e);font-size:12px"> · </span>');
     return `<footer class="site-footer" role="contentinfo">
       <div class="footer-inner container">
         <div class="footer-brand">
           <span class="logo-mark small">GW</span>
-          <span><strong>GeoWire</strong> — Global Intelligence Platform</span>
+          <span><strong>GeoWire</strong> — Recession Intelligence Platform</span>
         </div>
         <div class="footer-links">
-          ${GEOWIRE.navigationItems.slice(0,5).map(n=>`<a href="${n.href}">${n.label}</a>`).join('')}
+          ${GEOWIRE.navigationItems.map(n=>`<a href="${n.href}">${n.label}</a>`).join('')}
         </div>
+        ${secondaryLinks ? `<div class="footer-secondary-links" style="margin-top:12px;line-height:2">${secondaryLinks}</div>` : ''}
         <div class="footer-legal">
           <p>© ${year} GeoWire. All analysis is original unless attributed. Confidence badges indicate source methodology, not certainty.</p>
           <p class="footer-disclaimer">GeoWire is an independent intelligence platform. Seed data is editorial/demo content unless marked LIVE. Not financial or political advice.</p>

@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="canonical" href="https://geowire.org/predictions" />
+  <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire Prediction Markets — Live Polymarket & Kalshi probabilities for Iran conflict resolution, Hormuz reopening, oil price scenarios, and recession odds.">
   <meta property="og:title" content="Prediction Markets — GeoWire">
   <meta property="og:description" content="Polymarket & Kalshi crowd forecasts vs. GeoWire model estimates. Ceasefire timeline, oil scenarios, insider trading watch.">
-  <meta name="google-adsense-account" content="ca-pub-5068519853957013">
   <title>Prediction Markets — GeoWire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5068519853957013" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -83,7 +83,7 @@
   <section class="section container">
     <div class="section-header">
       <h2 class="section-title">Insider Trading Watch</h2>
-      <span class="section-subtitle">Form 4 filings since Day 1 of conflict — executives buying their own convictions</span>
+      <span class="section-subtitle">Form 4 filings since Day <span class="war-day-dynamic">—</span> of conflict — executives buying their own convictions</span>
     </div>
     <div class="pred-insider-disclaimer">
       ⚠ Insider filings are public information via SEC Edgar. This is not evidence of illegal activity. Informational only. Do not trade on this data.
@@ -325,7 +325,7 @@
   // ── AdSense
   document.getElementById('ad-pred-mid').innerHTML = UI.renderAdSlot('pred-mid');
   document.querySelectorAll('.adsbygoogle').forEach(() => {
-    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    try { } catch(e) {}
   });
 
   // ── Email capture

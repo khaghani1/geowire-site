@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="canonical" href="https://geowire.org/powermap" />
+  <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GeoWire — Power Map | Who Controls What in Operation Epic Fury</title>
+  <title>Power Structure — GeoWire</title>
   <meta name="description" content="Visual power map of the US-Iran conflict: who controls the narrative, the military advantage, the energy leverage, and the diplomatic high ground." />
 
   <meta property="og:title" content="GeoWire — Power Map" />
@@ -223,7 +225,7 @@
 
       // Leverage grid
       const leverages = [
-        { holder: '🇺🇸 US',     leverage: 'Air dominance',      desc: 'Total. Hormuz airspace owned by US/coalition. No contested air after Day 3.' },
+        { holder: '🇺🇸 US',     leverage: 'Air dominance',      desc: 'Total. Hormuz airspace owned by US/coalition. No contested air after Day <span class="war-day-dynamic">—</span>.' },
         { holder: '🇮🇷 Iran',   leverage: 'Hormuz chokepoint',  desc: 'Even at 3% capacity, Iran\'s ability to threaten tankers creates global pain.' },
         { holder: '🇮🇷 Iran',   leverage: 'Humanitarian optics',desc: '3,220+ dead civilians generates ceasefire pressure on US allies.' },
         { holder: '🇺🇸 US',     leverage: 'Financial system',    desc: 'SWIFT, dollar settlement, global credit — all US instruments.' },
@@ -245,11 +247,11 @@
 
       // Power shift timeline
       const shifts = [
-        { date: 'Day 1–3',   text: 'US establishes total air superiority. IRGC military leadership decimated. Iran retaliates with missiles — limited damage.', shift: 'us' },
-        { date: 'Day 4–7',   text: 'Hormuz closes. Global energy markets shock. Iran wins economic leverage dimension despite military defeat.', shift: 'iran' },
-        { date: 'Day 8–14',  text: 'UNGA 137-12 vote. Global diplomatic isolation of US becomes visible. Iran wins legitimacy battle in Global South.', shift: 'iran' },
-        { date: 'Day 15–21', text: 'S&P -12%. US domestic economic pain grows. Iran\'s economic position collapses faster — freefall. Net: US still ahead.', shift: 'neutral' },
-        { date: 'Day 22–25', text: 'US sortie rate declining. Back-channel signals emerging. Stalemate forming: US cannot force quick political settlement; Iran cannot resist indefinitely.', shift: 'neutral' },
+        { date: 'Day <span class="war-day-dynamic">—</span>–3',   text: 'US establishes total air superiority. IRGC military leadership decimated. Iran retaliates with missiles — limited damage.', shift: 'us' },
+        { date: 'Day <span class="war-day-dynamic">—</span>–7',   text: 'Hormuz closes. Global energy markets shock. Iran wins economic leverage dimension despite military defeat.', shift: 'iran' },
+        { date: 'Day <span class="war-day-dynamic">—</span>–14',  text: 'UNGA 137-12 vote. Global diplomatic isolation of US becomes visible. Iran wins legitimacy battle in Global South.', shift: 'iran' },
+        { date: 'Day <span class="war-day-dynamic">—</span>–21', text: 'S&P -12%. US domestic economic pain grows. Iran\'s economic position collapses faster — freefall. Net: US still ahead.', shift: 'neutral' },
+        { date: 'Day <span class="war-day-dynamic">—</span>–25', text: 'US sortie rate declining. Back-channel signals emerging. Stalemate forming: US cannot force quick political settlement; Iran cannot resist indefinitely.', shift: 'neutral' },
       ];
 
       document.getElementById('power-timeline').innerHTML = `<div class="power-shift-list">` +

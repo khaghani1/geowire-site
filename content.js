@@ -6,8 +6,8 @@ const GEOWIRE = {
 
   // ─── SITE META ──────────────────────────────────────────────────────────────
   siteMeta: {
-    title: 'GeoWire — Global Intelligence Platform',
-    description: 'Real-time geopolitical intelligence tracking the US-Iran conflict, global energy markets, and crisis analytics.',
+    title: 'GeoWire — Recession Intelligence Platform',
+    description: 'Track how geopolitical shocks, energy crises, inflation, rates, labor, and supply chains change recession probability in real time.',
     ogImage: 'https://geowire.org/og-default.png',
     twitterHandle: '@Geowire_org',
     baseUrl: 'https://geowire.org',
@@ -17,16 +17,55 @@ const GEOWIRE = {
 
   // ─── NAVIGATION ─────────────────────────────────────────────────────────────
   navigationItems: [
-    { label: 'Dashboard',    farsiLabel: 'داشبورد',    href: 'index.html',           icon: '📊' },
-    { label: 'Energy',       farsiLabel: 'انرژی',      href: 'energy.html',          icon: '⚡' },
-    { label: 'Countries',    farsiLabel: 'کشورها',     href: 'countries.html',       icon: '🌍' },
-    { label: 'Scenarios',    farsiLabel: 'سناریوها',   href: 'scenarios.html',       icon: '🔮' },
-    { label: 'Trade',        farsiLabel: 'تجارت',      href: 'trade.html',           icon: '🚢' },
-    { label: 'US Impact',    farsiLabel: 'تأثیر آمریکا', href: 'us-impact.html',    icon: '🇺🇸' },
-    { label: 'Humanitarian', farsiLabel: 'بشردوستانه', href: 'humanitarian.html',    icon: '🏥' },
-    { label: 'Geopolitical', farsiLabel: 'ژئوپلیتیک', href: 'geopolitical.html',    icon: '🗺️' },
-    { label: 'Analysis',     farsiLabel: 'تحلیل',      href: 'analysis.html',        icon: '📝' },
+    { label: 'Recession',    href: 'recession.html',   icon: '📉' },
+    { label: 'Macro',        href: 'macro.html',        icon: '📊' },
+    { label: 'Predictions',  href: 'predictions.html',  icon: '🔮' },
+    { label: 'Scenarios',    href: 'scenarios.html',    icon: '🧪' },
+    { label: 'Energy',       href: 'energy.html',       icon: '⚡' },
+    { label: 'Analysis',     href: 'analysis.html',     icon: '📝' },
+    { label: 'About',        href: 'about.html',        icon: 'ℹ️' },
   ],
+
+  // ─── SECONDARY NAV (footer) ──────────────────────────────────────────────────
+  secondaryNavItems: [
+    { label: 'Supply Chain',  href: 'trade.html' },
+    { label: 'Countries',     href: 'countries.html' },
+    { label: 'US Impact',     href: 'us-impact.html' },
+    { label: 'Humanitarian',  href: 'humanitarian.html' },
+    { label: 'Geopolitical',  href: 'geopolitical.html' },
+    { label: 'What Changed',  href: 'what-changed.html' },
+    { label: 'Podcast',       href: 'podcast.html' },
+    { label: 'Calculator',    href: 'exposure-calculator.html' },
+  ],
+
+  // ─── RECESSION DATA ──────────────────────────────────────────────────────────
+  recessionData: {
+    probability: 42,
+    direction: 'rising',
+    confidence: 'medium',
+    model: '10-Factor',
+    lastUpdated: '2026-03-27T06:00Z',
+    divergences: [
+      {
+        title: 'Fed Rate Path',
+        ourModel: '2 cuts in 2026',
+        market: '4 cuts in 2026',
+        thesis: 'War-induced inflation will prevent the Fed from cutting as aggressively as futures imply. Supply shock overrides demand weakness narrative.',
+      },
+      {
+        title: 'Oil Price Trajectory',
+        ourModel: '$105–120 for 90+ days',
+        market: '$95 by Q3 2026',
+        thesis: 'Consensus underweights Hormuz closure duration. A ceasefire is not imminent — IRGC hardliners control the strait, not the negotiators.',
+      },
+      {
+        title: 'Recession Probability',
+        ourModel: '42%',
+        market: '28%',
+        thesis: 'Goldman, JPM models lag on geopolitical shock transmission. Energy-to-CPI pass-through is underweighted. Labor market data has not yet absorbed the shock.',
+      },
+    ],
+  },
 
   // ─── CONFIDENCE LEVELS ──────────────────────────────────────────────────────
   confidenceLevels: {
