@@ -1,240 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="canonical" href="https://geowire.org/scenarios" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoWire Scenario Lab — Model recession probability across geopolitical shock scenarios with interactive sliders.">
+  <link rel="canonical" href="https://geowire.org/scenarios.html">
+  <title>Scenario Lab — GeoWire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scenario Analysis — GeoWire</title>
-  <meta name="description" content="Three-scenario analysis of the US-Iran conflict: ceasefire, protracted war, and regional escalation — with market signals and probability estimates." />
-
-  <meta property="og:title" content="GeoWire — Conflict Scenarios" />
-  <meta property="og:description" content="Best case: ceasefire. Base case: protracted war. Worst case: regional escalation. Full scenario analysis." />
-  <meta property="og:image" content="https://geowire.org/og-default.png" />
-  <meta property="og:url" content="https://geowire.org/scenarios.html" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@Geowire_org" />
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "GeoWire — Scenario Analysis",
-    "description": "Three-scenario analysis of the US-Iran conflict with market signals and probability estimates.",
-    "url": "https://geowire.org/scenarios.html"
-  }
-  </script>
-
-  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <div id="site-header"></div>
-  <div id="site-nav"></div>
+<div id="site-header"></div>
+<div id="site-nav"></div>
+<div id="market-ticker-bar"></div>
 
-  <main>
+<main class="page-main">
 
-    <section class="page-hero container">
-      <div class="page-hero-inner">
-        <div class="page-hero-icon">🔮</div>
-        <h1 class="page-title">Scenario Analysis</h1>
-        <p class="page-sub">Three probabilistic outlooks for the US-Iran conflict — driven by analyst modeling, prediction market data, and intelligence signals.</p>
-        <div class="demo-notice">
-          <span class="demo-badge-large">⚠️ ANALYTICAL MODEL</span>
-          Probabilities are model-inferred estimates, not official forecasts.
-        </div>
-      </div>
-    </section>
-
-    <!-- SCENARIO CARDS -->
-    <section class="section container">
-      <div class="scenario-cards-full" id="scenario-cards-full">
-        <!-- Populated by script -->
-      </div>
-    </section>
-
-    <!-- KALSHI / PREDICTION MARKET MODULE -->
-    <section class="section container">
-      <div class="section-header">
-        <h2 class="section-title">Prediction Market Signals</h2>
-        <span class="demo-badge">DEMO — Kalshi Integration Phase 2</span>
-      </div>
-      <div class="prediction-market-grid" id="prediction-market-grid">
-        <!-- Populated by script -->
-      </div>
-    </section>
-
-    <!-- MARKET SIGNALS PANEL -->
-    <section class="section container">
-      <div class="section-header">
-        <h2 class="section-title">Market Signals by Scenario</h2>
-      </div>
-      <div class="market-signals-panel" id="market-signals-panel">
-        <!-- Populated by script -->
-      </div>
-    </section>
-
-    <!-- NARRATIVE FRAMES -->
-    <section class="section container">
-      <div class="section-header">
-        <h2 class="section-title">Competing Narratives</h2>
-        <span class="section-badge">6 Perspectives</span>
-      </div>
-      <div class="narrative-grid" id="narrative-grid">
-        <!-- Populated by script -->
-      </div>
-    </section>
-
-    <!-- AD SLOT -->
+  <!-- War status bar -->
+  <div class="war-status-bar">
     <div class="container">
-      <div class="ad-slot" data-slot="scenarios-mid">
-        <span class="ad-label">Advertisement</span>
+      <div class="war-status-inner">
+        <span class="war-status-label">🎯 SCENARIO LAB — INTERACTIVE MODEL</span>
+        <div class="war-status-track">
+          <div class="war-status-fill" id="scenario-bar-fill" style="width:42%"></div>
+        </div>
+        <span class="war-status-pct" id="scenario-bar-pct" style="color:#F59E0B">42%</span>
       </div>
     </div>
+  </div>
 
-    <!-- SHARE + EMAIL -->
-    <section class="section container">
-      <div class="share-email-row">
-        <div id="scenarios-share"></div>
-        <div class="email-capture-inline">
-          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
-            <input type="email" class="email-input" placeholder="Get scenario updates by email" required />
-            <button type="submit" class="email-submit-btn">Subscribe</button>
-          </form>
+
+  <section class="section container">
+    <div class="section-header">
+      <h2 class="section-title">🎯 Scenario Lab</h2>
+      <span class="section-subtitle">Adjust parameters to model recession probability in real time</span>
+    </div>
+
+    <!-- Preset buttons -->
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px">
+      <button class="scenario-preset-btn" onclick="applyPreset('peace')"
+        style="padding:8px 18px;border:1px solid #22C55E;background:transparent;color:#22C55E;border-radius:6px;cursor:pointer;font-family:var(--font-mono);font-size:12px;font-weight:600">
+        ☮️ Peace Deal
+      </button>
+      <button class="scenario-preset-btn" onclick="applyPreset('ceasefire')"
+        style="padding:8px 18px;border:1px solid #5FA8D3;background:transparent;color:#5FA8D3;border-radius:6px;cursor:pointer;font-family:var(--font-mono);font-size:12px;font-weight:600">
+        🤝 Quick Ceasefire
+      </button>
+      <button class="scenario-preset-btn" onclick="applyPreset('prolonged')"
+        style="padding:8px 18px;border:1px solid #F59E0B;background:transparent;color:#F59E0B;border-radius:6px;cursor:pointer;font-family:var(--font-mono);font-size:12px;font-weight:600">
+        ⚔️ Prolonged Conflict
+      </button>
+      <button class="scenario-preset-btn" onclick="applyPreset('escalation')"
+        style="padding:8px 18px;border:1px solid #E63946;background:transparent;color:#E63946;border-radius:6px;cursor:pointer;font-family:var(--font-mono);font-size:12px;font-weight:600">
+        🔥 Full Escalation
+      </button>
+    </div>
+
+    <!-- Sliders + live output grid -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+
+      <!-- Left: sliders -->
+      <div class="cross-factor-insight" style="padding:24px">
+        <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:.08em;margin-bottom:16px">SCENARIO PARAMETERS</div>
+
+
+        <!-- Oil Price -->
+        <div style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <label style="font-size:13px;color:var(--text-2)">🛢️ Brent Crude ($/bbl)</label>
+            <span id="lbl-oil" style="font-family:var(--font-mono);font-size:13px;color:#F59E0B;font-weight:600">101</span>
+          </div>
+          <input type="range" id="sl-oil" min="60" max="200" value="101" step="1"
+            oninput="setSlider('oil',+this.value)" style="width:100%;accent-color:#F59E0B">
+        </div>
+
+        <!-- Unemployment -->
+        <div style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <label style="font-size:13px;color:var(--text-2)">👷 Unemployment (%)</label>
+            <span id="lbl-unemp" style="font-family:var(--font-mono);font-size:13px;color:#F59E0B;font-weight:600">4.1</span>
+          </div>
+          <input type="range" id="sl-unemp" min="3.5" max="8.0" value="4.1" step="0.1"
+            oninput="setSlider('unemp',+this.value)" style="width:100%;accent-color:#F59E0B">
+        </div>
+
+        <!-- Fed Funds Rate -->
+        <div style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <label style="font-size:13px;color:var(--text-2)">🏦 Fed Funds Rate (%)</label>
+            <span id="lbl-fed" style="font-family:var(--font-mono);font-size:13px;color:#F59E0B;font-weight:600">4.5</span>
+          </div>
+          <input type="range" id="sl-fed" min="3.0" max="7.0" value="4.5" step="0.25"
+            oninput="setSlider('fed',+this.value)" style="width:100%;accent-color:#F59E0B">
+        </div>
+
+
+        <!-- Hormuz closure -->
+        <div style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <label style="font-size:13px;color:var(--text-2)">🚢 Hormuz Closure (%)</label>
+            <span id="lbl-hormuz" style="font-family:var(--font-mono);font-size:13px;color:#E63946;font-weight:600">97</span>
+          </div>
+          <input type="range" id="sl-hormuz" min="0" max="100" value="97" step="1"
+            oninput="setSlider('hormuz',+this.value)" style="width:100%;accent-color:#E63946">
+        </div>
+
+        <!-- Conflict weeks -->
+        <div style="margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <label style="font-size:13px;color:var(--text-2)">📅 Conflict Duration (wks)</label>
+            <span id="lbl-weeks" style="font-family:var(--font-mono);font-size:13px;color:#F59E0B;font-weight:600">4</span>
+          </div>
+          <input type="range" id="sl-weeks" min="0" max="52" value="4" step="1"
+            oninput="setSlider('weeks',+this.value)" style="width:100%;accent-color:#F59E0B">
+        </div>
+
+        <!-- Tariff rate -->
+        <div style="margin-bottom:4px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <label style="font-size:13px;color:var(--text-2)">🏷️ Effective Tariff (%)</label>
+            <span id="lbl-tariff" style="font-family:var(--font-mono);font-size:13px;color:#F59E0B;font-weight:600">18</span>
+          </div>
+          <input type="range" id="sl-tariff" min="0" max="50" value="18" step="1"
+            oninput="setSlider('tariff',+this.value)" style="width:100%;accent-color:#F59E0B">
         </div>
       </div>
-    </section>
 
-  </main>
 
+      <!-- Right: live outputs -->
+      <div>
+        <!-- Recession probability gauge -->
+        <div class="cross-factor-insight" style="padding:24px;margin-bottom:16px;text-align:center">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:.08em;margin-bottom:12px">RECESSION PROBABILITY</div>
+          <div id="out-prob" style="font-size:64px;font-weight:700;font-family:var(--font-mono);line-height:1;color:#F59E0B">42%</div>
+          <div id="out-momentum" style="font-size:12px;color:var(--text-3);margin-top:6px;font-family:var(--font-mono)">RISING</div>
+          <div style="background:var(--surface-2);border-radius:4px;height:6px;margin-top:14px;overflow:hidden">
+            <div id="out-prob-bar" style="height:100%;background:#F59E0B;border-radius:4px;transition:width .3s;width:42%"></div>
+          </div>
+        </div>
+
+        <!-- Key outputs grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+          <div class="cross-factor-insight" style="padding:14px">
+            <div style="font-size:10px;color:var(--text-3);font-family:var(--font-mono);margin-bottom:4px">CPI IMPACT</div>
+            <div id="out-cpi" style="font-size:20px;font-weight:700;font-family:var(--font-mono);color:#E63946">+0.8pp</div>
+          </div>
+          <div class="cross-factor-insight" style="padding:14px">
+            <div style="font-size:10px;color:var(--text-3);font-family:var(--font-mono);margin-bottom:4px">GAS PRICE</div>
+            <div id="out-gas" style="font-size:20px;font-weight:700;font-family:var(--font-mono);color:#F59E0B">$3.82</div>
+          </div>
+          <div class="cross-factor-insight" style="padding:14px">
+            <div style="font-size:10px;color:var(--text-3);font-family:var(--font-mono);margin-bottom:4px">GDP DRAG</div>
+            <div id="out-gdp" style="font-size:20px;font-weight:700;font-family:var(--font-mono);color:#E63946">-0.6pp</div>
+          </div>
+          <div class="cross-factor-insight" style="padding:14px">
+            <div style="font-size:10px;color:var(--text-3);font-family:var(--font-mono);margin-bottom:4px">CONFIDENCE</div>
+            <div id="out-conf" style="font-size:20px;font-weight:700;font-family:var(--font-mono);color:#94A3B8">MED</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end grid -->
+
+
+    <!-- Sector impact grid -->
+    <div style="margin-top:28px">
+      <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:.08em;margin-bottom:14px">SECTOR IMPACT MATRIX</div>
+      <div id="sector-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px"></div>
+    </div>
+
+  </section>
+
+  <!-- AI Explain -->
+  <section class="section container">
+    <div id="scenario-ai-explain"></div>
+  </section>
+
+  <!-- Back nav -->
+  <section class="section container">
+    <div class="factor-nav-bar">
+      <a class="factor-nav-link" href="recession.html">📉 Recession Command Center</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="macro.html">📊 Macro Pulse</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="energy.html">⚡ Energy Command Center</a>
+    </div>
+  </section>
+
+  <section class="section container" id="scenario-email-capture"></section>
   <div id="site-footer"></div>
 
-  <script src="content.js"></script>
-  <script src="ui.js"></script>
-  <script src="api.js"></script>
+</main>
 
-  <script>
-    (async () => {
-      document.getElementById('site-header').innerHTML = UI.renderHeader();
-      document.getElementById('site-nav').innerHTML    = UI.renderNav('scenarios');
-      document.getElementById('site-footer').innerHTML = UI.renderFooter();
 
-      // Full scenario cards
-      const scenarios = GEOWIRE.scenarios || [];
-      document.getElementById('scenario-cards-full').innerHTML = scenarios.map(s => `
-        <div class="scenario-card-full scenario-${s.type}">
-          <div class="scenario-full-header">
-            <div class="scenario-type-label">${s.type.toUpperCase()} CASE</div>
-            <div class="scenario-title">${s.title}</div>
-            <div class="scenario-probability-large">
-              <span class="prob-label">Estimated Probability</span>
-              <span class="prob-value-large">${s.probability}</span>
-            </div>
-          </div>
-          <div class="scenario-full-body">
-            <div class="scenario-desc-full">${s.description}</div>
-            ${s.timeline ? `<div class="scenario-timeline-note">⏱ Timeline: ${s.timeline}</div>` : ''}
-            ${s.trigger ? `<div class="scenario-trigger"><strong>Key Trigger:</strong> ${s.trigger}</div>` : ''}
-            ${s.marketImpact ? `
-            <div class="scenario-market-impact">
-              <div class="smi-label">Market Impact</div>
-              <div class="smi-grid">
-                ${Object.entries(s.marketImpact).map(([k, v]) => `
-                  <div class="smi-item">
-                    <div class="smi-asset">${k}</div>
-                    <div class="smi-change ${v.startsWith('+') ? 'change-up' : 'change-down'}">${v}</div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>` : ''}
-            ${s.signals ? `
-            <div class="scenario-signals">
-              <div class="signals-label">Watch For</div>
-              <ul class="signals-list">
-                ${s.signals.map(sig => `<li>${sig}</li>`).join('')}
-              </ul>
-            </div>` : ''}
-          </div>
-          <div class="scenario-full-footer">
-            <span class="confidence-badge confidence-inferred">⚫ Model-inferred</span>
-            ${UI.renderShareButtons(
-              `${s.type.toUpperCase()} CASE: ${s.title} — ${s.probability} probability via GeoWire`,
-              'https://geowire.org/scenarios.html'
-            )}
-          </div>
-        </div>
-      `).join('');
+<!-- ─── SCRIPTS ──────────────────────────────────────────────────────────── -->
+<script src="content.js"></script>
+<script src="scoring.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+// ── State
+var _params = { oil: 130, unemp: 4.1, fed: 4.5, hormuz: 90, weeks: 4, tariff: 18 };
 
-      // Kalshi / prediction market demo module
-      const kalshi = GEOWIRE.kalshiModuleData || {};
-      const markets = kalshi.markets || [
-        { question: 'Ceasefire before April 1, 2026?',       yes: 18, no: 82, volume: '$2.1M' },
-        { question: 'Hormuz reopened before May 2026?',       yes: 24, no: 76, volume: '$1.4M' },
-        { question: 'Iranian regime change by June 2026?',    yes: 31, no: 69, volume: '$890K' },
-        { question: 'Oil above $130 before June 2026?',      yes: 44, no: 56, volume: '$3.2M' },
-        { question: 'US ground troops in Iran?',             yes: 8,  no: 92, volume: '$540K' },
-        { question: 'Nuclear facility strike before June?',  yes: 12, no: 88, volume: '$1.1M' },
-      ];
-      document.getElementById('prediction-market-grid').innerHTML = markets.map(m => `
-        <div class="prediction-card">
-          <div class="prediction-question">${m.question}</div>
-          <div class="prediction-bar-wrap">
-            <div class="prediction-bar-yes" style="width:${m.yes}%"></div>
-            <div class="prediction-bar-no"  style="width:${m.no}%"></div>
-          </div>
-          <div class="prediction-odds">
-            <span class="pred-yes">${m.yes}% YES</span>
-            <span class="pred-vol">${m.volume} vol</span>
-            <span class="pred-no">${m.no}% NO</span>
-          </div>
-        </div>
-      `).join('');
+// ── Presets
+var PRESETS = {
+  peace:      { oil: 65,  unemp: 3.8, fed: 4.0, hormuz: 0,  weeks: 0,  tariff: 8  },
+  ceasefire:  { oil: 78,  unemp: 3.9, fed: 4.25,hormuz: 25, weeks: 2,  tariff: 12 },
+  prolonged:  { oil: 130, unemp: 4.5, fed: 4.75,hormuz: 90, weeks: 16, tariff: 22 },
+  escalation: { oil: 160, unemp: 5.8, fed: 5.5, hormuz: 100,weeks: 52, tariff: 35 },
+};
 
-      // Market signals panel
-      document.getElementById('market-signals-panel').innerHTML = `
-        <div class="msp-row msp-header">
-          <div>Asset</div>
-          <div class="scenario-best">Best Case</div>
-          <div class="scenario-base">Base Case</div>
-          <div class="scenario-worst">Worst Case</div>
-        </div>
-        ${[
-          { asset: 'Brent Crude', best: '$70–80', base: '$100–120', worst: '$140–180+' },
-          { asset: 'Gold',        best: '$2,800', base: '$3,200–3,500', worst: '$3,800+' },
-          { asset: 'S&P 500',     best: '+8%',    base: '-5% to -15%', worst: '-25%+' },
-          { asset: 'USD Index',   best: '+3%',    base: '-3% to -6%', worst: '-10%+' },
-          { asset: 'Nat Gas',     best: '$2.80',  base: '$3.50–4.50', worst: '$6.00+' },
-          { asset: '10Y Treasury',best: '4.0%',   base: '4.2%–4.8%', worst: '5.5%+' },
-        ].map(row => `
-          <div class="msp-row">
-            <div class="msp-asset">${row.asset}</div>
-            <div class="msp-val scenario-best-val">${row.best}</div>
-            <div class="msp-val scenario-base-val">${row.base}</div>
-            <div class="msp-val scenario-worst-val">${row.worst}</div>
-          </div>
-        `).join('')}
-      `;
+function applyPreset(key) {
+  var p = PRESETS[key]; if (!p) return;
+  Object.assign(_params, p);
+  // Sync sliders
+  ['oil','unemp','fed','hormuz','weeks','tariff'].forEach(function(k) {
+    var el = document.getElementById('sl-' + k);
+    if (el) el.value = _params[k];
+    var lb = document.getElementById('lbl-' + k);
+    if (lb) lb.textContent = _params[k];
+  });
+  recalc();
+}
 
-      // Narrative frames
-      const narratives = GEOWIRE.narrativeFrames || [];
-      document.getElementById('narrative-grid').innerHTML = narratives.map(n => `
-        <div class="narrative-card">
-          <div class="narrative-source">${n.source}</div>
-          <div class="narrative-frame">${n.frame}</div>
-          <div class="narrative-text">${n.text}</div>
-          <div class="narrative-bias">Framing: <span class="bias-tag">${n.bias || 'unclassified'}</span></div>
-        </div>
-      `).join('');
+function setSlider(key, val) {
+  _params[key] = val;
+  var lb = document.getElementById('lbl-' + key);
+  if (lb) lb.textContent = val;
+  recalc();
+}
 
-      document.getElementById('scenarios-share').innerHTML = UI.renderShareButtons(
-        'Scenario analysis: ceasefire 18%, protracted war 57%, regional escalation 25% — via GeoWire',
-        'https://geowire.org/scenarios.html'
+
+function calculateScenario(p) {
+  // CPI impact: oil shock + tariff pass-through
+  var oilBaseline = 68;
+  var oilDelta = Math.max(0, p.oil - oilBaseline);
+  var cpiFromOil    = oilDelta * 0.008;                    // ~0.8pp per $100 oil rise
+  var cpiFromTariff = p.tariff * 0.03;                     // 3pp CPI per 10pp tariff
+  var cpiImpact = +(cpiFromOil + cpiFromTariff).toFixed(2);
+
+  // Gas price: ~$0.025 per $1 oil + hormuz premium
+  var gasPrice = +(2.80 + p.oil * 0.025 + p.hormuz * 0.008).toFixed(2);
+
+  // GDP drag: unemployment, oil shock, tariff
+  var gdpFromUnemp  = -(Math.max(0, p.unemp - 3.5) * 0.4);
+  var gdpFromOil    = -(oilDelta * 0.004);
+  var gdpFromTariff = -(p.tariff * 0.025);
+  var gdpDrag = +(gdpFromUnemp + gdpFromOil + gdpFromTariff).toFixed(2);
+
+  // Recession probability (0-100)
+  var base = 18;
+  var fromOil    = Math.min(25, oilDelta * 0.18);
+  var fromUnemp  = Math.min(20, Math.max(0, p.unemp - 3.5) * 8);
+  var fromFed    = Math.min(15, Math.max(0, p.fed - 4.0) * 6);
+  var fromHormuz = Math.min(20, p.hormuz * 0.18);
+  var fromWeeks  = Math.min(10, p.weeks * 0.15);
+  var fromTariff = Math.min(12, p.tariff * 0.3);
+  var prob = Math.min(98, Math.round(base + fromOil + fromUnemp + fromFed + fromHormuz + fromWeeks + fromTariff));
+
+  // Momentum label
+  var momentum = prob < 25 ? 'STABLE' : prob < 50 ? 'RISING' : prob < 70 ? 'ELEVATED' : 'CRITICAL';
+
+  // Confidence based on hormuz certainty + weeks
+  var conf = p.weeks < 4 ? 'LOW' : p.weeks < 12 ? 'MED' : 'HIGH';
+
+  return { cpiImpact, gasPrice, gdpDrag, prob, momentum, conf };
+}
+
+
+function renderSectors(p, res) {
+  var sectors = [
+    { name: 'Airlines',       fn: function() { return Math.min(10, (p.oil-68)*0.04 + p.hormuz*0.02); }, icon: '✈️' },
+    { name: 'Shipping',       fn: function() { return Math.min(10, p.hormuz*0.09 + p.weeks*0.05); },    icon: '🚢' },
+    { name: 'Autos',          fn: function() { return Math.min(10, (p.oil-68)*0.02 + p.tariff*0.15); }, icon: '🚗' },
+    { name: 'Semiconductors', fn: function() { return Math.min(10, p.hormuz*0.06 + p.tariff*0.12); },  icon: '💾' },
+    { name: 'Retail',         fn: function() { return Math.min(10, p.tariff*0.18 + res.cpiImpact*1.5);},icon: '🛒' },
+    { name: 'Banks',          fn: function() { return Math.min(10, (p.fed-4)*2.5 + res.prob*0.05); },   icon: '🏦' },
+    { name: 'Housing',        fn: function() { return Math.min(10, (p.fed-4)*3.5 + res.prob*0.04); },   icon: '🏠' },
+    { name: 'Energy',         fn: function() { return Math.max(0, -((p.oil-68)*0.05)); },               icon: '⚡' },
+  ];
+  return sectors.map(function(s) {
+    var raw = s.fn();
+    var impact = Math.max(0, +raw.toFixed(1));
+    var pct = Math.min(100, Math.round(impact * 10));
+    var color = impact < 2 ? '#22C55E' : impact < 5 ? '#F59E0B' : '#E63946';
+    return '<div class="cross-factor-insight" style="padding:12px">' +
+      '<div style="font-size:11px;color:var(--text-3);font-family:var(--font-mono);margin-bottom:4px">' + s.icon + ' ' + s.name + '</div>' +
+      '<div style="background:var(--surface-2);border-radius:3px;height:5px;margin-bottom:6px"><div style="height:100%;border-radius:3px;background:' + color + ';width:' + pct + '%;transition:width .3s"></div></div>' +
+      '<div style="font-size:13px;font-weight:700;font-family:var(--font-mono);color:' + color + '">' + (s.name === 'Energy' ? (impact === 0 ? 'TAILWIND' : impact.toFixed(1) + '/10') : impact.toFixed(1) + '/10') + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function recalc() {
+  var res = calculateScenario(_params);
+  // Probability outputs
+  var probColor = res.prob < 30 ? '#22C55E' : res.prob < 55 ? '#F59E0B' : '#E63946';
+  document.getElementById('out-prob').textContent = res.prob + '%';
+  document.getElementById('out-prob').style.color = probColor;
+  document.getElementById('out-prob-bar').style.width = res.prob + '%';
+  document.getElementById('out-prob-bar').style.background = probColor;
+  document.getElementById('out-momentum').textContent = res.momentum;
+  document.getElementById('scenario-bar-fill').style.width = res.prob + '%';
+  document.getElementById('scenario-bar-pct').textContent = res.prob + '%';
+  document.getElementById('scenario-bar-pct').style.color = probColor;
+  // Detail outputs
+  document.getElementById('out-cpi').textContent = (res.cpiImpact >= 0 ? '+' : '') + res.cpiImpact + 'pp';
+  document.getElementById('out-gas').textContent = '$' + res.gasPrice;
+  document.getElementById('out-gdp').textContent = (res.gdpDrag >= 0 ? '+' : '') + res.gdpDrag + 'pp';
+  document.getElementById('out-conf').textContent = res.conf;
+  // Sector grid
+  document.getElementById('sector-grid').innerHTML = renderSectors(_params, res);
+}
+
+
+// ── Init
+(function () {
+  try {
+    UI.init();
+    document.getElementById('site-header').innerHTML = UI.renderHeader();
+    document.getElementById('site-nav').innerHTML    = UI.renderNav('scenarios.html');
+    document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+    var tickerEl = document.getElementById('market-ticker-bar');
+    if (tickerEl) tickerEl.innerHTML = UI.renderMarketTicker();
+
+    // Apply prolonged preset as default, then override with current war defaults
+    applyPreset('prolonged');
+    setSlider('oil', 101);
+    setSlider('hormuz', 97);
+    setSlider('weeks', 4);
+
+    // AI Explain
+    var aiEl = document.getElementById('scenario-ai-explain');
+    if (aiEl) {
+      aiEl.innerHTML = UI.renderAIExplainButton(
+        'Geopolitical scenario modeling — recession probability',
+        'Interactive scenario lab modeling recession probability across oil price, unemployment, Fed rate, Hormuz closure, conflict duration, and tariff parameters.',
+        'scenario-ai-explain'
       );
+    }
 
-      UI.init();
-    })();
-  </script>
+    // Email capture
+    document.getElementById('scenario-email-capture').innerHTML = UI.renderEmailCapture();
+    UI.stubEmailCapture();
 
+  } catch (err) {
+    console.error('[GeoWire Scenarios] Fatal error:', err);
+  }
+})();
+</script>
 </body>
 </html>
