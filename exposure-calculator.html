@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Conflict Exposure Calculator | Personal &amp; Portfolio Impact</title>
+  <meta name="description" content="Calculate your personal exposure to Operation Epic Fury: energy costs, portfolio impact, travel risk, and supply chain vulnerability." />
+
+  <meta property="og:title" content="GeoWire — Conflict Exposure Calculator" />
+  <meta property="og:description" content="How exposed are you to the Iran war? Calculate your personal energy cost impact, portfolio exposure, and supply chain risk." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/exposure-calculator.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Exposure Calculator",
+    "description": "Calculate personal and portfolio exposure to Operation Epic Fury.",
+    "url": "https://geowire.org/exposure-calculator.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">📊</div>
+        <h1 class="page-title">Exposure Calculator</h1>
+        <p class="page-sub">Estimate your personal and portfolio exposure to the US-Iran conflict. Results are model estimates — not financial advice.</p>
+        <div class="demo-notice">
+          <span class="demo-badge-large">⚫ Model estimates</span>
+          For informational purposes only. Not financial or investment advice.
+        </div>
+      </div>
+    </section>
+
+    <!-- CALCULATOR TABS -->
+    <div class="container">
+      <div class="filter-tabs" id="calc-tabs">
+        <button class="filter-tab active" data-tab="energy">Energy Cost</button>
+        <button class="filter-tab" data-tab="portfolio">Portfolio</button>
+        <button class="filter-tab" data-tab="sector">Sector / Business</button>
+        <button class="filter-tab" data-tab="travel">Travel Risk</button>
+      </div>
+    </div>
+
+    <!-- ENERGY CALCULATOR -->
+    <section class="section container calculator-panel active" id="tab-energy">
+      <div class="calc-card">
+        <h2 class="calc-title">Annual Energy Cost Impact</h2>
+        <p class="calc-desc">Estimate how much the conflict has increased your annual energy spend.</p>
+        <div class="calc-form">
+          <div class="calc-field">
+            <label class="calc-label">Miles driven per year</label>
+            <input type="number" class="calc-input" id="miles-per-year" value="15000" min="0" max="100000" />
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Vehicle fuel economy (MPG)</label>
+            <input type="number" class="calc-input" id="mpg" value="28" min="1" max="150" />
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Monthly home energy bill ($)</label>
+            <input type="number" class="calc-input" id="energy-bill" value="180" min="0" max="2000" />
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Annual flights (round trips)</label>
+            <input type="number" class="calc-input" id="flights" value="4" min="0" max="100" />
+          </div>
+          <button class="calc-btn" onclick="calcEnergy()">Calculate Impact</button>
+        </div>
+        <div class="calc-result hidden" id="energy-result">
+          <!-- Populated on calculate -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO CALCULATOR -->
+    <section class="section container calculator-panel hidden" id="tab-portfolio">
+      <div class="calc-card">
+        <h2 class="calc-title">Portfolio Exposure Estimate</h2>
+        <p class="calc-desc">Rough estimate of conflict impact on a typical US investor portfolio based on market moves since Feb 28.</p>
+        <div class="calc-form">
+          <div class="calc-field">
+            <label class="calc-label">Total investable assets ($)</label>
+            <input type="number" class="calc-input" id="total-assets" value="100000" min="0" />
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">S&P 500 / equity allocation (%)</label>
+            <input type="range" class="calc-range" id="equity-pct" value="70" min="0" max="100" oninput="document.getElementById('equity-pct-val').textContent=this.value+'%'" />
+            <span class="range-val" id="equity-pct-val">70%</span>
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Bonds / Treasury allocation (%)</label>
+            <input type="range" class="calc-range" id="bond-pct" value="20" min="0" max="100" oninput="document.getElementById('bond-pct-val').textContent=this.value+'%'" />
+            <span class="range-val" id="bond-pct-val">20%</span>
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Gold / Commodities allocation (%)</label>
+            <input type="range" class="calc-range" id="gold-pct" value="5" min="0" max="100" oninput="document.getElementById('gold-pct-val').textContent=this.value+'%'" />
+            <span class="range-val" id="gold-pct-val">5%</span>
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Energy sector allocation (%)</label>
+            <input type="range" class="calc-range" id="energy-pct" value="5" min="0" max="100" oninput="document.getElementById('energy-pct-val').textContent=this.value+'%'" />
+            <span class="range-val" id="energy-pct-val">5%</span>
+          </div>
+          <button class="calc-btn" onclick="calcPortfolio()">Calculate Exposure</button>
+        </div>
+        <div class="calc-result hidden" id="portfolio-result"></div>
+      </div>
+    </section>
+
+    <!-- SECTOR CALCULATOR -->
+    <section class="section container calculator-panel hidden" id="tab-sector">
+      <div class="calc-card">
+        <h2 class="calc-title">Sector / Business Exposure</h2>
+        <p class="calc-desc">Estimate conflict impact on your business based on industry and geographic exposure.</p>
+        <div class="calc-form">
+          <div class="calc-field">
+            <label class="calc-label">Annual revenue or operating budget ($)</label>
+            <input type="number" class="calc-input" id="business-revenue" value="1000000" min="0" />
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Industry sector</label>
+            <select class="calc-select" id="sector-select">
+              <option value="airline">Airlines / Aviation</option>
+              <option value="trucking">Trucking / Logistics</option>
+              <option value="energy_producer">Energy Producer (oil/gas)</option>
+              <option value="energy_consumer">Energy-Intensive Manufacturing</option>
+              <option value="defense">Defense / Aerospace</option>
+              <option value="retail">Retail / Consumer Goods</option>
+              <option value="agriculture">Agriculture / Food</option>
+              <option value="tech">Technology</option>
+              <option value="finance">Financial Services</option>
+              <option value="other" selected>Other</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Middle East / Gulf revenue exposure (%)</label>
+            <input type="range" class="calc-range" id="gulf-exposure" value="5" min="0" max="100" oninput="document.getElementById('gulf-exp-val').textContent=this.value+'%'" />
+            <span class="range-val" id="gulf-exp-val">5%</span>
+          </div>
+          <button class="calc-btn" onclick="calcSector()">Calculate Business Impact</button>
+        </div>
+        <div class="calc-result hidden" id="sector-result"></div>
+      </div>
+    </section>
+
+    <!-- TRAVEL RISK -->
+    <section class="section container calculator-panel hidden" id="tab-travel">
+      <div class="calc-card">
+        <h2 class="calc-title">Travel Risk Assessment</h2>
+        <p class="calc-desc">Assess conflict-related risk for planned travel routes.</p>
+        <div class="calc-form">
+          <div class="calc-field">
+            <label class="calc-label">Departure region</label>
+            <select class="calc-select" id="travel-from">
+              <option value="us">United States</option>
+              <option value="europe">Europe</option>
+              <option value="asia">Asia-Pacific</option>
+              <option value="gulf">Gulf / Middle East</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label class="calc-label">Destination region</label>
+            <select class="calc-select" id="travel-to">
+              <option value="iran">Iran</option>
+              <option value="iraq">Iraq</option>
+              <option value="uae">UAE</option>
+              <option value="saudi">Saudi Arabia</option>
+              <option value="israel">Israel</option>
+              <option value="europe">Europe</option>
+              <option value="us">United States</option>
+              <option value="asia">Asia-Pacific</option>
+            </select>
+          </div>
+          <button class="calc-btn" onclick="calcTravel()">Assess Risk</button>
+        </div>
+        <div class="calc-result hidden" id="travel-result"></div>
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="calculator-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE -->
+    <section class="section container">
+      <div id="calc-share"></div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('dashboard');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      // Tab switching
+      document.getElementById('calc-tabs').addEventListener('click', e => {
+        const btn = e.target.closest('.filter-tab');
+        if (!btn) return;
+        document.querySelectorAll('#calc-tabs .filter-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.calculator-panel').forEach(p => { p.classList.add('hidden'); p.classList.remove('active'); });
+        const panel = document.getElementById('tab-' + btn.dataset.tab);
+        if (panel) { panel.classList.remove('hidden'); panel.classList.add('active'); }
+      });
+
+      document.getElementById('calc-share').innerHTML = UI.renderShareButtons(
+        'Calculate your personal exposure to the US-Iran conflict — GeoWire Exposure Calculator',
+        'https://geowire.org/exposure-calculator.html'
+      );
+
+      UI.init();
+    })();
+
+    // ── Energy calculator
+    function calcEnergy() {
+      const miles  = +document.getElementById('miles-per-year').value || 15000;
+      const mpg    = +document.getElementById('mpg').value || 28;
+      const bill   = +document.getElementById('energy-bill').value || 180;
+      const flights= +document.getElementById('flights').value || 4;
+
+      const preWarGas  = 3.28;
+      const currentGas = 4.42;
+      const gasDelta   = currentGas - preWarGas;
+      const gallonsPerYear = miles / mpg;
+      const gasCostIncrease = gallonsPerYear * gasDelta;
+
+      const homeEnergyIncrease = bill * 0.18 * 12; // ~18% energy cost increase
+      const flightSurcharge    = flights * 67.50;   // avg $67.50 round-trip surcharge
+
+      const total = gasCostIncrease + homeEnergyIncrease + flightSurcharge;
+
+      document.getElementById('energy-result').classList.remove('hidden');
+      document.getElementById('energy-result').innerHTML = `
+        <div class="result-header">Your Estimated Annual Cost Increase</div>
+        <div class="result-total">$${total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+        <div class="result-breakdown">
+          <div class="rb-row"><span>Gas (${gallonsPerYear.toFixed(0)} gal/yr × $${gasDelta.toFixed(2)}/gal increase)</span><span>$${gasCostIncrease.toFixed(0)}</span></div>
+          <div class="rb-row"><span>Home energy (+18% crisis premium)</span><span>$${homeEnergyIncrease.toFixed(0)}</span></div>
+          <div class="rb-row"><span>Flight surcharges (${flights} RT × $67.50 avg)</span><span>$${flightSurcharge.toFixed(0)}</span></div>
+        </div>
+        <div class="result-note">⚫ Model estimate based on current EIA data and airline industry surcharge reports. Actual costs vary by region and provider.</div>
+      `;
+    }
+
+    // ── Portfolio calculator
+    function calcPortfolio() {
+      const total    = +document.getElementById('total-assets').value || 100000;
+      const eqPct    = +document.getElementById('equity-pct').value / 100;
+      const bondPct  = +document.getElementById('bond-pct').value / 100;
+      const goldPct  = +document.getElementById('gold-pct').value / 100;
+      const energyPct= +document.getElementById('energy-pct').value / 100;
+
+      // Market moves since Feb 28
+      const eqReturn     = -0.122; // S&P -12.2%
+      const bondReturn   = -0.018; // bonds slightly down (rates up)
+      const goldReturn   = +0.209; // gold +20.9%
+      const energyReturn = +0.322; // energy sector +32.2%
+
+      const eqDelta     = total * eqPct * eqReturn;
+      const bondDelta   = total * bondPct * bondReturn;
+      const goldDelta   = total * goldPct * goldReturn;
+      const energyDelta = total * energyPct * energyReturn;
+      const totalDelta  = eqDelta + bondDelta + goldDelta + energyDelta;
+      const pct         = (totalDelta / total * 100).toFixed(1);
+
+      document.getElementById('portfolio-result').classList.remove('hidden');
+      document.getElementById('portfolio-result').innerHTML = `
+        <div class="result-header">Estimated Portfolio Impact</div>
+        <div class="result-total ${totalDelta >= 0 ? 'result-positive' : 'result-negative'}">
+          ${totalDelta >= 0 ? '+' : ''}$${Math.abs(totalDelta).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} (${totalDelta >= 0 ? '+' : ''}${pct}%)
+        </div>
+        <div class="result-breakdown">
+          <div class="rb-row"><span>Equities (${(eqPct*100).toFixed(0)}% × -12.2%)</span><span class="change-down">$${eqDelta.toFixed(0)}</span></div>
+          <div class="rb-row"><span>Bonds (${(bondPct*100).toFixed(0)}% × -1.8%)</span><span class="change-down">$${bondDelta.toFixed(0)}</span></div>
+          <div class="rb-row"><span>Gold (${(goldPct*100).toFixed(0)}% × +20.9%)</span><span class="change-up">+$${goldDelta.toFixed(0)}</span></div>
+          <div class="rb-row"><span>Energy (${(energyPct*100).toFixed(0)}% × +32.2%)</span><span class="change-up">+$${energyDelta.toFixed(0)}</span></div>
+        </div>
+        <div class="result-note">⚫ Model estimate based on asset class returns since Feb 28, 2026. Not financial advice. Past performance does not predict future results.</div>
+      `;
+    }
+
+    // ── Sector calculator
+    function calcSector() {
+      const revenue = +document.getElementById('business-revenue').value || 1000000;
+      const sector  = document.getElementById('sector-select').value;
+      const gulfExp = +document.getElementById('gulf-exposure').value / 100;
+
+      const impacts = {
+        airline:          { pct: -0.12, label: 'Fuel surcharges (-8%) + Gulf route losses (-4%)' },
+        trucking:         { pct: -0.09, label: 'Diesel cost increase (-$0.038/mile × typical fleet)' },
+        energy_producer:  { pct: +0.28, label: 'Oil price windfall (+$44/bbl average uplift)' },
+        energy_consumer:  { pct: -0.11, label: 'Energy input cost increase (+34% avg utility/feedstock)' },
+        defense:          { pct: +0.18, label: 'Contract surge — munitions restocking, C4ISR demand' },
+        retail:           { pct: -0.04, label: 'Freight + energy pass-through (~4% margin compression)' },
+        agriculture:      { pct: -0.07, label: 'Fertilizer +28%, fuel +35%, freight +215%' },
+        tech:             { pct: -0.05, label: 'Broad market drag + semiconductor supply chain risk' },
+        finance:          { pct: -0.06, label: 'Credit spread widening + Gulf exposure writedowns' },
+        other:            { pct: -0.04, label: 'Estimated blended economy impact' },
+      };
+
+      const base  = impacts[sector] || impacts.other;
+      const gulfDelta  = revenue * gulfExp * -0.35; // Gulf revenue exposure assumed -35%
+      const sectorDelta = revenue * base.pct;
+      const total = sectorDelta + gulfDelta;
+
+      document.getElementById('sector-result').classList.remove('hidden');
+      document.getElementById('sector-result').innerHTML = `
+        <div class="result-header">Estimated Business Impact</div>
+        <div class="result-total ${total >= 0 ? 'result-positive' : 'result-negative'}">
+          ${total >= 0 ? '+' : ''}$${Math.abs(total).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} (${(total/revenue*100).toFixed(1)}%)
+        </div>
+        <div class="result-breakdown">
+          <div class="rb-row"><span>Sector impact (${(base.pct*100).toFixed(0)}%)</span><span class="${sectorDelta >= 0 ? 'change-up' : 'change-down'}">${sectorDelta >= 0 ? '+' : ''}$${sectorDelta.toFixed(0)}</span></div>
+          <div class="rb-row"><span>Gulf exposure (${(gulfExp*100).toFixed(0)}% at -35%)</span><span class="change-down">$${gulfDelta.toFixed(0)}</span></div>
+        </div>
+        <div class="result-note">${base.label}</div>
+        <div class="result-note">⚫ Model estimate. Actual impact depends on contracts, hedging, and operational flexibility.</div>
+      `;
+    }
+
+    // ── Travel risk
+    function calcTravel() {
+      const from = document.getElementById('travel-from').value;
+      const to   = document.getElementById('travel-to').value;
+
+      const risks = {
+        iran:   { level: 'CRITICAL', text: 'All travel strongly advised against. Active conflict zone. No consular services. Internet blackout. Evacuation extremely difficult.', color: '#ff3b3b' },
+        iraq:   { level: 'HIGH',     text: 'Green Zone on lockdown. PMF factions active. US Embassy in reduced operations. Avoid all non-essential travel.', color: '#ff8c00' },
+        uae:    { level: 'ELEVATED', text: 'Al Dhafra AFB target of Day 1 strike. Dubai operations largely normal. Monitor for ballistic missile alerts. Travel possible with awareness.', color: '#ffb800' },
+        saudi:  { level: 'ELEVATED', text: 'Aramco suspended Gulf loading. Riyadh stable. US military presence elevated. Travel possible for most purposes.', color: '#ffb800' },
+        israel: { level: 'HIGH',     text: 'Active co-belligerent. Rocket/drone alert system active. Ben Gurion operational. Embassy advisories in effect.', color: '#ff8c00' },
+        europe: { level: 'LOW',      text: 'No direct conflict risk. Monitor for protest activity in some capitals. Normal travel operations.', color: '#00ff88' },
+        us:     { level: 'MINIMAL',  text: 'No direct conflict risk. Elevated security posture at major infrastructure. Normal travel operations.', color: '#00ff88' },
+        asia:   { level: 'LOW',      text: 'No direct conflict risk. Minor shipping disruption may affect some supply chains. Normal travel operations.', color: '#00ff88' },
+      };
+
+      const risk = risks[to] || { level: 'UNKNOWN', text: 'Risk data not available for this destination.', color: '#4a9eff' };
+
+      document.getElementById('travel-result').classList.remove('hidden');
+      document.getElementById('travel-result').innerHTML = `
+        <div class="result-header">Travel Risk Assessment: → ${to.toUpperCase()}</div>
+        <div class="result-risk-level" style="color:${risk.color}">${risk.level}</div>
+        <div class="result-risk-text">${risk.text}</div>
+        <div class="result-note">Check your government's official travel advisory before any international travel. GeoWire model — not official government guidance.</div>
+      `;
+    }
+  </script>
+
+</body>
+</html>

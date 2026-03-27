@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Country Status | US-Iran Conflict Regional Tracker</title>
+  <meta name="description" content="Real-time status of all key actors in the US-Iran conflict — Iran, USA, Israel, Saudi Arabia, UAE, Russia, China, Iraq, and Qatar." />
+
+  <meta property="og:title" content="GeoWire — Country Status Cards" />
+  <meta property="og:description" content="Threat levels, leaders, and current positions for all key actors in Operation Epic Fury." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/countries.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Country Status",
+    "description": "Threat levels, leaders, and current positions for all key actors in the US-Iran conflict.",
+    "url": "https://geowire.org/countries.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">🌍</div>
+        <h1 class="page-title">Country Status</h1>
+        <p class="page-sub">Real-time positions, threat assessments, and leadership status for all key actors in the conflict.</p>
+      </div>
+    </section>
+
+    <!-- FILTER TABS -->
+    <div class="container">
+      <div class="filter-tabs" id="country-filter-tabs">
+        <button class="filter-tab active" data-filter="all">All Countries</button>
+        <button class="filter-tab" data-filter="belligerent">Belligerents</button>
+        <button class="filter-tab" data-filter="ally">US Allies</button>
+        <button class="filter-tab" data-filter="neutral">Neutral / Third Party</button>
+      </div>
+    </div>
+
+    <!-- COUNTRY CARDS GRID -->
+    <section class="section container">
+      <div class="country-cards-grid" id="country-cards-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="countries-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- ALLIANCE MAP PREVIEW -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Alliance Landscape</h2>
+        <a href="geopolitical.html" class="section-link">Full Geopolitical →</a>
+      </div>
+      <div class="alliance-grid" id="alliance-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- SHARE -->
+    <section class="section container">
+      <div id="countries-share"></div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('countries');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      const countries = GEOWIRE.countries || [];
+      const grid = document.getElementById('country-cards-grid');
+
+      function renderCards(filter) {
+        const filtered = filter === 'all' ? countries : countries.filter(c => c.role === filter);
+        if (filtered.length === 0) {
+          grid.innerHTML = '<p class="empty-state">No countries match this filter.</p>';
+          return;
+        }
+        grid.innerHTML = filtered.map(c => {
+          const cl = GEOWIRE.confidenceLevels[c.confidence] || {};
+          const threat = c.threatLevel || 'medium';
+          return `
+            <div class="country-card threat-border-${threat}" data-role="${c.role || 'neutral'}">
+              <div class="country-card-header">
+                <span class="country-flag">${c.flag || '🏳️'}</span>
+                <div class="country-card-title-group">
+                  <div class="country-name">${c.name}</div>
+                  <div class="country-role">${(c.role || '').toUpperCase()}</div>
+                </div>
+                <span class="threat-pill threat-${threat}">${threat.toUpperCase()}</span>
+              </div>
+              <div class="country-card-body">
+                <div class="country-detail-row">
+                  <span class="detail-label">Leader</span>
+                  <span class="detail-value">${c.leader || '—'}</span>
+                </div>
+                <div class="country-detail-row">
+                  <span class="detail-label">Position</span>
+                  <span class="detail-value">${c.position || '—'}</span>
+                </div>
+                ${c.casualties !== undefined ? `
+                <div class="country-detail-row">
+                  <span class="detail-label">Casualties</span>
+                  <span class="detail-value">${c.casualties.toLocaleString()}</span>
+                </div>` : ''}
+                ${c.status ? `
+                <div class="country-status-text">${c.status}</div>` : ''}
+              </div>
+              <div class="country-card-footer">
+                <span class="confidence-badge confidence-${c.confidence}">${cl.emoji || ''} ${cl.label || c.confidence}</span>
+                ${UI.renderShareButtons(
+                  `${c.name} status in Operation Epic Fury — ${c.position || 'See GeoWire'}`,
+                  'https://geowire.org/countries.html'
+                )}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      renderCards('all');
+
+      // Filter tab logic
+      document.getElementById('country-filter-tabs').addEventListener('click', e => {
+        const btn = e.target.closest('.filter-tab');
+        if (!btn) return;
+        document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCards(btn.dataset.filter);
+      });
+
+      // Alliance grid
+      const alliances = GEOWIRE.alliancesData || [];
+      document.getElementById('alliance-grid').innerHTML = alliances.map(a => `
+        <div class="alliance-card">
+          <div class="alliance-name">${a.name}</div>
+          <div class="alliance-members">${(a.members || []).join(' · ')}</div>
+          <div class="alliance-status status-${a.active ? 'green' : 'amber'}">${a.active ? 'ACTIVE' : 'FRACTURED'}</div>
+          ${a.note ? `<div class="alliance-note">${a.note}</div>` : ''}
+        </div>
+      `).join('');
+
+      document.getElementById('countries-share').innerHTML = UI.renderShareButtons(
+        'Country-by-country breakdown of the US-Iran conflict — live status via GeoWire',
+        'https://geowire.org/countries.html'
+      );
+
+      UI.init();
+    })();
+  </script>
+
+</body>
+</html>

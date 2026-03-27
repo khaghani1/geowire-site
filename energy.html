@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Energy Markets | Oil, Gas &amp; Hormuz Crisis Tracker</title>
+  <meta name="description" content="Live tracking of oil prices, Strait of Hormuz closure, LNG disruptions, SPR levels, and energy market impacts of the US-Iran conflict." />
+
+  <meta property="og:title" content="GeoWire — Energy Markets" />
+  <meta property="og:description" content="Hormuz at 3% flow capacity. Brent crude at $112. Track the energy shock of Operation Epic Fury." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/energy.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Energy Markets",
+    "description": "Live tracking of oil prices, Strait of Hormuz closure, LNG disruptions, SPR levels.",
+    "url": "https://geowire.org/energy.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">⚡</div>
+        <h1 class="page-title">Energy Markets</h1>
+        <p class="page-sub">Strait of Hormuz closed. Global energy flows in crisis. Track oil, gas, and LNG impacts in real time.</p>
+      </div>
+    </section>
+
+    <!-- MARKET TICKER -->
+    <section class="ticker-section">
+      <div class="ticker-header">
+        <span class="ticker-title">ENERGY MARKETS</span>
+        <span id="ticker-live-badge"></span>
+      </div>
+      <div class="ticker-track" id="market-ticker-track"></div>
+    </section>
+
+    <!-- HORMUZ STATUS BANNER -->
+    <section class="section container">
+      <div class="hormuz-banner critical">
+        <div class="hormuz-banner-left">
+          <div class="hormuz-status-label">STRAIT OF HORMUZ</div>
+          <div class="hormuz-status-value">3% FLOW CAPACITY</div>
+          <div class="hormuz-status-sub">Normal: ~21 million bbl/day · Current: ~630,000 bbl/day</div>
+        </div>
+        <div class="hormuz-banner-right">
+          <div class="hormuz-stat">
+            <div class="hormuz-stat-label">US Naval Vessels</div>
+            <div class="hormuz-stat-value">2 Carrier Groups</div>
+          </div>
+          <div class="hormuz-stat">
+            <div class="hormuz-stat-label">Transit Risk</div>
+            <div class="hormuz-stat-value threat-critical">EXTREME</div>
+          </div>
+          <div class="hormuz-stat">
+            <div class="hormuz-stat-label">Lloyd's War Cover</div>
+            <div class="hormuz-stat-value threat-critical">SUSPENDED</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OIL & GAS PRICE TABLE -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Commodity Prices</h2>
+        <span id="energy-live-badge"></span>
+      </div>
+      <div class="data-table-wrapper">
+        <table class="data-table" id="energy-price-table">
+          <thead>
+            <tr>
+              <th>Commodity</th>
+              <th>Current</th>
+              <th>Pre-War</th>
+              <th>Change</th>
+              <th>Confidence</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody id="energy-table-body">
+            <!-- Populated by script -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SPR LEVELS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Strategic Petroleum Reserve</h2>
+        <span class="section-badge">Updated Weekly</span>
+      </div>
+      <div class="spr-grid">
+        <div class="spr-card">
+          <div class="spr-label">US SPR Level</div>
+          <div class="spr-value">351 million bbl</div>
+          <div class="spr-bar-wrap"><div class="spr-bar" style="width:50%"></div></div>
+          <div class="spr-sub">50% capacity · Drawdown authorized at 4M bbl/month</div>
+          <span class="confidence-badge confidence-confirmed">🟢 Confirmed</span>
+        </div>
+        <div class="spr-card">
+          <div class="spr-label">Days of Import Cover</div>
+          <div class="spr-value">~32 Days</div>
+          <div class="spr-bar-wrap"><div class="spr-bar spr-bar-amber" style="width:32%"></div></div>
+          <div class="spr-sub">At current consumption rate with Hormuz disrupted</div>
+          <span class="confidence-badge confidence-inferred">⚫ Model-inferred</span>
+        </div>
+        <div class="spr-card">
+          <div class="spr-label">IEA Coordinated Release</div>
+          <div class="spr-value">60M bbl Pledged</div>
+          <div class="spr-bar-wrap"><div class="spr-bar spr-bar-green" style="width:60%"></div></div>
+          <div class="spr-sub">IEA member states coordinating emergency release</div>
+          <span class="confidence-badge confidence-multisource">🟡 Multi-source</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENERGY RISK MATRIX -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Energy Risk Matrix</h2>
+      </div>
+      <div class="risk-matrix-grid" id="energy-risk-matrix">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- LNG DISRUPTIONS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">LNG Supply Chain</h2>
+        <a href="trade.html" class="section-link">Trade Detail →</a>
+      </div>
+      <div class="supply-chain-rows" id="lng-chain">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="energy-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="energy-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="Get daily energy briefings" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('energy');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      document.getElementById('market-ticker-track').innerHTML = UI.renderMarketTicker();
+      document.getElementById('ticker-live-badge').innerHTML   = UI.renderLiveBadge(false);
+      document.getElementById('energy-live-badge').innerHTML   = UI.renderLiveBadge(false);
+
+      // Energy price table
+      const energyMarkets = ['oil', 'natgas', 'usgas', 'gold', 'dollar'];
+      const tbody = document.getElementById('energy-table-body');
+      tbody.innerHTML = energyMarkets.map(key => {
+        const m = GEOWIRE.marketData[key];
+        if (!m) return '';
+        const changeSign = m.change >= 0 ? '+' : '';
+        const changeClass = m.change >= 0 ? 'change-up' : 'change-down';
+        const cl = GEOWIRE.confidenceLevels[m.confidence] || {};
+        return `
+          <tr>
+            <td class="market-label">${m.label}</td>
+            <td class="market-current">${m.value.toLocaleString()} <small>${m.unit}</small></td>
+            <td class="market-prewar">${m.preWar.toLocaleString()} <small>${m.unit}</small></td>
+            <td class="${changeClass}">${changeSign}${m.change}%</td>
+            <td><span class="confidence-badge confidence-${m.confidence}">${cl.emoji || ''} ${cl.label || m.confidence}</span></td>
+            <td class="source-label">${m.source}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Energy risk matrix
+      const risks = [
+        { label: 'Hormuz Transit',      level: 'critical',  text: 'Virtually closed. Iranian mines + IRGC harassment render transit near-impossible.' },
+        { label: 'Persian Gulf Tankers',level: 'critical',  text: '47 tankers anchored outside Hormuz. 12 seized or damaged since Feb 28.' },
+        { label: 'Saudi Aramco',        level: 'high',      text: 'Aramco suspended Gulf loading. Operations normal, export blocked.' },
+        { label: 'European LNG',        level: 'high',      text: 'Qatar shipments halted. EU scrambling for US LNG + Norwegian alternatives.' },
+        { label: 'Refinery Capacity',   level: 'medium',    text: 'US refinery runs at 92%. Inventory drawdown accelerating.' },
+        { label: 'Asian Energy',        level: 'high',      text: 'Japan/South Korea emergency stockpile draws. China routing via Cape of Good Hope.' },
+      ];
+      document.getElementById('energy-risk-matrix').innerHTML = risks.map(r => `
+        <div class="risk-matrix-card risk-${r.level}">
+          <div class="risk-matrix-header">
+            <span class="risk-matrix-label">${r.label}</span>
+            <span class="risk-matrix-level threat-${r.level}">${r.level.toUpperCase()}</span>
+          </div>
+          <div class="risk-matrix-text">${r.text}</div>
+        </div>
+      `).join('');
+
+      // LNG supply chain
+      const lngRoutes = [
+        { route: 'Qatar → Europe (Hormuz)', status: 'disrupted',  detail: 'All loading suspended since Mar 1' },
+        { route: 'Qatar → Asia (Hormuz)',   status: 'disrupted',  detail: 'Rerouting via Cape of Good Hope — +14 day transit' },
+        { route: 'US LNG → Europe',         status: 'active',     detail: 'Surge loading at Sabine Pass, Freeport, Cameron' },
+        { route: 'Australia → Asia',        status: 'active',     detail: 'Northwest Shelf unaffected. Spot demand surge.' },
+        { route: 'Russia → China (pipe)',   status: 'active',     detail: 'Power of Siberia pipeline at full capacity' },
+        { route: 'Norway → Europe (pipe)',  status: 'active',     detail: 'Operating at 98% — capacity ceiling near' },
+      ];
+      document.getElementById('lng-chain').innerHTML = lngRoutes.map(r => `
+        <div class="supply-chain-row">
+          <div class="sc-route">${r.route}</div>
+          <div class="sc-status status-${r.status === 'active' ? 'green' : r.status === 'disrupted' ? 'red' : 'amber'}">${r.status.toUpperCase()}</div>
+          <div class="sc-detail">${r.detail}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('energy-share').innerHTML = UI.renderShareButtons(
+        'Energy crisis: Hormuz at 3% capacity, Brent crude at $112/bbl — live tracking via GeoWire',
+        'https://geowire.org/energy.html'
+      );
+
+      UI.init();
+      await API.loadMarketData();
+
+    })();
+  </script>
+
+</body>
+</html>

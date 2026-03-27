@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="meta-title">GeoWire — Article</title>
+  <meta name="description" id="meta-desc" content="GeoWire intelligence analysis." />
+
+  <meta property="og:title" id="og-title" content="GeoWire — Article" />
+  <meta property="og:description" id="og-desc" content="GeoWire intelligence analysis." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:type" content="article" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <!-- JSON-LD populated by script -->
+  <script id="json-ld" type="application/ld+json">{}</script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <!-- ARTICLE HERO -->
+    <section class="article-hero container" id="article-hero">
+      <!-- Populated by script -->
+    </section>
+
+    <!-- AD SLOT: TOP -->
+    <div class="container">
+      <div class="ad-slot" data-slot="article-top">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- ARTICLE BODY -->
+    <article class="article-layout container">
+
+      <!-- MAIN CONTENT -->
+      <div class="article-body" id="article-body">
+        <!-- Populated by script -->
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <!-- CONFIDENCE LEGEND -->
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Confidence Legend</div>
+          <div id="sidebar-confidence-legend"></div>
+        </div>
+
+        <!-- RELATED ARTICLES -->
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Related Analysis</div>
+          <div id="sidebar-related"></div>
+        </div>
+
+        <!-- MARKET SNAPSHOT -->
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Market Snapshot</div>
+          <div id="sidebar-markets"></div>
+        </div>
+
+        <!-- AD SLOT: SIDEBAR -->
+        <div class="ad-slot" data-slot="article-sidebar">
+          <span class="ad-label">Advertisement</span>
+        </div>
+
+      </aside>
+    </article>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="article-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="Get analysis to your inbox" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- MORE ANALYSIS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">More Analysis</h2>
+        <a href="analysis.html" class="section-link">All Articles →</a>
+      </div>
+      <div class="article-grid" id="more-articles"></div>
+    </section>
+
+    <!-- AD SLOT: BOTTOM -->
+    <div class="container">
+      <div class="ad-slot" data-slot="article-bottom">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    // ── Article template engine
+    // Usage: article-ghalibaf.html sets window.ARTICLE_ID before loading this template,
+    // OR override with URL param: ?article=ghalibaf
+    // The template finds the matching article in GEOWIRE.articles[] and renders it.
+
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('analysis');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      // Resolve article
+      const params = new URLSearchParams(window.location.search);
+      const articleId = window.ARTICLE_ID || params.get('article') || '';
+      const articles  = GEOWIRE.articles || [];
+      const article   = articles.find(a => a.id === articleId) || articles[0];
+
+      if (!article) {
+        document.getElementById('article-hero').innerHTML = '<p class="empty-state">Article not found.</p>';
+        UI.init();
+        return;
+      }
+
+      // Meta tags
+      document.title = article.title + ' — GeoWire';
+      document.getElementById('meta-title').textContent   = article.title + ' — GeoWire';
+      document.getElementById('meta-desc').content        = article.excerpt || article.summary || '';
+      document.getElementById('og-title').content         = article.title;
+      document.getElementById('og-desc').content          = article.excerpt || '';
+
+      // JSON-LD
+      const ld = {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": article.title,
+        "description": article.excerpt || '',
+        "datePublished": article.date || '',
+        "author": { "@type": "Organization", "name": article.author || 'GeoWire' },
+        "publisher": { "@type": "Organization", "name": "GeoWire", "url": "https://geowire.org" },
+        "url": "https://geowire.org/" + (article.href || '')
+      };
+      document.getElementById('json-ld').textContent = JSON.stringify(ld);
+
+      // Hero
+      const cl = GEOWIRE.confidenceLevels[article.confidence || 'multisource'] || {};
+      document.getElementById('article-hero').innerHTML = `
+        <div class="article-hero-inner">
+          <div class="article-hero-eyebrow">
+            <span class="article-category-badge">${(article.category || 'ANALYSIS').toUpperCase()}</span>
+            <span class="article-date">${article.date || ''}</span>
+            <span class="confidence-badge confidence-${article.confidence || 'multisource'}">${cl.emoji || ''} ${cl.label || ''}</span>
+          </div>
+          <h1 class="article-hero-title">${article.title}</h1>
+          ${article.subtitle ? `<div class="article-hero-subtitle">${article.subtitle}</div>` : ''}
+          <div class="article-hero-meta">
+            <span class="article-author">${article.author || 'GeoWire Analysts'}</span>
+            <span class="article-readtime">⏱ ${article.readTime || '8 min read'}</span>
+            <span class="article-updated">Updated: ${article.date || ''}</span>
+          </div>
+          ${article.excerpt ? `<p class="article-hero-excerpt">${article.excerpt}</p>` : ''}
+        </div>
+      `;
+
+      // Article body
+      const body = document.getElementById('article-body');
+      if (article.body) {
+        // article.body is array of sections: { type: 'h2'|'p'|'blockquote'|'callout'|'timeline', text, confidence }
+        body.innerHTML = article.body.map(section => {
+          const scl = GEOWIRE.confidenceLevels[section.confidence] || {};
+          switch (section.type) {
+            case 'h2':
+              return `<h2 class="article-h2">${section.text}</h2>`;
+            case 'h3':
+              return `<h3 class="article-h3">${section.text}</h3>`;
+            case 'p':
+              return `<p class="article-p">${section.text}${section.confidence ? ` <span class="inline-confidence confidence-${section.confidence}" title="${scl.description || ''}">${scl.emoji || ''}</span>` : ''}</p>`;
+            case 'blockquote':
+              return `<blockquote class="article-blockquote"><p>${section.text}</p>${section.attribution ? `<cite>${section.attribution}</cite>` : ''}</blockquote>`;
+            case 'callout':
+              return `<div class="article-callout callout-${section.variant || 'info'}"><strong>${section.label || 'Key Insight'}</strong><p>${section.text}</p></div>`;
+            case 'confidence-note':
+              return `<div class="confidence-note"><span class="confidence-badge confidence-${section.badge || 'inferred'}">${(GEOWIRE.confidenceLevels[section.badge||'inferred']?.emoji)||''} ${(GEOWIRE.confidenceLevels[section.badge||'inferred']?.label)||''}</span> <span>${section.text}</span></div>`;
+            case 'divider':
+              return `<hr class="article-divider" />`;
+            default:
+              return `<p class="article-p">${section.text || ''}</p>`;
+          }
+        }).join('');
+      } else {
+        body.innerHTML = `<p class="article-p">${article.excerpt || article.summary || 'Full article coming soon.'}</p>`;
+      }
+
+      // Sidebar: confidence legend
+      document.getElementById('sidebar-confidence-legend').innerHTML = Object.entries(GEOWIRE.confidenceLevels).map(([key, cl]) => `
+        <div class="sidebar-confidence-row">
+          <span class="confidence-badge confidence-${key}">${cl.emoji} ${cl.label}</span>
+          <span class="sidebar-confidence-desc">${cl.description}</span>
+        </div>
+      `).join('');
+
+      // Sidebar: related articles
+      const related = articles.filter(a => a.id !== articleId && a.category === article.category).slice(0, 3);
+      document.getElementById('sidebar-related').innerHTML = related.length > 0 ? related.map(r => `
+        <a href="${r.href || 'analysis.html'}" class="sidebar-related-link">
+          <div class="sidebar-related-cat">${(r.category || '').toUpperCase()}</div>
+          <div class="sidebar-related-title">${r.title}</div>
+        </a>
+      `).join('') : '<p class="empty-state-sm">No related articles yet.</p>';
+
+      // Sidebar: market snapshot (key 5)
+      const marketKeys = ['oil', 'gold', 'sp500', 'dollar', 'bitcoin'];
+      document.getElementById('sidebar-markets').innerHTML = marketKeys.map(k => {
+        const m = GEOWIRE.marketData[k];
+        if (!m) return '';
+        const up = m.change >= 0;
+        return `<div class="sidebar-market-row">
+          <span class="sidebar-market-label">${m.label}</span>
+          <span class="sidebar-market-val ${up ? 'change-up' : 'change-down'}">${up ? '+' : ''}${m.change}%</span>
+        </div>`;
+      }).join('');
+
+      // Share buttons
+      document.getElementById('article-share').innerHTML = UI.renderShareButtons(
+        article.title + ' — GeoWire analysis',
+        'https://geowire.org/' + (article.href || 'analysis.html')
+      );
+
+      // More articles grid (excluding current)
+      const more = articles.filter(a => a.id !== articleId).slice(0, 4);
+      document.getElementById('more-articles').innerHTML = more.map(a => UI.renderArticleCard(a)).join('');
+
+      UI.init();
+      await API.loadMarketData();
+    })();
+  </script>
+
+</body>
+</html>

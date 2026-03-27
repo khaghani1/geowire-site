@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Power Map | Who Controls What in Operation Epic Fury</title>
+  <meta name="description" content="Visual power map of the US-Iran conflict: who controls the narrative, the military advantage, the energy leverage, and the diplomatic high ground." />
+
+  <meta property="og:title" content="GeoWire — Power Map" />
+  <meta property="og:description" content="Who controls the narrative, the military advantage, the energy leverage, and the diplomatic high ground in Operation Epic Fury." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/powermap.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Power Map",
+    "description": "Visual power map of the US-Iran conflict — who controls which dimensions.",
+    "url": "https://geowire.org/powermap.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">⚡</div>
+        <h1 class="page-title">Power Map</h1>
+        <p class="page-sub">Who controls what — across every dimension of the conflict. Updated with each major development.</p>
+        <div class="demo-notice">
+          <span class="demo-badge-large">⚫ Analyst model</span>
+          All assessments are GeoWire inference. Subject to rapid change.
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERALL SCOREBOARD -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Overall Power Balance</h2>
+        <span class="confidence-badge confidence-inferred">⚫ Model-inferred</span>
+      </div>
+      <div class="power-scoreboard" id="power-scoreboard">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- DIMENSION BREAKDOWN -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Power by Dimension</h2>
+      </div>
+      <div class="power-dimensions" id="power-dimensions">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- NARRATIVE CONTROL -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Narrative Control</h2>
+        <span class="section-badge">6 Competing Frames</span>
+      </div>
+      <div class="narrative-grid" id="narrative-grid-pm">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- KEY LEVERAGE POINTS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Key Leverage Points</h2>
+      </div>
+      <div class="leverage-grid" id="leverage-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- POWER SHIFT TIMELINE -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">How Power Has Shifted</h2>
+      </div>
+      <div id="power-timeline"></div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="powermap-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="pm-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="Power analysis to your inbox" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('geopolitical');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      // Overall scoreboard
+      const dimensions = [
+        { dim: 'Military',       us: 88, iran: 22, note: 'US air superiority total. Iran IRGC decimated.' },
+        { dim: 'Economic',       us: 62, iran: 18, note: 'US absorbing shock; Iran economy in freefall.' },
+        { dim: 'Diplomatic',     us: 38, iran: 45, note: 'Iran winning Global South narrative; US isolated in UNGA.' },
+        { dim: 'Humanitarian',   us: 28, iran: 55, note: 'Iran casualties generating sympathy; US on defensive.' },
+        { dim: 'Energy Leverage',us: 35, iran: 40, note: 'Hormuz closure hurts both sides and global neutrals.' },
+        { dim: 'Intelligence',   us: 82, iran: 30, note: 'US ISR dominant; Iranian blackout limits their view too.' },
+        { dim: 'Information',    us: 55, iran: 35, note: 'US narrative leads West; Iran leads Persian media.' },
+        { dim: 'Legitimacy',     us: 42, iran: 52, note: 'UNGA vote 137-12 for ceasefire undercuts US posture.' },
+      ];
+
+      // Overall weighted score
+      const usTotal   = Math.round(dimensions.reduce((s,d) => s + d.us, 0) / dimensions.length);
+      const iranTotal = Math.round(dimensions.reduce((s,d) => s + d.iran, 0) / dimensions.length);
+
+      document.getElementById('power-scoreboard').innerHTML = `
+        <div class="scoreboard-card">
+          <div class="scoreboard-side us-side">
+            <div class="scoreboard-flag">🇺🇸</div>
+            <div class="scoreboard-name">United States</div>
+            <div class="scoreboard-score">${usTotal}<span class="score-denom">/100</span></div>
+            <div class="scoreboard-label">Overall Power Index</div>
+          </div>
+          <div class="scoreboard-divider">
+            <div class="vs-label">VS</div>
+            <div class="vs-day">Day <span id="sb-war-day">—</span></div>
+          </div>
+          <div class="scoreboard-side iran-side">
+            <div class="scoreboard-flag">🇮🇷</div>
+            <div class="scoreboard-name">Iran</div>
+            <div class="scoreboard-score">${iranTotal}<span class="score-denom">/100</span></div>
+            <div class="scoreboard-label">Overall Power Index</div>
+          </div>
+        </div>
+        <div class="scoreboard-note">Power index = GeoWire weighted composite across ${dimensions.length} dimensions. Higher = more control. Not a measure of moral legitimacy.</div>
+      `;
+
+      // Set war day
+      const warDay = Math.floor((new Date() - new Date('2026-02-28')) / 86400000) + 1;
+      const sbEl = document.getElementById('sb-war-day');
+      if (sbEl) sbEl.textContent = warDay;
+
+      // Dimension breakdown
+      document.getElementById('power-dimensions').innerHTML = dimensions.map(d => {
+        const usW   = d.us;
+        const iranW = d.iran;
+        const usAdv = usW > iranW ? 'us-adv' : '';
+        const irAdv = iranW > usW ? 'ir-adv' : '';
+        return `
+          <div class="power-dim-row">
+            <div class="power-dim-label">${d.dim}</div>
+            <div class="power-dim-bars">
+              <div class="power-bar-wrap us-bar-wrap">
+                <div class="power-bar us-bar ${usAdv}" style="width:${usW}%"><span class="power-bar-val">${usW}</span></div>
+              </div>
+              <div class="power-dim-note">${d.note}</div>
+              <div class="power-bar-wrap iran-bar-wrap">
+                <div class="power-bar iran-bar ${irAdv}" style="width:${iranW}%"><span class="power-bar-val">${iranW}</span></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Narrative frames
+      const narratives = GEOWIRE.narrativeFrames || [];
+      document.getElementById('narrative-grid-pm').innerHTML = narratives.length > 0
+        ? narratives.map(n => `
+          <div class="narrative-card">
+            <div class="narrative-source">${n.source}</div>
+            <div class="narrative-frame">${n.frame}</div>
+            <div class="narrative-text">${n.text}</div>
+            <div class="narrative-bias">Framing: <span class="bias-tag">${n.bias || 'unclassified'}</span></div>
+          </div>
+        `).join('')
+        : [
+          { source: 'US/Western Media', frame: 'Surgical counter-proliferation',  text: 'Precision strikes on IRGC targets eliminate nuclear threat. Iranian people vs regime.', bias: 'Western coalition' },
+          { source: 'Iranian State Media', frame: 'US imperialism / resistance',   text: 'American aggression on a sovereign nation. Martyrdom narrative.', bias: 'Tehran' },
+          { source: 'Russian RT/Media',   frame: 'US hegemony collapse',           text: 'Unlawful unilateral action. Russia and China defending international law.', bias: 'Moscow' },
+          { source: 'Arab Street',        frame: 'Muslim solidarity vs occupation', text: 'Tehran as proxy for regional grievance regardless of IRGC record.', bias: 'Pan-Arab' },
+          { source: 'Global South / UNGA',frame: 'Rules-based order hypocrisy',    text: '137 countries voted for ceasefire. US isolated. Double standard on sovereignty.', bias: 'Non-aligned' },
+          { source: 'Israeli Media',      frame: 'Existential threat eliminated',   text: 'IRGC decimated. Nuclear timeline set back decades. Regional deterrence restored.', bias: 'Jerusalem' },
+        ].map(n => `
+          <div class="narrative-card">
+            <div class="narrative-source">${n.source}</div>
+            <div class="narrative-frame">${n.frame}</div>
+            <div class="narrative-text">${n.text}</div>
+            <div class="narrative-bias">Framing: <span class="bias-tag">${n.bias}</span></div>
+          </div>
+        `).join('');
+
+      // Leverage grid
+      const leverages = [
+        { holder: '🇺🇸 US',     leverage: 'Air dominance',      desc: 'Total. Hormuz airspace owned by US/coalition. No contested air after Day 3.' },
+        { holder: '🇮🇷 Iran',   leverage: 'Hormuz chokepoint',  desc: 'Even at 3% capacity, Iran\'s ability to threaten tankers creates global pain.' },
+        { holder: '🇮🇷 Iran',   leverage: 'Humanitarian optics',desc: '3,220+ dead civilians generates ceasefire pressure on US allies.' },
+        { holder: '🇺🇸 US',     leverage: 'Financial system',    desc: 'SWIFT, dollar settlement, global credit — all US instruments.' },
+        { holder: '🇨🇳 China',  leverage: 'UNSC veto',          desc: 'Blocks any binding multilateral action, extending conflict.' },
+        { holder: '🇷🇺 Russia', leverage: 'Energy fill',         desc: 'Benefits from every day of Hormuz closure through oil price premium.' },
+        { holder: '🇮🇷 Iran',   leverage: 'Proxy threats',      desc: 'Houthis, Hezbollah, PMF — credible threat multipliers even if degraded.' },
+        { holder: '🇺🇸 US',     leverage: 'Intelligence',       desc: 'ISR dominance enables precision targeting. Iran largely blind.' },
+      ];
+
+      document.getElementById('leverage-grid').innerHTML = leverages.map(l => `
+        <div class="leverage-card">
+          <div class="leverage-header">
+            <span class="leverage-holder">${l.holder}</span>
+            <span class="leverage-type">${l.leverage}</span>
+          </div>
+          <div class="leverage-desc">${l.desc}</div>
+        </div>
+      `).join('');
+
+      // Power shift timeline
+      const shifts = [
+        { date: 'Day 1–3',   text: 'US establishes total air superiority. IRGC military leadership decimated. Iran retaliates with missiles — limited damage.', shift: 'us' },
+        { date: 'Day 4–7',   text: 'Hormuz closes. Global energy markets shock. Iran wins economic leverage dimension despite military defeat.', shift: 'iran' },
+        { date: 'Day 8–14',  text: 'UNGA 137-12 vote. Global diplomatic isolation of US becomes visible. Iran wins legitimacy battle in Global South.', shift: 'iran' },
+        { date: 'Day 15–21', text: 'S&P -12%. US domestic economic pain grows. Iran\'s economic position collapses faster — freefall. Net: US still ahead.', shift: 'neutral' },
+        { date: 'Day 22–25', text: 'US sortie rate declining. Back-channel signals emerging. Stalemate forming: US cannot force quick political settlement; Iran cannot resist indefinitely.', shift: 'neutral' },
+      ];
+
+      document.getElementById('power-timeline').innerHTML = `<div class="power-shift-list">` +
+        shifts.map(s => `
+          <div class="power-shift-item shift-${s.shift}">
+            <div class="ps-date">${s.date}</div>
+            <div class="ps-text">${s.text}</div>
+            <div class="ps-indicator">${s.shift === 'us' ? '🇺🇸 Advantage shifts to US' : s.shift === 'iran' ? '🇮🇷 Advantage shifts to Iran' : '⚖️ Stalemate dynamic'}</div>
+          </div>
+        `).join('') + `</div>`;
+
+      document.getElementById('pm-share').innerHTML = UI.renderShareButtons(
+        'Power map of the US-Iran conflict: US 55/100 military, Iran 52/100 legitimacy — GeoWire analysis',
+        'https://geowire.org/powermap.html'
+      );
+
+      UI.init();
+    })();
+  </script>
+
+</body>
+</html>

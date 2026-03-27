@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Analysis | In-Depth Intelligence Reports on Operation Epic Fury</title>
+  <meta name="description" content="Long-form intelligence analysis: Ghalibaf's strategic position, ceasefire mathematics, energy crisis modeling, and the post-IRGC Iran question." />
+
+  <meta property="og:title" content="GeoWire — Analysis &amp; Intelligence Reports" />
+  <meta property="og:description" content="Who is Ghalibaf? What does a ceasefire look like? What happens to Iran after the IRGC? GeoWire's deep analysis." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/analysis.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "GeoWire — Analysis",
+    "description": "In-depth intelligence analysis of Operation Epic Fury and the US-Iran conflict.",
+    "url": "https://geowire.org/analysis.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">📝</div>
+        <h1 class="page-title">Analysis</h1>
+        <p class="page-sub">Long-form intelligence analysis. Not breaking news — deep understanding.</p>
+      </div>
+    </section>
+
+    <!-- HERO ARTICLE (featured) -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Featured Analysis</h2>
+        <span class="section-badge live-badge-text">New</span>
+      </div>
+      <div id="hero-article-card"></div>
+    </section>
+
+    <!-- CATEGORY FILTER TABS -->
+    <div class="container">
+      <div class="filter-tabs" id="article-filter-tabs">
+        <button class="filter-tab active" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="military">Military</button>
+        <button class="filter-tab" data-filter="economic">Economic</button>
+        <button class="filter-tab" data-filter="diplomatic">Diplomatic</button>
+        <button class="filter-tab" data-filter="humanitarian">Humanitarian</button>
+      </div>
+    </div>
+
+    <!-- ARTICLE GRID -->
+    <section class="section container">
+      <div class="article-grid" id="article-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="analysis-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- CONTRADICTION CARDS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Key Contradictions</h2>
+        <span class="section-badge">What the data doesn't explain</span>
+      </div>
+      <div class="contradiction-grid" id="contradiction-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- UPDATE LOG -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Analysis Update Log</h2>
+      </div>
+      <div class="update-log" id="analysis-update-log">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- EMAIL CAPTURE -->
+    <section class="section container">
+      <div class="email-capture-block">
+        <div class="email-capture-icon">📡</div>
+        <h3 class="email-capture-title">Deep Analysis — Direct to Inbox</h3>
+        <p class="email-capture-sub">New long-form pieces as soon as they publish. No noise.</p>
+        <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+          <input type="email" class="email-input" placeholder="your@email.com" required aria-label="Email address" />
+          <button type="submit" class="email-submit-btn">Subscribe</button>
+        </form>
+        <p class="email-capture-disclaimer" id="email-status"></p>
+      </div>
+    </section>
+
+    <!-- AD SLOT BOTTOM -->
+    <div class="container">
+      <div class="ad-slot" data-slot="analysis-bottom">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('analysis');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      const articles = GEOWIRE.articles || [];
+
+      // Hero article (first article = featured)
+      const hero = articles[0];
+      if (hero) {
+        document.getElementById('hero-article-card').innerHTML = `
+          <div class="hero-article-card article-${hero.category || 'analysis'}">
+            <div class="hero-article-eyebrow">
+              <span class="article-category-badge">${(hero.category || 'ANALYSIS').toUpperCase()}</span>
+              <span class="article-date">${hero.date || ''}</span>
+              ${UI.renderLiveBadge(false)}
+            </div>
+            <h2 class="hero-article-title">${hero.title}</h2>
+            <p class="hero-article-excerpt">${hero.excerpt || hero.summary || ''}</p>
+            <div class="hero-article-meta">
+              <span class="article-author">${hero.author || 'GeoWire Analysts'}</span>
+              <span class="article-readtime">${hero.readTime || '8 min read'}</span>
+            </div>
+            <div class="hero-article-footer">
+              <a href="${hero.href || 'analysis.html'}" class="hero-article-cta">Read Full Analysis →</a>
+              ${UI.renderShareButtons(hero.title + ' — GeoWire analysis', 'https://geowire.org/' + (hero.href || 'analysis.html'))}
+            </div>
+          </div>
+        `;
+      }
+
+      // Article grid
+      const allArticles = articles.slice(1);
+      const grid = document.getElementById('article-grid');
+
+      function renderArticles(filter) {
+        const filtered = filter === 'all' ? allArticles : allArticles.filter(a => a.category === filter);
+        if (filtered.length === 0) {
+          grid.innerHTML = '<p class="empty-state">No articles in this category yet.</p>';
+          return;
+        }
+        grid.innerHTML = filtered.map(a => UI.renderArticleCard(a)).join('');
+      }
+
+      renderArticles('all');
+
+      // Filter tabs
+      document.getElementById('article-filter-tabs').addEventListener('click', e => {
+        const btn = e.target.closest('.filter-tab');
+        if (!btn) return;
+        document.querySelectorAll('#article-filter-tabs .filter-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderArticles(btn.dataset.filter);
+      });
+
+      // Contradiction cards
+      const contradictions = [
+        {
+          title: 'US says strikes precision — HRANA says 3,220 dead',
+          text: 'CENTCOM characterizes the campaign as "surgical" targeting IRGC infrastructure. Independent monitors report over 3,200 civilian casualties. The gap cannot be explained by targeting doctrine alone.',
+          resolution: 'Unresolved — verification blocked by internet blackout',
+        },
+        {
+          title: 'Ceasefire "close" since Week 1 — still no deal 25 days in',
+          text: 'Multiple outlets have reported imminent ceasefire windows: WSJ (Mar 8), Reuters (Mar 14), FT (Mar 20). None materialized. Either leaks are tactical, or each side has non-overlapping red lines.',
+          resolution: 'Hypothesis: Iran demanding full halt; US demanding preconditions Iran cannot accept',
+        },
+        {
+          title: 'Oil at $112 — but US shale absorbing, so why market panic?',
+          text: 'US domestic oil production is at record levels. The S&P selloff suggests markets fear a broader conflict shock beyond energy — possibly a dollar crisis or SWIFT disruption.',
+          resolution: 'Secondary effects (inflation, rate pressure) driving the selloff more than oil directly',
+        },
+        {
+          title: 'Iran internet at 1% — but Ghalibaf is signaling',
+          text: 'If Iran\'s communications infrastructure is at 1% capacity, how is the regime coordinating nationally and sending diplomatic signals? Suggests the internet blackout is selective, not total.',
+          resolution: 'Military/government networks on isolated backbone — civilian internet destroyed, not theirs',
+        },
+      ];
+
+      document.getElementById('contradiction-grid').innerHTML = contradictions.map(c => `
+        <div class="contradiction-card">
+          <div class="contradiction-title">${c.title}</div>
+          <div class="contradiction-text">${c.text}</div>
+          <div class="contradiction-resolution">
+            <strong>Working hypothesis:</strong> ${c.resolution}
+          </div>
+        </div>
+      `).join('');
+
+      // Update log
+      const updates = GEOWIRE.updateLog || [];
+      if (updates.length === 0) {
+        document.getElementById('analysis-update-log').innerHTML = '<p class="empty-state">No updates logged yet.</p>';
+      } else {
+        document.getElementById('analysis-update-log').innerHTML = updates.map(u => {
+          const cl = GEOWIRE.confidenceLevels[u.confidence] || {};
+          return `
+            <div class="update-log-item">
+              <div class="update-log-time">${u.timestamp ? new Date(u.timestamp).toUTCString().replace(' GMT', ' UTC') : ''}</div>
+              <div class="update-log-text">${u.text}</div>
+              ${u.confidence ? `<span class="confidence-badge confidence-${u.confidence}">${cl.emoji || ''} ${cl.label || u.confidence}</span>` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      UI.init();
+    })();
+  </script>
+
+</body>
+</html>

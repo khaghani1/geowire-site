@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Humanitarian Crisis | Iran Casualties, Displacement &amp; Infrastructure</title>
+  <meta name="description" content="Tracking the human cost of Operation Epic Fury: Iranian casualties, displacement, internet blackout, medical system collapse, and civilian infrastructure damage." />
+
+  <meta property="og:title" content="GeoWire — Humanitarian Crisis Tracker" />
+  <meta property="og:description" content="3,220+ dead. 800,000+ displaced. 1% internet. Tracking the human cost of the US-Iran conflict." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/humanitarian.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Humanitarian Crisis",
+    "description": "Tracking casualties, displacement, internet blackout, and infrastructure damage.",
+    "url": "https://geowire.org/humanitarian.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">🏥</div>
+        <h1 class="page-title">Humanitarian Crisis</h1>
+        <p class="page-sub">The human cost of Operation Epic Fury — tracking casualties, displacement, communications collapse, and civilian infrastructure damage.</p>
+        <div class="demo-notice">
+          Data sourced from HRANA, NetBlocks, UN OCHA, and MSF. Independent verification limited by internet blackout.
+        </div>
+      </div>
+    </section>
+
+    <!-- CASUALTY TRACKER -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Casualty Tracker</h2>
+        <span id="hum-live-badge"></span>
+      </div>
+      <div class="casualty-grid" id="casualty-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- DISPLACEMENT -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Displacement &amp; Refugee Flows</h2>
+        <span class="confidence-badge confidence-singlesource">🟠 Single-source</span>
+      </div>
+      <div class="displacement-grid" id="displacement-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- INTERNET FREEDOM -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Internet &amp; Communications</h2>
+        <span class="confidence-badge confidence-confirmed">🟢 Confirmed</span>
+      </div>
+      <div class="internet-panel" id="internet-panel">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- INFRASTRUCTURE DAMAGE -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Infrastructure Damage</h2>
+        <span class="confidence-badge confidence-inferred">⚫ Model-inferred</span>
+      </div>
+      <div class="infra-grid" id="infra-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- MEDICAL SYSTEM -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Medical System Status</h2>
+      </div>
+      <div class="metric-rows" id="medical-rows">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- HUMANITARIAN AID -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Humanitarian Aid Access</h2>
+      </div>
+      <div class="aid-grid" id="aid-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="humanitarian-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="hum-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="Humanitarian briefings to your inbox" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('humanitarian');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+      document.getElementById('hum-live-badge').innerHTML = UI.renderLiveBadge(false);
+
+      const humData = GEOWIRE.humanitarianData || {};
+
+      // Casualty grid
+      const casualties = [
+        { group: 'Iranian Civilian Dead',       value: '3,220+',    note: 'HRANA — independent verification extremely limited', badge: 'singlesource' },
+        { group: 'Iranian Military Dead',        value: '8,400+',    note: 'GeoWire model estimate — IRGC + regular forces', badge: 'inferred' },
+        { group: 'IRGC Senior Officials Killed', value: '70+',       note: 'GeoWire / open-source tracking', badge: 'inferred' },
+        { group: 'US Military KIA',              value: '13',        note: 'DoD confirmed — first week retaliatory strikes', badge: 'confirmed' },
+        { group: 'US Military Wounded',          value: '47',        note: 'DoD — Qatar and Bahrain base attacks', badge: 'confirmed' },
+        { group: 'Coalition Military KIA',       value: '4',         note: 'Bahrain (2), UAE (2)', badge: 'multisource' },
+        { group: 'Contractor / Civilian',        value: '22',        note: 'Third-country nationals at US bases', badge: 'multisource' },
+        { group: 'Total Estimated Dead',         value: '11,700+',   note: 'Composite GeoWire model — all parties', badge: 'inferred' },
+      ];
+
+      document.getElementById('casualty-grid').innerHTML = casualties.map(c => {
+        const cl = GEOWIRE.confidenceLevels[c.badge] || {};
+        return `
+          <div class="casualty-card">
+            <div class="casualty-value">${c.value}</div>
+            <div class="casualty-label">${c.group}</div>
+            <div class="casualty-note">${c.note}</div>
+            <span class="confidence-badge confidence-${c.badge}">${cl.emoji || ''} ${cl.label || c.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Displacement
+      const displacement = [
+        { region: 'Tehran Region (IDP)',     count: '800,000+', note: 'UN estimate — internal displacement to rural areas', badge: 'singlesource' },
+        { region: 'Khuzestan Province',      count: '220,000+', note: 'Oil infrastructure strikes — civilian evacuation', badge: 'singlesource' },
+        { region: 'Iraq (Iranian refugees)', count: '45,000+',  note: 'UNHCR — border crossing surge at Khosravi and Parvizkhan', badge: 'multisource' },
+        { region: 'Turkey (Iranian refugees)',count: '28,000+', note: 'Turkish interior ministry — border intake accelerating', badge: 'singlesource' },
+        { region: 'Total Displaced',         count: '1.1M+',    note: 'GeoWire composite — IDP + cross-border', badge: 'inferred' },
+      ];
+
+      document.getElementById('displacement-grid').innerHTML = displacement.map(d => {
+        const cl = GEOWIRE.confidenceLevels[d.badge] || {};
+        return `
+          <div class="displacement-card">
+            <div class="disp-count">${d.count}</div>
+            <div class="disp-region">${d.region}</div>
+            <div class="disp-note">${d.note}</div>
+            <span class="confidence-badge confidence-${d.badge}">${cl.emoji || ''} ${cl.label || d.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Internet panel
+      document.getElementById('internet-panel').innerHTML = `
+        <div class="internet-stats-grid">
+          <div class="internet-stat">
+            <div class="internet-stat-value threat-critical">1%</div>
+            <div class="internet-stat-label">Iran Internet Connectivity</div>
+            <div class="internet-stat-note">Normal baseline = 100% · Source: NetBlocks (Mar 5)</div>
+          </div>
+          <div class="internet-stat">
+            <div class="internet-stat-value">99%</div>
+            <div class="internet-stat-label">Mobile Networks Down</div>
+            <div class="internet-stat-note">IranCel, MCI, Rightel — all disrupted</div>
+          </div>
+          <div class="internet-stat">
+            <div class="internet-stat-value">Day 19</div>
+            <div class="internet-stat-label">Blackout Duration</div>
+            <div class="internet-stat-note">Longest internet shutdown in Iranian history</div>
+          </div>
+          <div class="internet-stat">
+            <div class="internet-stat-value">+8,400%</div>
+            <div class="internet-stat-label">VPN Downloads in Iran</div>
+            <div class="internet-stat-note">Psiphon and Lantern — pre-blackout surge</div>
+          </div>
+        </div>
+        <div class="internet-compare">
+          <div class="ic-label">Comparison Context</div>
+          <div class="ic-grid">
+            <div class="ic-item"><span class="ic-event">Ethiopia (Nov 2021)</span> <span class="ic-pct">50% disruption (worst prior case)</span></div>
+            <div class="ic-item"><span class="ic-event">Iran (2019 protests)</span> <span class="ic-pct">96% disruption for 5 days</span></div>
+            <div class="ic-item ic-current"><span class="ic-event">Iran NOW (Operation Epic Fury)</span> <span class="ic-pct threat-critical">99% disruption — Day 19</span></div>
+          </div>
+        </div>
+      `;
+
+      // Infrastructure damage
+      const infra = [
+        { category: 'Power Grid',        status: 'CRITICAL',  detail: 'Multiple substations destroyed. Rolling blackouts across 11 provinces. 40% capacity.', badge: 'inferred' },
+        { category: 'Water Systems',     status: 'DEGRADED',  detail: 'Pump failures in Tehran, Isfahan. Contamination risk in Khuzestan.', badge: 'inferred' },
+        { category: 'Oil Infrastructure',status: 'CRITICAL',  detail: 'Kharg Island export terminal struck Mar 2. Abadan refinery offline.', badge: 'multisource' },
+        { category: 'Military Sites',    status: 'DESTROYED', detail: '150+ IRGC sites struck Day 1. Natanz access road destroyed.', badge: 'confirmed' },
+        { category: 'Communications',    status: 'CRITICAL',  detail: 'Fiber backbone cut. Satellite uplinks jammed. See internet panel above.', badge: 'confirmed' },
+        { category: 'Hospitals',         status: 'STRAINED',  detail: 'WHO: 12 hospitals damaged. 68% bed capacity. Blood supply critical.', badge: 'singlesource' },
+        { category: 'Roads / Bridges',   status: 'DAMAGED',   detail: '23 key bridges on Tehran-Iraq route destroyed. Humanitarian convoy blocked.', badge: 'inferred' },
+      ];
+
+      document.getElementById('infra-grid').innerHTML = infra.map(i => {
+        const cl = GEOWIRE.confidenceLevels[i.badge] || {};
+        const threatLevel = { 'CRITICAL': 'critical', 'DESTROYED': 'critical', 'DEGRADED': 'high', 'STRAINED': 'high', 'DAMAGED': 'medium' }[i.status] || 'medium';
+        return `
+          <div class="infra-card">
+            <div class="infra-header">
+              <span class="infra-category">${i.category}</span>
+              <span class="infra-status threat-${threatLevel}">${i.status}</span>
+            </div>
+            <div class="infra-detail">${i.detail}</div>
+            <span class="confidence-badge confidence-${i.badge}">${cl.emoji || ''} ${cl.label || i.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Medical rows
+      const medical = [
+        { label: 'Functioning hospitals (Tehran)', value: '34 of 58',     note: 'WHO field assessment Mar 18', badge: 'singlesource' },
+        { label: 'Blood supply status',             value: 'CRITICAL',     note: 'Iranian Red Crescent — supplies for 3 days', badge: 'singlesource' },
+        { label: 'MSF teams on ground',             value: '0',            note: 'MSF expelled Mar 3. Unable to operate.', badge: 'confirmed' },
+        { label: 'Medical evacuations (foreign)',   value: '1,200+',       note: 'Dual nationals — Turkey, Germany airlifts', badge: 'multisource' },
+        { label: 'Medicine supply',                 value: 'SEVERE SHORTAGE', note: 'Sanctions + logistics collapse', badge: 'multisource' },
+      ];
+
+      document.getElementById('medical-rows').innerHTML = medical.map(m => {
+        const cl = GEOWIRE.confidenceLevels[m.badge] || {};
+        return `
+          <div class="metric-row">
+            <div class="metric-label">${m.label}</div>
+            <div class="metric-value ${m.value === 'CRITICAL' || m.value === 'SEVERE SHORTAGE' ? 'threat-critical' : ''}">${m.value}</div>
+            <div class="metric-note">${m.note}</div>
+            <span class="confidence-badge confidence-${m.badge}">${cl.emoji || ''} ${cl.label || m.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Aid grid
+      const aidOrgs = [
+        { org: 'ICRC',          status: 'LIMITED',   note: 'Minimal access. 3 teams in Kurdistan province only.' },
+        { org: 'UNHCR',         status: 'BORDER',    note: 'Operational at Iraq/Turkey borders. No interior access.' },
+        { org: 'WFP',           status: 'SUSPENDED', note: 'Food aid operations suspended Mar 4. Staff evacuated.' },
+        { org: 'MSF',           status: 'EXPELLED',  note: 'All teams expelled Mar 3 by IRGC order.' },
+        { org: 'WHO',           status: 'REMOTE',    note: 'Remote coordination only. Medical supplies airlifted to Turkey for handoff.' },
+        { org: 'UN OCHA',       status: 'BLOCKED',   note: 'Humanitarian access formally denied by interim government.' },
+      ];
+
+      document.getElementById('aid-grid').innerHTML = aidOrgs.map(a => {
+        const sc = { 'LIMITED': 'amber', 'BORDER': 'amber', 'SUSPENDED': 'red', 'EXPELLED': 'red', 'REMOTE': 'amber', 'BLOCKED': 'red' }[a.status] || 'amber';
+        return `
+          <div class="aid-card">
+            <div class="aid-org">${a.org}</div>
+            <div class="aid-status status-${sc}">${a.status}</div>
+            <div class="aid-note">${a.note}</div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('hum-share').innerHTML = UI.renderShareButtons(
+        '3,220+ dead. 1.1M displaced. 1% internet. The human cost of the Iran war — GeoWire tracker',
+        'https://geowire.org/humanitarian.html'
+      );
+
+      UI.init();
+    })();
+  </script>
+
+</body>
+</html>

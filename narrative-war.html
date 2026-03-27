@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Narrative War | Information Operations &amp; Competing Frames</title>
+  <meta name="description" content="Track the information war around Operation Epic Fury: competing narratives, disinformation, media framing, and who is winning the global story." />
+
+  <meta property="og:title" content="GeoWire — Narrative War" />
+  <meta property="og:description" content="Six competing narratives. One conflict. Track how each side is telling the story of Operation Epic Fury." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/narrative-war.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Narrative War",
+    "description": "Competing narratives, information operations, and media framing analysis for Operation Epic Fury.",
+    "url": "https://geowire.org/narrative-war.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">📢</div>
+        <h1 class="page-title">Narrative War</h1>
+        <p class="page-sub">Every conflict has multiple truths. Track how Operation Epic Fury is being told — and by whom — across the global information environment.</p>
+        <div class="demo-notice">
+          GeoWire tracks framing, not truth-value. Presenting a narrative does not endorse it. All narratives labeled by perceived source and bias.
+        </div>
+      </div>
+    </section>
+
+    <!-- NARRATIVE OVERVIEW -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">6 Competing Narratives</h2>
+        <span id="nw-live-badge"></span>
+      </div>
+      <div class="narrative-full-grid" id="narrative-full-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- INFORMATION OPERATIONS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Known Information Operations</h2>
+        <span class="confidence-badge confidence-multisource">🟡 Multi-source</span>
+      </div>
+      <div class="info-ops-grid" id="info-ops-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- DISINFORMATION TRACKER -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Disinformation Tracker</h2>
+        <span class="section-badge">Fact-checked claims</span>
+      </div>
+      <div class="disinfo-list" id="disinfo-list">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- MEDIA COVERAGE MAP -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Media Coverage by Region</h2>
+      </div>
+      <div class="media-coverage-grid" id="media-coverage-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="narrative-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="nw-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="Narrative analysis to your inbox" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('analysis');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+      document.getElementById('nw-live-badge').innerHTML = UI.renderLiveBadge(false);
+
+      // Full narrative cards
+      const narratives = GEOWIRE.narrativeFrames && GEOWIRE.narrativeFrames.length > 0
+        ? GEOWIRE.narrativeFrames
+        : [
+          { source: 'US / Western Coalition', frame: 'Surgical counter-proliferation', bias: 'Washington / Tel Aviv', text: 'Operation Epic Fury is a precision campaign against IRGC military infrastructure — not a war on the Iranian people. The strikes eliminated an existential nuclear threat. Every target was a legitimate military objective. Iranian civilians are victims of the IRGC regime, not US policy.', audienceReach: 'Western democracies, ~2.1B media audience', confidence: 'confirmed' },
+          { source: 'Islamic Republic of Iran', frame: 'American imperialism and resistance', bias: 'Tehran', text: 'The United States launched an unprovoked war of aggression against a sovereign nation. The Islamic Republic is defending its people, its sovereignty, and the Muslim world. Every shahid (martyr) strengthens the resistance. Victory is inevitable.', audienceReach: 'Iran domestic, Persian diaspora, Shia communities', confidence: 'confirmed' },
+          { source: 'Russian State Media (RT, Sputnik)', frame: 'US hegemony collapsing', bias: 'Moscow', text: 'America\'s unilateral aggression exposes the bankruptcy of the "rules-based international order" — a US construct designed to legitimize its own empire. Russia and China stand with international law. The world is watching the end of American dominance.', audienceReach: 'Russia, Eastern Europe, MENA, ~600M reach', confidence: 'multisource' },
+          { source: 'Chinese State Media (CGTN, Xinhua)', frame: 'Strategic stability under threat', bias: 'Beijing', text: 'US military action destabilizes the global energy market and threatens peaceful development worldwide. China calls for an immediate ceasefire and negotiated solution. The international community must reject hegemonism.', audienceReach: 'China, Southeast Asia, Africa, ~1.4B reach', confidence: 'confirmed' },
+          { source: 'Arab Street / Al-Jazeera', frame: 'Muslim solidarity vs aggression', bias: 'Pan-Arab / Qatar', text: 'Regardless of the IRGC\'s record in Arab countries, US bombs falling on a Muslim-majority nation awakens deep solidarity. The same power that bombed Iraq, Libya, and Syria is now bombing Iran. Who is next?', audienceReach: 'Arab world, ~400M reach', confidence: 'multisource' },
+          { source: 'Global South / Non-Aligned', frame: 'Rules-based order hypocrisy exposed', bias: 'Non-aligned bloc', text: '137 nations at the UN voted for ceasefire. The US blocked it. One set of rules for powerful nations, another for everyone else. If this is allowed, no nation\'s sovereignty is safe. The international order must be reformed.', audienceReach: 'Africa, Latin America, South/Southeast Asia', confidence: 'confirmed' },
+        ];
+
+      document.getElementById('narrative-full-grid').innerHTML = narratives.map(n => {
+        const cl = GEOWIRE.confidenceLevels[n.confidence || 'multisource'] || {};
+        return `
+          <div class="narrative-full-card">
+            <div class="nf-header">
+              <div class="nf-source">${n.source}</div>
+              <div class="nf-bias-tag">${n.bias}</div>
+            </div>
+            <div class="nf-frame">"${n.frame}"</div>
+            <div class="nf-text">${n.text}</div>
+            ${n.audienceReach ? `<div class="nf-reach">📡 Audience reach: <strong>${n.audienceReach}</strong></div>` : ''}
+            <div class="nf-footer">
+              <span class="confidence-badge confidence-${n.confidence || 'multisource'}">${cl.emoji || ''} ${cl.label || ''}</span>
+              ${UI.renderShareButtons(`"${n.frame}" — Competing narrative in Operation Epic Fury via GeoWire`, 'https://geowire.org/narrative-war.html')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Information operations
+      const infoOps = [
+        { actor: '🇺🇸 CENTCOM',   op: 'Precision narrative management', desc: 'Daily BDA (Battle Damage Assessment) releases emphasizing military targets, low civilian casualties. Press embeds limited. No independent verification possible.', badge: 'confirmed' },
+        { actor: '🇮🇷 Iran',      op: 'Internet blackout',              desc: 'Iran\'s communications blackout (99% internet down) also blocks out independent civilian reporting — intentional or not, it prevents verification of casualty claims.', badge: 'confirmed' },
+        { actor: '🇷🇺 Russia',    op: 'Amplification of civilian casualties', desc: 'RT and affiliated outlets running 24h casualty footage. Some verified, some origin unclear. Goal: pressure US allies.', badge: 'multisource' },
+        { actor: 'Unknown',        op: 'Deepfake Ghalibaf speech',       desc: 'GeoWire flagged a widely-shared "Ghalibaf ceasefire speech" on March 21 as likely AI-generated. Iran state media denied origin.', badge: 'singlesource' },
+        { actor: '🇮🇱 Israel',    op: 'IRGC leadership targeting PR',   desc: 'Israeli intelligence releasing names and photos of eliminated IRGC commanders faster than US CENTCOM — calibrated to deter reconstitution.', badge: 'multisource' },
+      ];
+
+      document.getElementById('info-ops-grid').innerHTML = infoOps.map(io => {
+        const cl = GEOWIRE.confidenceLevels[io.badge] || {};
+        return `
+          <div class="info-op-card">
+            <div class="io-header">
+              <span class="io-actor">${io.actor}</span>
+              <span class="io-op">${io.op}</span>
+            </div>
+            <div class="io-desc">${io.desc}</div>
+            <span class="confidence-badge confidence-${io.badge}">${cl.emoji || ''} ${cl.label || io.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Disinformation tracker
+      const disinfo = [
+        { claim: '"US dropped depleted uranium bombs on Tehran"',       verdict: 'FALSE',    evidence: 'No verified evidence. Originated from Iranian state TV, amplified by RT. CENTCOM denied. DU not used in B-2 payload types deployed.', badge: 'confirmed' },
+        { claim: '"Ghalibaf signed ceasefire document"',               verdict: 'FALSE',    evidence: 'Viral video on March 21 was AI-generated. GeoWire verified via Hive Moderation analysis. No ceasefire signed.', badge: 'singlesource' },
+        { claim: '"US carrier struck by Iranian missile"',             verdict: 'UNVERIFIED', evidence: 'Claim circulated March 12 across Persian Telegram. CENTCOM denied. No satellite confirmation. Rated unverified.', badge: 'singlesource' },
+        { claim: '"Iranian civilian death toll is 50,000+"',           verdict: 'DISPUTED',  evidence: 'Claim from Iranian exile groups. HRANA estimates 3,220. GeoWire model inference 11,700 including military. 50,000+ unsubstantiated.', badge: 'disputed' },
+        { claim: '"Qatar secretly funding IRGC weapons resupply"',     verdict: 'UNVERIFIED', evidence: 'Claim from single Israeli source on March 18. Qatar denied. Inconsistent with Qatar hosting US Al Udeid base. Unverified.', badge: 'singlesource' },
+      ];
+
+      document.getElementById('disinfo-list').innerHTML = disinfo.map(d => {
+        const cl = GEOWIRE.confidenceLevels[d.badge] || {};
+        const vClass = { 'FALSE': 'disinfo-false', 'UNVERIFIED': 'disinfo-unverified', 'DISPUTED': 'disinfo-disputed', 'TRUE': 'disinfo-true' }[d.verdict] || '';
+        return `
+          <div class="disinfo-card ${vClass}">
+            <div class="disinfo-header">
+              <div class="disinfo-claim">${d.claim}</div>
+              <div class="disinfo-verdict verdict-${d.verdict.toLowerCase()}">${d.verdict}</div>
+            </div>
+            <div class="disinfo-evidence">${d.evidence}</div>
+            <span class="confidence-badge confidence-${d.badge}">${cl.emoji || ''} ${cl.label || d.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Media coverage
+      const mediaCoverage = [
+        { region: 'United States',   dominant: 'CENTCOM briefings, defense correspondent embed',        tone: 'Pro-coalition', access: 'Limited independent' },
+        { region: 'Western Europe',  dominant: 'Independent outlets + wire services',                    tone: 'Critical of both, pro-ceasefire', access: 'Good' },
+        { region: 'Russia',          dominant: 'RT, Sputnik, Tass — state-controlled',                  tone: 'Pro-Iran / anti-US', access: 'Filtered' },
+        { region: 'China',           dominant: 'CGTN, Xinhua, Global Times',                            tone: 'Anti-US, ceasefire-forward', access: 'Filtered' },
+        { region: 'Middle East',     dominant: 'Al-Jazeera, Al-Arabiya (mixed)',                        tone: 'Split — civilian focus', access: 'Limited in Iran' },
+        { region: 'Iran (domestic)', dominant: 'State TV (IRIB) — only functional media',              tone: 'Regime narrative + resistance', access: 'Internet blackout — 1%' },
+        { region: 'Global South',    dominant: 'Wire services + diaspora social media',                 tone: 'Anti-US sovereignty frame', access: 'Variable' },
+      ];
+
+      document.getElementById('media-coverage-grid').innerHTML = mediaCoverage.map(m => `
+        <div class="media-coverage-card">
+          <div class="mc-region">${m.region}</div>
+          <div class="mc-dominant">${m.dominant}</div>
+          <div class="mc-tone">Tone: <strong>${m.tone}</strong></div>
+          <div class="mc-access">Access: <strong>${m.access}</strong></div>
+        </div>
+      `).join('');
+
+      document.getElementById('nw-share').innerHTML = UI.renderShareButtons(
+        'The information war inside Operation Epic Fury — 6 competing narratives tracked by GeoWire',
+        'https://geowire.org/narrative-war.html'
+      );
+
+      UI.init();
+    })();
+  </script>
+
+</body>
+</html>

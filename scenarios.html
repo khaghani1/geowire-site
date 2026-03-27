@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Scenario Analysis | Best, Base &amp; Worst Case Outlooks</title>
+  <meta name="description" content="Three-scenario analysis of the US-Iran conflict: ceasefire, protracted war, and regional escalation — with market signals and probability estimates." />
+
+  <meta property="og:title" content="GeoWire — Conflict Scenarios" />
+  <meta property="og:description" content="Best case: ceasefire. Base case: protracted war. Worst case: regional escalation. Full scenario analysis." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/scenarios.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Scenario Analysis",
+    "description": "Three-scenario analysis of the US-Iran conflict with market signals and probability estimates.",
+    "url": "https://geowire.org/scenarios.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">🔮</div>
+        <h1 class="page-title">Scenario Analysis</h1>
+        <p class="page-sub">Three probabilistic outlooks for the US-Iran conflict — driven by analyst modeling, prediction market data, and intelligence signals.</p>
+        <div class="demo-notice">
+          <span class="demo-badge-large">⚠️ ANALYTICAL MODEL</span>
+          Probabilities are model-inferred estimates, not official forecasts.
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENARIO CARDS -->
+    <section class="section container">
+      <div class="scenario-cards-full" id="scenario-cards-full">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- KALSHI / PREDICTION MARKET MODULE -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Prediction Market Signals</h2>
+        <span class="demo-badge">DEMO — Kalshi Integration Phase 2</span>
+      </div>
+      <div class="prediction-market-grid" id="prediction-market-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- MARKET SIGNALS PANEL -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Market Signals by Scenario</h2>
+      </div>
+      <div class="market-signals-panel" id="market-signals-panel">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- NARRATIVE FRAMES -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Competing Narratives</h2>
+        <span class="section-badge">6 Perspectives</span>
+      </div>
+      <div class="narrative-grid" id="narrative-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="scenarios-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="scenarios-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="Get scenario updates by email" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('scenarios');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      // Full scenario cards
+      const scenarios = GEOWIRE.scenarios || [];
+      document.getElementById('scenario-cards-full').innerHTML = scenarios.map(s => `
+        <div class="scenario-card-full scenario-${s.type}">
+          <div class="scenario-full-header">
+            <div class="scenario-type-label">${s.type.toUpperCase()} CASE</div>
+            <div class="scenario-title">${s.title}</div>
+            <div class="scenario-probability-large">
+              <span class="prob-label">Estimated Probability</span>
+              <span class="prob-value-large">${s.probability}</span>
+            </div>
+          </div>
+          <div class="scenario-full-body">
+            <div class="scenario-desc-full">${s.description}</div>
+            ${s.timeline ? `<div class="scenario-timeline-note">⏱ Timeline: ${s.timeline}</div>` : ''}
+            ${s.trigger ? `<div class="scenario-trigger"><strong>Key Trigger:</strong> ${s.trigger}</div>` : ''}
+            ${s.marketImpact ? `
+            <div class="scenario-market-impact">
+              <div class="smi-label">Market Impact</div>
+              <div class="smi-grid">
+                ${Object.entries(s.marketImpact).map(([k, v]) => `
+                  <div class="smi-item">
+                    <div class="smi-asset">${k}</div>
+                    <div class="smi-change ${v.startsWith('+') ? 'change-up' : 'change-down'}">${v}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>` : ''}
+            ${s.signals ? `
+            <div class="scenario-signals">
+              <div class="signals-label">Watch For</div>
+              <ul class="signals-list">
+                ${s.signals.map(sig => `<li>${sig}</li>`).join('')}
+              </ul>
+            </div>` : ''}
+          </div>
+          <div class="scenario-full-footer">
+            <span class="confidence-badge confidence-inferred">⚫ Model-inferred</span>
+            ${UI.renderShareButtons(
+              `${s.type.toUpperCase()} CASE: ${s.title} — ${s.probability} probability via GeoWire`,
+              'https://geowire.org/scenarios.html'
+            )}
+          </div>
+        </div>
+      `).join('');
+
+      // Kalshi / prediction market demo module
+      const kalshi = GEOWIRE.kalshiModuleData || {};
+      const markets = kalshi.markets || [
+        { question: 'Ceasefire before April 1, 2026?',       yes: 18, no: 82, volume: '$2.1M' },
+        { question: 'Hormuz reopened before May 2026?',       yes: 24, no: 76, volume: '$1.4M' },
+        { question: 'Iranian regime change by June 2026?',    yes: 31, no: 69, volume: '$890K' },
+        { question: 'Oil above $130 before June 2026?',      yes: 44, no: 56, volume: '$3.2M' },
+        { question: 'US ground troops in Iran?',             yes: 8,  no: 92, volume: '$540K' },
+        { question: 'Nuclear facility strike before June?',  yes: 12, no: 88, volume: '$1.1M' },
+      ];
+      document.getElementById('prediction-market-grid').innerHTML = markets.map(m => `
+        <div class="prediction-card">
+          <div class="prediction-question">${m.question}</div>
+          <div class="prediction-bar-wrap">
+            <div class="prediction-bar-yes" style="width:${m.yes}%"></div>
+            <div class="prediction-bar-no"  style="width:${m.no}%"></div>
+          </div>
+          <div class="prediction-odds">
+            <span class="pred-yes">${m.yes}% YES</span>
+            <span class="pred-vol">${m.volume} vol</span>
+            <span class="pred-no">${m.no}% NO</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Market signals panel
+      document.getElementById('market-signals-panel').innerHTML = `
+        <div class="msp-row msp-header">
+          <div>Asset</div>
+          <div class="scenario-best">Best Case</div>
+          <div class="scenario-base">Base Case</div>
+          <div class="scenario-worst">Worst Case</div>
+        </div>
+        ${[
+          { asset: 'Brent Crude', best: '$70–80', base: '$100–120', worst: '$140–180+' },
+          { asset: 'Gold',        best: '$2,800', base: '$3,200–3,500', worst: '$3,800+' },
+          { asset: 'S&P 500',     best: '+8%',    base: '-5% to -15%', worst: '-25%+' },
+          { asset: 'USD Index',   best: '+3%',    base: '-3% to -6%', worst: '-10%+' },
+          { asset: 'Nat Gas',     best: '$2.80',  base: '$3.50–4.50', worst: '$6.00+' },
+          { asset: '10Y Treasury',best: '4.0%',   base: '4.2%–4.8%', worst: '5.5%+' },
+        ].map(row => `
+          <div class="msp-row">
+            <div class="msp-asset">${row.asset}</div>
+            <div class="msp-val scenario-best-val">${row.best}</div>
+            <div class="msp-val scenario-base-val">${row.base}</div>
+            <div class="msp-val scenario-worst-val">${row.worst}</div>
+          </div>
+        `).join('')}
+      `;
+
+      // Narrative frames
+      const narratives = GEOWIRE.narrativeFrames || [];
+      document.getElementById('narrative-grid').innerHTML = narratives.map(n => `
+        <div class="narrative-card">
+          <div class="narrative-source">${n.source}</div>
+          <div class="narrative-frame">${n.frame}</div>
+          <div class="narrative-text">${n.text}</div>
+          <div class="narrative-bias">Framing: <span class="bias-tag">${n.bias || 'unclassified'}</span></div>
+        </div>
+      `).join('');
+
+      document.getElementById('scenarios-share').innerHTML = UI.renderShareButtons(
+        'Scenario analysis: ceasefire 18%, protracted war 57%, regional escalation 25% — via GeoWire',
+        'https://geowire.org/scenarios.html'
+      );
+
+      UI.init();
+    })();
+  </script>
+
+</body>
+</html>

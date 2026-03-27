@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Global Trade | Hormuz, Shipping &amp; Supply Chain Disruptions</title>
+  <meta name="description" content="Live tracking of Strait of Hormuz flow, global shipping route disruptions, commodity chain impacts, and Lloyd's war risk status." />
+
+  <meta property="og:title" content="GeoWire — Global Trade Disruptions" />
+  <meta property="og:description" content="Hormuz at 3%. Lloyd's suspended. Track global shipping and supply chain impacts of Operation Epic Fury." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/trade.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Global Trade",
+    "description": "Live tracking of global shipping route disruptions, commodity chain impacts, and Lloyd's war risk status.",
+    "url": "https://geowire.org/trade.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">🚢</div>
+        <h1 class="page-title">Global Trade</h1>
+        <p class="page-sub">The world's most critical chokepoint is closed. Track shipping disruptions, commodity chain impacts, and the insurance crisis.</p>
+      </div>
+    </section>
+
+    <!-- HORMUZ FLOW STATUS -->
+    <section class="section container">
+      <div class="hormuz-banner critical">
+        <div class="hormuz-banner-left">
+          <div class="hormuz-status-label">STRAIT OF HORMUZ — FLOW STATUS</div>
+          <div class="hormuz-status-value">3% OF NORMAL CAPACITY</div>
+          <div class="hormuz-status-sub">20% of global oil trade · 17% of global LNG · 30% of global petrochemical feedstock</div>
+        </div>
+        <div class="hormuz-banner-right">
+          <div class="hormuz-stat">
+            <div class="hormuz-stat-label">Tankers Waiting</div>
+            <div class="hormuz-stat-value">47 vessels</div>
+          </div>
+          <div class="hormuz-stat">
+            <div class="hormuz-stat-label">Daily Loss</div>
+            <div class="hormuz-stat-value">$420M/day</div>
+          </div>
+          <div class="hormuz-stat">
+            <div class="hormuz-stat-label">Cape Reroute Premium</div>
+            <div class="hormuz-stat-value threat-high">+$3.8M/voyage</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHIPPING ROUTES TABLE -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Shipping Route Status</h2>
+        <span id="trade-live-badge"></span>
+      </div>
+      <div class="supply-chain-rows" id="shipping-routes">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- COMMODITY CHAIN TABLE -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Commodity Supply Chain Impacts</h2>
+      </div>
+      <div class="data-table-wrapper">
+        <table class="data-table" id="commodity-table">
+          <thead>
+            <tr>
+              <th>Commodity</th>
+              <th>Normal Route</th>
+              <th>Current Status</th>
+              <th>Alt. Route</th>
+              <th>Cost Premium</th>
+              <th>Risk</th>
+            </tr>
+          </thead>
+          <tbody id="commodity-table-body">
+            <!-- Populated by script -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- LLOYD'S STATUS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Insurance &amp; Finance</h2>
+      </div>
+      <div class="insurance-grid" id="insurance-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- TRADE DATA METRICS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Global Trade Metrics</h2>
+      </div>
+      <div class="metric-rows" id="trade-metrics">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="trade-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE -->
+    <section class="section container">
+      <div id="trade-share"></div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('trade');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+      document.getElementById('trade-live-badge').innerHTML = UI.renderLiveBadge(false);
+
+      // Shipping routes
+      const routes = [
+        { route: 'Strait of Hormuz',         status: 'critical',  vol: '21M bbl/day oil',    detail: 'IRGC interdiction + mines. Transit near-impossible.' },
+        { route: 'Red Sea / Bab el-Mandeb',  status: 'disrupted', vol: '10% global trade',   detail: 'Houthi drone threat continues. US Navy escort required.' },
+        { route: 'Suez Canal',               status: 'disrupted', vol: '12% global trade',   detail: 'Traffic down 55% vs pre-crisis. Insurance costs quadrupled.' },
+        { route: 'Cape of Good Hope',        status: 'active',    vol: 'Surge routing',      detail: '+14-18 days transit. Spot rate premium $1.5M–$3.8M/voyage.' },
+        { route: 'Panama Canal',             status: 'active',    vol: '5% global trade',    detail: 'Normal operations. Drought restrictions partially lifted.' },
+        { route: 'Malacca Strait',           status: 'active',    vol: '25% global trade',   detail: 'Elevated watch due to Houthi spillover risk. No disruptions.' },
+        { route: 'Trans-Siberian Pipeline',  status: 'active',    vol: 'Russia–China gas',   detail: 'Unaffected. Running at capacity.' },
+        { route: 'BTC Pipeline (Baku–Ceyhan)',status:'disrupted', vol: '1.2M bbl/day',       detail: 'Azerbaijan suspended exports amid regional security review.' },
+      ];
+
+      document.getElementById('shipping-routes').innerHTML = routes.map(r => `
+        <div class="supply-chain-row">
+          <div class="sc-route">${r.route}</div>
+          <div class="sc-volume">${r.vol}</div>
+          <div class="sc-status status-${r.status === 'active' ? 'green' : r.status === 'disrupted' ? 'amber' : 'red'}">${r.status.toUpperCase()}</div>
+          <div class="sc-detail">${r.detail}</div>
+        </div>
+      `).join('');
+
+      // Commodity table
+      const commodities = [
+        { commodity: 'Crude Oil (Gulf)',      route: 'Hormuz → Global',       status: 'Halted',       alt: 'Cape of Good Hope', premium: '+$8.20/bbl',   risk: 'critical' },
+        { commodity: 'LNG (Qatar)',           route: 'Hormuz → Asia/Europe',  status: 'Suspended',    alt: 'Australian, US LNG', premium: '+180%',        risk: 'critical' },
+        { commodity: 'Petrochemicals',        route: 'Hormuz → Asia',         status: 'Disrupted',    alt: 'Air freight (limited)', premium: '+250%+',    risk: 'critical' },
+        { commodity: 'Grain (Black Sea)',     route: 'Bosphorus → Suez',      status: 'Reduced',      alt: 'Cape routing',      premium: '+$42/ton',     risk: 'high' },
+        { commodity: 'Semiconductors (Asia)', route: 'Malacca → Suez',        status: 'Elevated Risk',alt: 'Current route + escort', premium: '+35%',   risk: 'medium' },
+        { commodity: 'Auto Parts (Japan/KR)', route: 'Pacific → US',          status: 'Normal',       alt: 'N/A',               premium: 'Minimal',      risk: 'low' },
+        { commodity: 'Consumer Goods (China)',route: 'Pacific → US/EU',       status: 'Normal',       alt: 'N/A',               premium: 'Minimal',      risk: 'low' },
+      ];
+
+      document.getElementById('commodity-table-body').innerHTML = commodities.map(c => `
+        <tr>
+          <td>${c.commodity}</td>
+          <td class="route-cell">${c.route}</td>
+          <td class="status-cell threat-${c.risk}">${c.status}</td>
+          <td>${c.alt}</td>
+          <td class="${c.premium.startsWith('+') ? 'change-up' : ''}">${c.premium}</td>
+          <td><span class="risk-pill risk-${c.risk}">${c.risk.toUpperCase()}</span></td>
+        </tr>
+      `).join('');
+
+      // Insurance grid
+      const insuranceItems = [
+        { org: "Lloyd's of London", status: 'SUSPENDED', note: 'War risk cover for Hormuz transit suspended March 1', badge: 'confirmed' },
+        { org: 'P&I Clubs (13 major)', status: 'RESTRICTED', note: 'Cover limited to vessels with naval escort. Premium +400%.', badge: 'multisource' },
+        { org: 'Export Credit Agencies', status: 'PAUSED', note: 'US EXIM, UK UKEF paused Gulf region credit guarantees.', badge: 'confirmed' },
+        { org: 'SWIFT (Iran)', status: 'BLOCKED', note: 'Iranian banks cut from SWIFT since 2012; sanctions reinforced.', badge: 'confirmed' },
+        { org: 'Trade Finance (Global)', status: 'TIGHTENED', note: 'Letter of credit spreads for Gulf cargo widened 220 bps.', badge: 'multisource' },
+      ];
+
+      document.getElementById('insurance-grid').innerHTML = insuranceItems.map(i => {
+        const cl = GEOWIRE.confidenceLevels[i.badge] || {};
+        return `
+          <div class="insurance-card">
+            <div class="insurance-org">${i.org}</div>
+            <div class="insurance-status threat-${i.status === 'SUSPENDED' || i.status === 'BLOCKED' ? 'critical' : i.status === 'RESTRICTED' ? 'high' : 'medium'}">${i.status}</div>
+            <div class="insurance-note">${i.note}</div>
+            <span class="confidence-badge confidence-${i.badge}">${cl.emoji || ''} ${cl.label || i.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Trade metrics
+      const tradeData = GEOWIRE.tradeData || {};
+      const metrics = [
+        { label: 'Global shipping rates (WCI)',   value: tradeData.shippingRateChange || '+215%',   note: 'Drewry World Container Index', badge: 'multisource' },
+        { label: 'Persian Gulf oil flow',         value: '~630,000 bbl/day',                         note: 'vs 21M bbl/day normal', badge: 'multisource' },
+        { label: 'EU energy import substitute',   value: '$38B pledged',                             note: 'Emergency US LNG + Norwegian allocation', badge: 'confirmed' },
+        { label: 'Asia emergency stockpile draw', value: '120M bbl',                                 note: 'Japan, South Korea, India combined', badge: 'multisource' },
+        { label: 'Chinese rerouting cost',        value: '+$14B/quarter',                            note: 'CNPC estimate — Cape routing premium', badge: 'singlesource' },
+      ];
+
+      document.getElementById('trade-metrics').innerHTML = metrics.map(m => {
+        const cl = GEOWIRE.confidenceLevels[m.badge] || {};
+        return `
+          <div class="metric-row">
+            <div class="metric-label">${m.label}</div>
+            <div class="metric-value">${m.value}</div>
+            <div class="metric-note">${m.note}</div>
+            <span class="confidence-badge confidence-${m.badge}">${cl.emoji || ''} ${cl.label || m.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('trade-share').innerHTML = UI.renderShareButtons(
+        'Hormuz at 3% capacity — global trade disruptions tracker via GeoWire',
+        'https://geowire.org/trade.html'
+      );
+
+      UI.init();
+      await API.loadMarketData();
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — What Changed | 24-Hour Intelligence Delta</title>
+  <meta name="description" content="What changed in the last 24 hours: new strikes, diplomatic signals, market moves, and intelligence updates from Operation Epic Fury." />
+
+  <meta property="og:title" content="GeoWire — What Changed" />
+  <meta property="og:description" content="The 24-hour intelligence delta: what shifted in Operation Epic Fury since yesterday." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/what-changed.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — What Changed",
+    "description": "24-hour intelligence delta for Operation Epic Fury.",
+    "url": "https://geowire.org/what-changed.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">🔄</div>
+        <h1 class="page-title">What Changed</h1>
+        <p class="page-sub">The 24-hour intelligence delta — what moved, what shifted, and what it means.</p>
+        <div class="wc-timestamp">Last updated: <span id="last-updated">—</span></div>
+      </div>
+    </section>
+
+    <!-- CATEGORY FILTER -->
+    <div class="container">
+      <div class="filter-tabs" id="wc-filter-tabs">
+        <button class="filter-tab active" data-filter="all">All Updates</button>
+        <button class="filter-tab" data-filter="military">Military</button>
+        <button class="filter-tab" data-filter="economic">Economic</button>
+        <button class="filter-tab" data-filter="diplomatic">Diplomatic</button>
+        <button class="filter-tab" data-filter="humanitarian">Humanitarian</button>
+      </div>
+    </div>
+
+    <!-- UPDATES FEED -->
+    <section class="section container">
+      <div class="what-changed-feed" id="what-changed-feed">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- MARKET DELTA -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Market Moves (24h)</h2>
+        <span id="market-delta-badge"></span>
+      </div>
+      <div class="market-delta-grid" id="market-delta-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- CONFIDENCE BREAKDOWN -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Source Confidence Breakdown</h2>
+        <span class="section-badge">Today's Updates</span>
+      </div>
+      <div class="confidence-breakdown" id="confidence-breakdown">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="what-changed-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="wc-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="Daily delta to your inbox" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('dashboard');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      document.getElementById('last-updated').textContent = new Date().toUTCString().replace(' GMT', ' UTC');
+      document.getElementById('market-delta-badge').innerHTML = UI.renderLiveBadge(false);
+
+      const updates = GEOWIRE.updateLog || [];
+
+      // Seed updates if empty
+      const seedUpdates = updates.length > 0 ? updates : [
+        { type: 'military',    timestamp: '2026-03-24T08:00:00Z', text: 'US sortie count: 14 sorties confirmed in 24h — down from Week 1 peak of 40+.', confidence: 'multisource' },
+        { type: 'diplomatic',  timestamp: '2026-03-24T07:30:00Z', text: 'Qatar FM Abu Abdullah in Washington for "routine consultations." GeoWire assesses ceasefire-adjacent.', confidence: 'singlesource' },
+        { type: 'economic',    timestamp: '2026-03-24T06:00:00Z', text: 'Brent crude: $112.40 — flat vs yesterday. Gold: $3,240 — new 3-year high.', confidence: 'confirmed' },
+        { type: 'humanitarian',timestamp: '2026-03-24T05:00:00Z', text: 'ICRC: attempting to deliver 12 tons of medical supplies to Kurdistan region.', confidence: 'confirmed' },
+        { type: 'military',    timestamp: '2026-03-23T22:00:00Z', text: 'Houthi drone swarm (8 units) intercepted by USS Carney in Red Sea. No casualties.', confidence: 'confirmed' },
+        { type: 'diplomatic',  timestamp: '2026-03-23T18:00:00Z', text: 'UN SG Guterres envoy arrived Ankara for shuttle diplomacy. Iran has not responded.', confidence: 'multisource' },
+        { type: 'economic',    timestamp: '2026-03-23T16:00:00Z', text: 'S&P 500 closed -0.8% on renewed conflict news. Defensive sectors (defense, gold) up.', confidence: 'confirmed' },
+        { type: 'humanitarian',timestamp: '2026-03-23T12:00:00Z', text: 'NetBlocks: Iran internet at 1.2% — slight uptick from 0.8% overnight low. Significance unclear.', confidence: 'singlesource' },
+      ];
+
+      const feed = document.getElementById('what-changed-feed');
+      const typeColors = { military: '#ff3b3b', economic: '#ffb800', diplomatic: '#4a9eff', humanitarian: '#00ff88', political: '#cc88ff' };
+
+      function renderFeed(filter) {
+        const filtered = filter === 'all' ? seedUpdates : seedUpdates.filter(u => u.type === filter);
+        if (filtered.length === 0) {
+          feed.innerHTML = '<p class="empty-state">No updates in this category.</p>';
+          return;
+        }
+        feed.innerHTML = filtered.map(u => {
+          const cl = GEOWIRE.confidenceLevels[u.confidence] || {};
+          const color = typeColors[u.type] || '#4a9eff';
+          const timeStr = u.timestamp ? new Date(u.timestamp).toUTCString().replace(' GMT', ' UTC') : '';
+          return `
+            <div class="wc-feed-item" style="border-left-color:${color}">
+              <div class="wc-feed-header">
+                <span class="wc-feed-type" style="color:${color}">${(u.type || 'UPDATE').toUpperCase()}</span>
+                <span class="wc-feed-time">${timeStr}</span>
+                <span class="confidence-badge confidence-${u.confidence}">${cl.emoji || ''} ${cl.label || u.confidence}</span>
+              </div>
+              <div class="wc-feed-text">${u.text}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      renderFeed('all');
+
+      document.getElementById('wc-filter-tabs').addEventListener('click', e => {
+        const btn = e.target.closest('.filter-tab');
+        if (!btn) return;
+        document.querySelectorAll('#wc-filter-tabs .filter-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderFeed(btn.dataset.filter);
+      });
+
+      // Market delta grid
+      const marketKeys = ['oil', 'gold', 'sp500', 'dollar', 'bitcoin', 'usgas'];
+      document.getElementById('market-delta-grid').innerHTML = marketKeys.map(k => {
+        const m = GEOWIRE.marketData[k];
+        if (!m) return '';
+        const up = m.change >= 0;
+        return `
+          <div class="market-delta-card">
+            <div class="md-label">${m.label}</div>
+            <div class="md-value">${m.value.toLocaleString()} <small>${m.unit}</small></div>
+            <div class="md-change ${up ? 'change-up' : 'change-down'}">${up ? '▲' : '▼'} ${Math.abs(m.change)}% vs pre-war</div>
+            <div class="md-prewar">Pre-war: ${m.preWar.toLocaleString()} ${m.unit}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Confidence breakdown
+      const confCounts = {};
+      seedUpdates.forEach(u => { confCounts[u.confidence] = (confCounts[u.confidence] || 0) + 1; });
+      const total = seedUpdates.length;
+      document.getElementById('confidence-breakdown').innerHTML = `
+        <div class="conf-breakdown-grid">
+          ${Object.entries(confCounts).map(([key, count]) => {
+            const cl = GEOWIRE.confidenceLevels[key] || {};
+            const pct = Math.round(count / total * 100);
+            return `
+              <div class="conf-breakdown-item">
+                <span class="confidence-badge confidence-${key}">${cl.emoji || ''} ${cl.label || key}</span>
+                <div class="conf-bar-wrap"><div class="conf-bar" style="width:${pct}%;background:${cl.color || '#555'}"></div></div>
+                <span class="conf-count">${count} update${count !== 1 ? 's' : ''} (${pct}%)</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <p class="conf-note">Higher confirmed % = better day for intelligence visibility. Low confirmed rate indicates active information warfare environment.</p>
+      `;
+
+      document.getElementById('wc-share').innerHTML = UI.renderShareButtons(
+        'What changed in the last 24h — Operation Epic Fury intelligence delta via GeoWire',
+        'https://geowire.org/what-changed.html'
+      );
+
+      UI.init();
+      await API.loadMarketData();
+    })();
+  </script>
+
+</body>
+</html>

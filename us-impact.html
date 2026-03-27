@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — US Impact | Economic &amp; Military Cost of Operation Epic Fury</title>
+  <meta name="description" content="Tracking the economic, military, and political costs to the United States: gas prices, defense spending, market losses, and congressional debate." />
+
+  <meta property="og:title" content="GeoWire — US Impact Analysis" />
+  <meta property="og:description" content="US gas at $4.42. S&P down 12%. $1.75B/day in military costs. Full US impact breakdown." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/us-impact.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — US Impact",
+    "description": "Economic, military, and political cost tracking for Operation Epic Fury.",
+    "url": "https://geowire.org/us-impact.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">🇺🇸</div>
+        <h1 class="page-title">US Impact</h1>
+        <p class="page-sub">What Operation Epic Fury is costing America — in dollars, lives, market value, and political capital.</p>
+      </div>
+    </section>
+
+    <!-- WAR COST METER -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">War Cost Meter</h2>
+        <span class="confidence-badge confidence-inferred">⚫ Model estimate</span>
+      </div>
+      <div id="war-cost-ticker"></div>
+    </section>
+
+    <!-- KEY METRICS GRID -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Key US Metrics</h2>
+      </div>
+      <div class="us-metrics-grid" id="us-metrics-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- GAS PRICE IMPACT -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Consumer Impact — Gas &amp; Energy Prices</h2>
+      </div>
+      <div class="gas-impact-panel" id="gas-impact-panel">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- MARKET LOSSES -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Financial Market Impact</h2>
+        <a href="scenarios.html" class="section-link">Scenario Outlook →</a>
+      </div>
+      <div class="data-table-wrapper">
+        <table class="data-table" id="market-impact-table">
+          <thead>
+            <tr>
+              <th>Asset / Index</th>
+              <th>Pre-War</th>
+              <th>Current</th>
+              <th>Change</th>
+              <th>Implied Loss</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody id="market-impact-body">
+            <!-- Populated by script -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTOR BREAKDOWN -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Sector-by-Sector Exposure</h2>
+      </div>
+      <div class="sector-grid" id="sector-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- MILITARY COST BREAKDOWN -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Military Operations Cost</h2>
+        <span class="confidence-badge confidence-inferred">⚫ Model-inferred</span>
+      </div>
+      <div class="metric-rows" id="military-cost-rows">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- POLITICAL CONTEXT -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Political Context</h2>
+      </div>
+      <div class="political-cards" id="political-cards">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="us-impact-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="us-impact-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="US impact briefings to your inbox" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('us-impact');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      // War cost meter
+      document.getElementById('war-cost-ticker').innerHTML = UI.renderWarCostTicker();
+      UI.startWarCostCounter();
+
+      // Key metrics grid
+      const usData = GEOWIRE.usImpactData || {};
+      const metricsItems = [
+        { label: 'US Military KIA',        value: '13+',          note: 'Confirmed as of Mar 18', badge: 'confirmed' },
+        { label: 'US Military Wounded',    value: '47+',          note: 'DoD confirmed', badge: 'confirmed' },
+        { label: 'Daily Ops Cost',         value: '$1.75B/day',   note: 'GeoWire model estimate', badge: 'inferred' },
+        { label: 'Total Cost (25 days)',   value: '$43.75B+',     note: 'Model estimate — excludes future obligations', badge: 'inferred' },
+        { label: 'US Gas Price Avg',       value: '$4.42/gal',    note: 'vs $3.28 pre-war', badge: 'confirmed' },
+        { label: 'S&P 500 Loss',           value: '-12.2%',       note: '$3.1T in market cap erased', badge: 'confirmed' },
+        { label: 'Inflation Impact (est)', value: '+0.8–1.2% CPI',note: '12-month forward estimate', badge: 'inferred' },
+        { label: 'Congressional AUMF',     value: 'Pending',      note: 'Senate debate ongoing, no vote yet', badge: 'confirmed' },
+      ];
+
+      document.getElementById('us-metrics-grid').innerHTML = metricsItems.map(m => {
+        const cl = GEOWIRE.confidenceLevels[m.badge] || {};
+        return `
+          <div class="us-metric-card">
+            <div class="us-metric-value">${m.value}</div>
+            <div class="us-metric-label">${m.label}</div>
+            <div class="us-metric-note">${m.note}</div>
+            <span class="confidence-badge confidence-${m.badge}">${cl.emoji || ''} ${cl.label || m.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Gas price impact
+      document.getElementById('gas-impact-panel').innerHTML = `
+        <div class="gas-impact-grid">
+          <div class="gas-card">
+            <div class="gas-card-label">National Average</div>
+            <div class="gas-card-value">$4.42 <small>/gal</small></div>
+            <div class="gas-card-change change-up">▲ +$1.14 since Feb 28</div>
+            <div class="gas-card-note">+34.8% from pre-war baseline of $3.28/gal</div>
+          </div>
+          <div class="gas-card">
+            <div class="gas-card-label">Annual Household Cost</div>
+            <div class="gas-card-value">+$1,680</div>
+            <div class="gas-card-change change-up">▲ Per household/year increase</div>
+            <div class="gas-card-note">Based on avg 15,000 mi/yr, 28 mpg, 3.6 drivers/HH</div>
+          </div>
+          <div class="gas-card">
+            <div class="gas-card-label">Diesel (Trucking)</div>
+            <div class="gas-card-value">$5.18 <small>/gal</small></div>
+            <div class="gas-card-change change-up">▲ +$1.42 (+37.8%)</div>
+            <div class="gas-card-note">Adds $0.04–0.12 to retail goods per unit shipped</div>
+          </div>
+          <div class="gas-card">
+            <div class="gas-card-label">Jet Fuel</div>
+            <div class="gas-card-value">+42%</div>
+            <div class="gas-card-change change-up">▲ Airlines surcharging $45–90/RT</div>
+            <div class="gas-card-note">Major carriers adding fuel surcharges to all fares</div>
+          </div>
+        </div>
+        <div class="gas-impact-note">
+          <span class="confidence-badge confidence-confirmed">🟢 Confirmed</span> EIA Weekly Price Series · Updated Tuesday
+        </div>
+      `;
+
+      // Market impact table
+      const marketRows = [
+        { asset: 'S&P 500',       preWar: '5,480',   current: '4,812',   change: '-12.2%', loss: '-$3.1T market cap', source: 'FRED' },
+        { asset: '10Y Treasury',  preWar: '4.20%',   current: '4.43%',   change: '+23 bps',loss: 'Bond holder losses',  source: 'FRED' },
+        { asset: 'US Dollar (DXY)',preWar: '104.2',   current: '99.15',   change: '-4.8%',  loss: 'Import inflation ↑',  source: 'FRED' },
+        { asset: 'Gold',          preWar: '$2,680',   current: '$3,240',  change: '+20.9%', loss: 'Safe haven premium',   source: 'FRED' },
+        { asset: 'Bitcoin',       preWar: '$95,000',  current: '$70,716', change: '-25.6%', loss: 'Risk-off selloff',      source: 'CoinGecko' },
+        { asset: 'US Gas (retail)',preWar: '$3.28',   current: '$4.42',   change: '+34.8%', loss: '+$1,680/HH/yr',        source: 'EIA' },
+      ];
+
+      document.getElementById('market-impact-body').innerHTML = marketRows.map(r => {
+        const neg = r.change.startsWith('-');
+        const changeClass = neg ? 'change-down' : 'change-up';
+        return `
+          <tr>
+            <td>${r.asset}</td>
+            <td>${r.preWar}</td>
+            <td>${r.current}</td>
+            <td class="${changeClass}">${r.change}</td>
+            <td class="market-note-cell">${r.loss}</td>
+            <td class="source-label">${r.source}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Sector grid
+      const sectors = [
+        { sector: 'Energy / Oil',     exposure: 'HIGH BENEFIT',  note: 'US shale producers gaining $22–38/bbl windfall. Permian Basin at record output.', color: 'green' },
+        { sector: 'Airlines',         exposure: 'HIGH RISK',     note: 'Jet fuel +42%. Delta, United projecting Q2 losses. Capacity cuts expected.', color: 'red' },
+        { sector: 'Auto / Transport', exposure: 'HIGH RISK',     note: 'Trucking diesel +38%. Supply chain costs up $0.06–0.14/mile. Margins compressed.', color: 'red' },
+        { sector: 'Defense',          exposure: 'HIGH BENEFIT',  note: 'RTX, LMT, NOC surging. JASSM, Tomahawk restocking contracts accelerating.', color: 'green' },
+        { sector: 'Financials',       exposure: 'MEDIUM RISK',   note: 'Credit spreads widening. Middle East exposure loans under review.', color: 'amber' },
+        { sector: 'Technology',       exposure: 'MEDIUM RISK',   note: 'S&P drag. Semiconductor supply chain elevated risk if Malacca disrupted.', color: 'amber' },
+        { sector: 'Agriculture',      exposure: 'MEDIUM RISK',   note: 'Fertilizer (potash/urea) costs up 28%. Food inflation risk in 6–9 months.', color: 'amber' },
+        { sector: 'Consumer Staples', exposure: 'LOW-MED RISK',  note: 'Margin pressure from freight and energy. Pricing power limits pass-through.', color: 'amber' },
+      ];
+
+      document.getElementById('sector-grid').innerHTML = sectors.map(s => `
+        <div class="sector-card sector-${s.color}">
+          <div class="sector-name">${s.sector}</div>
+          <div class="sector-exposure sector-exp-${s.color}">${s.exposure}</div>
+          <div class="sector-note">${s.note}</div>
+        </div>
+      `).join('');
+
+      // Military cost
+      const milCosts = [
+        { item: 'Carrier Strike Group (×2)',    daily: '$24M/day',      note: 'Operational cost estimate', badge: 'inferred' },
+        { item: 'Air Sorties (B-2, B-52, F-35)',daily: '$380M/day',     note: 'Munitions + operational', badge: 'inferred' },
+        { item: 'Tomahawk / JASSM Resupply',   daily: '$210M/day',      note: 'RTX unit cost × sortie rate', badge: 'inferred' },
+        { item: 'Personnel + Logistics',        daily: '$95M/day',      note: 'Pentagon FY2026 scale-up', badge: 'inferred' },
+        { item: 'Total Estimated',              daily: '$1.75B/day',    note: 'GeoWire composite model', badge: 'inferred' },
+      ];
+
+      document.getElementById('military-cost-rows').innerHTML = milCosts.map(m => {
+        const cl = GEOWIRE.confidenceLevels[m.badge] || {};
+        return `
+          <div class="metric-row ${m.item === 'Total Estimated' ? 'metric-row-total' : ''}">
+            <div class="metric-label">${m.item}</div>
+            <div class="metric-value">${m.daily}</div>
+            <div class="metric-note">${m.note}</div>
+            <span class="confidence-badge confidence-${m.badge}">${cl.emoji || ''} ${cl.label || m.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Political context
+      const political = [
+        { label: 'Presidential Approval',    text: 'Gallup: 52% approve of military action. -3pp from pre-war high. Partisan split: R+28, D-14, I+4.' },
+        { label: 'Congressional AUMF Status',text: 'Senate Armed Services debating AUMF. McConnell supports; 6 GOP senators demand timeline. No vote scheduled.' },
+        { label: 'Protest Activity',         text: 'Anti-war demonstrations in 40+ cities. Largest: 85,000 in Washington D.C. (Mar 15). Campus movements growing.' },
+        { label: 'Media Framing',            text: 'Right media: defense of Israel + deterrence framing. Left media: quagmire / cost concerns. Independent: mixed.' },
+      ];
+
+      document.getElementById('political-cards').innerHTML = political.map(p => `
+        <div class="political-card">
+          <div class="political-label">${p.label}</div>
+          <div class="political-text">${p.text}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('us-impact-share').innerHTML = UI.renderShareButtons(
+        'US cost of Operation Epic Fury: $1.75B/day, gas at $4.42, S&P -12% — via GeoWire',
+        'https://geowire.org/us-impact.html'
+      );
+
+      UI.init();
+      await API.loadMarketData();
+    })();
+  </script>
+
+</body>
+</html>

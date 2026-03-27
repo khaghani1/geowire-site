@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GeoWire — Geopolitical Analysis | Alliances, Diplomacy &amp; UN Status</title>
+  <meta name="description" content="Geopolitical map of the US-Iran conflict: alliance structures, diplomatic back-channels, UN Security Council status, and emerging power plays by Russia and China." />
+
+  <meta property="og:title" content="GeoWire — Geopolitical Analysis" />
+  <meta property="og:description" content="Russia/China vetoed ceasefire. Witkoff back-channel active. NATO fractured. Full geopolitical analysis." />
+  <meta property="og:image" content="https://geowire.org/og-default.png" />
+  <meta property="og:url" content="https://geowire.org/geopolitical.html" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@Geowire_org" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "GeoWire — Geopolitical Analysis",
+    "description": "Alliance structures, diplomatic back-channels, UN Security Council status, and power plays.",
+    "url": "https://geowire.org/geopolitical.html"
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div id="site-header"></div>
+  <div id="site-nav"></div>
+
+  <main>
+
+    <section class="page-hero container">
+      <div class="page-hero-inner">
+        <div class="page-hero-icon">🗺️</div>
+        <h1 class="page-title">Geopolitical Analysis</h1>
+        <p class="page-sub">Alliance structures, diplomatic signals, power plays, and the multilateral response — who stands where and why.</p>
+      </div>
+    </section>
+
+    <!-- ALLIANCE GRID -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Alliance Landscape</h2>
+        <a href="countries.html" class="section-link">Country Cards →</a>
+      </div>
+      <div class="alliance-grid-full" id="alliance-grid-full">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- DIPLOMATIC STATUS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Diplomatic Status</h2>
+      </div>
+      <div class="diplomatic-grid" id="diplomatic-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- BACK-CHANNELS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Back-Channel Intelligence</h2>
+        <span class="confidence-badge confidence-singlesource">🟠 Partially confirmed</span>
+      </div>
+      <div class="backchannel-list" id="backchannel-list">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- UN STATUS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">UN Security Council</h2>
+        <span class="confidence-badge confidence-confirmed">🟢 Confirmed</span>
+      </div>
+      <div class="un-panel" id="un-panel">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- RUSSIA + CHINA POSTURE -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Great Power Posturing</h2>
+      </div>
+      <div class="great-power-grid" id="great-power-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- REGIONAL ACTORS -->
+    <section class="section container">
+      <div class="section-header">
+        <h2 class="section-title">Regional Actor Positions</h2>
+      </div>
+      <div class="regional-actors-grid" id="regional-actors-grid">
+        <!-- Populated by script -->
+      </div>
+    </section>
+
+    <!-- AD SLOT -->
+    <div class="container">
+      <div class="ad-slot" data-slot="geopolitical-mid">
+        <span class="ad-label">Advertisement</span>
+      </div>
+    </div>
+
+    <!-- SHARE + EMAIL -->
+    <section class="section container">
+      <div class="share-email-row">
+        <div id="geo-share"></div>
+        <div class="email-capture-inline">
+          <form class="email-capture-form" onsubmit="UI.handleEmailSubmit(event)">
+            <input type="email" class="email-input" placeholder="Geopolitical briefings to your inbox" required />
+            <button type="submit" class="email-submit-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="content.js"></script>
+  <script src="ui.js"></script>
+  <script src="api.js"></script>
+
+  <script>
+    (async () => {
+      document.getElementById('site-header').innerHTML = UI.renderHeader();
+      document.getElementById('site-nav').innerHTML    = UI.renderNav('geopolitical');
+      document.getElementById('site-footer').innerHTML = UI.renderFooter();
+
+      // Alliance grid (full cards)
+      const alliances = GEOWIRE.alliancesData || [];
+      document.getElementById('alliance-grid-full').innerHTML = alliances.length > 0 ? alliances.map(a => `
+        <div class="alliance-card-full ${a.active ? 'alliance-active' : 'alliance-fractured'}">
+          <div class="alliance-card-header">
+            <div class="alliance-name">${a.name}</div>
+            <div class="alliance-status-pill ${a.active ? 'status-green' : 'status-amber'}">${a.active ? 'ACTIVE' : 'FRACTURED'}</div>
+          </div>
+          <div class="alliance-members-full">${(a.members || []).map(m => `<span class="member-tag">${m}</span>`).join('')}</div>
+          ${a.note ? `<div class="alliance-note">${a.note}</div>` : ''}
+          ${a.currentAction ? `<div class="alliance-action"><strong>Current:</strong> ${a.currentAction}</div>` : ''}
+        </div>
+      `).join('') : `
+        <div class="alliance-card-full alliance-active">
+          <div class="alliance-card-header"><div class="alliance-name">US-Israel Military Coordination</div><div class="alliance-status-pill status-green">ACTIVE</div></div>
+          <div class="alliance-members-full"><span class="member-tag">🇺🇸 USA</span><span class="member-tag">🇮🇱 Israel</span></div>
+          <div class="alliance-note">Joint strike coordination. Intelligence sharing real-time. F-35 operations from Nevatim.</div>
+        </div>
+        <div class="alliance-card-full alliance-active">
+          <div class="alliance-card-header"><div class="alliance-name">Abraham Accords Coalition</div><div class="alliance-status-pill status-green">ACTIVE</div></div>
+          <div class="alliance-members-full"><span class="member-tag">🇸🇦 Saudi Arabia</span><span class="member-tag">🇦🇪 UAE</span><span class="member-tag">🇧🇭 Bahrain</span></div>
+          <div class="alliance-note">Gulf states host US forces. Allowing overflight. Not publicly endorsing strikes.</div>
+        </div>
+        <div class="alliance-card-full alliance-fractured">
+          <div class="alliance-card-header"><div class="alliance-name">NATO Alliance</div><div class="alliance-status-pill status-amber">FRACTURED</div></div>
+          <div class="alliance-members-full"><span class="member-tag">🇩🇪 Germany</span><span class="member-tag">🇫🇷 France</span><span class="member-tag">🇹🇷 Turkey</span><span class="member-tag">+26 states</span></div>
+          <div class="alliance-note">No Article 5 invocation. Germany/France demanding ceasefire. Turkey offering mediation. UK supporting US with intelligence only.</div>
+        </div>
+        <div class="alliance-card-full alliance-fractured">
+          <div class="alliance-card-header"><div class="alliance-name">Russia-China Axis</div><div class="alliance-status-pill status-amber">OPPORTUNISTIC</div></div>
+          <div class="alliance-members-full"><span class="member-tag">🇷🇺 Russia</span><span class="member-tag">🇨🇳 China</span><span class="member-tag">🇮🇷 Iran (proxy)</span></div>
+          <div class="alliance-note">UNSC veto coordination. Humanitarian aid optics. Quietly purchasing discounted Iranian oil. Not militarily intervening.</div>
+        </div>
+      `;
+
+      // Diplomatic grid
+      const diplomatic = [
+        { actor: 'USA — Iran',       channel: 'Witkoff / Kushner back-channel', status: 'ACTIVE',    note: '5-day ceasefire window discussed (WSJ, Mar 8). No agreement yet.', badge: 'singlesource' },
+        { actor: 'Qatar mediation',  channel: 'Doha channel (Hamas precedent)', status: 'EXPLORING', note: 'Qatar FM in Washington Mar 20. Offer to host talks rejected by IRGC.', badge: 'multisource' },
+        { actor: 'Oman channel',     channel: 'Traditional US-Iran back-channel',status:'SEVERED',   note: 'Oman embassy closed after ballistic missile strike on US base in Oman.', badge: 'confirmed' },
+        { actor: 'EU mediation',     channel: 'High Representative Kallas',     status: 'STALLED',   note: 'EU demands ceasefire precondition. US rejected.', badge: 'confirmed' },
+        { actor: 'UN Secretary-General',channel:'Personal envoy deployed',      status: 'ACTIVE',    note: 'Guterres envoy in Ankara. Iran has not responded to communication.', badge: 'multisource' },
+        { actor: 'Turkey mediation', channel: 'Erdogan — bilateral',           status: 'OPEN',      note: 'Turkey offering to host ceasefire talks. US "not opposed."', badge: 'singlesource' },
+      ];
+
+      document.getElementById('diplomatic-grid').innerHTML = diplomatic.map(d => {
+        const cl = GEOWIRE.confidenceLevels[d.badge] || {};
+        const sc = { 'ACTIVE': 'green', 'EXPLORING': 'amber', 'SEVERED': 'red', 'STALLED': 'amber', 'OPEN': 'amber' }[d.status] || 'amber';
+        return `
+          <div class="diplomatic-card">
+            <div class="dipl-header">
+              <div class="dipl-actor">${d.actor}</div>
+              <div class="dipl-status status-${sc}">${d.status}</div>
+            </div>
+            <div class="dipl-channel">${d.channel}</div>
+            <div class="dipl-note">${d.note}</div>
+            <span class="confidence-badge confidence-${d.badge}">${cl.emoji || ''} ${cl.label || d.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Back-channels
+      const backchannels = [
+        { label: 'Witkoff-Kushner (US → Iran)', date: 'Mar 8',  text: 'Three officials confirmed a 5-day ceasefire window was discussed via this channel. Iran demanded US halt strikes + sanctions relief before talks.', source: 'WSJ', badge: 'singlesource' },
+        { label: 'Swiss protecting power',       date: 'Mar 12', text: 'Switzerland relaying official messages as protecting power for US interests in Iran. Communication ongoing but no breakthrough.', source: 'Reuters', badge: 'multisource' },
+        { label: 'Ghalibaf direct signal',       date: 'Mar 18', text: 'Speaker Ghalibaf sent indirect message to Witkoff via Qatari intermediary indicating "conditional openness" to ceasefire framework.', source: 'GeoWire', badge: 'inferred' },
+        { label: 'Russian backroom role',        date: 'Mar 20', text: 'Russian diplomat held separate meetings with Iranian and US representatives in Geneva. Purpose unclear.', source: 'FT', badge: 'singlesource' },
+      ];
+
+      document.getElementById('backchannel-list').innerHTML = backchannels.map(b => {
+        const cl = GEOWIRE.confidenceLevels[b.badge] || {};
+        return `
+          <div class="backchannel-card">
+            <div class="bc-header">
+              <div class="bc-label">${b.label}</div>
+              <div class="bc-date">${b.date}</div>
+            </div>
+            <div class="bc-text">${b.text}</div>
+            <div class="bc-footer">
+              <span class="bc-source">Source: ${b.source}</span>
+              <span class="confidence-badge confidence-${b.badge}">${cl.emoji || ''} ${cl.label || b.badge}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // UN Panel
+      document.getElementById('un-panel').innerHTML = `
+        <div class="un-stats-grid">
+          <div class="un-stat">
+            <div class="un-stat-value">2</div>
+            <div class="un-stat-label">Emergency Sessions</div>
+            <div class="un-stat-note">Feb 28 + Mar 15</div>
+          </div>
+          <div class="un-stat">
+            <div class="un-stat-value threat-critical">2 VETOES</div>
+            <div class="un-stat-label">Ceasefire Resolution</div>
+            <div class="un-stat-note">China + Russia blocked Feb 28 resolution</div>
+          </div>
+          <div class="un-stat">
+            <div class="un-stat-value">137</div>
+            <div class="un-stat-label">UNGA Votes for Ceasefire</div>
+            <div class="un-stat-note">Non-binding resolution — passed Mar 5</div>
+          </div>
+          <div class="un-stat">
+            <div class="un-stat-value">12</div>
+            <div class="un-stat-label">UNGA Against</div>
+            <div class="un-stat-note">US, Israel + 10 others</div>
+          </div>
+        </div>
+        <div class="un-summary">
+          The Security Council remains paralyzed by P5 split. China and Russia will veto any binding ceasefire resolution that does not include a halt to US strikes. The UNGA non-binding resolution has no enforcement mechanism but signals global isolation of the US position.
+          <span class="confidence-badge confidence-confirmed" style="margin-top:8px;display:inline-block;">🟢 Confirmed — UN records</span>
+        </div>
+      `;
+
+      // Great power grid
+      const greatPowers = [
+        {
+          country: '🇷🇺 Russia', stance: 'OPPORTUNISTIC',
+          points: [
+            'UNSC veto coordination with China — blocking all binding resolutions',
+            'Selling discounted oil fills to nations cutting Iranian supply',
+            'Rhetoric: "US aggression destabilizing region" — winning Global South narrative',
+            'No military intervention — avoiding direct NATO conflict',
+            'Monitoring precedent for Ukraine implications',
+          ],
+          badge: 'multisource'
+        },
+        {
+          country: '🇨🇳 China', stance: 'STRATEGIC WAIT',
+          points: [
+            'Rerouting Gulf oil imports via Cape — absorbing cost increase',
+            'Calling for ceasefire publicly while vetoing binding UNSC resolutions',
+            'Dispatched 3 naval vessels to Gulf of Oman (not entering Hormuz)',
+            'Contingency planning: Taiwan window assessment ongoing',
+            'RMB oil settlement push — accelerating de-dollarization narrative',
+          ],
+          badge: 'multisource'
+        },
+      ];
+
+      document.getElementById('great-power-grid').innerHTML = greatPowers.map(gp => {
+        const cl = GEOWIRE.confidenceLevels[gp.badge] || {};
+        return `
+          <div class="great-power-card">
+            <div class="gp-header">
+              <div class="gp-country">${gp.country}</div>
+              <div class="gp-stance">${gp.stance}</div>
+            </div>
+            <ul class="gp-points">
+              ${gp.points.map(p => `<li>${p}</li>`).join('')}
+            </ul>
+            <span class="confidence-badge confidence-${gp.badge}">${cl.emoji || ''} ${cl.label || gp.badge}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Regional actors
+      const regional = [
+        { actor: '🇸🇦 Saudi Arabia',  stance: 'PASSIVE SUPPORT',  text: 'Hosting US forces. Suspended Hormuz transit itself. Publicly neutral. Privately supporting rapid conclusion.' },
+        { actor: '🇦🇪 UAE',           stance: 'HOST STATE',        text: 'Al Dhafra AFB central to US air ops. Ballistic missile strike absorbed Day 1. Seeking rapid ceasefire.' },
+        { actor: '🇮🇶 Iraq',          stance: 'FRACTURED',         text: 'PMF factions threatening US bases. Iraqi government demands US departure. Green Zone on lockdown.' },
+        { actor: '🇶🇦 Qatar',         stance: 'MEDIATOR',          text: 'Al Udeid hosting US. Simultaneously offering mediation. Qatar FM in diplomatic shuttle.' },
+        { actor: '🇹🇷 Turkey',        stance: 'MEDIATION OFFER',   text: 'Erdogan calling both sides. NATO member offering bridge role. Quietly profiting from refugee flows.' },
+        { actor: '🇵🇰 Pakistan',      stance: 'CONCERNED NEUTRAL', text: 'Nuclear neighbor watching closely. Offering no material support either side. Concerned about spillover.' },
+        { actor: '🇮🇳 India',         stance: 'STRATEGIC NEUTRAL', text: 'Largest buyer of discounted Russian oil. Abstained UNGA. Evacuated 12,000 nationals from Iran.' },
+      ];
+
+      document.getElementById('regional-actors-grid').innerHTML = regional.map(r => `
+        <div class="regional-card">
+          <div class="regional-actor">${r.actor}</div>
+          <div class="regional-stance">${r.stance}</div>
+          <div class="regional-text">${r.text}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('geo-share').innerHTML = UI.renderShareButtons(
+        'Geopolitical map of the US-Iran conflict: alliances, vetoes, back-channels — GeoWire analysis',
+        'https://geowire.org/geopolitical.html'
+      );
+
+      UI.init();
+    })();
+  </script>
+
+</body>
+</html>
