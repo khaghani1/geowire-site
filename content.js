@@ -37,23 +37,25 @@ const GEOWIRE = {
       'rec-bottom':    '',
       'macro-top':     '',
       'macro-bottom':  '',
-      'energy-top':    '',      'podcast-top':   '',
+      'energy-top':    '',
+      'farsi-top':     '',
+      'farsi-mid':     '',
+      'podcast-top':   '',
       'podcast-mid':   '',
     },
   },
 
   // ─── NAVIGATION ─────────────────────────────────────────────────────────────
   navigationItems: [
-    { label: 'Recession',    href: 'recession.html',    icon: '📉' },
-    { label: 'Macro',        href: 'macro.html',        icon: '📊' },
-    { label: 'Predictions',  href: 'predictions.html',  icon: '🔮' },
-    { label: 'Scenarios',    href: 'scenarios.html',    icon: '🧪' },
-    { label: 'Energy',       href: 'energy.html',       icon: '⚡' },
-    { label: 'Analysis',     href: 'analysis.html',     icon: '📝' },
-    { label: 'About',        href: 'about.html',        icon: 'ℹ️' },
+    { label: 'Recession',   href: 'recession.html',   icon: '📉' },
+    { label: 'Macro',       href: 'macro.html',       icon: '📊' },
+    { label: 'Predictions', href: 'predictions.html', icon: '🔮' },
+    { label: 'Scenarios',   href: 'scenarios.html',   icon: '🧪' },
+    { label: 'Energy',      href: 'energy.html',      icon: '⚡' },
+    { label: 'Analysis',    href: 'analysis.html',    icon: '📝' },
+    { label: 'About',       href: 'about.html',       icon: 'ℹ️' },
   ],
 
-  // ─── SECONDARY NAV (footer only) ────────────────────────────────────────────
   secondaryNavItems: [
     { label: 'Supply Chain',        href: 'trade.html' },
     { label: 'Countries',           href: 'countries.html' },
@@ -76,7 +78,22 @@ const GEOWIRE = {
     disputed:     { label: 'Disputed',       emoji: '⚠️', color: '#ff3b3b', description: 'Conflicting claims' },
   },
 
-─ MARKET DATA ────────────────────────────────────────────────────────────
+  // ─── FARSI LABELS ───────────────────────────────────────────────────────────
+  farsiLabels: {
+    siteTitle: 'جیووایر — پلتفرم اطلاعات جهانی',
+    homepageHeadline: 'تعارض ایران و آمریکا — روز ۲۵',
+    navItems: {
+      'Dashboard': 'داشبورد', 'Energy': 'انرژی', 'Countries': 'کشورها',
+      'Scenarios': 'سناریوها', 'Trade': 'تجارت', 'US Impact': 'تأثیر آمریکا',
+      'Humanitarian': 'بشردوستانه', 'Geopolitical': 'ژئوپلیتیک', 'Analysis': 'تحلیل',
+    },
+    tickerLabels: {
+      oil: 'نفت خام', gold: 'طلا', treasury: 'اوراق خزانه ۱۰ ساله',
+      dollar: 'شاخص دلار', bitcoin: 'بیت‌کوین', warCost: 'هزینه جنگ',
+    },
+  },
+
+  // ─── MARKET DATA ────────────────────────────────────────────────────────────
   marketData: {
     oil:      { label: 'Brent Crude',         value: 101.15, preWar: 68.20,  unit: '$/bbl',    change: +33.9,  source: 'Bloomberg',      confidence: 'multisource',  lastUpdated: '2026-03-25T06:00Z' },
     wti:      { label: 'WTI Crude',           value: 90.22,  preWar: 64.10,  unit: '$/bbl',    change: +28.9,  source: 'CME/Bloomberg',   confidence: 'multisource',  lastUpdated: '2026-03-25T06:00Z' },

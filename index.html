@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GeoWire — Recession Intelligence | How Shocks Change Recession Risk</title>
   <meta name="description" content="GeoWire tracks how geopolitical shocks, energy crises, inflation, rates, labor, and supply chains change recession probability in real time." />
   <meta property="og:title" content="GeoWire — Recession Intelligence Platform" />
   <meta property="og:description" content="Track how shocks change recession probability — before consensus catches up." />
   <meta property="og:url" content="https://geowire.org/" />
   <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@Geowire_org" />
+  <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
   <link rel="canonical" href="https://geowire.org/" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -19,12 +17,12 @@
 <div id="site-nav"></div>
 <main>
 
-  <!-- ── Section 1: Recession Command Bar ─────────────────────────────────── -->
+  <!-- Section 1: Recession Command Bar -->
   <section class="war-status-bar">
     <div class="container">
       <div class="war-status-grid">
         <div class="war-status-item"><span class="war-status-label">RECESSION RISK</span><span class="war-status-value threat-critical" id="rec-prob-bar">42%</span></div>
-        <div class="war-status-item"><span class="war-status-label">DIRECTION</span><span class="war-status-value" style="color:#f87171">RISING ↑</span></div>
+        <div class="war-status-item"><span class="war-status-label">DIRECTION</span><span class="war-status-value" style="color:#f87171">RISING &#8593;</span></div>
         <div class="war-status-item"><span class="war-status-label">CONFIDENCE</span><span class="war-status-value">MEDIUM</span></div>
         <div class="war-status-item"><span class="war-status-label">MODEL</span><span class="war-status-value">10-FACTOR</span></div>
         <div class="war-status-item"><span class="war-status-label">UPDATED</span><span class="war-status-value" id="rec-updated-bar">Today</span></div>
@@ -33,66 +31,52 @@
     </div>
   </section>
 
-  <!-- ── Section 2: Market Ticker ─────────────────────────────────────────── -->
-  <section class="ticker-section">
-    <div id="ticker-mount"></div>
-  </section>
+  <!-- Section 2: Market Ticker -->
+  <section class="ticker-section"><div id="ticker-mount"></div></section>
 
-  <!-- ── Section 3: Hero ──────────────────────────────────────────────────── -->
+  <!-- Section 3: Hero — Recession-first -->
   <section class="hero-section container">
     <div class="hero-inner">
       <div class="hero-badge-row">
         <span class="live-dot"></span>
         <span class="hero-badge">RECESSION INTELLIGENCE</span>
-        <span class="hero-sep">•</span>
-        <span class="hero-badge-sub">10-Factor Model · Updated Daily</span>
+        <span class="hero-sep">&bull;</span>
+        <span class="hero-badge-sub">10-Factor Model &middot; Updated Daily</span>
       </div>
       <h1 class="homepage-headline">Are We Heading Toward Recession?</h1>
-      <p class="hero-sub">GeoWire tracks how geopolitical shocks, energy crises, inflation, rates, labor, housing, and supply chains change recession probability — before consensus catches up.</p>
+      <p class="hero-sub">GeoWire tracks how geopolitical shocks, energy crises, inflation, rates, labor, housing, and supply chains change recession probability &mdash; before consensus catches up.</p>
       <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
-        <a href="recession.html" style="display:inline-block;padding:10px 24px;background:var(--gw-accent,#5FA8D3);color:#fff;border-radius:6px;font-weight:600;font-size:14px;text-decoration:none;">See Recession Dashboard →</a>
-        <a href="scenarios.html" style="display:inline-block;padding:10px 24px;border:1px solid var(--gw-border,#334155);color:var(--gw-text-secondary,#94A3B8);border-radius:6px;font-size:14px;text-decoration:none;">Try Scenario Lab →</a>
+        <a href="recession.html" style="display:inline-block;padding:10px 24px;background:var(--gw-accent,#5FA8D3);color:#fff;border-radius:6px;font-weight:600;font-size:14px;text-decoration:none;">See Recession Dashboard &rarr;</a>
+        <a href="scenarios.html" style="display:inline-block;padding:10px 24px;border:1px solid var(--gw-border,#334155);color:var(--gw-text-secondary,#94A3B8);border-radius:6px;font-size:14px;text-decoration:none;">Try Scenario Lab &rarr;</a>
       </div>
     </div>
   </section>
 
-  <!-- ── Section 4: Recession Widget ─────────────────────────────────────── -->
+  <!-- Section 4: Recession Widget -->
   <section class="section container">
-    <div class="section-header">
-      <h2 class="section-title">Recession Probability</h2>
-      <a href="recession.html" class="section-link">Full Dashboard →</a>
-    </div>
+    <div class="section-header"><h2 class="section-title">Recession Probability</h2><a href="recession.html" class="section-link">Full Dashboard &rarr;</a></div>
     <div id="recession-widget"></div>
   </section>
 
-  <!-- ── Section 5: What Changed Today ────────────────────────────────────── -->
+  <!-- Section 5: What Changed Today -->
   <section class="section container">
-    <div class="section-header">
-      <h2 class="section-title">What Changed Today</h2>
-      <a href="what-changed.html" class="section-link">Full Log →</a>
-    </div>
+    <div class="section-header"><h2 class="section-title">What Changed Today</h2><a href="what-changed.html" class="section-link">Full Log &rarr;</a></div>
     <div class="what-changed-grid" id="what-changed-preview"></div>
   </section>
 
-  <!-- ── Section 6: Where Markets Disagree ────────────────────────────────── -->
+  <!-- Section 6: Where Markets Disagree -->
   <section class="section container">
-    <div class="section-header">
-      <h2 class="section-title">Where Markets Disagree</h2>
-      <a href="predictions.html" class="section-link">See All Predictions →</a>
-    </div>
+    <div class="section-header"><h2 class="section-title">Where Markets Disagree</h2><a href="predictions.html" class="section-link">See All Predictions &rarr;</a></div>
     <div id="divergence-preview"></div>
   </section>
 
-  <!-- ── Section 7: Scenario Outlook ─────────────────────────────────────── -->
+  <!-- Section 7: Scenario Preview -->
   <section class="section container">
-    <div class="section-header">
-      <h2 class="section-title">Scenario Outlook</h2>
-      <a href="scenarios.html" class="section-link">Interactive Scenario Lab →</a>
-    </div>
+    <div class="section-header"><h2 class="section-title">Scenario Outlook</h2><a href="scenarios.html" class="section-link">Interactive Scenario Lab &rarr;</a></div>
     <div class="scenario-preview-grid" id="scenario-preview"></div>
   </section>
 
-  <!-- ── Section 8: Current Crisis Context ───────────────────────────────── -->
+  <!-- Section 8: Current Crisis Context (demoted, framed as input to recession) -->
   <section class="section container">
     <div class="section-header">
       <h2 class="section-title">Current Shock: Operation Epic Fury</h2>
@@ -104,120 +88,88 @@
     </div>
   </section>
 
-  <!-- ── Section 9: Intelligence Feed ────────────────────────────────────── -->
+  <!-- Section 9: Intelligence Feed -->
   <section class="section container">
-    <div class="section-header">
-      <h2 class="section-title">Intelligence Feed</h2>
-      <span id="news-live-badge"></span>
-    </div>
-    <div class="news-grid" id="news-feed-container">
-      <p class="loading-state">Loading intelligence feed…</p>
-    </div>
+    <div class="section-header"><h2 class="section-title">Intelligence Feed</h2><span id="news-live-badge"></span></div>
+    <div class="news-grid" id="news-feed-container"><p class="loading-state">Loading intelligence feed&hellip;</p></div>
   </section>
 
-  <!-- ── Section 10: Email + Footer ───────────────────────────────────────── -->
+  <!-- Section 10: Email Capture -->
   <section class="section container" id="email-section"></section>
 
 </main>
 <div id="site-footer"></div>
-
 <script src="content.js"></script>
 <script src="scoring.js"></script>
 <script src="ui.js"></script>
 <script src="api.js"></script>
 <script>
 (async () => {
-  // ── Shell
-  UI.init();
   document.getElementById('site-header').innerHTML = UI.renderHeader();
   document.getElementById('site-nav').innerHTML    = UI.renderNav('index.html');
   document.getElementById('site-footer').innerHTML = UI.renderFooter();
-  UI.startClock('utc-clock-ws');
 
-  // ── Recession status bar
-  const rd = GEOWIRE.recessionData || {};
-  if (rd.probability !== undefined) {
-    const probEl = document.getElementById('rec-prob-bar');
-    if (probEl) probEl.textContent = rd.probability + '%';
-  }
-  if (rd.lastUpdated) {
+  // Recession command bar update
+  const recData = GEOWIRE.recessionData;
+  if (recData) {
+    const probBar = document.getElementById('rec-prob-bar');
+    if (probBar) probBar.textContent = recData.probability + '%';
     const updBar = document.getElementById('rec-updated-bar');
     if (updBar) {
-      const ago = Math.round((Date.now() - new Date(rd.lastUpdated).getTime()) / 3600000);
+      const ago = Math.round((Date.now() - new Date(recData.lastUpdated).getTime()) / 3600000);
       updBar.textContent = ago < 1 ? 'Just now' : ago + 'h ago';
     }
   }
 
-  // ── Market ticker
+  // UTC clock in status bar
+  function tickWS() {
+    var el = document.getElementById('utc-clock-ws');
+    if (el) el.textContent = new Date().toISOString().slice(11,19);
+  }
+  tickWS(); setInterval(tickWS, 1000);
+
+  // Ticker
   document.getElementById('ticker-mount').innerHTML = UI.renderMarketTicker();
 
-  // ── Recession widget
-  document.getElementById('recession-widget').innerHTML = UI.renderRecessionWidget(rd);
+  // Recession widget
+  document.getElementById('recession-widget').innerHTML = UI.renderRecessionWidget(GEOWIRE.recessionData);
 
-  // ── What Changed Today
-  const wctEl = document.getElementById('what-changed-preview');
-  if (wctEl) {
-    const items = (rd.whatChangedToday || []).slice(0, 5);
-    wctEl.innerHTML = items.length
-      ? items.map(u => `
-          <div class="what-changed-card">
-            <div class="wc-type tag-${(u.impact || 'update').toLowerCase()}">${u.factor || 'UPDATE'}</div>
-            <div class="wc-time">${u.time || ''}</div>
-            <div class="wc-text">${u.change}</div>
-            <div style="font-size:11px;color:var(--text-3);margin-top:4px">Source: ${u.source || ''}</div>
-          </div>`).join('')
-      : '<p class="loading-state">No changes logged today.</p>';
+  // What Changed Today
+  var wcEl = document.getElementById('what-changed-preview');
+  if (wcEl) {
+    wcEl.innerHTML = (GEOWIRE.updateLog || []).slice(0, 6).map(function(u) {
+      return '<div class="what-changed-card"><div class="wc-type tag-' + (u.category||'update').toLowerCase() + '">' + (u.category || 'UPDATE') + '</div><div class="wc-time">' + new Date(u.timestamp).toUTCString().replace(' GMT',' UTC') + '</div><div class="wc-text">' + u.item + ': ' + u.change + '</div></div>';
+    }).join('');
   }
 
-  // ── Where Markets Disagree
-  const divEl = document.getElementById('divergence-preview');
-  if (divEl && rd.divergences) {
-    divEl.innerHTML = rd.divergences.map(d => `
-      <div class="what-changed-card" style="border-left:3px solid var(--gw-warning,#F59E0B)">
-        <div class="wc-type" style="color:var(--gw-warning,#F59E0B)">${d.title}</div>
-        <div class="wc-text"><strong>Our model:</strong> ${d.ours}</div>
-        <div class="wc-text"><strong>Market:</strong> ${d.market}</div>
-        <div class="wc-text" style="color:var(--gw-text-secondary,#94A3B8);font-size:12px;margin-top:4px">${d.thesis}</div>
-      </div>
-    `).join('');
+  // Where Markets Disagree — divergences
+  var divEl = document.getElementById('divergence-preview');
+  if (divEl && GEOWIRE.recessionData && GEOWIRE.recessionData.divergences) {
+    divEl.innerHTML = GEOWIRE.recessionData.divergences.map(function(d) {
+      return '<div class="what-changed-card" style="border-left:3px solid var(--gw-warning,#F59E0B)"><div class="wc-type" style="color:var(--gw-warning,#F59E0B)">' + d.title + '</div><div class="wc-text"><strong>Our model:</strong> ' + d.ours + '</div><div class="wc-text"><strong>Market:</strong> ' + d.market + '</div><div class="wc-text" style="color:var(--gw-text-secondary,#94A3B8);font-size:12px;margin-top:4px">' + d.thesis + '</div></div>';
+    }).join('');
+  } else if (divEl) {
+    divEl.innerHTML = '<p class="loading-state" style="padding:16px;color:var(--gw-text-secondary,#94A3B8)">Divergence data coming soon &mdash; check <a href="predictions.html">Predictions</a> for full market vs model comparison.</p>';
   }
 
-  // ── Scenario Outlook
-  document.getElementById('scenario-preview').innerHTML = (GEOWIRE.scenarios || []).map(s => `
-    <div class="scenario-card scenario-${s.type}">
-      <div class="scenario-type-label">${s.type.toUpperCase()}</div>
-      <div class="scenario-title">${s.title}</div>
-      <div class="scenario-probability"><span class="prob-label">Probability</span><span class="prob-value">${s.probability}%</span></div>
-      <div class="scenario-desc">${s.summary}</div>
-      <a href="scenarios.html" class="scenario-cta">Full Analysis →</a>
-    </div>`).join('');
+  // Scenarios
+  document.getElementById('scenario-preview').innerHTML = (GEOWIRE.scenarios || []).map(function(s) {
+    return '<div class="scenario-card scenario-' + s.type + '"><div class="scenario-type-label">' + s.type.toUpperCase() + '</div><div class="scenario-title">' + s.title + '</div><div class="scenario-probability"><span class="prob-label">Probability</span><span class="prob-value">' + s.probability + '%</span></div><div class="scenario-desc">' + s.summary + '</div><a href="scenarios.html" class="scenario-cta">Full Analysis &rarr;</a></div>';
+  }).join('');
 
-  // ── Current Shock: conflict timeline + supply chain
-  const tlEl = document.getElementById('conflict-timeline');
-  if (tlEl) {
-    const events = (GEOWIRE.timelineEvents || []).slice(-4).reverse();
-    tlEl.innerHTML = `<h3 style="font-size:14px;font-weight:600;margin:0 0 12px;color:var(--text)">Recent Events</h3>` +
-      events.map(ev => `
-        <div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">
-          <div style="color:var(--text-3);font-size:11px;font-family:var(--font-mono)">${ev.date} · ${ev.type.toUpperCase()}</div>
-          <div style="margin-top:4px;color:var(--text-2)">${ev.text}</div>
-        </div>`).join('');
-  }
-  const scEl = document.getElementById('supply-chain-status');
-  if (scEl) {
-    scEl.innerHTML = UI.renderSupplyChain ? UI.renderSupplyChain() : '';
-  }
+  // Crisis context: conflict timeline + supply chain
+  document.getElementById('conflict-timeline').innerHTML = UI.renderTimeline(GEOWIRE.timelineEvents);
+  document.getElementById('supply-chain-status').innerHTML = UI.renderSupplyChain();
 
-  // ── News live badge
-  const nbEl = document.getElementById('news-live-badge');
-  if (nbEl) nbEl.innerHTML = UI.renderLiveBadge(false);
-
-  // ── Email capture
+  // Email capture
   document.getElementById('email-section').innerHTML = UI.renderEmailCapture();
-  UI.stubEmailCapture();
 
-  // ── Async: live market data + news
+  // Init clock etc.
+  UI.init();
+
+  // Async: live market data
   await API.loadMarketData();
+  // Async: news feed
   await API.loadNews('news-feed-container');
 })();
 </script>

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recession Probability Tracker — GeoWire</title>
-  <link rel="canonical" href="https://geowire.org/recession.html" />
   <meta name="description" content="Real-time recession probability tracking with 10-factor model, historical comparisons, and market divergence analysis. Updated daily." />
   <meta property="og:title" content="GeoWire — Recession Intelligence Dashboard" />
   <meta property="og:description" content="10-factor recession probability model tracking the economic impact of Operation Epic Fury. Updated daily." />
   <meta property="og:url" content="https://geowire.org/recession.html" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
-<link rel="stylesheet" href="styles.css" />
+  <link rel="canonical" href="https://geowire.org/recession.html" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <div id="site-header"></div>
@@ -271,8 +271,6 @@
   }
 
   // ── AdSense
-  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
-  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
 
   // ── Async: live FRED data (updates metric cards when available)
   try {
@@ -307,7 +305,6 @@
       document.getElementById('metric-kalshi').innerHTML = UI.renderMetricCard(
         'Kalshi Recession Odds', liveOdds, change || null, '%', 'Kalshi (live)', 'warn'
       );
-      // Also update content.js seed so gauge/model reflect live value
       GEOWIRE.recessionData.kalshiOdds.recession2026 = liveOdds;
       console.log('[GeoWire] Kalshi recession odds (live):', liveOdds + '%', '(prev:', prevOdds + '%)');
     }

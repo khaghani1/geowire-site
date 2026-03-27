@@ -1,240 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About & Methodology — GeoWire</title>
-  <link rel="canonical" href="https://geowire.org/about.html" />
-  <meta name="description" content="How GeoWire's 10-factor recession model works: scoring methodology, confidence levels, FRED data sources, and the logic behind the probability calculation." />
-  <meta property="og:title" content="GeoWire — Methodology & About" />
-  <meta property="og:description" content="Transparent recession probability model. 10 macro factors, explicit weights, live FRED data, and honest uncertainty ranges." />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About &amp; Methodology — GeoWire</title>
+  <meta name="description" content="GeoWire is an independent recession intelligence platform. Learn about our 10-factor model, data sources, and editorial principles." />
+  <meta property="og:title" content="About &amp; Methodology — GeoWire" />
+  <meta property="og:description" content="How GeoWire builds its recession probability model — methodology, data sources, and confidence framework." />
   <meta property="og:url" content="https://geowire.org/about.html" />
   <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@Geowire_org" />
+  <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@Geowire_org" />
+  <link rel="canonical" href="https://geowire.org/about.html" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <div id="site-header"></div>
 <div id="site-nav"></div>
+
 <main class="page-main">
 
-  <!-- Recession risk bar -->
-  <div class="war-status-bar">
+  <!-- PAGE HERO -->
+  <section class="page-hero">
     <div class="container">
-      <div class="war-status-inner">
-        <span class="war-status-label">6-MO RECESSION PROBABILITY</span>
-        <div class="war-status-track">
-          <div class="war-status-fill" id="rec-prob-fill" style="width:42%"></div>
+      <div class="page-hero-inner">
+        <div class="page-hero-badge">
+          <span class="live-dot"></span>
+          <span>METHODOLOGY &amp; TRUST</span>
         </div>
-        <span class="war-status-pct" id="rec-prob-pct" style="color:#F59E0B">42%</span>
+        <h1 class="page-hero-title">About GeoWire</h1>
+        <p class="page-hero-sub">GeoWire is an independent recession intelligence platform. We track how geopolitical shocks, energy crises, inflation, rates, labor, and supply chains change recession probability — before consensus catches up.</p>
       </div>
-    </div>
-  </div>
-
-  <!-- Hero -->
-  <section class="hero-section container">
-    <div class="hero-inner">
-      <div class="hero-badge-row">
-        <span class="hero-badge">METHODOLOGY</span>
-        <span class="hero-sep">•</span>
-        <span class="hero-badge-sub">Transparent by Design</span>
-      </div>
-      <h1 class="homepage-headline">How the GeoWire Model Works</h1>
-      <p class="hero-sub">GeoWire scores 10 macro factor families, applies historically calibrated weights, and outputs an explicit recession probability with an honest uncertainty range. Every source is cited. Every assumption is shown.</p>
     </div>
   </section>
 
-  <!-- 10-Factor Model -->
+  <!-- SECTION: 10-Factor Recession Model -->
   <section class="section container">
     <div class="section-header">
       <h2 class="section-title">The 10-Factor Recession Model</h2>
-      <a href="macro.html" class="section-link">Live Scorecard →</a>
     </div>
-    <p style="color:var(--text-2);margin-bottom:20px;max-width:640px">Each factor is scored 0–100. Higher scores indicate greater recession stress. The weighted composite becomes the headline probability.</p>
-
-    <div id="factor-table-mount"></div>
-
-    <div class="cross-factor-insight" style="margin-top:20px">
-      <strong>Score Interpretation</strong>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:12px">
-        <div style="padding:10px;background:var(--surface-2);border-radius:8px;border:1px solid #22c55e40">
-          <div style="font-family:var(--font-mono);font-weight:700;color:#22c55e">0 – 35</div>
-          <div style="font-size:13px;color:var(--text-2);margin-top:4px">STABLE — Low stress. Historical normal range.</div>
-        </div>
-        <div style="padding:10px;background:var(--surface-2);border-radius:8px;border:1px solid #F59E0B40">
-          <div style="font-family:var(--font-mono);font-weight:700;color:#F59E0B">36 – 55</div>
-          <div style="font-size:13px;color:var(--text-2);margin-top:4px">ELEVATED — Warrants monitoring. Not yet recessionary.</div>
-        </div>
-        <div style="padding:10px;background:var(--surface-2);border-radius:8px;border:1px solid #f9741640">
-          <div style="font-family:var(--font-mono);font-weight:700;color:#f97416">56 – 75</div>
-          <div style="font-size:13px;color:var(--text-2);margin-top:4px">DETERIORATING — Consistent with pre-recession patterns.</div>
-        </div>
-        <div style="padding:10px;background:var(--surface-2);border-radius:8px;border:1px solid #E6394640">
-          <div style="font-family:var(--font-mono);font-weight:700;color:#E63946">76 – 100</div>
-          <div style="font-size:13px;color:var(--text-2);margin-top:4px">STRESS / CRISIS — Active deterioration. Recession risk very high.</div>
-        </div>
-      </div>
+    <div class="about-content" style="max-width:720px;">
+      <p style="color:var(--gw-text-secondary,#94A3B8);line-height:1.7;margin-bottom:16px;">
+        GeoWire's recession probability score is derived from a weighted composite of 10 economic and geopolitical factors. Each factor is scored 0–100 (where higher = more recessionary pressure), then combined using evidence-weighted coefficients calibrated against historical recession onset patterns.
+      </p>
+      <div id="factor-list-about" style="display:grid;gap:12px;margin-top:16px;"></div>
     </div>
   </section>
 
-  <!-- Confidence Levels -->
+  <!-- SECTION: Confidence Levels -->
   <section class="section container">
     <div class="section-header">
       <h2 class="section-title">Confidence Levels</h2>
     </div>
-    <p style="color:var(--text-2);margin-bottom:16px;max-width:640px">Uncertainty is information, not weakness. GeoWire explicitly shows confidence levels on every data point so you know exactly how reliable each claim is.</p>
-    <div id="confidence-levels-mount"></div>
+    <div id="confidence-levels-list" style="max-width:720px;display:grid;gap:10px;"></div>
   </section>
 
-  <!-- Data Sources -->
+  <!-- SECTION: Data Sources -->
   <section class="section container">
     <div class="section-header">
-      <h2 class="section-title">Primary Data Sources</h2>
+      <h2 class="section-title">Data Sources</h2>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px" id="sources-mount">
-      <div class="cross-factor-insight">
-        <strong>FRED (St. Louis Federal Reserve)</strong>
-        <p style="color:var(--text-2);font-size:13px;margin:6px 0 0">Primary source for all US macro series: interest rates, yield curves, CPI, unemployment, housing starts, mortgage rates.</p>
-      </div>
-      <div class="cross-factor-insight">
-        <strong>Bloomberg / Reuters</strong>
-        <p style="color:var(--text-2);font-size:13px;margin:6px 0 0">Commodity prices, equity indices, corporate credit spreads, market news. Confirmed = 2+ outlets agree. Multi-source = Bloomberg + one other.</p>
-      </div>
-      <div class="cross-factor-insight">
-        <strong>Kalshi / Polymarket</strong>
-        <p style="color:var(--text-2);font-size:13px;margin:6px 0 0">Prediction market odds for recession probability, ceasefire timing, and oil price targets. Treated as market-implied probabilities, not forecasts.</p>
-      </div>
-      <div class="cross-factor-insight">
-        <strong>Kpler / Clarksons</strong>
-        <p style="color:var(--text-2);font-size:13px;margin:6px 0 0">Strait of Hormuz tanker flow data, shipping route disruption estimates, and global commodity logistics.</p>
-      </div>
-      <div class="cross-factor-insight">
-        <strong>CENTCOM / DoD</strong>
-        <p style="color:var(--text-2);font-size:13px;margin:6px 0 0">Official US military casualty figures, operational updates. Marked "Confirmed" when cited directly. Propaganda risk noted.</p>
-      </div>
-      <div class="cross-factor-insight">
-        <strong>HRANA / OCHA / UN</strong>
-        <p style="color:var(--text-2);font-size:13px;margin:6px 0 0">Human Rights Activists News Agency for Iranian casualties. UN OCHA for displacement figures. Access-restricted — likely undercounts.</p>
-      </div>
-      <div class="cross-factor-insight">
-        <strong>IEA / EIA</strong>
-        <p style="color:var(--text-2);font-size:13px;margin:6px 0 0">Global energy supply/demand balance, US gasoline prices, strategic petroleum reserve data.</p>
-      </div>
-      <div class="cross-factor-insight">
-        <strong>GeoWire Intelligence Desk</strong>
-        <p style="color:var(--text-2);font-size:13px;margin:6px 0 0">Original analysis and inferred estimates. Clearly marked "Model-inferred" with explicit methodology shown. Not a substitute for primary source verification.</p>
-      </div>
+    <div style="max-width:720px;color:var(--gw-text-secondary,#94A3B8);line-height:1.7;">
+      <p>GeoWire pulls from the following public and commercial data sources:</p>
+      <ul style="margin-top:12px;padding-left:20px;display:grid;gap:8px;">
+        <li><strong style="color:var(--gw-text,#E2E8F0);">FRED</strong> — Federal Reserve Economic Data (St. Louis Fed). GDP, unemployment, yield curves, CPI, housing starts.</li>
+        <li><strong style="color:var(--gw-text,#E2E8F0);">BLS</strong> — Bureau of Labor Statistics. Non-farm payrolls, initial claims, JOLTS, PPI.</li>
+        <li><strong style="color:var(--gw-text,#E2E8F0);">EIA</strong> — US Energy Information Administration. Oil/gas production, inventories, price forecasts.</li>
+        <li><strong style="color:var(--gw-text,#E2E8F0);">CoinGecko</strong> — Crypto market data. Bitcoin, Ethereum as risk-sentiment indicators.</li>
+        <li><strong style="color:var(--gw-text,#E2E8F0);">Kalshi</strong> — Prediction markets. Probability-implied forecasts for economic events.</li>
+        <li><strong style="color:var(--gw-text,#E2E8F0);">Polymarket</strong> — Decentralized prediction markets. Independent market-implied recession odds.</li>
+        <li><strong style="color:var(--gw-text,#E2E8F0);">GDELT</strong> — Global Database of Events, Language, and Tone. Conflict tracking and geopolitical sentiment.</li>
+        <li><strong style="color:var(--gw-text,#E2E8F0);">Bloomberg / CME / ICE</strong> — Commodity and financial market prices (via public redistributors).</li>
+      </ul>
     </div>
   </section>
 
-  <!-- Model Philosophy -->
+  <!-- SECTION: Editorial Principles -->
   <section class="section container">
     <div class="section-header">
-      <h2 class="section-title">Model Philosophy</h2>
+      <h2 class="section-title">Editorial Principles</h2>
     </div>
-    <div style="max-width:680px;color:var(--text-2);line-height:1.7">
-      <p><strong style="color:var(--text)">Transparency over false precision.</strong> We show you every score, every weight, and every source. A 42% probability is not a guarantee — it's the output of a model with known limitations. We show the confidence range so you can calibrate appropriately.</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">The Iran conflict is an input, not the whole picture.</strong> Geopolitical shocks accelerate pre-existing macro trends. Our model scored the US economy at elevated recession risk before the conflict began. The war is a shock amplifier — not the sole cause.</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Not financial or political advice.</strong> GeoWire is an independent intelligence platform. All analysis is original editorial unless attributed. Prediction market data represents market participants' views, not GeoWire forecasts. Nothing here constitutes investment, trading, or policy advice.</p>
-      <p style="margin-top:12px"><strong style="color:var(--text)">Updates.</strong> Factor scores are updated when significant new data arrives (typically daily). The headline probability is recalculated on every update. Timestamps are shown throughout.</p>
+    <div style="max-width:720px;display:grid;gap:14px;">
+      <div class="what-changed-card">
+        <div class="wc-type" style="color:var(--gw-accent,#5FA8D3)">NOT FINANCIAL ADVICE</div>
+        <div class="wc-text">GeoWire provides intelligence and probability analysis, not investment recommendations. All content is for informational purposes only. Always consult a qualified financial advisor before making investment decisions.</div>
+      </div>
+      <div class="what-changed-card">
+        <div class="wc-type" style="color:var(--gw-accent,#5FA8D3)">CONFIDENCE RATINGS ON ALL OUTPUTS</div>
+        <div class="wc-text">Every data point and analysis carries a confidence badge — Confirmed, Multi-source, Single-source, Model-inferred, or Disputed. We never present uncertain data as fact.</div>
+      </div>
+      <div class="what-changed-card">
+        <div class="wc-type" style="color:var(--gw-accent,#5FA8D3)">AI SUMMARIES LABELED</div>
+        <div class="wc-text">Where AI-generated summaries or model inferences are used, they are clearly labeled as such. Human editorial review is applied to all published analysis.</div>
+      </div>
+      <div class="what-changed-card">
+        <div class="wc-type" style="color:var(--gw-accent,#5FA8D3)">INDEPENDENT &amp; AD-FREE</div>
+        <div class="wc-text">GeoWire is independently operated with no advertiser relationships that could influence editorial decisions. We are supported by readers.</div>
+      </div>
     </div>
   </section>
 
-  <!-- Historical Calibration -->
-  <section class="section container">
-    <div class="section-header">
-      <h2 class="section-title">Historical Calibration</h2>
-      <a href="recession.html" class="section-link">Historical Comparisons →</a>
-    </div>
-    <div id="historical-mount"></div>
-  </section>
-
-  <!-- Email + Footer -->
-  <section class="section container" id="email-section"></section>
+  <!-- Email Capture -->
+  <section class="section container" id="email-capture-section"></section>
 
 </main>
 <div id="site-footer"></div>
-
 <script src="content.js"></script>
 <script src="scoring.js"></script>
 <script src="ui.js"></script>
 <script src="api.js"></script>
 <script>
-(async () => {
-  UI.init();
+(function() {
   document.getElementById('site-header').innerHTML = UI.renderHeader();
   document.getElementById('site-nav').innerHTML    = UI.renderNav('about.html');
   document.getElementById('site-footer').innerHTML = UI.renderFooter();
 
-  const rd = GEOWIRE.recessionData || {};
-
-  // Update probability bar
-  if (rd.probability !== undefined) {
-    const pct = document.getElementById('rec-prob-pct');
-    const fill = document.getElementById('rec-prob-fill');
-    if (pct) pct.textContent = rd.probability + '%';
-    if (fill) fill.style.width = rd.probability + '%';
+  // Render factor list
+  var factorListEl = document.getElementById('factor-list-about');
+  if (factorListEl && GEOWIRE.recessionData && GEOWIRE.recessionData.factorScores) {
+    var scores = GEOWIRE.recessionData.factorScores;
+    factorListEl.innerHTML = Object.entries(scores).map(function(entry) {
+      var key = entry[0]; var f = entry[1];
+      var barColor = f.score >= 70 ? '#ef4444' : f.score >= 45 ? '#F59E0B' : '#22c55e';
+      return '<div class="what-changed-card" style="display:grid;gap:6px;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<strong style="color:var(--gw-text,#E2E8F0);font-size:14px;">' + key.replace(/([A-Z])/g,' $1').trim() + '</strong>' +
+        '<span style="color:' + barColor + ';font-weight:700;font-size:14px;">' + f.score + '/100</span>' +
+        '</div>' +
+        '<div style="background:var(--gw-border,#334155);border-radius:4px;height:6px;overflow:hidden;"><div style="width:' + f.score + '%;background:' + barColor + ';height:100%;border-radius:4px;"></div></div>' +
+        '<div class="wc-text" style="font-size:12px;">' + (f.topDriver || '') + '</div>' +
+        '</div>';
+    }).join('');
   }
 
-  // 10-Factor table
-  const ftEl = document.getElementById('factor-table-mount');
-  if (ftEl && rd.factorScores) {
-    const factorNames = {
-      ratesLiquidity: 'Rates & Liquidity', inflation: 'Inflation', laborMarket: 'Labor Market',
-      consumerHealth: 'Consumer Health', corporateCredit: 'Corporate Credit', housing: 'Housing',
-      supplyLogistics: 'Supply & Logistics', globalSpillovers: 'Global Spillovers',
-      marketSignals: 'Market Signals', outsideBox: 'Outside the Box',
-    };
-    const statusColor = { STABLE: '#22c55e', ELEVATED: '#F59E0B', DETERIORATING: '#f97416', STRESS: '#E63946' };
-    ftEl.innerHTML = `<div style="overflow-x:auto"><table class="methodology-table" style="width:100%">
-      <thead><tr><th>Factor</th><th>Weight</th><th>Score</th><th>Status</th><th>Top Driver</th></tr></thead>
-      <tbody>` +
-      Object.entries(rd.factorScores).map(([k, v]) => {
-        const color = statusColor[v.status] || '#94A3B8';
-        return `<tr>
-          <td><a href="factor.html?f=${k}" style="color:#5FA8D3">${factorNames[k] || k}</a></td>
-          <td style="font-family:var(--font-mono)">${Math.round((v.weight || 0) * 100)}%</td>
-          <td style="font-family:var(--font-mono);font-weight:700;color:${color}">${v.score}</td>
-          <td><span style="color:${color};font-size:12px;font-weight:600">${v.status}</span></td>
-          <td style="font-size:12px;color:var(--text-2)">${v.topDriver || '—'}</td>
-        </tr>`;
-      }).join('') + `</tbody></table></div>`;
-  }
-
-  // Confidence levels
-  const clEl = document.getElementById('confidence-levels-mount');
-  if (clEl && GEOWIRE.confidenceLevels) {
-    clEl.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">` +
-      Object.values(GEOWIRE.confidenceLevels).map(c => `
-        <div style="padding:12px;background:var(--surface-2);border-radius:8px;border:1px solid var(--border)">
-          <div style="font-size:20px;margin-bottom:6px">${c.emoji}</div>
-          <div style="font-weight:600;color:var(--text)">${c.label}</div>
-          <div style="font-size:12px;color:var(--text-2);margin-top:4px">${c.description}</div>
-        </div>`).join('') + `</div>`;
-  }
-
-  // Historical comparisons
-  const histEl = document.getElementById('historical-mount');
-  if (histEl && rd.historicalComparisons) {
-    histEl.innerHTML = `<div style="display:grid;gap:10px">` +
-      rd.historicalComparisons.map(h => `
-        <div class="cross-factor-insight">
-          <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-            <strong style="color:var(--text)">${h.event}</strong>
-            <span style="font-family:var(--font-mono);color:#5FA8D3;font-size:13px">Similarity: ${h.similarity}%</span>
-          </div>
-          <div style="display:flex;gap:16px;margin:6px 0;flex-wrap:wrap">
-            <span style="font-size:12px;color:var(--text-3)">Oil: ${h.oilChange}</span>
-            <span style="font-size:12px;color:var(--text-3)">Recession lag: ${h.recessionLag}</span>
-          </div>
-          <p style="margin:0;font-size:13px;color:var(--text-2)">${h.notes}</p>
-        </div>`).join('') + `</div>`;
+  // Render confidence levels
+  var confEl = document.getElementById('confidence-levels-list');
+  if (confEl && GEOWIRE.confidenceLevels) {
+    confEl.innerHTML = Object.entries(GEOWIRE.confidenceLevels).map(function(entry) {
+      var key = entry[0]; var c = entry[1];
+      return '<div class="what-changed-card" style="display:flex;align-items:flex-start;gap:12px;">' +
+        '<span style="font-size:20px;flex-shrink:0;">' + c.emoji + '</span>' +
+        '<div><strong style="color:var(--gw-text,#E2E8F0);">' + c.label + '</strong>' +
+        '<p class="wc-text" style="margin-top:4px;">' + c.description + '</p></div>' +
+        '</div>';
+    }).join('');
   }
 
   // Email capture
-  document.getElementById('email-section').innerHTML = UI.renderEmailCapture();
-  UI.stubEmailCapture();
+  var emailEl = document.getElementById('email-capture-section');
+  if (emailEl) emailEl.innerHTML = UI.renderEmailCapture();
+
+  UI.init();
 })();
 </script>
 </body>

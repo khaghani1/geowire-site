@@ -4,8 +4,8 @@
 const UI = (() => {
 
   // ─── INTERNAL HELPERS ────────────────────────────────────────────────────────
-  function _getLang() { return 'en'; }
-  function _t(enText) { return enText; }
+  function _getLang() { return localStorage.getItem('geowire-lang') || 'en'; }
+  function _t(enText, faText) { return _getLang() === 'fa' ? faText : enText; }
   function _warDay() {
     const start = new Date(GEOWIRE.siteMeta.warStartDate);
     return Math.max(1, Math.ceil((Date.now() - start) / 86400000));
@@ -98,9 +98,37 @@ const UI = (() => {
     return `<div class="section-heading"><h2>${_escHtml(title)}</h2>${subtitle ? `<p class="section-subtitle">${_escHtml(subtitle)}</p>` : ''}</div>`;
   }
 
-  function renderLanguageToggle() { return ''; }
-  function setLang() {}
-  function _applyLang() {}
+  // ─── LANGUAGE TOGGLE ─────────────────────────────────────────────────────────
+  function renderLanguageToggle() {
+    const lang = _getLang();
+    return `<div class="lang-toggle" role="group" aria-label="Language selector">
+      <button class="lang-btn ${lang==='en'?'active':''}" onclick="UI.setLang('en')" aria-pressed="${lang==='en'}">EN</button>
+      <button class="lang-btn ${lang==='fa'?'active':''}" onclick="UI.setLang('fa')" aria-pressed="${lang==='fa'}">FA</button>
+    </div>`;
+  }
+
+  function setLang(lang) {
+    localStorage.setItem('geowire-lang', lang);
+    _applyLang(lang);
+  }
+
+  function _applyLang(lang) {
+    const fa = GEOWIRE.farsiLabels;
+    const isFa = lang === 'fa';
+    const titleEl = document.querySelector('.site-title');
+    if (titleEl) { titleEl.textContent = isFa ? fa.siteTitle : 'GeoWire'; titleEl.dir = isFa ? 'rtl' : 'ltr'; }
+    const headlineEl = document.querySelector('.homepage-headline');
+    if (headlineEl) { headlineEl.textContent = isFa ? fa.homepageHeadline : (headlineEl.dataset.en || headlineEl.textContent); headlineEl.dir = isFa ? 'rtl' : 'ltr'; }
+    document.querySelectorAll('[data-nav-label]').forEach(el => {
+      const k = el.dataset.navLabel;
+      el.textContent = isFa ? (fa.navItems[k] || k) : k;
+      el.dir = isFa ? 'rtl' : 'ltr';
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+      btn.setAttribute('aria-pressed', btn.textContent === lang.toUpperCase());
+    });
+  }
 
   // ─── EMAIL CAPTURE ───────────────────────────────────────────────────────────
   const EMAIL_KEY      = 'geowire-subscribed';      // flag: any email saved
@@ -150,12 +178,13 @@ const UI = (() => {
 
   function renderEmailCapture() {
     if (isSubscribed()) return renderEmailCaptureSuccess();
-    const title = 'Get the GeoWire Daily Brief — Free';
-    const sub   = 'Conflict intelligence, market signals, and analysis — every morning.';
-    const ph    = 'your@email.com';
-    const btn   = 'Subscribe Free';
-    const note  = '💭 No spam. Unsubscribe anytime.';
-    return `<div class="email-capture" id="email-capture-block">
+    const isFa = _getLang() === 'fa';
+    const title = isFa ? 'خبرنامه روزانه GeoWire — رایگان' : 'Get the GeoWire Daily Brief — Free';
+    const sub   = isFa ? 'هوش تعارض، سیگنال‌های بازار و تحلیل — هر روز صبح.' : 'Conflict intelligence, market signals, and analysis — every morning.';
+    const ph    = isFa ? 'ایمیل شما' : 'your@email.com';
+    const btn   = isFa ? 'عضویت' : 'Subscribe Free';
+    const note  = isFa ? '📭 بدون اسپم. لغو عضویت هر زمان.' : '📭 No spam. Unsubscribe anytime.';
+    return `<div class="email-capture" id="email-capture-block" dir="${isFa?'rtl':'ltr'}">
       <div class="email-capture-inner">
         <div class="email-capture-icon">📬</div>
         <h3 class="email-capture-title">${title}</h3>
@@ -234,7 +263,7 @@ const UI = (() => {
               <span class="site-tagline">RECESSION INTELLIGENCE</span>
             </div>
           </a>
-          <div class="war-status-pill" aria-label="Live status">
+          <div class="war-status-pill" aria-label="Platform status">
             <span class="pulse-dot" aria-hidden="true"></span>
             <span>LIVE — RECESSION RISK TRACKER</span>
           </div>
@@ -253,7 +282,7 @@ const UI = (() => {
   function renderNav(activePage) {
     const items = GEOWIRE.navigationItems.map(item => {
       const isActive = item.href === activePage || item.href === activePage + '.html' || item.href.replace('.html','') === activePage;
-      return `<a href="${_escHtml(item.href)}" class="nav-link ${isActive ? 'nav-link-active' : ''}" data-nav-label="${_escHtml(item.label)}" aria-current="${isActive ? 'page' : 'false'}">${_escHtml(item.label)}</a>`;
+      return `<a href="${_escHtml(item.href)}" class="nav-link ${isActive ? 'nav-link-active' : ''}" aria-current="${isActive ? 'page' : 'false'}">${_escHtml(item.label)}</a>`;
     }).join('');
     return `<nav class="main-nav" id="main-nav" role="navigation" aria-label="Main navigation">
       <div class="nav-inner container">${items}</div>
@@ -264,7 +293,7 @@ const UI = (() => {
   function renderFooter() {
     const year = new Date().getFullYear();
     const primaryLinks = GEOWIRE.navigationItems.map(n=>`<a href="${_escHtml(n.href)}">${_escHtml(n.label)}</a>`).join('');
-    const secondaryLinks = (GEOWIRE.secondaryNavItems || []).map(n=>`<a href="${_escHtml(n.href)}" style="font-size:12px;color:var(--text-3)">${_escHtml(n.label)}</a>`).join('');
+    const secondaryLinks = (GEOWIRE.secondaryNavItems || []).map(n=>`<a href="${_escHtml(n.href)}">${_escHtml(n.label)}</a>`).join('');
     return `<footer class="site-footer" role="contentinfo">
       <div class="footer-inner container">
         <div class="footer-brand">
@@ -272,10 +301,10 @@ const UI = (() => {
           <span><strong>GeoWire</strong> — Recession Intelligence Platform</span>
         </div>
         <div class="footer-links">${primaryLinks}</div>
-        ${secondaryLinks ? `<div class="footer-links" style="margin-top:8px;gap:12px">${secondaryLinks}</div>` : ''}
+        ${secondaryLinks ? `<div class="footer-secondary-links" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px 16px;">${secondaryLinks.replace(/<a /g,'<a style="font-size:12px;color:var(--gw-text-secondary,#94A3B8);text-decoration:none;" ')}</div>` : ''}
         <div class="footer-legal">
           <p>© ${year} GeoWire. All analysis is original unless attributed. Confidence badges indicate source methodology, not certainty.</p>
-          <p class="footer-disclaimer">GeoWire is an independent intelligence platform. Seed data is editorial/demo content unless marked LIVE. Not financial or political advice.</p>
+          <p class="footer-disclaimer">GeoWire is an independent recession intelligence platform. Seed data is editorial/demo content unless marked LIVE. Not financial or political advice.</p>
         </div>
       </div>
     </footer>`;

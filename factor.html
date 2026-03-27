@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire Factor Explorer — Deep dive into a single recession factor: FRED chart, second-order effects, watch items.">
-<title>Factor Explorer — GeoWire</title>
-  <link rel="canonical" href="https://geowire.org/factor.html" />
+  <title id="page-title">Factor Explorer — GeoWire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -116,43 +115,14 @@
   (async function () {
     try {
     // ── Init shared shell
-    UI.init();
     document.getElementById('site-header').innerHTML = UI.renderHeader();
     document.getElementById('site-nav').innerHTML    = UI.renderNav('macro.html');
     document.getElementById('site-footer').innerHTML = UI.renderFooter();
+    UI.init();
 
-    // ── Parse ?f= from URL
+    // ── Parse ?f= from URL (NO default — show index if missing)
     const params = new URLSearchParams(window.location.search);
     const factorKey = params.get('f') || '';
-
-    // ── If no factor key, show a directory of all factors
-    if (!factorKey) {
-      document.title = 'Factor Explorer — GeoWire';
-      document.getElementById('breadcrumb-factor-name').textContent = 'All Factors';
-      const rec2 = GEOWIRE.recessionData || {};
-      const fd2  = GEOWIRE.factorDetails || {};
-      const statusColor = { STABLE: '#22c55e', ELEVATED: '#F59E0B', DETERIORATING: '#f97416', STRESS: '#E63946' };
-      document.getElementById('factor-explorer-mount').innerHTML =
-        `<h2 style="margin-bottom:16px;font-size:20px">Macro Factor Index</h2>
-         <p style="color:var(--text-2);margin-bottom:20px">Click any factor for a deep dive: FRED data, second-order effects, and watch items.</p>
-         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">` +
-        FACTOR_ORDER.map(k => {
-          const fs = (rec2.factorScores || {})[k] || {};
-          const fd_ = fd2[k] || {};
-          const color = statusColor[fs.status] || '#94A3B8';
-          return `<a href="factor.html?f=${k}" style="display:block;padding:16px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text)">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-              <span style="font-weight:600;font-size:14px">${fd_.name || k}</span>
-              <span style="font-family:var(--font-mono);font-weight:700;color:${color};font-size:18px">${fs.score || 0}</span>
-            </div>
-            <span style="font-size:11px;font-weight:600;color:${color};letter-spacing:0.05em">${fs.status || 'N/A'}</span>
-            <p style="font-size:12px;color:var(--text-2);margin:6px 0 0;line-height:1.4">${(fd_.description || '').slice(0, 80)}…</p>
-          </a>`;
-        }).join('') + `</div>`;
-      document.getElementById('factor-email-capture').innerHTML = UI.renderEmailCapture();
-      UI.stubEmailCapture();
-      return;
-    }
 
     // Defensive: guard rec itself, not just rec.factorScores
     const rec = GEOWIRE.recessionData   || {};
@@ -160,27 +130,43 @@
     const factorScore  = (rec.factorScores  || {})[factorKey];
     const factorDetail = fd[factorKey];
 
-    if (!factorScore || !factorDetail) {
-      const validKeys = Object.keys(fd).length
-        ? Object.keys(fd)
+    // If no ?f= param or factor not found, show a clickable index of all 10 factors
+    if (!factorKey || !factorScore || !factorDetail) {
+      const validKeys = Object.keys((rec.factorScores || {})).length
+        ? Object.keys(rec.factorScores)
         : ['ratesLiquidity','inflation','laborMarket','consumerHealth','corporateCredit',
            'housing','supplyLogistics','globalSpillovers','marketSignals','outsideBox'];
+      const indexCards = validKeys.map(function(k) {
+        var fs = (rec.factorScores || {})[k] || {};
+        var fdet = fd[k] || {};
+        var score = fs.score || 0;
+        var barColor = score >= 70 ? '#ef4444' : score >= 45 ? '#F59E0B' : '#22c55e';
+        var statusLabel = fs.status || 'UNKNOWN';
+        return '<a href="factor.html?f=' + k + '" style="display:block;padding:14px 16px;background:var(--surface-2,#1E293B);border:1px solid var(--border,#334155);border-radius:8px;text-decoration:none;color:inherit;transition:border-color 0.2s;" onmouseover="this.style.borderColor=\'#5FA8D3\'" onmouseout="this.style.borderColor=\'var(--border,#334155)\'">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+          '<strong style="color:var(--gw-text,#E2E8F0);font-size:14px;">' + (fdet.name || k.replace(/([A-Z])/g,' $1').trim()) + '</strong>' +
+          '<span style="color:' + barColor + ';font-weight:700;font-size:15px;">' + score + '<small style="font-size:11px;font-weight:400;color:var(--gw-text-secondary,#94A3B8)">/100</small></span>' +
+          '</div>' +
+          '<div style="background:var(--gw-border,#334155);border-radius:4px;height:5px;overflow:hidden;margin-bottom:8px;"><div style="width:' + score + '%;background:' + barColor + ';height:100%;border-radius:4px;"></div></div>' +
+          '<div style="font-size:12px;color:var(--gw-text-secondary,#94A3B8);">' + (fs.topDriver || statusLabel) + '</div>' +
+          '</a>';
+      }).join('');
       document.getElementById('factor-explorer-mount').innerHTML =
-        `<div class="cross-factor-insight" style="text-align:left">
-           <strong style="color:#E63946">Factor not found:</strong> <code style="font-family:var(--font-mono);color:#F59E0B">${factorKey || '(none)'}</code>
-           <p style="margin:12px 0 8px;color:var(--text-2)">Valid factor keys:</p>
-           <div style="display:flex;flex-wrap:wrap;gap:8px">
-             ${validKeys.map(k => `<a href="factor.html?f=${k}" style="padding:4px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;color:#5FA8D3;font-family:var(--font-mono);font-size:12px;text-decoration:none">${k}</a>`).join('')}
-           </div>
-           <p style="margin-top:12px"><a href="macro.html" style="color:#5FA8D3">← Return to Macro Pulse</a></p>
-         </div>`;
-      document.getElementById('breadcrumb-factor-name').textContent = 'Not found';
+        '<div style="text-align:left">' +
+        '<h2 style="color:var(--gw-text,#E2E8F0);margin-bottom:8px;">Factor Explorer — All 10 Factors</h2>' +
+        '<p style="color:var(--gw-text-secondary,#94A3B8);margin-bottom:20px;">Click a factor below to explore its score, drivers, and second-order effects.</p>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">' + indexCards + '</div>' +
+        '<p style="margin-top:20px;font-size:13px;"><a href="macro.html" style="color:#5FA8D3;">&larr; Return to Macro Pulse</a></p>' +
+        '</div>';
+      document.getElementById('breadcrumb-factor-name').textContent = 'All Factors';
+      document.getElementById('factor-email-capture').innerHTML = UI.renderEmailCapture();
       return;
     }
 
     // ── Dynamic page title & breadcrumb
     const name = factorDetail.name || factorKey;
     document.title = `${name} — Macro Factor Explorer — GeoWire`;
+    document.getElementById('page-title').textContent = `${name} — GeoWire`;
     document.getElementById('breadcrumb-factor-name').textContent = name;
 
     // ── Render factor explorer
@@ -197,7 +183,8 @@
         const captionEl = chartWrap ? chartWrap.querySelector('.factor-chart-caption') : null;
 
         try {
-          // Fetch last 24 months of data from FRED
+          const liveData = await API.fetchFRED(seriesId);
+          // Attempt to fetch last 24 months of data from FRED
           const FRED_KEY = 'f8f377edb471980ac3d88f219145c071';
           const url = `https://api.stlouisfed.org/fred/series/observations?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=asc&limit=24`;
           const res = await fetch(url);
@@ -311,12 +298,6 @@
     // ── Market ticker
     document.getElementById('market-ticker-bar') &&
       (document.getElementById('market-ticker-bar').innerHTML = ''); // factor page doesn't have ticker mount, skip
-
-    // ── AdSense
-    document.getElementById('ad-factor-mid').innerHTML = UI.renderAdSlot('factor-mid');
-    document.querySelectorAll('.adsbygoogle').forEach(() => {
-      try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-    });
 
     // ── AI Explain — for the current factor
     const aiEl = document.getElementById('factor-ai-explain');

@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire What Changed — Daily update log tracking every significant development in Operation Epic Fury.">
-<title>What Changed Log — GeoWire</title>
-  <link rel="canonical" href="https://geowire.org/what-changed.html" />
+  <title>What Changed Log — GeoWire</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -90,6 +89,12 @@
   document.getElementById('site-nav').innerHTML    = UI.renderNav('what-changed.html');
   document.getElementById('site-footer').innerHTML = UI.renderFooter();
 
+  // Update dynamic war day display
+  var warDayDisplay = document.getElementById('war-day-display');
+  if (warDayDisplay) {
+    warDayDisplay.textContent = Math.max(1, Math.ceil((Date.now() - new Date('2026-02-28').getTime()) / 86400000));
+  }
+
   // Update log entries (from content.js or fallback)
   const updates = GEOWIRE.updateLog || [];
   const logEl = document.getElementById('update-log');
@@ -171,8 +176,6 @@
   }
 
   UI.init();
-  (window.adsbygoogle || []).push({});
-  (window.adsbygoogle || []).push({});
 })();
 </script>
 </body>
