@@ -6,7 +6,7 @@ const GEOWIRE = {
   // ─── SITE META ──────────────────────────────────────────────────────────────
   siteMeta: {
     title: 'GeoWire — Recession Intelligence Platform',
-    description: 'Real-time recession intelligence: probability scoring, 10-factor macro model, prediction markets, and US–Iran conflict spillover analysis.',
+    description: 'Track how geopolitical shocks, energy crises, inflation, rates, labor, and supply chains change recession probability in real time.',
     ogImage: 'https://geowire.org/og-default.png',
     twitterHandle: '@Geowire_org',
     baseUrl: 'https://geowire.org',
@@ -45,23 +45,26 @@ const GEOWIRE = {
   // ─── NAVIGATION ─────────────────────────────────────────────────────────────
   navigationItems: [
     { label: 'Recession',    href: 'recession.html',    icon: '📉' },
-    { label: 'Macro Pulse',  href: 'macro.html',        icon: '📊' },
+    { label: 'Macro',        href: 'macro.html',        icon: '📊' },
     { label: 'Predictions',  href: 'predictions.html',  icon: '🔮' },
+    { label: 'Scenarios',    href: 'scenarios.html',    icon: '🧪' },
     { label: 'Energy',       href: 'energy.html',       icon: '⚡' },
-    { label: 'Scenarios',    href: 'scenarios.html',    icon: '🗺️' },
     { label: 'Analysis',     href: 'analysis.html',     icon: '📝' },
     { label: 'About',        href: 'about.html',        icon: 'ℹ️' },
   ],
 
-  // ─── SECONDARY NAV (footer + expanded menus) ────────────────────────────────
+  // ─── SECONDARY NAV (footer only) ────────────────────────────────────────────
   secondaryNavItems: [
-    { label: 'Dashboard',    href: 'index.html',        icon: '🏠' },
-    { label: 'Countries',    href: 'countries.html',    icon: '🌍' },
-    { label: 'Trade',        href: 'trade.html',        icon: '🚢' },
-    { label: 'US Impact',    href: 'us-impact.html',    icon: '🇺🇸' },
-    { label: 'Humanitarian', href: 'humanitarian.html', icon: '🏥' },
-    { label: 'Geopolitical', href: 'geopolitical.html', icon: '🗺️' },
-    { label: 'Podcast',      href: 'podcast.html',      icon: '🎙️' },
+    { label: 'Supply Chain',        href: 'trade.html' },
+    { label: 'Countries',           href: 'countries.html' },
+    { label: 'US Impact',           href: 'us-impact.html' },
+    { label: 'Humanitarian',        href: 'humanitarian.html' },
+    { label: 'Geopolitical',        href: 'geopolitical.html' },
+    { label: 'What Changed',        href: 'what-changed.html' },
+    { label: 'Podcast',             href: 'podcast.html' },
+    { label: 'War Cost Calculator', href: 'exposure-calculator.html' },
+    { label: 'Power Map',           href: 'powermap.html' },
+    { label: 'Narrative War',       href: 'narrative-war.html' },
   ],
 
   // ─── CONFIDENCE LEVELS ──────────────────────────────────────────────────────

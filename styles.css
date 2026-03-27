@@ -2948,3 +2948,7 @@ th, td { text-align: left; vertical-align: top; }
   .scenario-result-grid  { grid-template-columns: 1fr 1fr; }
   .sector-grid           { grid-template-columns: 1fr 1fr; }
 }
+
+@media (max-width: 768px) {
+  #crisis-context-grid { grid-template-columns: 1fr !important; }
+}
