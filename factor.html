@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="canonical" href="https://geowire.org/factor" />
+  <link rel="canonical" href="https://geowire.org/factor.html" />
   <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire Factor Explorer — Deep dive into a single recession factor: FRED chart, second-order effects, watch items.">
@@ -50,9 +50,6 @@
     </div>
 
   </section>
-
-  <!-- AdSense -->
-  <div class="container" id="ad-factor-mid"></div>
 
   <!-- Related factors -->
   <section class="section container" id="related-factors-section" style="display:none">
@@ -288,12 +285,6 @@
     // ── Market ticker
     document.getElementById('market-ticker-bar') &&
       (document.getElementById('market-ticker-bar').innerHTML = ''); // factor page doesn't have ticker mount, skip
-
-    // ── AdSense
-    document.getElementById('ad-factor-mid').innerHTML = UI.renderAdSlot('factor-mid');
-    document.querySelectorAll('.adsbygoogle').forEach(() => {
-      try { } catch(e) {}
-    });
 
     // ── AI Explain — for the current factor
     const aiEl = document.getElementById('factor-ai-explain');

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="canonical" href="https://geowire.org/predictions" />
+  <link rel="canonical" href="https://geowire.org/predictions.html" />
   <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire Prediction Markets — Live Polymarket & Kalshi probabilities for Iran conflict resolution, Hormuz reopening, oil price scenarios, and recession odds.">
@@ -74,9 +74,6 @@
     <div class="pred-cards-grid" id="pred-cards-mount"></div>
   </section>
 
-  <!-- AdSense mid -->
-  <div class="container" id="ad-pred-mid"></div>
-
   <!-- ═══════════════════════════════════════════════════════════════════════
        INSIDER TRADING WATCH
        ═══════════════════════════════════════════════════════════════════════ -->
@@ -122,6 +119,13 @@
     </div>
   </section>
 
+
+  <!-- Freemium hook -->
+  <section class="section container">
+    <div style="padding:14px 18px;background:rgba(79,130,255,.07);border:1px solid rgba(79,130,255,.25);border-radius:10px;font-size:12px;color:var(--text-2);font-family:var(--font-mono)">
+      🔒 <strong style="color:var(--accent)">Coming soon:</strong> Real-time divergence alerts when model probability diverges from prediction markets by 10pp+, model vs. market tracker, and historical accuracy scores.
+    </div>
+  </section>
   <section class="section container" id="pred-email-capture"></section>
   <div id="site-footer"></div>
 
@@ -321,12 +325,6 @@
       },
     });
   }
-
-  // ── AdSense
-  document.getElementById('ad-pred-mid').innerHTML = UI.renderAdSlot('pred-mid');
-  document.querySelectorAll('.adsbygoogle').forEach(() => {
-    try { } catch(e) {}
-  });
 
   // ── Email capture
   document.getElementById('pred-email-capture').innerHTML = UI.renderEmailCapture();

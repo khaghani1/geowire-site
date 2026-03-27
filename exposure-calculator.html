@@ -1,377 +1,573 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="canonical" href="https://geowire.org/exposure-calculator" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculate your personal monthly cost from the Iran war — gas, groceries, heating, portfolio, and mortgage impact.">
+  <link rel="canonical" href="https://geowire.org/exposure-calculator.html">
+  <title>Personal Impact Calculator — GeoWire</title>
+  <meta property="og:title" content="GeoWire — Personal War Cost Calculator">
+  <meta property="og:description" content="How much is the Iran war costing you every month? Calculate your gas, grocery, heating, and portfolio impact.">
+  <meta property="og:url" content="https://geowire.org/exposure-calculator.html">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Impact Calculator — GeoWire</title>
-  <meta name="description" content="Calculate your personal exposure to Operation Epic Fury: energy costs, portfolio impact, travel risk, and supply chain vulnerability." />
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    /* ── Wizard shell ─────────────────────────────────────────────────── */
+    .wizard-wrap { max-width:680px; margin:0 auto; padding:0 16px 60px; }
 
-  <meta property="og:title" content="GeoWire — Conflict Exposure Calculator" />
-  <meta property="og:description" content="How exposed are you to the Iran war? Calculate your personal energy cost impact, portfolio exposure, and supply chain risk." />
-  <meta property="og:image" content="https://geowire.org/og-default.png" />
-  <meta property="og:url" content="https://geowire.org/exposure-calculator.html" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@Geowire_org" />
+    /* Progress dots */
+    .wizard-dots { display:flex; justify-content:center; align-items:center; gap:10px; margin:28px 0 32px; }
+    .wizard-dot { width:10px; height:10px; border-radius:50%; background:var(--surface-2); border:2px solid var(--border); transition:.2s; cursor:default; }
+    .wizard-dot.active { background:var(--accent); border-color:var(--accent); }
+    .wizard-dot.done   { background:var(--accent); border-color:var(--accent); opacity:.45; }
+    .wizard-dot-line { flex:1; max-width:40px; height:2px; background:var(--border); border-radius:1px; }
+    .wizard-dot-line.done { background:var(--accent); opacity:.4; }
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "GeoWire — Exposure Calculator",
-    "description": "Calculate personal and portfolio exposure to Operation Epic Fury.",
-    "url": "https://geowire.org/exposure-calculator.html"
-  }
-  </script>
+    /* Step card */
+    .wizard-step { display:none; }
+    .wizard-step.active { display:block; }
+    .wizard-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:28px; }
+    .wizard-step-label { font-family:var(--font-mono); font-size:10px; color:var(--text-3); letter-spacing:.1em; margin-bottom:6px; }
+    .wizard-step-title { font-size:1.4rem; font-weight:700; margin:0 0 6px; color:var(--text); }
+    .wizard-step-sub   { font-size:14px; color:var(--text-2); margin:0 0 24px; }
 
-  <link rel="stylesheet" href="styles.css" />
+    /* Clickable cards */
+    .option-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; margin-bottom:20px; }
+    .option-card { border:2px solid var(--border); border-radius:10px; padding:14px 10px; text-align:center; cursor:pointer; transition:.15s; background:var(--bg); user-select:none; }
+    .option-card:hover { border-color:var(--accent); }
+    .option-card.selected { border-color:var(--accent); background:rgba(79,130,255,.09); }
+    .option-card .oc-icon { font-size:22px; margin-bottom:6px; }
+    .option-card .oc-label { font-size:12px; font-weight:600; color:var(--text); line-height:1.3; }
+    .option-card .oc-check { display:none; font-size:12px; color:var(--accent); margin-top:4px; }
+    .option-card.selected .oc-check { display:block; }
+
+    /* Slider rows */
+    .slider-row { margin-bottom:22px; }
+    .slider-row-head { display:flex; justify-content:space-between; margin-bottom:8px; }
+    .slider-row-head label { font-size:13px; color:var(--text-2); }
+    .slider-row-head span  { font-family:var(--font-mono); font-size:13px; color:var(--accent); font-weight:600; }
+    .slider-row input[type=range] { width:100%; accent-color:var(--accent); }
+
+    /* Gas premium callout */
+    .gas-premium { font-family:var(--font-mono); font-size:12px; color:var(--text-3); margin-top:6px; padding:8px 12px; background:var(--surface-2); border-radius:6px; }
+
+    /* Nav buttons */
+    .wizard-nav { display:flex; justify-content:space-between; margin-top:24px; gap:12px; }
+    .wizard-btn { padding:11px 28px; border-radius:8px; border:none; font-family:var(--font-mono); font-size:13px; font-weight:700; cursor:pointer; transition:.15s; }
+    .wizard-btn-back { background:var(--surface-2); color:var(--text-2); border:1px solid var(--border); }
+    .wizard-btn-back:hover { color:var(--text); }
+    .wizard-btn-next { background:var(--accent); color:#fff; flex:1; }
+    .wizard-btn-next:hover { opacity:.88; }
+
+    /* Results */
+    .result-total { text-align:center; padding:32px 20px; }
+    .result-total-intro { font-size:14px; color:var(--text-2); margin-bottom:8px; }
+    .result-total-amount { font-size:clamp(2.4rem,8vw,4rem); font-weight:700; font-family:var(--font-mono); color:var(--accent); line-height:1; }
+    .result-total-sub { font-size:13px; color:var(--text-3); margin-top:10px; }
+    .result-bars { margin-top:20px; }
+    .result-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .result-bar-label { font-size:12px; color:var(--text-2); width:100px; flex-shrink:0; }
+    .result-bar-track { flex:1; height:8px; background:var(--surface-2); border-radius:4px; overflow:hidden; }
+    .result-bar-fill { height:100%; border-radius:4px; transition:width 1.5s cubic-bezier(.25,.8,.25,1); }
+    .result-bar-val { font-family:var(--font-mono); font-size:12px; color:var(--text-2); width:52px; text-align:right; flex-shrink:0; }
+
+    /* Share card (hidden, for html2canvas) */
+    #share-card { position:fixed; left:-9999px; top:0; width:1200px; height:675px; background:#0A0F1E;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px; box-sizing:border-box; }
+    #share-card .sc-eyebrow { font-family:'JetBrains Mono',monospace; font-size:14px; color:#5FA8D3; letter-spacing:.1em; margin-bottom:12px; }
+    #share-card .sc-amount { font-family:'JetBrains Mono',monospace; font-size:88px; font-weight:700; color:#4F82FF; line-height:1; }
+    #share-card .sc-label { font-family:'JetBrains Mono',monospace; font-size:20px; color:#94A3B8; margin-top:14px; }
+    #share-card .sc-brand { font-family:'JetBrains Mono',monospace; font-size:13px; color:#475569; margin-top:32px; }
+
+    /* Share buttons */
+    .share-row { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+    .share-btn { padding:9px 16px; border-radius:7px; border:1px solid var(--border); background:var(--surface); color:var(--text-2); font-size:12px; font-family:var(--font-mono); cursor:pointer; font-weight:600; transition:.15s; }
+    .share-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .share-btn.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .share-btn.primary:hover { opacity:.85; }
+  </style>
 </head>
 <body>
 
-  <div id="site-header"></div>
-  <div id="site-nav"></div>
+<div id="site-header"></div>
+<div id="site-nav"></div>
 
-  <main>
+<main class="page-main">
 
-    <section class="page-hero container">
-      <div class="page-hero-inner">
-        <div class="page-hero-icon">📊</div>
-        <h1 class="page-title">Exposure Calculator</h1>
-        <p class="page-sub">Estimate your personal and portfolio exposure to the US-Iran conflict. Results are model estimates — not financial advice.</p>
-        <div class="demo-notice">
-          <span class="demo-badge-large">⚫ Model estimates</span>
-          For informational purposes only. Not financial or investment advice.
+  <!-- War status bar -->
+  <div class="war-status-bar">
+    <div class="container">
+      <div class="war-status-inner">
+        <span class="war-status-label">💸 PERSONAL WAR COST CALCULATOR</span>
+        <div class="war-status-track"><div class="war-status-fill" style="width:60%"></div></div>
+        <span class="war-status-pct" style="color:#F59E0B">Step 1 of 5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard-wrap">
+
+    <!-- Page title -->
+    <div style="text-align:center;margin-bottom:8px">
+      <h1 style="font-size:clamp(1.4rem,4vw,2rem);font-weight:800;margin:0">💸 Personal War Cost Calculator</h1>
+      <p style="color:var(--text-2);font-size:14px;margin:8px 0 0">How much is the Iran war costing you per month?</p>
+    </div>
+
+
+    <!-- Progress dots -->
+    <div class="wizard-dots" id="wizard-dots">
+      <div class="wizard-dot active" id="dot-0"></div>
+      <div class="wizard-dot-line" id="line-01"></div>
+      <div class="wizard-dot" id="dot-1"></div>
+      <div class="wizard-dot-line" id="line-12"></div>
+      <div class="wizard-dot" id="dot-2"></div>
+      <div class="wizard-dot-line" id="line-23"></div>
+      <div class="wizard-dot" id="dot-3"></div>
+      <div class="wizard-dot-line" id="line-34"></div>
+      <div class="wizard-dot" id="dot-4"></div>
+    </div>
+
+    <!-- ── STEP 1: LOCATION ──────────────────────────────────────────── -->
+    <div class="wizard-step active" id="step-0">
+      <div class="wizard-card">
+        <div class="wizard-step-label">STEP 1 OF 5</div>
+        <h2 class="wizard-step-title">📍 Where do you live?</h2>
+        <p class="wizard-step-sub">Gas prices vary sharply by region — this calibrates your baseline.</p>
+        <div class="option-grid" id="country-grid">
+          <div class="option-card selected" onclick="selectCard('country','US',this)"><div class="oc-icon">🇺🇸</div><div class="oc-label">United States</div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('country','UK',this)"><div class="oc-icon">🇬🇧</div><div class="oc-label">United Kingdom</div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('country','EU',this)"><div class="oc-icon">🇪🇺</div><div class="oc-label">Europe</div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('country','IN',this)"><div class="oc-icon">🇮🇳</div><div class="oc-label">India</div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('country','PK',this)"><div class="oc-icon">🇵🇰</div><div class="oc-label">Pakistan</div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('country','JP',this)"><div class="oc-icon">🇯🇵</div><div class="oc-label">Japan</div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('country','OTHER',this)"><div class="oc-icon">🌍</div><div class="oc-label">Other</div><div class="oc-check">✓ Selected</div></div>
+        </div>
+        <div id="state-wrap" style="margin-bottom:16px">
+          <label style="font-size:13px;color:var(--text-2);display:block;margin-bottom:8px">State (optional — improves gas price estimate)</label>
+          <select id="state-select" onchange="updateGasPremium()" style="width:100%;padding:9px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px">
+            <option value="">— Select state —</option>
+            <option value="CA">California ($4.75/gal)</option>
+            <option value="NY">New York ($4.20/gal)</option>
+            <option value="FL">Florida ($3.65/gal)</option>
+            <option value="TX">Texas ($3.45/gal)</option>
+            <option value="AVG">Other (national avg $3.88/gal)</option>
+          </select>
+          <div class="gas-premium" id="gas-premium-display" style="display:none"></div>
         </div>
       </div>
-    </section>
+      <div class="wizard-nav"><div></div><button class="wizard-btn wizard-btn-next" onclick="goStep(1)">Next: Transportation →</button></div>
+    </div>
 
-    <!-- CALCULATOR TABS -->
-    <div class="container">
-      <div class="filter-tabs" id="calc-tabs">
-        <button class="filter-tab active" data-tab="energy">Energy Cost</button>
-        <button class="filter-tab" data-tab="portfolio">Portfolio</button>
-        <button class="filter-tab" data-tab="sector">Sector / Business</button>
-        <button class="filter-tab" data-tab="travel">Travel Risk</button>
+
+    <!-- ── STEP 2: TRANSPORTATION ────────────────────────────────────── -->
+    <div class="wizard-step" id="step-1">
+      <div class="wizard-card">
+        <div class="wizard-step-label">STEP 2 OF 5</div>
+        <h2 class="wizard-step-title">🚗 Transportation</h2>
+        <p class="wizard-step-sub">Your vehicle type determines your fuel efficiency — and your exposure to oil price spikes.</p>
+        <div class="option-grid">
+          <div class="option-card" onclick="selectCard('vehicle','sedan',this)"><div class="oc-icon">🚗</div><div class="oc-label">Sedan<br><small style="color:var(--text-3)">25 mpg</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('vehicle','suv',this)"><div class="oc-icon">🚙</div><div class="oc-label">SUV<br><small style="color:var(--text-3)">18 mpg</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('vehicle','truck',this)"><div class="oc-icon">🛻</div><div class="oc-label">Truck<br><small style="color:var(--text-3)">15 mpg</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('vehicle','ev',this)"><div class="oc-icon">⚡</div><div class="oc-label">Electric<br><small style="color:var(--text-3)">No gas</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('vehicle','none',this)"><div class="oc-icon">🚶</div><div class="oc-label">No car<br><small style="color:var(--text-3)">Transit/walk</small></div><div class="oc-check">✓ Selected</div></div>
+        </div>
+        <div id="commute-wrap" style="display:none">
+          <div class="slider-row">
+            <div class="slider-row-head">
+              <label>Daily round-trip commute distance</label>
+              <span id="lbl-commute">30 mi</span>
+            </div>
+            <input type="range" id="sl-commute" min="0" max="100" value="30" step="1"
+              oninput="document.getElementById('lbl-commute').textContent=this.value+' mi'">
+          </div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="wizard-btn wizard-btn-back" onclick="goStep(0)">← Back</button>
+        <button class="wizard-btn wizard-btn-next" onclick="goStep(2)">Next: Home →</button>
       </div>
     </div>
 
-    <!-- ENERGY CALCULATOR -->
-    <section class="section container calculator-panel active" id="tab-energy">
-      <div class="calc-card">
-        <h2 class="calc-title">Annual Energy Cost Impact</h2>
-        <p class="calc-desc">Estimate how much the conflict has increased your annual energy spend.</p>
-        <div class="calc-form">
-          <div class="calc-field">
-            <label class="calc-label">Miles driven per year</label>
-            <input type="number" class="calc-input" id="miles-per-year" value="15000" min="0" max="100000" />
+    <!-- ── STEP 3: HOME ──────────────────────────────────────────────── -->
+    <div class="wizard-step" id="step-2">
+      <div class="wizard-card">
+        <div class="wizard-step-label">STEP 3 OF 5</div>
+        <h2 class="wizard-step-title">🏠 Home Energy & Housing</h2>
+        <p class="wizard-step-sub">Energy prices and rate changes feed into housing costs differently by type.</p>
+        <div style="margin-bottom:20px">
+          <p style="font-size:13px;font-weight:600;color:var(--text);margin:0 0 10px">Home heating type</p>
+          <div class="option-grid">
+            <div class="option-card" onclick="selectCard('heating','gas',this)"><div class="oc-icon">🔥</div><div class="oc-label">Natural Gas<br><small style="color:#E63946">+$45/mo</small></div><div class="oc-check">✓ Selected</div></div>
+            <div class="option-card" onclick="selectCard('heating','electric',this)"><div class="oc-icon">⚡</div><div class="oc-label">Electric<br><small style="color:#F59E0B">+$15/mo</small></div><div class="oc-check">✓ Selected</div></div>
+            <div class="option-card" onclick="selectCard('heating','oil',this)"><div class="oc-icon">🛢️</div><div class="oc-label">Heating Oil<br><small style="color:#E63946">+$60/mo</small></div><div class="oc-check">✓ Selected</div></div>
+            <div class="option-card selected" onclick="selectCard('heating','none',this)"><div class="oc-icon">🌴</div><div class="oc-label">None / AC only<br><small style="color:#22C55E">+$0/mo</small></div><div class="oc-check">✓ Selected</div></div>
           </div>
-          <div class="calc-field">
-            <label class="calc-label">Vehicle fuel economy (MPG)</label>
-            <input type="number" class="calc-input" id="mpg" value="28" min="1" max="150" />
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">Monthly home energy bill ($)</label>
-            <input type="number" class="calc-input" id="energy-bill" value="180" min="0" max="2000" />
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">Annual flights (round trips)</label>
-            <input type="number" class="calc-input" id="flights" value="4" min="0" max="100" />
-          </div>
-          <button class="calc-btn" onclick="calcEnergy()">Calculate Impact</button>
         </div>
-        <div class="calc-result hidden" id="energy-result">
-          <!-- Populated on calculate -->
+        <div>
+          <p style="font-size:13px;font-weight:600;color:var(--text);margin:0 0 10px">Mortgage / housing type</p>
+          <div class="option-grid">
+            <div class="option-card" onclick="selectCard('mortgage','fixed',this)"><div class="oc-icon">🔒</div><div class="oc-label">Fixed Rate<br><small style="color:#22C55E">+$0/mo</small></div><div class="oc-check">✓ Selected</div></div>
+            <div class="option-card" onclick="selectCard('mortgage','arm',this)"><div class="oc-icon">📈</div><div class="oc-label">Adjustable<br><small style="color:#E63946">+$60/mo</small></div><div class="oc-check">✓ Selected</div></div>
+            <div class="option-card selected" onclick="selectCard('mortgage','rent',this)"><div class="oc-icon">🏢</div><div class="oc-label">Renting<br><small style="color:#22C55E">+$0/mo</small></div><div class="oc-check">✓ Selected</div></div>
+            <div class="option-card" onclick="selectCard('mortgage','outright',this)"><div class="oc-icon">🏡</div><div class="oc-label">Own Outright<br><small style="color:#22C55E">+$0/mo</small></div><div class="oc-check">✓ Selected</div></div>
+          </div>
         </div>
       </div>
-    </section>
-
-    <!-- PORTFOLIO CALCULATOR -->
-    <section class="section container calculator-panel hidden" id="tab-portfolio">
-      <div class="calc-card">
-        <h2 class="calc-title">Portfolio Exposure Estimate</h2>
-        <p class="calc-desc">Rough estimate of conflict impact on a typical US investor portfolio based on market moves since Feb 28.</p>
-        <div class="calc-form">
-          <div class="calc-field">
-            <label class="calc-label">Total investable assets ($)</label>
-            <input type="number" class="calc-input" id="total-assets" value="100000" min="0" />
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">S&P 500 / equity allocation (%)</label>
-            <input type="range" class="calc-range" id="equity-pct" value="70" min="0" max="100" oninput="document.getElementById('equity-pct-val').textContent=this.value+'%'" />
-            <span class="range-val" id="equity-pct-val">70%</span>
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">Bonds / Treasury allocation (%)</label>
-            <input type="range" class="calc-range" id="bond-pct" value="20" min="0" max="100" oninput="document.getElementById('bond-pct-val').textContent=this.value+'%'" />
-            <span class="range-val" id="bond-pct-val">20%</span>
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">Gold / Commodities allocation (%)</label>
-            <input type="range" class="calc-range" id="gold-pct" value="5" min="0" max="100" oninput="document.getElementById('gold-pct-val').textContent=this.value+'%'" />
-            <span class="range-val" id="gold-pct-val">5%</span>
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">Energy sector allocation (%)</label>
-            <input type="range" class="calc-range" id="energy-pct" value="5" min="0" max="100" oninput="document.getElementById('energy-pct-val').textContent=this.value+'%'" />
-            <span class="range-val" id="energy-pct-val">5%</span>
-          </div>
-          <button class="calc-btn" onclick="calcPortfolio()">Calculate Exposure</button>
-        </div>
-        <div class="calc-result hidden" id="portfolio-result"></div>
-      </div>
-    </section>
-
-    <!-- SECTOR CALCULATOR -->
-    <section class="section container calculator-panel hidden" id="tab-sector">
-      <div class="calc-card">
-        <h2 class="calc-title">Sector / Business Exposure</h2>
-        <p class="calc-desc">Estimate conflict impact on your business based on industry and geographic exposure.</p>
-        <div class="calc-form">
-          <div class="calc-field">
-            <label class="calc-label">Annual revenue or operating budget ($)</label>
-            <input type="number" class="calc-input" id="business-revenue" value="1000000" min="0" />
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">Industry sector</label>
-            <select class="calc-select" id="sector-select">
-              <option value="airline">Airlines / Aviation</option>
-              <option value="trucking">Trucking / Logistics</option>
-              <option value="energy_producer">Energy Producer (oil/gas)</option>
-              <option value="energy_consumer">Energy-Intensive Manufacturing</option>
-              <option value="defense">Defense / Aerospace</option>
-              <option value="retail">Retail / Consumer Goods</option>
-              <option value="agriculture">Agriculture / Food</option>
-              <option value="tech">Technology</option>
-              <option value="finance">Financial Services</option>
-              <option value="other" selected>Other</option>
-            </select>
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">Middle East / Gulf revenue exposure (%)</label>
-            <input type="range" class="calc-range" id="gulf-exposure" value="5" min="0" max="100" oninput="document.getElementById('gulf-exp-val').textContent=this.value+'%'" />
-            <span class="range-val" id="gulf-exp-val">5%</span>
-          </div>
-          <button class="calc-btn" onclick="calcSector()">Calculate Business Impact</button>
-        </div>
-        <div class="calc-result hidden" id="sector-result"></div>
-      </div>
-    </section>
-
-    <!-- TRAVEL RISK -->
-    <section class="section container calculator-panel hidden" id="tab-travel">
-      <div class="calc-card">
-        <h2 class="calc-title">Travel Risk Assessment</h2>
-        <p class="calc-desc">Assess conflict-related risk for planned travel routes.</p>
-        <div class="calc-form">
-          <div class="calc-field">
-            <label class="calc-label">Departure region</label>
-            <select class="calc-select" id="travel-from">
-              <option value="us">United States</option>
-              <option value="europe">Europe</option>
-              <option value="asia">Asia-Pacific</option>
-              <option value="gulf">Gulf / Middle East</option>
-            </select>
-          </div>
-          <div class="calc-field">
-            <label class="calc-label">Destination region</label>
-            <select class="calc-select" id="travel-to">
-              <option value="iran">Iran</option>
-              <option value="iraq">Iraq</option>
-              <option value="uae">UAE</option>
-              <option value="saudi">Saudi Arabia</option>
-              <option value="israel">Israel</option>
-              <option value="europe">Europe</option>
-              <option value="us">United States</option>
-              <option value="asia">Asia-Pacific</option>
-            </select>
-          </div>
-          <button class="calc-btn" onclick="calcTravel()">Assess Risk</button>
-        </div>
-        <div class="calc-result hidden" id="travel-result"></div>
-      </div>
-    </section>
-
-    <!-- AD SLOT -->
-    <div class="container">
-      <div class="ad-slot" data-slot="calculator-mid">
-        <span class="ad-label">Advertisement</span>
+      <div class="wizard-nav">
+        <button class="wizard-btn wizard-btn-back" onclick="goStep(1)">← Back</button>
+        <button class="wizard-btn wizard-btn-next" onclick="goStep(3)">Next: Finances →</button>
       </div>
     </div>
 
-    <!-- SHARE -->
-    <section class="section container">
-      <div id="calc-share"></div>
-    </section>
 
-  </main>
+    <!-- ── STEP 4: FINANCES ──────────────────────────────────────────── -->
+    <div class="wizard-step" id="step-3">
+      <div class="wizard-card">
+        <div class="wizard-step-label">STEP 4 OF 5</div>
+        <h2 class="wizard-step-title">💼 Investments & Portfolio</h2>
+        <p class="wizard-step-sub">War-driven volatility hits different asset classes in different ways.</p>
+        <div class="slider-row">
+          <div class="slider-row-head">
+            <label>Approximate portfolio value</label>
+            <span id="lbl-portfolio">$25,000</span>
+          </div>
+          <input type="range" id="sl-portfolio" min="0" max="500000" value="25000" step="5000"
+            oninput="fmtPortfolio(+this.value)">
+        </div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin:0 0 10px">Portfolio composition</p>
+        <div class="option-grid">
+          <div class="option-card" onclick="selectCard('porttype','stocks',this)"><div class="oc-icon">📈</div><div class="oc-label">Mostly Stocks<br><small style="color:#E63946">-4.5%/yr</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card selected" onclick="selectCard('porttype','balanced',this)"><div class="oc-icon">⚖️</div><div class="oc-label">Balanced<br><small style="color:#F59E0B">-2.5%/yr</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('porttype','bonds',this)"><div class="oc-icon">📋</div><div class="oc-label">Mostly Bonds<br><small style="color:#94A3B8">-1.0%/yr</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('porttype','crypto',this)"><div class="oc-icon">₿</div><div class="oc-label">Crypto Heavy<br><small style="color:#E63946">-8.0%/yr</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('porttype','none',this)"><div class="oc-icon">💵</div><div class="oc-label">No Investments<br><small style="color:#22C55E">+$0</small></div><div class="oc-check">✓ Selected</div></div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="wizard-btn wizard-btn-back" onclick="goStep(2)">← Back</button>
+        <button class="wizard-btn wizard-btn-next" onclick="goStep(4)">Next: Food →</button>
+      </div>
+    </div>
 
+    <!-- ── STEP 5: FOOD ───────────────────────────────────────────────── -->
+    <div class="wizard-step" id="step-4">
+      <div class="wizard-card">
+        <div class="wizard-step-label">STEP 5 OF 5</div>
+        <h2 class="wizard-step-title">🛒 Food & Groceries</h2>
+        <p class="wizard-step-sub">Supply chain stress and shipping costs are driving grocery inflation across all categories.</p>
+        <div class="slider-row">
+          <div class="slider-row-head">
+            <label>Monthly grocery spend</label>
+            <span id="lbl-grocery">$600/mo</span>
+          </div>
+          <input type="range" id="sl-grocery" min="200" max="1500" value="600" step="50"
+            oninput="document.getElementById('lbl-grocery').textContent='$'+this.value+'/mo'">
+        </div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin:0 0 10px">Diet type</p>
+        <div class="option-grid">
+          <div class="option-card selected" onclick="selectCard('diet','standard',this)"><div class="oc-icon">🍽️</div><div class="oc-label">Standard<br><small style="color:var(--text-3)">1× multiplier</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('diet','meat',this)"><div class="oc-icon">🥩</div><div class="oc-label">Meat Heavy<br><small style="color:#F59E0B">1.3× multiplier</small></div><div class="oc-check">✓ Selected</div></div>
+          <div class="option-card" onclick="selectCard('diet','plant',this)"><div class="oc-icon">🥦</div><div class="oc-label">Plant Based<br><small style="color:#22C55E">0.7× multiplier</small></div><div class="oc-check">✓ Selected</div></div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="wizard-btn wizard-btn-back" onclick="goStep(3)">← Back</button>
+        <button class="wizard-btn wizard-btn-next" onclick="showResults()" style="background:#22C55E">Calculate My Cost →</button>
+      </div>
+    </div>
+
+
+    <!-- ── RESULTS ───────────────────────────────────────────────────── -->
+    <div class="wizard-step" id="step-results">
+      <div class="wizard-card">
+        <div class="result-total" id="share-card-inner">
+          <div class="result-total-intro">The Iran war is costing you approximately</div>
+          <div class="result-total-amount" id="result-total-display">$0</div>
+          <div class="result-total-sub" id="result-equiv-display">per month</div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:0">
+        <div class="result-bars" style="padding:20px">
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-3);letter-spacing:.08em;margin-bottom:14px">BREAKDOWN BY CATEGORY</div>
+          <div class="result-bar-row">
+            <div class="result-bar-label">⛽ Gas</div>
+            <div class="result-bar-track"><div class="result-bar-fill" id="bar-gas" style="width:0%;background:#F59E0B"></div></div>
+            <div class="result-bar-val" id="val-gas">$0</div>
+          </div>
+          <div class="result-bar-row">
+            <div class="result-bar-label">🛒 Groceries</div>
+            <div class="result-bar-track"><div class="result-bar-fill" id="bar-groc" style="width:0%;background:#E63946"></div></div>
+            <div class="result-bar-val" id="val-groc">$0</div>
+          </div>
+          <div class="result-bar-row">
+            <div class="result-bar-label">🔥 Heating</div>
+            <div class="result-bar-track"><div class="result-bar-fill" id="bar-heat" style="width:0%;background:#5FA8D3"></div></div>
+            <div class="result-bar-val" id="val-heat">$0</div>
+          </div>
+          <div class="result-bar-row">
+            <div class="result-bar-label">💼 Portfolio</div>
+            <div class="result-bar-track"><div class="result-bar-fill" id="bar-port" style="width:0%;background:#8B5CF6"></div></div>
+            <div class="result-bar-val" id="val-port">$0</div>
+          </div>
+          <div class="result-bar-row">
+            <div class="result-bar-label">🏠 Mortgage</div>
+            <div class="result-bar-track"><div class="result-bar-fill" id="bar-mort" style="width:0%;background:#94A3B8"></div></div>
+            <div class="result-bar-val" id="val-mort">$0</div>
+          </div>
+        </div>
+      </div>
+      <!-- Share buttons -->
+      <div class="share-row">
+        <button class="share-btn primary" onclick="shareTwitter()">𝕏 Share on X</button>
+        <button class="share-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
+        <button class="share-btn" onclick="copyLink()">🔗 Copy Link</button>
+        <button class="share-btn" onclick="downloadCard()">⬇️ Download Card</button>
+        <button class="share-btn" onclick="resetWizard()">↺ Start Over</button>
+      </div>
+    </div>
+
+    <!-- Hidden share card for html2canvas -->
+    <div id="share-card">
+      <div class="sc-eyebrow">GEOWIRE — PERSONAL WAR COST CALCULATOR</div>
+      <div class="sc-amount" id="sc-amount">$0</div>
+      <div class="sc-label">The Iran war costs me <span id="sc-amount-label">$0</span>/month</div>
+      <div class="sc-brand">geowire.org/exposure-calculator.html</div>
+    </div>
+
+  </div><!-- end wizard-wrap -->
+
+  <section class="section container">
+    <div class="factor-nav-bar">
+      <a class="factor-nav-link" href="recession.html">📉 Recession Tracker</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="scenarios.html">🎯 Scenario Lab</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="energy.html">⚡ Energy Dashboard</a>
+    </div>
+  </section>
+  <section class="section container" id="calc-email-capture"></section>
   <div id="site-footer"></div>
 
-  <script src="content.js"></script>
-  <script src="ui.js"></script>
-  <script src="api.js"></script>
+</main>
 
-  <script>
-    (async () => {
-      document.getElementById('site-header').innerHTML = UI.renderHeader();
-      document.getElementById('site-nav').innerHTML    = UI.renderNav('dashboard');
-      document.getElementById('site-footer').innerHTML = UI.renderFooter();
 
-      // Tab switching
-      document.getElementById('calc-tabs').addEventListener('click', e => {
-        const btn = e.target.closest('.filter-tab');
-        if (!btn) return;
-        document.querySelectorAll('#calc-tabs .filter-tab').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('.calculator-panel').forEach(p => { p.classList.add('hidden'); p.classList.remove('active'); });
-        const panel = document.getElementById('tab-' + btn.dataset.tab);
-        if (panel) { panel.classList.remove('hidden'); panel.classList.add('active'); }
-      });
+<script src="content.js"></script>
+<script src="scoring.js"></script>
+<script src="ui.js"></script>
+<script src="api.js"></script>
+<script>
+// ── State object
+var S = {
+  country:'US', state:'', vehicle:'', commute:30,
+  heating:'none', mortgage:'rent',
+  portfolio:25000, porttype:'balanced',
+  grocery:600, diet:'standard'
+};
 
-      document.getElementById('calc-share').innerHTML = UI.renderShareButtons(
-        'Calculate your personal exposure to the US-Iran conflict — GeoWire Exposure Calculator',
-        'https://geowire.org/exposure-calculator.html'
-      );
+// ── Gas prices by country / US state
+var GAS_PRICES = { US:3.88, UK:6.80, EU:6.20, IN:1.40, PK:1.10, JP:5.90, OTHER:4.00 };
+var STATE_GAS  = { CA:4.75, NY:4.20, FL:3.65, TX:3.45, AVG:3.88 };
+var GAS_PREWAR = 2.98;
 
-      UI.init();
-    })();
+function currentGasPrice() {
+  if (S.country === 'US' && S.state && STATE_GAS[S.state]) return STATE_GAS[S.state];
+  return GAS_PRICES[S.country] || 3.88;
+}
 
-    // ── Energy calculator
-    function calcEnergy() {
-      const miles  = +document.getElementById('miles-per-year').value || 15000;
-      const mpg    = +document.getElementById('mpg').value || 28;
-      const bill   = +document.getElementById('energy-bill').value || 180;
-      const flights= +document.getElementById('flights').value || 4;
+// ── Card selection
+function selectCard(key, val, el) {
+  S[key] = val;
+  var parent = el.parentElement;
+  parent.querySelectorAll('.option-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  if (key === 'vehicle') {
+    document.getElementById('commute-wrap').style.display = (val === 'ev' || val === 'none') ? 'none' : 'block';
+  }
+  if (key === 'country') {
+    document.getElementById('state-wrap').style.display = (val === 'US') ? 'block' : 'none';
+    updateGasPremium();
+  }
+}
 
-      const preWarGas  = 3.28;
-      const currentGas = 4.42;
-      const gasDelta   = currentGas - preWarGas;
-      const gallonsPerYear = miles / mpg;
-      const gasCostIncrease = gallonsPerYear * gasDelta;
+function updateGasPremium() {
+  S.state = document.getElementById('state-select').value;
+  var current = currentGasPrice();
+  var premium = (current - GAS_PREWAR).toFixed(2);
+  var el = document.getElementById('gas-premium-display');
+  if (S.country === 'US' && S.state) {
+    el.style.display = 'block';
+    el.textContent = 'Current avg: $' + current + '/gal  |  Pre-war: $' + GAS_PREWAR + '/gal  |  War premium: +$' + premium + '/gal';
+  } else {
+    el.style.display = 'none';
+  }
+}
 
-      const homeEnergyIncrease = bill * 0.18 * 12; // ~18% energy cost increase
-      const flightSurcharge    = flights * 67.50;   // avg $67.50 round-trip surcharge
+function fmtPortfolio(val) {
+  var label = val >= 500000 ? '$500K+' : '$' + val.toLocaleString();
+  document.getElementById('lbl-portfolio').textContent = label;
+  S.portfolio = val;
+}
 
-      const total = gasCostIncrease + homeEnergyIncrease + flightSurcharge;
+// ── Step navigation
+var currentStep = 0;
+function goStep(n) {
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  currentStep = n;
+  if (n <= 4) {
+    document.getElementById('step-' + n).classList.add('active');
+  }
+  updateDots(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-      document.getElementById('energy-result').classList.remove('hidden');
-      document.getElementById('energy-result').innerHTML = `
-        <div class="result-header">Your Estimated Annual Cost Increase</div>
-        <div class="result-total">$${total.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
-        <div class="result-breakdown">
-          <div class="rb-row"><span>Gas (${gallonsPerYear.toFixed(0)} gal/yr × $${gasDelta.toFixed(2)}/gal increase)</span><span>$${gasCostIncrease.toFixed(0)}</span></div>
-          <div class="rb-row"><span>Home energy (+18% crisis premium)</span><span>$${homeEnergyIncrease.toFixed(0)}</span></div>
-          <div class="rb-row"><span>Flight surcharges (${flights} RT × $67.50 avg)</span><span>$${flightSurcharge.toFixed(0)}</span></div>
-        </div>
-        <div class="result-note">⚫ Model estimate based on current EIA data and airline industry surcharge reports. Actual costs vary by region and provider.</div>
-      `;
+function updateDots(active) {
+  for (var i = 0; i <= 4; i++) {
+    var dot = document.getElementById('dot-' + i);
+    dot.classList.remove('active','done');
+    if (i < active) dot.classList.add('done');
+    else if (i === active) dot.classList.add('active');
+    if (i < 4) {
+      var line = document.getElementById('line-' + i + '' + (i+1));
+      if (line) { line.classList.toggle('done', i < active); }
     }
+  }
+}
 
-    // ── Portfolio calculator
-    function calcPortfolio() {
-      const total    = +document.getElementById('total-assets').value || 100000;
-      const eqPct    = +document.getElementById('equity-pct').value / 100;
-      const bondPct  = +document.getElementById('bond-pct').value / 100;
-      const goldPct  = +document.getElementById('gold-pct').value / 100;
-      const energyPct= +document.getElementById('energy-pct').value / 100;
 
-      // Market moves since Feb 28
-      const eqReturn     = -0.122; // S&P -12.2%
-      const bondReturn   = -0.018; // bonds slightly down (rates up)
-      const goldReturn   = +0.209; // gold +20.9%
-      const energyReturn = +0.322; // energy sector +32.2%
+// ── Calculation engine
+function calculate() {
+  var mpgMap = { sedan:25, suv:18, truck:15, ev:0, none:0 };
+  var mpg = mpgMap[S.vehicle] || 25;
+  var gasIncrease = Math.max(0, currentGasPrice() - GAS_PREWAR);
+  var commute = +document.getElementById('sl-commute').value || S.commute;
+  var gasMonthly = mpg > 0 ? (commute / mpg) * gasIncrease * 22 : 0;
 
-      const eqDelta     = total * eqPct * eqReturn;
-      const bondDelta   = total * bondPct * bondReturn;
-      const goldDelta   = total * goldPct * goldReturn;
-      const energyDelta = total * energyPct * energyReturn;
-      const totalDelta  = eqDelta + bondDelta + goldDelta + energyDelta;
-      const pct         = (totalDelta / total * 100).toFixed(1);
+  var grocery = +document.getElementById('sl-grocery').value || S.grocery;
+  var dietMult = { standard:1, meat:1.3, plant:0.7 }[S.diet] || 1;
+  var grocMonthly = grocery * 0.07 * dietMult;
 
-      document.getElementById('portfolio-result').classList.remove('hidden');
-      document.getElementById('portfolio-result').innerHTML = `
-        <div class="result-header">Estimated Portfolio Impact</div>
-        <div class="result-total ${totalDelta >= 0 ? 'result-positive' : 'result-negative'}">
-          ${totalDelta >= 0 ? '+' : ''}$${Math.abs(totalDelta).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} (${totalDelta >= 0 ? '+' : ''}${pct}%)
-        </div>
-        <div class="result-breakdown">
-          <div class="rb-row"><span>Equities (${(eqPct*100).toFixed(0)}% × -12.2%)</span><span class="change-down">$${eqDelta.toFixed(0)}</span></div>
-          <div class="rb-row"><span>Bonds (${(bondPct*100).toFixed(0)}% × -1.8%)</span><span class="change-down">$${bondDelta.toFixed(0)}</span></div>
-          <div class="rb-row"><span>Gold (${(goldPct*100).toFixed(0)}% × +20.9%)</span><span class="change-up">+$${goldDelta.toFixed(0)}</span></div>
-          <div class="rb-row"><span>Energy (${(energyPct*100).toFixed(0)}% × +32.2%)</span><span class="change-up">+$${energyDelta.toFixed(0)}</span></div>
-        </div>
-        <div class="result-note">⚫ Model estimate based on asset class returns since Feb 28, 2026. Not financial advice. Past performance does not predict future results.</div>
-      `;
-    }
+  var heatMap = { gas:45, electric:15, oil:60, none:0 };
+  var heatMonthly = heatMap[S.heating] || 0;
 
-    // ── Sector calculator
-    function calcSector() {
-      const revenue = +document.getElementById('business-revenue').value || 1000000;
-      const sector  = document.getElementById('sector-select').value;
-      const gulfExp = +document.getElementById('gulf-exposure').value / 100;
+  var portVal = +document.getElementById('sl-portfolio').value || S.portfolio;
+  var portReturn = { stocks:-0.045, balanced:-0.025, bonds:-0.01, crypto:-0.08, none:0 }[S.porttype] || 0;
+  var portMonthly = portVal > 0 ? Math.abs(portVal * portReturn / 12) : 0;
 
-      const impacts = {
-        airline:          { pct: -0.12, label: 'Fuel surcharges (-8%) + Gulf route losses (-4%)' },
-        trucking:         { pct: -0.09, label: 'Diesel cost increase (-$0.038/mile × typical fleet)' },
-        energy_producer:  { pct: +0.28, label: 'Oil price windfall (+$44/bbl average uplift)' },
-        energy_consumer:  { pct: -0.11, label: 'Energy input cost increase (+34% avg utility/feedstock)' },
-        defense:          { pct: +0.18, label: 'Contract surge — munitions restocking, C4ISR demand' },
-        retail:           { pct: -0.04, label: 'Freight + energy pass-through (~4% margin compression)' },
-        agriculture:      { pct: -0.07, label: 'Fertilizer +28%, fuel +35%, freight +215%' },
-        tech:             { pct: -0.05, label: 'Broad market drag + semiconductor supply chain risk' },
-        finance:          { pct: -0.06, label: 'Credit spread widening + Gulf exposure writedowns' },
-        other:            { pct: -0.04, label: 'Estimated blended economy impact' },
-      };
+  var mortMap = { fixed:0, arm:60, rent:0, outright:0 };
+  var mortMonthly = mortMap[S.mortgage] || 0;
 
-      const base  = impacts[sector] || impacts.other;
-      const gulfDelta  = revenue * gulfExp * -0.35; // Gulf revenue exposure assumed -35%
-      const sectorDelta = revenue * base.pct;
-      const total = sectorDelta + gulfDelta;
+  var total = gasMonthly + grocMonthly + heatMonthly + portMonthly + mortMonthly;
+  return { gas: gasMonthly, groc: grocMonthly, heat: heatMonthly, port: portMonthly, mort: mortMonthly, total: total };
+}
 
-      document.getElementById('sector-result').classList.remove('hidden');
-      document.getElementById('sector-result').innerHTML = `
-        <div class="result-header">Estimated Business Impact</div>
-        <div class="result-total ${total >= 0 ? 'result-positive' : 'result-negative'}">
-          ${total >= 0 ? '+' : ''}$${Math.abs(total).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')} (${(total/revenue*100).toFixed(1)}%)
-        </div>
-        <div class="result-breakdown">
-          <div class="rb-row"><span>Sector impact (${(base.pct*100).toFixed(0)}%)</span><span class="${sectorDelta >= 0 ? 'change-up' : 'change-down'}">${sectorDelta >= 0 ? '+' : ''}$${sectorDelta.toFixed(0)}</span></div>
-          <div class="rb-row"><span>Gulf exposure (${(gulfExp*100).toFixed(0)}% at -35%)</span><span class="change-down">$${gulfDelta.toFixed(0)}</span></div>
-        </div>
-        <div class="result-note">${base.label}</div>
-        <div class="result-note">⚫ Model estimate. Actual impact depends on contracts, hedging, and operational flexibility.</div>
-      `;
-    }
+// ── Animated counter
+function animateCounter(el, target, prefix, duration) {
+  var start = 0, startTime = null;
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    var progress = Math.min((ts - startTime) / duration, 1);
+    var val = Math.round(progress * progress * target); // ease-in
+    el.textContent = prefix + val.toLocaleString();
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = prefix + Math.round(target).toLocaleString();
+  }
+  requestAnimationFrame(step);
+}
 
-    // ── Travel risk
-    function calcTravel() {
-      const from = document.getElementById('travel-from').value;
-      const to   = document.getElementById('travel-to').value;
+// ── Show results
+function showResults() {
+  var R = calculate();
+  var maxVal = Math.max(R.total, 1);
 
-      const risks = {
-        iran:   { level: 'CRITICAL', text: 'All travel strongly advised against. Active conflict zone. No consular services. Internet blackout. Evacuation extremely difficult.', color: '#ff3b3b' },
-        iraq:   { level: 'HIGH',     text: 'Green Zone on lockdown. PMF factions active. US Embassy in reduced operations. Avoid all non-essential travel.', color: '#ff8c00' },
-        uae:    { level: 'ELEVATED', text: 'Al Dhafra AFB target of Day <span class="war-day-dynamic">—</span> strike. Dubai operations largely normal. Monitor for ballistic missile alerts. Travel possible with awareness.', color: '#ffb800' },
-        saudi:  { level: 'ELEVATED', text: 'Aramco suspended Gulf loading. Riyadh stable. US military presence elevated. Travel possible for most purposes.', color: '#ffb800' },
-        israel: { level: 'HIGH',     text: 'Active co-belligerent. Rocket/drone alert system active. Ben Gurion operational. Embassy advisories in effect.', color: '#ff8c00' },
-        europe: { level: 'LOW',      text: 'No direct conflict risk. Monitor for protest activity in some capitals. Normal travel operations.', color: '#00ff88' },
-        us:     { level: 'MINIMAL',  text: 'No direct conflict risk. Elevated security posture at major infrastructure. Normal travel operations.', color: '#00ff88' },
-        asia:   { level: 'LOW',      text: 'No direct conflict risk. Minor shipping disruption may affect some supply chains. Normal travel operations.', color: '#00ff88' },
-      };
+  // Update progress bar status to results
+  document.getElementById('step-4').classList.remove('active');
+  document.getElementById('step-results').classList.add('active');
+  updateDots(5);
 
-      const risk = risks[to] || { level: 'UNKNOWN', text: 'Risk data not available for this destination.', color: '#4a9eff' };
+  // Animate total
+  var totalEl = document.getElementById('result-total-display');
+  animateCounter(totalEl, R.total, '$', 1500);
 
-      document.getElementById('travel-result').classList.remove('hidden');
-      document.getElementById('travel-result').innerHTML = `
-        <div class="result-header">Travel Risk Assessment: → ${to.toUpperCase()}</div>
-        <div class="result-risk-level" style="color:${risk.color}">${risk.level}</div>
-        <div class="result-risk-text">${risk.text}</div>
-        <div class="result-note">Check your government's official travel advisory before any international travel. GeoWire model — not official government guidance.</div>
-      `;
-    }
-  </script>
+  // Equivalent
+  var streams = Math.round(R.total / 15.99);
+  document.getElementById('result-equiv-display').textContent =
+    'per month — equivalent to ' + streams + ' Netflix subscriptions';
 
+  // Bars (start from 0 width, CSS transitions to final)
+  var bars = [
+    { id:'gas', val:R.gas }, { id:'groc', val:R.groc },
+    { id:'heat', val:R.heat }, { id:'port', val:R.port }, { id:'mort', val:R.mort }
+  ];
+  bars.forEach(function(b) {
+    setTimeout(function() {
+      document.getElementById('bar-' + b.id).style.width = (b.val / maxVal * 100) + '%';
+      document.getElementById('val-' + b.id).textContent = '$' + Math.round(b.val);
+    }, 100);
+  });
+
+  // Share card
+  var fmt = '$' + Math.round(R.total).toLocaleString();
+  document.getElementById('sc-amount').textContent = fmt;
+  document.getElementById('sc-amount-label').textContent = fmt;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Share functions
+function shareTwitter() {
+  var R = calculate();
+  var total = '$' + Math.round(R.total).toLocaleString();
+  var text = 'The Iran war is costing me approximately ' + total + '/month in gas, groceries, and portfolio losses. Calculate yours: geowire.org/exposure-calculator.html #GeoWire #EconomicImpact';
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+}
+
+function shareWhatsApp() {
+  var R = calculate();
+  var total = '$' + Math.round(R.total).toLocaleString();
+  var text = 'The Iran war is costing me ' + total + '/month. See the breakdown & calculate yours: https://geowire.org/exposure-calculator.html';
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText('https://geowire.org/exposure-calculator.html').then(function() {
+    var btn = event.target; btn.textContent = '✓ Copied!';
+    setTimeout(function() { btn.textContent = '🔗 Copy Link'; }, 2000);
+  });
+}
+
+function downloadCard() {
+  if (typeof html2canvas === 'undefined') { alert('Download unavailable — try again in a moment.'); return; }
+  html2canvas(document.getElementById('share-card'), { scale:1, backgroundColor:'#0A0F1E' }).then(function(canvas) {
+    var a = document.createElement('a');
+    a.download = 'geowire-war-cost.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  });
+}
+
+function resetWizard() {
+  document.getElementById('step-results').classList.remove('active');
+  currentStep = 0;
+  document.getElementById('step-0').classList.add('active');
+  updateDots(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Init shell
+(function() {
+  try {
+    UI.init();
+    document.getElementById('site-header').innerHTML = UI.renderHeader();
+    document.getElementById('site-nav').innerHTML    = UI.renderNav('exposure-calculator.html');
+    document.getElementById('site-footer').innerHTML = UI.renderFooter();
+    document.getElementById('calc-email-capture').innerHTML = UI.renderEmailCapture();
+    UI.stubEmailCapture();
+  } catch(e) { console.error('[Calc] Init error:', e); }
+})();
+</script>
 </body>
 </html>

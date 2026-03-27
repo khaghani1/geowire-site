@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="canonical" href="https://geowire.org/macro" />
+  <link rel="canonical" href="https://geowire.org/macro.html" />
   <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire Macro Pulse — All 10 recession factor families tracked in real time. Labor, rates, inflation, consumer, credit, housing, supply, global, market signals, and alternative indicators.">
@@ -85,9 +85,6 @@
     </div>
   </section>
 
-  <!-- AdSense mid -->
-  <div class="container" id="ad-macro-mid"></div>
-
   <!-- ═══════════════════════════════════════════════════════════════════════
        CROSS-FACTOR INSIGHT
        ═══════════════════════════════════════════════════════════════════════ -->
@@ -119,10 +116,18 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════
-       ADSENSE + EMAIL + FOOTER
-       ═══════════════════════════════════════════════════════════════════════ -->
-  <section class="section container" id="ad-macro-bottom"></section>
+  <!-- Cross-links -->
+  <section class="section container">
+    <div class="factor-nav-bar">
+      <a class="factor-nav-link" href="recession.html">📉 Recession Tracker</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="factor.html">🔍 Factor Explorer</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="energy.html">⚡ Energy Dashboard</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="predictions.html">🎲 Prediction Markets</a>
+    </div>
+  </section>
   <section class="section container" id="macro-email-capture"></section>
   <div id="site-footer"></div>
 
@@ -177,13 +182,6 @@
     if (pctEl) pctEl.textContent = rec.probability + '%';
     const heroEl = document.getElementById('macro-hero-prob');
     if (heroEl) heroEl.textContent = rec.probability + '%';
-
-    // ── AdSense
-    document.getElementById('ad-macro-mid').innerHTML    = UI.renderAdSlot('macro-mid');
-    document.getElementById('ad-macro-bottom').innerHTML = UI.renderAdSlot('macro-bottom');
-    document.querySelectorAll('.adsbygoogle').forEach(() => {
-      try { } catch(e) {}
-    });
 
     // ── AI Explain — cross-factor insight
     document.getElementById('macro-cross-ai-explain').innerHTML =

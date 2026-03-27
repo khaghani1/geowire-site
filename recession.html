@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <link rel="canonical" href="https://geowire.org/recession" />
+  <link rel="canonical" href="https://geowire.org/recession.html" />
   <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recession Probability Tracker — GeoWire</title>
   <meta name="description" content="Real-time recession probability tracking with 10-factor model, historical comparisons, and market divergence analysis. Updated daily." />
@@ -23,7 +23,7 @@
     <div class="container">
       <div class="war-status-grid">
         <div class="war-status-item"><span class="war-status-label">OPERATION</span><span class="war-status-value war-name">Epic Fury</span></div>
-        <div class="war-status-item"><span class="war-status-label">DAY</span><span class="war-status-value" id="war-day">26</span></div>
+        <div class="war-status-item"><span class="war-status-label">DAY</span><span class="war-status-value" id="war-day">…</span></div>
         <div class="war-status-item"><span class="war-status-label">RECESSION RISK</span><span class="war-status-value threat-critical" id="rec-risk-bar">42%</span></div>
         <div class="war-status-item"><span class="war-status-label">MODEL</span><span class="war-status-value">RISING ↑</span></div>
         <div class="war-status-item"><span class="war-status-label">UTC</span><span class="war-status-value" id="utc-clock-ws">--:--:--</span></div>
@@ -38,8 +38,6 @@
 
   <!-- Ad Slot Top -->
   <div class="container">
-    <!-- Ad slot: configure numeric ID in GEOWIRE.adConfig.slots (content.js) -->
-  </div>
 
   <!-- Page Title -->
   <section class="hero-section container">
@@ -153,12 +151,30 @@
     </div>
   </section>
 
+
+  <!-- Freemium hook -->
+  <section class="section container">
+    <div style="padding:14px 18px;background:rgba(79,130,255,.07);border:1px solid rgba(79,130,255,.25);border-radius:10px;font-size:12px;color:var(--text-2);font-family:var(--font-mono)">
+      🔒 <strong style="color:var(--accent)">Coming soon:</strong> Weekly PDF briefing, custom factor watchlists, threshold alerts when recession probability crosses key levels.
+    </div>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="section container">
+    <div class="factor-nav-bar">
+      <a class="factor-nav-link" href="macro.html">📊 Macro Pulse</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="energy.html">⚡ Energy Dashboard</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="scenarios.html">🎯 Scenario Lab</a>
+      <span class="factor-nav-sep">·</span>
+      <a class="factor-nav-link" href="predictions.html">🎲 Prediction Markets</a>
+    </div>
+  </section>
   <section class="section container" id="email-section"></section>
 
   <!-- Ad Slot Bottom -->
   <div class="container">
-    <!-- Ad slot: configure numeric ID in GEOWIRE.adConfig.slots (content.js) -->
-  </div>
 
 </main>
 <div id="site-footer"></div>
@@ -271,9 +287,6 @@
     updEl.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
-  // ── AdSense
-  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
-  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
 
   // ── Async: live FRED data (updates metric cards when available)
   try {

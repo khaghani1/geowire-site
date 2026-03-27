@@ -1,119 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Priority 1.0 — Homepage -->
+  <!-- Primary — priority 1.0 -->
   <url>
     <loc>https://geowire.org/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- Priority 0.9 — Recession -->
+  <!-- Core intelligence pages — priority 0.9 -->
   <url>
-    <loc>https://geowire.org/recession</loc>
+    <loc>https://geowire.org/recession.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- Priority 0.8 — Core intelligence pages -->
+  <!-- Major features — priority 0.8 -->
   <url>
-    <loc>https://geowire.org/macro</loc>
+    <loc>https://geowire.org/macro.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://geowire.org/predictions</loc>
+    <loc>https://geowire.org/predictions.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://geowire.org/scenarios</loc>
+    <loc>https://geowire.org/scenarios.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://geowire.org/energy</loc>
+    <loc>https://geowire.org/energy.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Priority 0.7 — Secondary analysis -->
+  <!-- Secondary features — priority 0.7 -->
   <url>
-    <loc>https://geowire.org/analysis</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://geowire.org/factor</loc>
+    <loc>https://geowire.org/analysis.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://geowire.org/trade</loc>
+    <loc>https://geowire.org/factor.html</loc>
     <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://geowire.org/trade.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://geowire.org/exposure-calculator.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://geowire.org/about.html</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
-  <!-- Priority 0.6 — Supporting pages -->
+  <!-- Supporting pages — priority 0.6 -->
   <url>
-    <loc>https://geowire.org/countries</loc>
+    <loc>https://geowire.org/countries.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/us-impact</loc>
+    <loc>https://geowire.org/us-impact.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/humanitarian</loc>
+    <loc>https://geowire.org/humanitarian.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/geopolitical</loc>
+    <loc>https://geowire.org/geopolitical.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/what-changed</loc>
+    <loc>https://geowire.org/what-changed.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/podcast</loc>
+    <loc>https://geowire.org/podcast.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/exposure-calculator</loc>
+    <loc>https://geowire.org/farsi.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/about</loc>
-    <changefreq>monthly</changefreq>
+    <loc>https://geowire.org/powermap.html</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/powermap</loc>
+    <loc>https://geowire.org/narrative-war.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://geowire.org/narrative-war</loc>
+    <loc>https://geowire.org/article-ghalibaf.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://geowire.org/farsi</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://geowire.org/article-ghalibaf</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
 
 </urlset>

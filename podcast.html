@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="canonical" href="https://geowire.org/podcast" />
+  <link rel="canonical" href="https://geowire.org/podcast.html" />
   <script defer data-domain="geowire.org" src="https://plausible.io/js/script.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GeoWire Podcast — Weekly deep dives on the US-Iran conflict, oil markets, global recession risk, and geopolitical intelligence. Powered by Google NotebookLM.">
@@ -109,9 +109,6 @@
     </div>
   </section>
 
-  <!-- AdSense top -->
-  <div class="container" id="ad-podcast-top"></div>
-
   <!-- ═══════════════════════════════════════════════════════════════════════
        SPOTIFY EMBED PLACEHOLDER
        ═══════════════════════════════════════════════════════════════════════ -->
@@ -203,9 +200,6 @@
 
     </div>
   </section>
-
-  <!-- AdSense mid -->
-  <div class="container" id="ad-podcast-mid"></div>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
        HOW WE MAKE THIS
@@ -361,13 +355,6 @@
         document.getElementById('podcast-notify-form').style.display = 'none';
       });
     }
-
-    // ── AdSense
-    document.getElementById('ad-podcast-top').innerHTML = UI.renderAdSlot('podcast-top');
-    document.getElementById('ad-podcast-mid').innerHTML = UI.renderAdSlot('podcast-mid');
-    document.querySelectorAll('.adsbygoogle').forEach(() => {
-      try { } catch(e) {}
-    });
 
     // ── Email capture
     document.getElementById('podcast-email-capture').innerHTML = UI.renderEmailCapture();
