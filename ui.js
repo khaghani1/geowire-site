@@ -318,6 +318,7 @@ const UI = (() => {
         <div class="footer-legal">
           <p>© ${year} GeoWire. All analysis is original unless attributed. Confidence badges indicate source methodology, not certainty.</p>
           <p class="footer-disclaimer">GeoWire is an independent recession intelligence platform. All analysis is original unless attributed. Confidence badges indicate source methodology, not certainty. Not financial or political advice.</p>
+          <p style="margin-top:8px;"><a href="/privacy.html" style="color:var(--gw-muted,#94A3B8);font-size:12px;text-decoration:none;">Privacy Policy</a></p>
         </div>
       </div>
     </footer>`;
